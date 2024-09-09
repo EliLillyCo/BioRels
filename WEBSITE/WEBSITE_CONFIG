@@ -1,0 +1,2021 @@
+
+REGEX	PUBLI_TOPIC	^[A-Za-z0-9 .\-\(\)_]+$
+REGEX	PUBLI		PMID([0-9]{1,10})
+REGEX	PMC			PMC([0-9]{1,10})
+REGEX	PUBLI		([0-9]{1,10})
+REGEX	DOI			10.\d{4,9}/[-._;()/:A-Z0-9]+
+REGEX	DOI			10.\d{4}/\d+-\d+X?(\d+)\d+<[\d\w]+:[\d\w]*>\d+.\d+.\w+;\d
+REGEX	DOI			10.1021/\w\w\d++
+REGEX	DOI			10.1207/[\w\d]+\&\d+_\d+
+REGEX	GENE		([a-zA-Z0-9]{1,10})
+REGEX	GENEID		^[0-9]{1,10}$
+REGEX	UNIPROT_ID	([a-zA-Z0-9]{1,10}_[a-zA-Z0-9]{1,5})
+REGEX	UNIPROT_AC	[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}
+REGEX	UNIPROT_SEQ	([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})(\-[0-9]{1,2}){0,1}
+REGEX	CHEMBL		CHEMBL[0-9]{1,10}
+REGEX	ACD			MFCD[0-9]{6,10}
+REGEX	EMOL		EMOL[0-9]{6,10}
+REGEX	TRANSCRIPT	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|YP|ZP)_[0-9]+(.[0-9]{1,3}){0,1}(-[0-9]{1,2}){0,1}$
+REGEX	TRANSCRIPT	^(MIR|Mir)([A-Za-z0-9]{0,7}){0,1}(.[0-9A-Z]{1,5}){0,1}(-[0-9]{1,2}){0,1}$
+REGEX	TRANSCRIPT	^(KEG)[0-9]+_([a-z0-9]{3}){0,1}$
+REGEX	TRANSCRIPT	^(TR|Tr)([a-zA-Z0-9]{1,10}){0,5}(\-[a-zA-Z0-9]{2,7}){0,1}(-[0-9]{1,3}){0,1}(-[0-9]{1,2}){0,1}$
+REGEX	TRANSCRIPT	^(IG|Ig|Gm|KE)([a-zA-Z0-9]{1,10}){0,1}(-[A-Z0-9]{1,5}){0,1}(-[0-9]{1,2}){0,1}(-[0-9]{1,2}){0,1}$
+REGEX	TRANSCRIPT	^(LOC)([0-9]{1,11}){0,1}$
+REGEX	TRANSCRIPT	^(KEG|KEF)[0-9]+_([a-z0-9]{3}){0,1}$
+REGEX	TRANSCRIPT	^([A-Za-z0-9]{1,10})(-[0-9]{1,2}){0,1}$
+REGEX	TRANSCRIPT	^ENS[A-Z]{1,7}[0-9]{11}(.[0-9]{1,3}){0,1}$
+REGEX	ENSEMBL		^ENS[A-Z]{0,6}G[0-9]{9,13}(\.[0-9]{1,3}){0,1}$
+REGEX	TISSUE		^(Liver|Heart|Muscle)$
+REGEX	REACTOMEPW	^R-(BTA|PFA|DME|HSA|RNO|XTR|CEL|CFA|SCE|SSC|DDI|DRE|GGA|MMU|MTU|SPO)-[0-9]{1,10}$
+REGEX	TEXT		^[A-Za-z0-9_\-]{1,100}$
+REGEX	JOB_ID		^[0-9a-fA-F]{32}$
+REGEX	MD5			^[0-9a-fA-F]{32}$
+REGEX	PDB			^[0-9][A-Za-z0-9]{3}$
+REGEX	PDB_RES		^[0-9][A-Za-z0-9]{3}\-[A-Za-z0-9]{1}\-[A-Z0-9]{1,3}\-[0-9]{1,5}$
+REGEX	PDB_CHAIN	^[0-9][A-Za-z0-9]{3}\-[A-Za-z0-9](\-[A-Za-z0-9]){0,3}$
+REGEX	UNIRES		^(ALA|GLY|ILE|LEU|PRO|VAL|PHE|TRP|TYR|ASP|GLU|ARG|HIS|LYS|SER|THR|CYS|MET|ASN|GLN){1}-[0-9]{1,6}$
+REGEX	DOMAIN_NAME	^.*$
+REGEX	CLINICAL_TRIAL	^NCT[0-9]{8}$
+REGEX	SNP			^(rs){0,1}[0-9]{1,15}$
+REGEX	OLIGO		^[ATCGUN]{16,23}$
+
+START	GLOBAL
+PRD_STATUS		T
+# T -> Enable HTTPD ACCESS check
+# F -> Disable HTTPD ACCESS check
+WITH_HTTPD_ACCESS	F
+# Name of the HTTPD key that will contain the user groups			
+HTTPD_ACCESS		N/A
+# Name of the HTTPD key that will contain the user email
+HTTPD_USER_EMAIL	N/A
+# Name of the HTTPD key that will contain the user name
+HTTPD_USER_NAME		N/A
+# Name of the HTTPD key that will contain the user id
+HTTPD_USER_ID		N/A
+
+
+
+# environment variable name for the public database user
+PUBLIC_DB_USER		PGUSER
+# environment variable name for the public database user password
+PUBLIC_DB_PASS		PGPASSWORD
+# environment variable name for the private database user.
+PRIVATE_DB_USER		PGUSER
+# environment variable name for the private database user password
+PRIVATE_DB_PASS		PGPASSWORD
+
+DB_SCHEMA_PRIVATE	SCHEMA_PRIVATE
+DB_SCHEMA			DB_SCHEMA
+
+#Rule set for different groups. 
+#The rule set is a list of group rules separated by '|'. 
+#The first group is the one with highest access/least restrictive
+# Each group rule is defined by the group name followed by ':' and the access level
+# The access level is a 10 digit number where each digit represents a different level of access
+# A value of 1 means that the group has access to the resource
+# A value of 0 means that the group does not have access to the resource
+# You can imagine something as such:
+# 1 - Access to the public data
+# 2 - Access to the private data
+# 3 - Access to the restricted data
+# 4->10 - Access to the portion specific of the website
+HTTPD_GRP_RULE	Group1:1000000000|Group2:1000000000|Group3:1000000000|Group4:1000000000|Group5:10100000000|Group6:10100000000|Group7:0110000000|Group8:0100000000|Admin:0000000001
+EMAIL_FROM			[EMAIL_FROM]
+EMAIL_REPLY			[ADMIN_EMAIL]
+WEBSITE_NAME	BioRels
+GRAPH_CLIENT_ID			[MICROSOFT_GRAPH_CLIENT_ID]
+GRAPH_REDIRECT_URL			/
+GRAPH_AUTHORITY			https://login.microsoftonline.com/[AUTHORITY]
+END		GLOBAL
+
+
+
+EXPORT_TAGS	HCONTENT|CONTENT|JSON|CSV|TXT|PDF|JPG|IMG|XLSX|PPTX|FASTA|PDB|MOL2
+
+LINK	ENSEMBL	GENE						http://uswest.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${LINK}
+LINK	ENSEMBL	TRANSCRIPT					http://uswest.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=${LINK}
+LINK	REFSEQ	TRANSCRIPT					https://www.ncbi.nlm.nih.gov/nuccore/${LINK}
+LINK	REFSEQ	GENE						https://www.ncbi.nlm.nih.gov/gene/${LINK}
+LINK	ENSEMBL	RANGE_VIEW					http://uswest.ensembl.org/Homo_sapiens/Location/View?r=${LINK}
+LINK	DBSNP	DBSNP						https://www.ncbi.nlm.nih.gov/snp/rs${LINK}
+LINK	CLINVAR	RCV							https://www.ncbi.nlm.nih.gov/clinvar/${LINK}
+LINK	CLINVAR	VARIATION					https://www.ncbi.nlm.nih.gov/clinvar/variation/${LINK}
+LINK	CLINVAR	MEDGEN						https://www.ncbi.nlm.nih.gov/medgen/${LINK}
+LINK	CLINVAR	HUMAN PHENOTYPE ONTOLOGY	http://www.human-phenotype-ontology.org/hpoweb/showterm?id=${LINK}
+LINK	CLINVAR	MONDO						https://monarchinitiative.org/disease/${LINK}
+LINK	CLINVAR	MESH						https://meshb.nlm.nih.gov/record/ui?ui=${LINK}
+LINK	OLS		EFO							http://www.ebi.ac.uk/efo/${LINK}
+LINK	UNIPROT	UNIID						https://www.uniprot.org/uniprot/${LINK}
+LINK	DOMAIN	PFAM						http://pfam.xfam.org/family/${LINK}
+LINK	OMIM	OMIM						https://omim.org/entry/${LINK}
+LINK	CLINICAL	TRIAL						https://clinicaltrials.gov/ct2/show/${LINK}
+LINK	CHEMBL	COMPOUND					https://www.ebi.ac.uk/chembl/compound_report_card/${LINK}/
+LINK	CHEMBL	ASSAY						https://www.ebi.ac.uk/chembl/assay_report_card/${LINK}/
+LINK	SWISSLIPIDS	COMPOUND				http://www.swisslipids.org/#/entity/${LINK}/
+LINK	OPEN_TARGET	COMPOUND			    https://platform.opentargets.org/drug/${LINK}
+
+
+
+###################################################################################################
+###################################################################################################
+################################################ CORE #############################################
+###################################################################################################
+###################################################################################################
+
+START	PAGE	UNKNOWN_REC
+LOC				/core/unknown_rec
+FNAME			unknown_rec
+HTML_TAG		unknown_rec
+TAG				UNKNOWN_REC
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	UNKNOWN_REC
+
+START	PAGE	NO_ACCESS
+LOC				/core/no_access
+FNAME			no_access
+HTML_TAG		no_access
+TAG				NO_ACCESS
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	NO_ACCESS
+
+START	PAGE	HEADER
+LOC				/core/header
+FNAME			header
+HTML_TAG		header
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	HEADER
+
+
+START	PAGE	WELCOME
+LOC				/core/welcome
+FNAME			welcome
+HTML_TAG		welcome
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	WELCOME
+
+
+START	PAGE	HELP
+LOC				/core/help
+TAG				HELP	[0-9a-zA-Z:|, _]{0,1000}
+FNAME			help
+HTML_TAG		help
+WITH_EXPORT		true
+WITH_DATA		false
+END		PAGE	HELP
+
+
+START	PORTAL	EMPTY_PORTAL
+PORTAL_ID	10
+LOC				/core/empty_portal
+FNAME			empty_portal
+HTML_TAG		empty_portal
+WITH_EXPORT		false
+WITH_DATA		false
+END	PORTAL	EMPTY_PORTAL
+
+
+
+
+START	PAGE	API_HOME
+LOC				/api/api_home
+FNAME			api_home
+HTML_TAG		API_HOME
+TAG				API
+TAG				API_RUN	[a-zA-Z_]{0,1000}
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	API_HOME
+
+###################################################################################################
+###################################################################################################
+############################################### SEARCH ############################################
+###################################################################################################
+###################################################################################################
+
+
+START	PAGE	SEARCH
+LOC				/core/search
+
+TAG				SEARCH
+FNAME			search
+HTML_TAG		search
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH
+
+
+START	PAGE	SEARCH_NEWS
+LOC				/core/search
+TAG				SEARCH_NEWS	(.*){1,400}
+FNAME			search_news
+HTML_TAG		search_news
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_NEWS
+
+START	PAGE	SEARCH_CLINICAL
+LOC				/core/search
+TAG				SEARCH_CLINICAL	(.*){1,200}
+FNAME			search_clinical
+HTML_TAG		search_clinical
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_CLINICAL
+
+START	PAGE	SEARCH_COMPANY
+LOC				/core/search
+TAG				SEARCH_COMPANY	(.*){1,200}
+FNAME			search_company
+HTML_TAG		search_company
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_COMPANY
+
+START	PAGE	SEARCH_COMPOUND
+LOC				/core/search
+TAG				SEARCH_COMPOUND	(.*){1,200}
+FNAME			search_compound
+HTML_TAG		search_compound
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_COMPOUND
+
+START	PAGE	SEARCH_DRUG
+LOC				/core/search
+TAG				SEARCH_DRUG	(.*){1,200}
+FNAME			search_drug
+HTML_TAG		search_drug
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_DRUG
+
+START	PAGE	SEARCH_PUBLI
+LOC				/core/search
+TAG				SEARCH_PUBLI	[A-Za-z0-9.\-\_\; ,]{1,100}
+FNAME			search_publi
+HTML_TAG		search_publi
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_PUBLI
+
+START	PAGE	SEARCH_CLINICAL
+LOC				/core/search
+TAG				SEARCH_CLINICAL	[A-Za-z0-9.\-\_\; ,]{1,100}
+FNAME			search_clinical
+HTML_TAG		search_clinical
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_CLINICAL
+
+
+START	PAGE	SEARCH_PATHWAY
+LOC				/core/search
+TAG				SEARCH_PATHWAY	[A-Za-z0-9.\-\_ ]{1,100}
+FNAME			search_pathway
+HTML_TAG		search_pathway
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_PATHWAY
+
+START	PAGE	SEARCH_GENE
+LOC				/core/search
+TAG				SEARCH_GENE	[A-Za-z0-9.\-\_ \(\)]{1,100}
+FNAME			search_gene
+HTML_TAG		search_gene
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_GENE
+
+START	PAGE	SEARCH_DISEASE
+LOC				/core/search
+TAG				SEARCH_DISEASE	[A-Za-z0-9.\-\_ ()]{1,100}
+FNAME			search_disease
+HTML_TAG		search_disease
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_DISEASE
+
+START	PAGE	SEARCH_ASSAY
+LOC				/core/search
+TAG				SEARCH_ASSAY	[A-Za-z0-9.\-\_ ()]{1,100}
+FNAME			search_assay
+HTML_TAG		search_assay
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_ASSAY
+
+
+START	PAGE	SEARCH_TISSUE
+LOC				/core/search
+TAG				SEARCH_TISSUE	[A-Za-z0-9.\-\_ ()]{1,100}
+FNAME			search_tissue
+HTML_TAG		search_tissue
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_TISSUE
+
+START	PAGE	SEARCH_PROTEIN
+LOC				/core/search
+TAG				SEARCH_PROTEIN	[A-Za-z0-9.\-\_ ]{1,100}
+FNAME			search_protein
+HTML_TAG		search_protein
+WITH_EXPORT		false
+WITH_DATA		false
+END		PAGE	SEARCH_PROTEIN
+
+
+
+###################################################################################################
+###################################################################################################
+######################################## PUBLICATION PORTAL #######################################
+###################################################################################################
+###################################################################################################
+
+
+START	PORTAL	PUBLICATION
+LOC					/publication/publication_portal
+FNAME				publication_portal
+HTML_TAG			publication_portal
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		PUBMED		REGEX:PUBLI
+TAG		DOI			REGEX:DOI
+END	PAGE	PUBLICATION
+
+
+START	PAGE	PUBLI_INFO
+LOC					/publication/publi_info
+FNAME				publi_info
+HTML_TAG			publi_info
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		PUBLI_INFO	REGEX:PUBLI
+TAG		PUBLI_INFO	REGEX:DOI
+END	PAGE	PUBLI_INFO
+
+START	PAGE	PUBLICATION_ENTRY
+LOC					/publication/publication
+FNAME				publication
+HTML_TAG			publication
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		PUBLICATION	REGEX:PUBLI
+TAG		PUBLICATION	REGEX:DOI
+END	PAGE	PUBLICATION_ENTRY
+
+
+START	PAGE	PUBLI_FULLTEXT
+LOC					/publication/publi_fulltext
+FNAME				publi_fulltext
+HTML_TAG			publi_fulltext
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		PUBLICATION_FULLTEXT	REGEX:PUBLI
+TAG		PUBLICATION_FULLTEXT	REGEX:DOI
+END	PAGE	PUBLICATION_FULLTEXT
+
+
+START	PAGE	PUBLICATION_IMAGE
+LOC					/publication/publi_image
+FNAME				publi_image
+HTML_TAG			publi_image
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		PUBLICATION_IMAGE	REGEX:PMC
+TAG		PUBLICATION_IMAGE	REGEX:DOI
+END	PAGE	PUBLICATION_IMAGE
+
+
+START	PAGE	PUBLI_ECO
+LOC				/publication/publi_eco
+TAG				PUBLI_ECO	[0-9a-zA-Z:|, ]{0,1000}
+FNAME			publi_eco
+HTML_TAG		publi_eco
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_ECO
+
+
+START		PAGE	PUBLI_LINK
+LOC					/publication/publi_link
+TAG					PUBLI_LINK		REGEX:PUBLI
+FNAME					publi_link
+HTML_TAG				publi_link
+WITH_EXPORT				false
+WITH_DATA				false
+END			PAGE	PUBLI_LINK
+
+
+
+START		PAGE	PUBLICATION_BATCH
+LOC					/publication/publi_batch
+TAG					PUBLICATION_BATCH		([0-9]{1,10}_{0,1}){1,1000}
+TAG					PUBLICATION_LIST
+FNAME					publi_batch
+HTML_TAG				publi_batch
+WITH_EXPORT				true
+WITH_DATA				true
+END			PAGE	PUBLICATION_BATCH
+
+
+###################################################################################################
+###################################################################################################
+########################################### 3D PORTAL ########################################
+###################################################################################################
+###################################################################################################
+
+
+START	PAGE	3D_ENTRY
+LOC				/3D/3D_entry
+TAG				3D_ENTRY	REGEX:PDB
+FNAME			3D_entry
+HTML_TAG		3D_entry
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_ENTRY
+
+
+START	PAGE	3D_FILE
+LOC				/3D/3D_structure_file
+TAG				3D_FILE	REGEX:PDB
+FNAME			3D_structure_file
+HTML_TAG		3D_structure_file
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_FILE
+
+
+START	PAGE	3D_VIEW
+LOC				/3D/3D_structure_view
+TAG				3D_VIEW	REGEX:PDB
+FNAME			3D_structure_view
+HTML_TAG		3D_structure_view
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_VIEW
+
+
+START	PAGE	3D_STRUCTURES
+LOC				/3D/3D_structures
+TAG				3D_STRUCTURES
+FNAME			3D_structures
+HTML_TAG		3D_structures
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_STRUCTURES
+
+
+START	PAGE	3D_STRUCTURES_LIST
+LOC				/3D/3D_structures_list
+TAG				3D_STRUCTURES_LIST
+FNAME			3D_structures_list
+HTML_TAG		3D_structures_list
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_STRUCTURES_LIST
+
+
+START	PAGE	3D_VIEW_CHAINS
+LOC				/3D/3D_view_chains
+TAG				3D_VIEW_CHAINS	REGEX:PDB_CHAIN
+FNAME			3D_view_chains
+HTML_TAG		3D_view_chains
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_VIEW_CHAINS
+
+
+START	PAGE	3D_VIEW_LIG
+LOC				/3D/3D_view_ligand
+TAG				3D_VIEW_LIG	REGEX:PDB_RES
+FNAME			3D_view_ligand
+HTML_TAG		3D_view_ligand
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	3D_VIEW_LIG
+
+
+
+
+START	PAGE	COMPANY_VALIDATE
+LOC				/core/company_validate
+TAG				COMPANY_VALIDATE
+FNAME			company_validate
+HTML_TAG		company_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	COMPANY_VALIDATE
+
+###################################################################################################
+###################################################################################################
+########################################### ANATOMY ###############################################
+###################################################################################################
+###################################################################################################
+
+
+START	PAGE	DISEASE_ONTOLOGY
+LOC				/disease/disease_ontology
+TAG				DISEASE_ONTOLOGY
+FNAME			disease_ontology
+HTML_TAG		disease_ontology
+WITH_EXPORT		true
+WITH_DATA		true
+END	PAGE		DISEASE_ONTOLOGY
+
+
+
+
+START	PAGE	DISEASE_OVERVIEW
+LOC				/anatomy/disease_overview
+TAG				DISEASE_OVERVIEW	[0-9A-Za-z \-()]{1,2000}
+FNAME			disease_overview
+HTML_TAG		disease_overview
+WITH_EXPORT		true
+WITH_DATA		true
+END	PAGE		DISEASE_OVERVIEW
+
+
+START	PAGE	DISEASE_SUMMARY
+TAG				DISEASE_SUMMARY
+LOC				/anatomy/disease_summary
+HTML_TAG		DISEASE_SUMMARY
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_summary
+END	TOPIC		DISEASE_SUMMARY
+
+
+START	PAGE	DISEASE_TRAIT
+LOC				/anatomy/disease_trait
+TAG				CLINVAR_TRAIT	[0-9]{1,12}
+FNAME			disease_trait
+HTML_TAG		disease_trait
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	DISEASE_TRAIT
+
+
+START	PAGE	DISEASE_TREE
+TAG				DISEASE_TREE
+LOC				/anatomy/disease_tree
+HTML_TAG		DISEASE_TREE
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_tree
+END	TOPIC		DISEASE_TREE
+
+
+START	PAGE	DISEASE_VALIDATE
+LOC				/anatomy/disease_validate
+TAG				DISEASE_VALIDATE
+FNAME			disease_validate
+HTML_TAG		disease_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	DISEASE_VALIDATE
+
+
+START	PAGE	TISSUE_DISEASE_TABLE
+LOC				/anatomy/tissue_disease_table
+TAG				TISSUE_DISEASE_TABLE
+FNAME			tissue_disease_table
+HTML_TAG		tissue_disease_table
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_DISEASE_TABLE
+
+
+START	PAGE	TISSUE_DISEASE_VIEW
+LOC				/anatomy/tissue_disease_view
+TAG				TISSUE_DISEASE_VIEW
+FNAME			tissue_disease_view
+HTML_TAG		tissue_disease_view
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_DISEASE_VIEW
+
+
+START	PAGE	TISSUE_VALIDATE
+LOC				/anatomy/tissue_validate
+TAG				TISSUE_VALIDATE
+FNAME			tissue_validate
+HTML_TAG		tissue_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_VALIDATE
+
+
+###################################################################################################
+###################################################################################################
+########################################### CLINICAL ##############################################
+###################################################################################################
+###################################################################################################
+
+START	PAGE	CLINICAL_TRIAL_PROTEIN
+LOC			/clinical/clin_trials_prot
+TAG			CLINICAL_TRIALS
+HTML_TAG	clin_trials_prot
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME		clin_trials_prot
+END	PAGE	CLINICAL_TRIAL_PROTEIN
+
+
+
+
+START	PAGE	CLINICAL_RELEASE
+TAG				CLINICAL_RELEASE
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			clinical_release
+HTML_TAG		clinical_release
+LOC				/clinical/clinical_release
+END		PAGE	CLINICAL_RELEASE
+
+
+
+
+
+START	PAGE	CLINICAL_VALIDATE
+LOC				/clinical/clinical_validate
+TAG				CLINICAL_VALIDATE
+FNAME			clinical_validate
+HTML_TAG		clinical_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	CLINICAL_VALIDATE
+
+
+
+START	PAGE	CLINICAL_TRIAL
+LOC				/clinical/clinical_trial
+TAG				CLINICAL_TRIAL	REGEX:CLINICAL_TRIAL
+HTML_TAG		clinical_trial
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			clinical_trial
+END		PAGE	CLINICAL_TRIAL
+
+
+START	PAGE	CLINVAR
+LOC				/clinical/clinvar
+TAG				CLINVAR	[0-9]{1,12}
+FNAME			clinvar
+HTML_TAG		clinvar
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	CLINVAR
+
+
+START	PAGE	DRUGS
+LOC				/clinical/drugs
+TAG				DRUGS
+FNAME			drugs
+HTML_TAG		drugs
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	DRUGS
+
+
+START	PAGE	VARCLIN
+LOC				/clinical/varclin
+TAG				VARCLIN
+FNAME			varclin
+HTML_TAG		varclin
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	VARCLIN
+
+###################################################################################################
+###################################################################################################
+########################################### DRUG ###############################################
+###################################################################################################
+
+START	PORTAL	DRUG
+
+TAG				DRUG		[0-9a-zA-Z :| ,-]{1,100}[[:ascii:]]*
+
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			drug_portal
+HTML_TAG		drug_portal
+LOC				/drug/drug_portal
+END		PORTAL	DRUG
+
+START	PAGE	DRUG_MENU
+LOC				/drug/drug_menu
+TAG				DRUG_MENU
+FNAME			drug_menu
+HTML_TAG		drug_menu
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	DRUG_MENU
+
+
+START	PAGE	DRUG_VALIDATE
+LOC				/drug/drug_validate
+TAG				DRUG_VALIDATE
+FNAME			drug_validate
+HTML_TAG		drug_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	drug_validate
+
+
+
+
+START	PAGE	DRUG_CLINPHASE
+LOC				/drug/drug_clinphase
+TAG				DRUG_CLINPHASE
+FNAME			drug_clinphase
+HTML_TAG		drug_clinphase
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	drug_clinphase
+
+
+START	PAGE	DRUG_CLINTRIAL_YEAR
+LOC				/drug/drug_clintrial_year
+TAG				DRUG_CLINTRIAL_YEAR
+FNAME			drug_clintrial_year
+HTML_TAG		drug_clintrial_year
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	drug_clintrial_year
+
+
+
+START	PAGE	DRUG_PUBLI_DISTRIB
+LOC				/drug/drug_publi_distrib
+TAG				DRUG_PUBLI_DISTRIB
+FNAME			drug_publi_distrib
+HTML_TAG		drug_publi_distrib
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	drug_publi_distrib
+
+
+###################################################################################################
+###################################################################################################
+########################################### COMPOUND ##############################################
+###################################################################################################
+###################################################################################################
+
+
+START	PORTAL	COMPOUND
+
+TAG				COMPOUND		(.){1,200}
+
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			compound_portal
+HTML_TAG		compound_portal
+LOC				/compound/compound_portal
+END		PORTAL	COMPOUND
+
+
+START	PAGE	COMPOUND_VALIDATE
+LOC				/compound/compound_validate
+TAG				COMPOUND_VALIDATE
+FNAME			compound_validate
+HTML_TAG		compound_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	COMPOUND_VALIDATE
+
+START	PAGE	COMPOUND_MENU
+LOC				/compound/compound_menu
+TAG				COMPOUND_MENU
+FNAME			compound_menu
+HTML_TAG		compound_menu
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	COMPOUND_MENU
+
+
+START	PAGE	COMPOUND_ASSAY
+TAG				COMPOUND_ASSAY
+LOC				/compound/compound_assay
+HTML_TAG		compound_assay
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			compound_assay
+END	TOPIC		COMPOUND_ASSAY
+
+START	PAGE	LIPID_ONTOLOGY
+TAG				LIPID_ONTOLOGY
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			lipid_ontology
+HTML_TAG		lipid_ontology
+LOC				/compound/lipid_ontology
+END		PAGE	LIPID_ONTOLOGY
+
+
+START	PAGE	LIPID_TREE
+TAG				LIPID_TREE
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			lipid_tree
+HTML_TAG		lipid_tree
+LOC				/compound/lipid_tree
+END		PAGE	LIPID_TREE
+
+
+START	PAGE	SIM_CPDS_SEARCH
+TAG				SIM_COMPOUNDS_SEARCH
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sim_compounds_search
+HTML_TAG		sim_compounds_search
+LOC				/compound/sim_compounds_search
+END		PAGE	SIM_CPDS_SEARCH
+
+
+START	PAGE	SIM_CPDS
+TAG				SIM_COMPOUNDS
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sim_compounds
+HTML_TAG		sim_compounds
+LOC				/compound/sim_compounds_search
+END		PAGE	SIM_CPDS
+
+
+
+
+###################################################################################################
+###################################################################################################
+########################################### ASSAYS ###############################################
+###################################################################################################
+
+
+
+
+START	PORTAL	ASSAY
+PORTAL_ID	12
+TAG		ASSAY	REGEX:CHEMBL
+LOC			/assay/assay_portal
+FNAME			assay_portal
+HTML_TAG		assay_portal
+WITH_EXPORT		true
+WITH_DATA		true
+END	PORTAL	GENE
+
+START	PAGE	ASSAY_COMPOUND
+TAG				ASSAY_COMPOUND
+LOC				/assay/assay_compound
+HTML_TAG		assay_compound
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			assay_compound
+END	TOPIC		ASSAY_COMPOUND
+
+
+START	PAGE	ASSAY_DATA
+TAG				ASSAY_DATA
+LOC				/assay/assay_data
+HTML_TAG		assay_data
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			assay_data
+END	TOPIC		ASSAY_DATA
+
+
+START	PAGE	ASSAY_DATA_SEARCH
+TAG				ASSAY_DATA_SEARCH
+LOC				/assay/assay_data
+HTML_TAG		assay_data_search
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			assay_data_search
+END	TOPIC		ASSAY_DATA_SEARCH
+
+###################################################################################################
+###################################################################################################
+########################################### GENOMIC ###############################################
+###################################################################################################
+
+
+START	PAGE	GENES_LOCATIONS
+LOC				/genomic/genes_location
+TAG				GENES_LOCATION
+FNAME			genes_location
+HTML_TAG		genes_location
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENES_LOCATION
+
+
+START	PAGE	PREMRNA
+LOC				/genomic/premrna
+TAG				PREMRNA	REGEX:TRANSCRIPT
+FNAME			premrna
+HTML_TAG		premrna
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PREMRNA
+
+START	PAGE	PREMRNA_SEL
+LOC				/genomic/premrna_sel
+TAG				PREMRNA_SEL	REGEX:TRANSCRIPT
+FNAME			premrna_sel
+HTML_TAG		premrna_sel
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PREMRNA_SEL
+
+
+
+START	PAGE	TRANSCRIPT_SEL
+LOC				/genomic/transcript_sel
+TAG				TRANSCRIPT_SEL	REGEX:TRANSCRIPT
+FNAME			transcript_sel
+HTML_TAG		transcript_sel
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TRANSCRIPT_SEL
+
+
+START	PAGE	GENE_PUBLI_GRAPH
+LOC				/genomic/gene_publi_graph
+TAG				GENE_PUBLI_GRAPH
+FNAME			gene_publi_graph
+HTML_TAG		gene_publi_graph
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENE_PUBLI_GRAPH
+
+
+
+START	PAGE	GENE_DESCRIPTION
+LOC				/genomic/gene_description
+TAG				GENE_DESCRIPTION
+FNAME			gene_description
+HTML_TAG		gene_description
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENE_DESCRIPTION
+
+
+START	PAGE	GENE_ASSAYS
+TAG				ASSAYS
+LOC				/genomic/gene_assays
+HTML_TAG		gene_assays
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			gene_assays
+END	PAGE		GENE_ASSAYS
+
+
+START	PAGE	DISEASE_GENE_EVIDENCE_TBL
+TAG				DISEASE_GENE_EVIDENCE_TBL
+LOC				/genomic/disease_gene_evidence_tbl
+HTML_TAG		disease_gene_evidence_tbl
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_gene_evidence_tbl
+END	PAGE		DISEASE_GENE_EVIDENCE_TBL
+
+START	PAGE	DISEASE_GENE_VIEW
+TAG				DISEASE_GENE_VIEW	REGEX:GENEID
+TAG				DISEASE_GENE_VIEW	[A-Za-z0-9.\-\_ ()]{1,100}
+LOC				/genomic/disease_gene_view
+HTML_TAG		disease_gene_view
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_gene_view
+END	PAGE		DISEASE_EVIDENCE_VIEW
+
+START	PAGE	DISEASE_EVIDENCES
+TAG				DISEASE_EVIDENCES
+LOC				/genomic/disease_genes
+HTML_TAG		disease_genes
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_genes
+END	PAGE		DISEASE_EVIDENCES
+
+START	PAGE	DISEASE_PUB_GRAPH
+TAG				DISEASE_PUB_GRAPH
+LOC				/disease/disease_pub_graph
+HTML_TAG		disease_pub_graph
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_pub_graph
+END	PAGE		DISEASE_PUB_GRAPH
+
+
+START	PAGE	DISEASE_TRIAL_GRAPH
+TAG				DISEASE_TRIAL_GRAPH
+LOC				/disease/disease_trial_graph
+HTML_TAG		disease_trial_graph
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_trial_graph
+END	PAGE		DISEASE_TRIAL_GRAPH
+
+
+
+START	PAGE	DISEASE_ONGOING_TRIAL
+TAG				DISEASE_ONGOING_TRIAL
+LOC				/disease/disease_ongoing_trial
+HTML_TAG		disease_ongoing_trial
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_ongoing_trial
+END	PAGE		DISEASE_ONGOING_TRIAL
+
+
+
+START	PAGE	DISEASE_PHASE_GRAPH
+TAG				DISEASE_PHASE_GRAPH
+LOC				/disease/disease_phase_graph
+HTML_TAG		disease_phase_graph
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_phase_graph
+END	PAGE		DISEASE_PHASE_GRAPH
+
+START	PAGE	GENE_EVIDENCES
+TAG				GENE_EVIDENCES
+LOC				/genomic/disease_genes
+HTML_TAG		disease_genes
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			disease_genes
+END	PAGE		GENE_EVIDENCES
+
+
+
+START	PAGE	DISEASE_CLINPHASE
+LOC				/disease/disease_clinphase
+TAG				DISEASE_CLINPHASE
+FNAME			disease_clinphase
+HTML_TAG		disease_clinphase
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	disease_clinphase
+
+
+START	PAGE	DISEASE_CLINTRIAL_YEAR
+LOC				/disease/disease_clintrial_year
+TAG				DISEASE_CLINTRIAL_YEAR
+FNAME			disease_clintrial_year
+HTML_TAG		disease_clintrial_year
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	disease_clintrial_year
+
+
+
+START	PAGE	GENE_VALIDATE
+LOC				/genomic/gene_validate
+TAG				GENE_VALIDATE
+FNAME			gene_validate
+HTML_TAG		gene_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENE_VALIDATE
+
+
+
+START	PORTAL	GENE
+PORTAL_ID	1
+TAG		GENE	([a-zA-Z0-9]{1,10})
+TAG		GENEID	([0-9]{1,10})
+TAG		ENSEMBL	REGEX:ENSEMBL
+LOC				/genomic/genomic_portal
+FNAME			genomic_portal
+HTML_TAG		genomic_portal
+WITH_EXPORT		true
+WITH_DATA		true
+END	PORTAL	GENE
+
+START	PORTAL	DISEASE
+PORTAL_ID	25
+TAG		DISEASE	[0-9A-Za-z \-()]{1,2000}
+LOC				/genomic/disease
+FNAME			disease
+HTML_TAG		portal_disease
+WITH_EXPORT		false
+WITH_DATA		false
+END	PORTAL	DISEASE
+
+
+START	PAGE	GENE_MENU
+LOC				/genomic/genomic_menu
+FNAME			genomic_menu
+HTML_TAG		genomic_menu
+END	PAGE	GENE_MENU
+
+
+START	PAGE	VARIANT
+LOC				/genomic/variant
+TAG				VARIANT	REGEX:SNP
+FNAME			variant
+HTML_TAG		variant
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	VARIANT
+
+
+START	PAGE	VARIANT_SEARCH
+LOC				/genomic/variant_search
+TAG				VARIANT_SEARCH
+FNAME			variant_search
+HTML_TAG		variant_search
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	VARIANT_SEARCHs
+
+
+START	PAGE	VARIANTS
+LOC				/genomic/variants
+TAG				VARIANTS
+FNAME			variants
+HTML_TAG		variants
+WITH_EXPORT		false
+WITH_DATA		true
+END		PAGE	VARIANTS
+
+
+START	PAGE	ORTHOLOGS
+LOC				/genomic/orthologs
+TAG				ORTHOLOGS
+FNAME			orthologs
+HTML_TAG		orthologs
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	ORTHOLOGS
+
+
+
+START	PAGE	GENE_TISSUE_EXPR
+LOC				/genomic/rna_expr_gene_tr_tissue
+TAG				GENE_TISSUE_EXPR
+FNAME			rna_expr_gene_tr_tissue
+HTML_TAG		rna_expr_gene_tr_tissue
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENE_TISSUE_EXPR
+
+START	PAGE	GENE_RNA_EXPR
+LOC				/genomic/rna_exprs
+TAG				GRNA_EXPRS
+FNAME			rna_exprs
+HTML_TAG		grna_exprs
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENE_RNA_EXPR
+
+
+START	PAGE	RNA_GENE_EXPR_BP
+LOC				/genomic/rna_gene_expr_bp
+TAG				RNA_GENE_EXPR_BP
+FNAME			rna_gene_expr_bp
+HTML_TAG		rna_gene_expr_bp
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	RNA_GENE_EXPR_BP
+
+
+START	PAGE	RNA_TR_EXPR_BP
+LOC				/genomic/rna_tr_expr_bp
+TAG				RNA_TR_EXPR_BP	REGEX:TRANSCRIPT
+FNAME			rna_tr_expr_bp
+HTML_TAG		rna_tr_expr_bp
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	RNA_TR_EXPR_BP
+
+
+START	PAGE	TISSUE_PROTEXPR
+LOC				/genomic/tissue_protexpr
+TAG				TISSUE_PROTEXPR
+FNAME			tissue_protexpr
+HTML_TAG		tissue_protexpr
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_PROTEXPR
+
+
+START	PAGE	TISSUE_RNA_EXPR_GENESUM
+LOC				/genomic/tissue_rna_expr_genesum
+TAG				TISSUE_RNA_EXPR_GENESUM	REGEX:GENEID
+FNAME			tissue_rna_expr_genesum
+HTML_TAG		tissue_rna_expr_genesum
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_RNA_EXPR_GENESUM
+
+
+START	PAGE	TISSUE_RNA_EXPR_TBL
+LOC				/genomic/tissue_rna_expr_tbl
+TAG				TISSUE_RNA_EXPR_TBL
+FNAME			tissue_rna_expr_tbl
+HTML_TAG		tissue_rna_expr_tbl
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_RNA_EXPR_TBL
+
+
+START	PAGE	TISSUE_RNA_EXPR
+LOC				/genomic/tissue_rna_expr_view
+TAG				TISSUE_RNA_EXPR
+FNAME			tissue_rna_expr_view
+HTML_TAG		tissue_rna_expr_view
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TISSUE_RNA_EXPR
+
+
+START	PAGE	TRANSCRIPT_SEQ
+LOC				/genomic/transcript_seq
+TAG				TRANSCRIPT_SEQ	REGEX:TRANSCRIPT
+FNAME			transcript_seq
+HTML_TAG		transcript_seq
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TRANSCRIPT_SEQ
+
+
+START	PAGE	TRANSCRIPT
+LOC				/genomic/transcript
+TAG				TRANSCRIPT	REGEX:TRANSCRIPT
+FNAME			transcript
+HTML_TAG		transcript
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TRANSCRIPT
+
+
+START	PAGE	TRANSCRIPTS
+LOC				/genomic/transcripts
+TAG				TRANSCRIPTS
+FNAME			transcripts
+HTML_TAG		transcripts
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TRANSCRIPTS
+
+START	PAGE	TRANSCRIPTS_CHROM
+LOC				/genomic/transcripts_chrom
+TAG				TRANSCRIPTS_CHROM
+FNAME			transcripts_chrom
+HTML_TAG		transcripts_chrom
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TRANSCRIPTS_CHROM
+
+
+
+START	PAGE	TRANSCRIPTS_SEQ_SUMMARY
+LOC				/genomic/transcripts_seq_summary
+TAG				TRANSCRIPTS_SEQ_SUMMARY
+FNAME			transcripts_seq_summary
+HTML_TAG		transcripts_seq_summary
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	TRANSCRIPTS_SEQ_SUMMARY
+
+
+START	PAGE	NEWS_VALIDATE
+LOC				/external/news_validate
+TAG				NEWS_VALIDATE
+FNAME			news_validate
+HTML_TAG		news_validate
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	NEWS_VALIDATE
+
+START	PAGE	NEWS_INFO
+LOC					/external/news_info
+FNAME				news_info
+HTML_TAG			news_info
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		NEWS_INFO
+TAG		NEWS_INFO
+END	PAGE	NEWS_INFO
+
+START	PAGE	ADD_NEWS
+LOC				/external/add_news
+TAG				ADD_NEWS
+FNAME			add_news
+HTML_TAG		add_news
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	ADD_NEWS
+
+START	PAGE	SEND_NEWS
+LOC				/external/send_news
+TAG				SEND_NEWS	REGEX:MD5
+FNAME			send_news
+HTML_TAG		send_news
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	SEND_NEWS
+
+
+START	PAGE	MONITOR_NEWS
+TAG				MONITOR_NEWS
+LOC				/external/monitor_news
+HTML_TAG		monitor_news
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			monitor_news
+END	TOPIC	    MONITOR_NEWS
+
+
+START	PAGE	NEWS_BATCH
+LOC				/external/news_batch
+TAG				NEWS_BATCH
+FNAME			news_batch
+HTML_TAG		news_batch
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	NEWS_BATCH
+
+START	PAGE	NEWS_CONTENT
+LOC				/external/news_content
+TAG				NEWS_CONTENT
+FNAME			news_content
+HTML_TAG		news_content
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	NEWS_CONTENT
+
+START	PAGE	NEWS_FILE
+LOC				/external/news_file
+TAG				NEWS_FILE	REGEX:MD5
+FNAME			news_file
+HTML_TAG		news_file
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	NEWS_FILE
+
+
+START	PAGE	PUBLI_NEWS
+LOC				/external/news_search
+TAG				PUBLI_NEWS
+FNAME			publi_news
+HTML_TAG		publi_news
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_NEWS
+
+
+START	PAGE	PUBLI_NEWS_SEARCH
+TAG				PUBLI_NEWS_SEARCH
+LOC				/external/news_search
+FNAME			publi_news_search
+HTML_TAG		publi_news_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	PUBLI_NEWS_SEARCH
+
+
+
+###################################################################################################
+###################################################################################################
+########################################### DISEASE #############################################
+###################################################################################################
+###################################################################################################
+
+
+START	PORTAL	DISEASE
+PORTAL_ID	4
+TAG		DISEASE	[A-Z_0-9]{1,20}
+LOC				/disease/disease_portal
+FNAME			disease_portal
+HTML_TAG		disease_portal
+WITH_EXPORT		true
+WITH_DATA		true
+END	PORTAL	DISEASE
+
+START	PAGE	DISEASE_MENU
+LOC				/disease/disease_menu
+FNAME			disease_menu
+HTML_TAG		disease_menu
+END	PAGE	DISEASE_MENU
+
+
+###################################################################################################
+###################################################################################################
+########################################### PROTEOMIC #############################################
+###################################################################################################
+###################################################################################################
+
+
+START	PORTAL	PROTEIN
+PORTAL_ID	2
+TAG		UNIPROT_ID	REGEX:UNIPROT_ID
+TAG		UNIPROT_AC	REGEX:UNIPROT_AC
+LOC				/proteomic/proteomic_portal
+FNAME			proteomic_portal
+HTML_TAG		proteomic_portal
+WITH_EXPORT		true
+WITH_DATA		true
+END	PORTAL	PROTEIN
+
+START	PAGE	PROTEIN_MENU
+LOC				/proteomic/proteomic_menu
+FNAME			proteomic_menu
+HTML_TAG		proteomic_menu
+END	PAGE	GENE_MENU
+
+
+START	PAGE	CHEMTOOL_SUMMARY
+LOC				/proteomic/chemtool_summary
+TAG				CHEMTOOL_SUMMARY
+FNAME			chemtool_summary
+HTML_TAG		chemtool_summary
+WITH_EXPORT		true
+WITH_DATA		true
+END	PAGE		CHEMTOOL_SUMMARY
+
+
+START	PAGE	DOMAIN
+LOC				/proteomic/domain
+TAG				DOMAIN	REGEX:DOMAIN_NAME
+FNAME			domain
+HTML_TAG		domain
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	DOMAIN
+
+
+START	PAGE	DOMAIN_ALIGNMENT
+LOC				/proteomic/domain_alignment
+TAG				DOMAIN_ALIGNMENT
+FNAME			domain_alignment
+HTML_TAG		domain_alignment
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	DOMAIN_ALIGNMENT
+
+
+START	PAGE	DOMAIN_REL_SEARCH
+LOC				/proteomic/domain_rel_search
+TAG				DOMAIN_REL_SEARCH	REGEX:DOMAIN_NAME
+FNAME			domain_rel_search
+HTML_TAG		domain_rel_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	DOMAIN_REL_SEARCH
+
+
+START	PAGE	DOMAINS
+LOC				/proteomic/domains
+TAG				DOMAINS
+FNAME			domains
+HTML_TAG		domains
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	DOMAINS
+
+
+START	PAGE	EXTERNAL_LINKS	
+LOC				/proteomic/external_link
+TAG				LINKS
+HTML_TAG		links
+FNAME			external_link
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	LINKS
+
+
+START	PAGE	ISOFORM_ALIGNMENT
+LOC				/proteomic/isoform_alignment
+TAG				ISOFORM_ALIGNMENT	REGEX:UNIPROT_SEQ
+FNAME			isoform_alignment
+HTML_TAG		isoform_alignment
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	ISOFORM_ALIGNMENT
+
+
+START	PAGE	ORTHOLOG_DOMAIN_SIMILARITY
+LOC				/proteomic/ortholog_domain_similarity
+TAG				ORTHOLOG_DOM
+FNAME			ortholog_domain_similarity
+HTML_TAG		ortholog_domain_similarity
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	ORTHOLOG_DOMAIN_SIMILARITY
+
+
+START	PAGE	ORTHOLOG_SEQUENCE_SIMILARITY
+LOC				/proteomic/ortholog_sequence_similarity
+TAG				ORTHOLOG_ALIGN	REGEX:UNIPROT_SEQ
+FNAME			oss
+HTML_TAG		oss
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	ORTHOLOG_SEQUENCE_SIMILARITY
+
+
+START	PAGE	PATHWAY
+LOC				/proteomic/pathway
+TAG				PATHWAY	REGEX:REACTOMEPW
+FNAME			pathway
+HTML_TAG		pathway
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PATHWAY
+
+
+START	PAGE	PATHWAYS
+LOC				/proteomic/pathways
+TAG				PATHWAYS
+FNAME			pathways
+HTML_TAG		pathways
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PATHWAYS
+
+
+START	PAGE	PROTEIN_DESC
+LOC				/proteomic/protein_desc
+TAG				PROTEIN_DESC
+FNAME			protein_desc
+HTML_TAG		protein_desc
+WITH_EXPORT		true
+WITH_DATA		true
+END	PAGE		PROTEIN_DESC
+
+
+START	PAGE	PROTEXPR
+LOC				/proteomic/protein_expression
+TAG				PROTEXPR
+FNAME			protexpr
+HTML_TAG		protexpr
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PROTEXPR
+
+
+START	PAGE	PROTEIN_RESIDUE
+LOC				/proteomic/protein_residue
+TAG				PROTEIN_RESIDUE	REGEX:UNIRES
+FNAME			protein_residue
+HTML_TAG		protein_residue
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PROTEIN_RESIDUE
+
+
+START	PAGE	SEQUENCE
+LOC				/proteomic/sequence
+TAG				SEQUENCE	([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})(\-[0-9]{1,2}){0,1}
+HTML_TAG		prot_seq
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			sequence
+END		PAGE	SEQUENCE
+
+
+START	PAGE	SEQUENCE_ALIGNMENT
+LOC				/proteomic/sequence_alignment
+TAG				SEQUENCE_ALIGNMENT	REGEX:UNIPROT_SEQ
+FNAME			sequence_alignment
+HTML_TAG		sequence_alignment
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	SEQUENCE_ALIGNMENT
+
+
+START	PAGE	SEQUENCE_REL_SEARCH
+LOC				/proteomic/sequence_rel_search
+TAG				SEQUENCE_REL_SEARCH	REGEX:UNIPROT_SEQ
+FNAME			sequence_rel_search
+HTML_TAG		sequence_rel_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	SEQUENCE_REL_SEARCH
+
+
+START	PAGE	SEQUENCE_TABLE
+LOC			/proteomic/sequence_table
+TAG			SEQUENCE_TABLE	([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})(\-[0-9]{1,2}){0,1}
+HTML_TAG	sequence_table
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME		sequence_table
+END	PAGE	SEQUENCE_TABLE
+
+
+START	PAGE	SEQUENCES	
+LOC			/proteomic/sequences
+TAG			SEQUENCES
+HTML_TAG	sequences
+FNAME			sequences
+WITH_EXPORT		true
+WITH_DATA		true
+END	PAGE	SEQUENCES
+
+
+
+START	PAGE	PTMS	
+LOC			/proteomic/PTMOME
+TAG			PTMS
+HTML_TAG	ptmome
+FNAME			ptmome
+WITH_EXPORT		true
+WITH_DATA		true
+END	PAGE	PTMOME
+
+
+
+
+
+START	PORTAL	ASSAY
+LOC					/assay/assay_portal
+FNAME				assay_portal
+HTML_TAG			assay_portal
+WITH_EXPORT			true
+WITH_DATA			true
+TAG		ASSAY	REGEX:CHEMBL
+END	PORTAL	ASSAY
+
+
+START	PAGE	ASSAY_MENU
+LOC				/assay/assay_menu
+FNAME			assay_menu
+HTML_TAG		assay_menu
+END	PAGE	ASSAY_MENU
+
+###################################################################################################
+###################################################################################################
+########################################### PUBLICATION ###########################################
+###################################################################################################
+###################################################################################################
+
+
+START	PAGE	GENE_PUBLI_STAT
+LOC				/publication/gene_publi_stat
+TAG				GENE_PUBLI_STAT	REGEX:GENEID
+FNAME			gene_publi_stat
+HTML_TAG		gene_publi_stat
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	GENE_PUBLI_STAT
+
+
+START	PAGE	PUBLI_AUTHOR
+LOC				/publication/publi_author
+TAG				PUBLI_AUTHOR	[0-9]{1,13}
+FNAME			publi_author
+HTML_TAG		publi_author
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_AUTHOR
+
+
+
+
+
+START	PAGE	PUBLI_DISEASE
+LOC				/publication/publi_disease
+TAG				PUBLI_DISEASE
+FNAME			publi_disease
+HTML_TAG		publi_disease
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_DISEASE
+
+
+START	PAGE	PUBLI_DISEASE_SEARCH
+LOC				/publication/publi_disease
+TAG				PUBLI_DISEASE_SEARCH
+FNAME			publi_disease_search
+HTML_TAG		publi_disease_search
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_DISEASE_SEARCH
+
+
+
+START	PAGE	PUBLI_ECO
+LOC				/publication/publi_eco
+TAG				PUBLI_ECO	[0-9a-zA-Z:|, ]{0,1000}
+FNAME			publi_eco
+HTML_TAG		publi_eco
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_ECO
+
+
+START	PAGE	PUBLI_GENE
+LOC				/publication/publi_gene
+TAG				PUBLI_GENE
+FNAME			publi_gene
+HTML_TAG		publi_gene
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_GENE
+
+
+START	PAGE	PUBLI_GENE_SEARCH
+TAG				PUBLI_GENE_SEARCH
+LOC				/publication/publi_gene
+FNAME			publi_gene_search
+HTML_TAG		publi_gene_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	PUBLI_GENE_SEARCH
+
+
+START	PAGE	PUBLI_COMPOUND
+LOC				/publication/publi_compound
+TAG				PUBLI_COMPOUND
+FNAME			publi_compound
+HTML_TAG		publi_compound
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_COMPOUND
+
+START	PAGE	PUBLI_COMPOUND_SEARCH
+TAG				PUBLI_COMPOUND_SEARCH 
+LOC				/publication/publi_compound
+FNAME			publi_compound_search
+HTML_TAG		publi_compound_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	PUBLI_COMPOUND_SEARCH
+
+
+START	PAGE	PUBLI_TOPIC_SEARCH
+TAG				PUBLI_TOPIC_SEARCH	REGEX:PUBLI_TOPIC
+LOC				/publication/publi_topic
+FNAME			publi_topic_search
+HTML_TAG		publi_topic_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	PUBLI_TOPIC_SEARCH
+
+START	PAGE	PUBLI_TOPIC
+TAG				PUBLI_TOPIC	REGEX:PUBLI_TOPIC
+LOC				/publication/publi_topic
+FNAME			publi_topic
+HTML_TAG		publi_topic
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	PUBLI_TOPIC
+
+
+START	PAGE	PUBLICATION
+LOC				/publication/publication
+FNAME			publication
+HTML_TAG		publication
+WITH_EXPORT		true
+WITH_DATA		true
+TAG				PUBLICATION	PMID[0-9]{1,10}
+TAG				PUBLICATION	[0-9]{1,10}
+TAG				PUBLICATION	PMID[0-9]{1,10}
+END		PAGE	PUBLICATION
+
+START	PAGE	PUBLI_DRUG
+LOC				/publication/publi_drug
+TAG				PUBLI_DRUG
+FNAME			publi_drug
+HTML_TAG		publi_drug
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	PUBLI_DRUG
+
+START	PAGE	PUBLI_DRUG_SEARCH
+TAG				PUBLI_DRUG_SEARCH 
+LOC				/publication/publi_drug
+FNAME			publi_drug_search
+HTML_TAG		publi_drug_search
+WITH_DATA		true
+WITH_EXPORT		true
+END		PAGE	PUBLI_DRUG_SEARCH
+
+###################################################################################################
+########################################### TOOLS #################################################
+###################################################################################################
+###################################################################################################
+
+
+
+
+START	PAGE	SIRNA_GENE_INPUT
+TAG				SIRNA_GENE_INPUT
+WITH_DATA		true
+WITH_EXPORT		false
+FNAME			sirna_gene_input
+HTML_TAG		sirna_gene_input
+LOC				/tool/sirna_gene/input/
+END		PAGE	SIRNA_GENE_INPUT
+
+START	PAGE	SIRNA_GENE_SUBMIT
+TAG				SIRNA_GENE_SUBMIT
+WITH_DATA		false
+WITH_EXPORT		false
+FNAME			sirna_gene_submit
+HTML_TAG		sirna_gene_submit
+LOC				/tool/sirna_gene/submit/
+END		PAGE	SIRNA_GENE_SUBMIT
+
+START	PAGE	SIRNA_GENE_RESULTS
+TAG				SIRNA_GENE_RESULTS	REGEX:JOB_ID
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sirna_gene_output
+HTML_TAG		sirna_gene_output
+LOC				/tool/sirna_gene/output/
+END		PAGE	SIRNA_GENE_RESULTS
+
+START	PAGE	ONTOLOGY_TREE
+TAG				ONTOLOGY_TREE
+LOC				/global/ontology_tree
+HTML_TAG		ONTOLOGY_TREE
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			ontology_tree
+END	TOPIC	    ONTOLOGY_TREE
+
+
+START	PAGE	DNA_SEQ_VIEW
+TAG				DNA_SEQ_VIEW
+LOC				/genomic/dna_seq_view
+HTML_TAG		dna_seq_view
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			dna_seq_view
+END	TOPIC	    DNA_SEQ_VIEW
+
+
+
+
+
+START	PAGE	DNA_VIEW
+TAG				DNA_VIEW
+LOC				/genomic/dna_view
+HTML_TAG		dna_view
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			dna_view
+END	TOPIC	    DNA_VIEW
+
+
+START	PAGE	MONITOR_ADMIN_INFO
+TAG				MONITOR_ADMIN_INFO
+LOC				/core/monitor_admin_info
+HTML_TAG		monitor_admin_info
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			monitor_admin_info
+END	TOPIC	    MONITOR_ADMIN_INFO
+
+START	PAGE	MONITOR_ADMIN
+TAG				MONITOR_ADMIN
+LOC				/core/monitor_admin
+HTML_TAG		monitor_admin
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			monitor_admin
+END	TOPIC	    MONITOR_ADMIN
+
+START	PAGE	SUNBURST
+TAG				SUNBURST
+LOC				/graph/sunburst
+HTML_TAG		sunburst
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			sunburst
+END	TOPIC	    SUNBURST
+
+
+START	PAGE	BARCHART
+TAG				BARCHART
+LOC				/graph/barchart
+HTML_TAG		barchart
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			barchart
+END	TOPIC	    BARCHART
+
+
+START	PAGE	STACKED_BARCHART
+TAG				STACKED_BARCHART
+LOC				/graph/stacked_barchart
+HTML_TAG		stacked_barchart
+WITH_EXPORT		true
+WITH_DATA		true
+FNAME			stacked_barchart
+END	TOPIC	    STACKED_BARCHART
+
+
+START	PAGE	DNA_VARIANTS
+NAME			DNA Variant frequency
+TAG				DNA_VARIANTS
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			dna_variants
+HTML_TAG		dna_variants
+DESC			Retrieve variant frequencies for a given chromosomal range
+LOC				/tool/dna_variants/input
+END		PAGE	DNA_VARIANTS
+
+
+
+START	PAGE	MONITOR_JOB
+TAG				MONITOR_JOB	REGEX:JOB_ID
+LOC				/tool/monitor_job
+FNAME			monitor_job
+HTML_TAG		monitor_job
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	MONITOR_JOB
+
+
+START	PAGE	DNA_VARIANTS_RESULTS
+TAG				DNA_VARIANTS_RESULTS	REGEX:JOB_ID
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			dna_variants_results
+HTML_TAG		dna_variants_results
+LOC				/tool/dna_variants/results
+END		PAGE	DNA_VARIANTS_RESULTS
+
+
+START	PAGE	DRUG_SIM
+NAME			Drug similarity
+TAG				DRUG_SIM
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			drug_sim
+HTML_TAG		drug_sim
+DESC			Check similarity of a given compound against existing drugs
+LOC				/tool/drug_sim/input
+END		PAGE	DRUG_SIM
+
+
+START	PAGE	DRUG_SIM_RESULTS
+TAG				DRUG_SIM_RESULTS	REGEX:JOB_ID
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			drug_sim_results
+HTML_TAG		drug_sim_results
+LOC				/tool/drug_sim/results
+END		PAGE	DRUG_SIM_RESULTS
+
+
+START	PAGE	SIRNA_ORTHOLOGS
+NAME			siRNA/ASO ortholog analysis
+TAG				SIRNA_ORTHOLOGS
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sirna_orthologs
+HTML_TAG		sirna_orthologs
+DESC			Check siRNA against orthologous genes
+LOC				/tool/sirna_orthologs/input
+END		PAGE	SIRNA_ORTHOLOGS
+
+
+
+START	PAGE	SIRNA_ORTHOLOGS_RESULTS
+NAME			siRNA/ASO ortholog analysis
+TAG				SIRNA_ORTHOLOGS_RESULTS	REGEX:JOB_ID
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sirna_orthologs_results
+HTML_TAG		sirna_orthologs_results
+LOC				/tool/sirna_orthologs/results
+END		PAGE	SIRNA_ORTHOLOGS_RESULTS
+
+
+
+START	PAGE	SEQUENCE_SEARCH
+NAME			Local DNA/RNA Sequence search
+TAG				SEQUENCE_SEARCH
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sequence_search_input
+HTML_TAG		sequence_search_input
+DESC			Search sequence against mRNA/pre-mRNA/promotor sequences
+LOC				/tool/sequence_search/input
+END		PAGE	SEQUENCE_SEARCH
+
+
+
+START	PAGE	SEQUENCE_SEARCH_RESULTS
+NAME			Local DNA/RNA Sequence search
+TAG				SEQUENCE_SEARCH_RESULTS	REGEX:JOB_ID
+WITH_DATA		true
+WITH_EXPORT		true
+FNAME			sequence_search_results
+HTML_TAG		sequence_search_results
+LOC				/tool/sequence_search/results
+END		PAGE	SEQUENCE_SEARCH_RESULTS
+
+
+

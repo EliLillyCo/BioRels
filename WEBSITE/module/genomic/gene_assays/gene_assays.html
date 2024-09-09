@@ -1,0 +1,173 @@
+<h3>List of assays</h3>
+
+<div class="w3-container">
+<table class="display" id="gene_assays" style="min-width:400px">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Type</th>
+			<th>Target Type</th>
+			<th>Confidence</th>
+			<th>Cell Line</th>
+			<th>Tissue</th>
+			<th>Mutation</th>
+			<th>Source</th>
+		</tr>
+	</thead>
+	<tbody>
+		${LIST_ASSAYS}
+	</tbody>
+</table>
+</div>
+<link rel="stylesheet" href="/require/css/dev/searchPanes.dataTables.min.css" 		       type="text/css"/>
+       <script src="/require/js/dataTables.searchPanes.min.js" ></script>
+<script>
+	var list_info = JSON.parse('${INFO}');
+    var list_tooltips = JSON.parse('${TOOLTIPS}');
+	$(document).ready(function() {
+    // Create date inputs
+    
+ 
+    // DataTables initialisation
+    var table = $('#gene_assays').DataTable({
+		
+		buttons: [
+            {
+				
+                extend: 'searchPanes',
+                config: {
+                    cascadePanes: true
+                }
+            }
+        ],
+		"columnDefs": [
+    { "width": "130px", "targets": 0 },
+	{ "width": "60%", "targets": 1 },
+	{ "width": "5%", "targets": 2,
+	render: function ( data, type, row ) {// console.log("ASSAY "+data);console.log("ASSAY =>  "+list_info.ASSAY_TYPE[data]);
+	return list_info.ASSAY_TYPE[data];} },
+	{ "className": "dt-center","width": "10%", "targets": 3 ,
+	render: function ( data, type, row ) {//console.log("TARGET "+data);console.log("TARGET =>  "+list_info.TARGET_TYPE[data]);
+	 return list_info.TARGET_TYPE[data];} },
+	{"className": "dt-center", "width": "4%", "targets": 4},
+	{ "width": "4%", "targets": 5,
+    render: function ( data, type, row ) {// console.log("CELL "+data);console.log("CELL =>  "+list_info.ASSAY_TYPE[data]);
+	return list_info.CELL_TYPE[data];}  },
+	{ "width": "4%", "targets": 6,},
+	{ "width": "4%", "targets": 7,},
+	{ "width": "4%", "targets": 8,},
+	
+  ],
+		
+        dom: 'Blfrtip',
+        language: {
+            searchPanes: {
+				clearMessage: 'Clear Selections',
+                collapse: {0: 'Search Options', _: 'Search Options (%d)'},
+                count: '{total} found',
+                countFiltered: '{shown} / {total}'
+            }
+        }
+	,
+	"fnDrawCallback": function() {
+		$('.ttl_tr').uitooltip({
+		open: function (event, ui) {
+			ui.tooltip.css("width", "fit-content");
+		},
+		hide: {
+			effect: "slideDown",
+			delay: 400
+		},
+		track: true,
+		content: function () {
+			console.log($(this).data('pos'));
+			return list_tooltips[$(this).data('pos')];;
+		}
+	}) }});
+ 
+
+	$('.ttl_tr').uitooltip({
+		open: function (event, ui) {
+			ui.tooltip.css("width", "fit-content");
+		},
+		hide: {
+			effect: "slideDown",
+			delay: 400
+		},
+		track: true,
+		content: function () {
+			console.log($(this).data('pos'));
+			return list_tooltips[$(this).data('pos')];;
+		}
+	});
+});
+// $(document).ready(function() {
+//     // Create date inputs
+    
+ 
+//     // DataTables initialisation
+//     var table = $('#gene_assays').DataTable({ buttons: [
+//             {
+				
+//                 extend: 'searchPanes',
+//                 config: {
+//                     cascadePanes: true
+//                 }
+//             }
+//         ],
+// 		"columnDefs": [
+//     { "width": "10%", "targets": 0 },
+// 	{ "width": "60%", "targets": 1 },
+// 	{ "width": "5%", "targets": 2 },
+// 	{ "className": "dt-center","width": "17%", "targets": 3 },
+// 	{"className": "dt-center", "width": "4%", "targets": 4 },
+// 	{ "width": "4%", "targets": 5 },
+	
+//   ],
+		
+//         dom: 'Blfrtip',
+//         language: {
+//             searchPanes: {
+// 				clearMessage: 'Clear Selections',
+//                 collapse: {0: 'Search Options', _: 'Search Options (%d)'},
+//                 count: '{total} found',
+//                 countFiltered: '{shown} / {total}'
+//             }
+//         }
+// 	,
+// 	"fnDrawCallback": function() {
+// 		$('.ttl_tr').tooltip({
+// 		open: function (event, ui) {
+// 			ui.tooltip.css("width", "fit-content");
+// 			//ui.tooltip.css("min-width", "600px");
+// 		},
+// 		hide: {
+// 			effect: "slideDown",
+// 			delay: 400
+// 		},
+// 		track: true,
+// 		content: function () {
+// 			console.log($(this).data('pos'));
+// 			return list_tooltips[$(this).data('pos')];;
+// 		}
+// 	}) }});
+ 
+
+// 	$('.ttl_tr').tooltip({
+// 		open: function (event, ui) {
+// 			ui.tooltip.css("width", "fit-content");
+// 			//ui.tooltip.css("min-width", "600px");
+// 		},
+// 		hide: {
+// 			effect: "slideDown",
+// 			delay: 400
+// 		},
+// 		track: true,
+// 		content: function () {
+// 			console.log($(this).data('pos'));
+// 			return list_tooltips[$(this).data('pos')];;
+// 		}
+// 	});
+// });
+</script>

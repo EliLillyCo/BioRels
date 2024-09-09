@@ -1,0 +1,20 @@
+
+$[VALID]
+<table id="mutation_search_res" style="width:100%;max-width:100%;" class="table"><thead><tr><th>RSID</th><th>Change</th><th>Clinical Significance</th><th>Overall<br/>Frequency</th><th>Highest study<br/>Frequency</th></tr></thead>
+<tbody>${LIST}</tbody></table>
+
+<hr/>
+<div class="w3-col s12">
+    <table class="table table-sm">
+${PARAMS}
+</table>
+</div>
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#mutation_search_res').DataTable({responsive:true});
+} );
+</script>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">${ERROR}</div>
+$[/INVALID]

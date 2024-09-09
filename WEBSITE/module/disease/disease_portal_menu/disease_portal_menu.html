@@ -1,0 +1,31 @@
+<nav class="w3-sidebar w3-collapse w3-lly w3-animate-left topbar portal_col2" id="navbar">
+	<div class="w3-row" id="navbar_menu">
+		<div class="w3-row portal_name w3-col l2 m4 s12 s-center l-center">
+			Disease Portal
+		</div>
+		<div class="w3-row portal_name w3-col l2 m8 s12 s-center">
+			${DISEASE_NAME}
+		</div>
+
+		
+		<div class="w3-bar-block w3-col s12 m12 l6 main-menu">
+			<ul class="nav nav-pills topmenu">
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="/DISEASE/${DISEASE_TAG}">Summary</a>
+				</li>
+				
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+						aria-expanded="false">External</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="/DISEASE/${DISEASE_TAG}/CLINICAL_TRIALS">Clinical trials</a></li>
+						<li><a class="dropdown-item" href="/DISEASE/${DISEASE_TAG}/PUBLI_DISEASE">Publications</a></li>
+					<!--	<li><a class="dropdown-item" href="/DISEASE/${DISEASE_TAG}/DRUGS">Drugs</a></li>-->
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="w3-main protein_portal">

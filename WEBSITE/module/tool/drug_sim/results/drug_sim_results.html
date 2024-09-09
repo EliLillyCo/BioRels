@@ -1,0 +1,95 @@
+<div class="w3-container genomic-portal">
+	<header class="w3-container">
+		<div class="page-title">
+			Similarity to existing drugs
+			
+		</div>
+	</header>
+</div>
+$[MONITOR]
+
+<script>
+	
+	
+
+$(document).ready(function(){
+	setTimeout(function(){
+
+		window.location.replace("/DRUG_SIM_RESULTS/${HASH}");
+		
+	},3000);
+});
+
+
+
+
+</script>
+<div class="w3-container alert alert-info">
+	${MONITOR_STR}
+</div>
+$[/MONITOR]
+<ul class="nav nav-tabs">
+	<li id="ssr_${HASH}_tab_1" class="active nav-item nav-link" onclick="showMenu('ssr_${HASH}',1,2)">Input & Log</li>
+	$[READY]
+	<li id="ssr_${HASH}_tab_2" class="active nav-item nav-link" onclick="showMenu('ssr_${HASH}',2,2)">Results</li>
+	$[/READY]
+</ul>
+
+<div id="ssr_${HASH}_view_1" class="container-grey w3-container  w3-col s12 l12 m12 s-always-show">
+	<div class=" w3-col s12 m5 l5 w3-container ">
+		<h5 style="text-align: center;margin-top:10px">Input parameters:</h5>
+		
+		<table class="table">
+			<tr><th>Similarity threshold:</th><td>${THRESHOLD}</td></tr>
+			<tr><th>Structure:</th><td></td></tr>
+			<tr><td colspan="2" id="ref_struct" style="max-width:300px"></td></tr>
+			
+			</table>
+	</div>
+	<div class=" w3-col s12 m7 l7 w3-container " style="max-height: 500px; overflow-y: scroll;">
+		<h5 style="text-align: center;margin-top:10px">Log:</h5>
+		<table  class="table table-sm">
+			${LOG}
+		</table>
+	</div>
+	</div>
+	$[READY]
+	<div id="ssr_${HASH}_view_2" class="container-grey w3-container w3-col s12 l12 m12 s-always-show" style="display: none">
+		<table id="res_tbl" class="table table-sm">
+			<thead><tr>
+				$[similarity]
+				<th>Similarity</th>
+				$[/similarity]
+				<th>Structure</th>
+				<th>Name</th>
+				<th>Synonym</th>
+				<th>Is Approved</th>
+				<th>Is Withdrawn</th>
+				<th>Max clin phase</th>
+
+			</tr></thead>
+			<tbody>
+				${RESULTS}
+			</tbody>
+		</table>
+		
+	</div>
+	<script>
+		$(document).ready(function(){
+			${LIST_IMGS}
+
+			table = $('#res_tbl').dataTable(
+						{
+							responsive:true,
+							rowCallback: (row, data) => {
+								console.log($(row).children('td:first').data('id'));
+							getCompoundImage($(row).children('td:first').data('smi'),$(row).children('td:first').data('id'),300);
+		
+        }
+							
+						});
+		});
+	</script>
+	$[/READY]
+
+	

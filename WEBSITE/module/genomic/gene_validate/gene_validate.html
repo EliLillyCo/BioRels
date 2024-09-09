@@ -1,0 +1,8 @@
+<input type="text" id="gnval_input_${TAG}" />
+<input id="gnval_val_${TAG}" type="button" value="validate" onclick="validateGene('${TAG}', '${HUMAN_FILTER}')" />
+<select id="gnval_sel_${TAG}" name="gnval_sel_${TAG}" style="display: none;">
+    <option value=""></option>
+</select>
+<input id="cancel_gn_${TAG}" style="display: none; margin-left: 15px;" type="button" class="default_button"
+    onclick="cancelGeneValidate('${TAG}')" value="Cancel" />
+<span class="alert alert-info" style="display:none;" id="gn_status_${TAG}"></span>

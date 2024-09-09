@@ -1,0 +1,34 @@
+<h3>Gene evidence from publications</h3>
+<div class="w3-container w3-col s12">
+<table  class="table table-sm w3-centered" id="varclin_list">
+	<thead>
+		<tr>
+			$[GENE]
+			<th>Symbol</th>
+			<th>Gene ID</th>
+			<th>Full Name</th>
+			$[/GENE]
+			$[DISEASE]
+			<th>Disease Name</th>
+			$[/DISEASE]
+			<th>All Publications</th>
+			<th>Publications over the last year</th>
+			<th>1 year trend</th>
+			<th>5 years trend</th>
+			<th>View</th>
+		</tr>
+	</thead>
+	<tbody>
+		${tbl}
+	</tbody>
+</table>
+</div>
+<script type="text/javascript">
+$(document).ready( function () {
+	$('.ttp').uitooltip();
+    $('#varclin_list').DataTable({
+		responsive: true,
+		"order": [[ ${COL}, "desc" ]]});
+} );
+
+</script>

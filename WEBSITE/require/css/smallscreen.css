@@ -1,0 +1,217 @@
+.w3-col.m_hide{display: none;}
+.w3-col.m1 {
+	width: 8.33333%
+}
+.w3-col.m10p {
+	width: 10%;
+}
+
+.w3-col.m1_5 {
+	width: 11.11111%
+}
+
+.w3-col.m2 {
+	width: 16.66666%
+}
+.w3-col.m10p {
+	width: 10%;
+}
+
+.w3-col.m3 {
+	width: 24.99999%
+}
+.w3-col.m3-m {
+	width: 22.99999%;
+    margin:1%;
+}
+.w3-col.m3_1 {
+	width: 23.99999%;
+	margin-right: 1%;
+}
+
+.w3-col.m4 {
+	width: 33.33333%
+}
+.w3-col.m4-m {
+	width: 31.33333%;
+margin:1%;
+}
+
+.w3-col.m5 {
+	width: 41.66666%
+}
+
+.w3-col.m6 {
+	width: 49.99999%
+}
+.w3-col.m6-m {
+	width: 47.99999%;
+	margin:1%;
+}
+.w3-col.m7 {
+	width: 58.33333%
+}
+
+.w3-col.m8 {
+	width: 66.66666%
+}
+
+.w3-col.m9 {
+	width: 74.99999%
+}
+
+.w3-col.m10 {
+	width: 83.33333%
+}
+
+.w3-col.m11 {
+	width: 91.66666%
+}
+
+.w3-col.m12 {
+	width: 99.99999%
+}
+
+.w3-col.m3_1 {
+	width: 23.99999%;
+	margin-right: 1%;
+}
+.w3-col.m-al-right
+{
+    text-align: right
+}
+
+.m_hide{display: none;}
+
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+ HEAD PAGE
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+*/
+
+mgt-login {
+	--button-color: #fff;
+	--button-background-color--hover: transparent;
+	--button-color--hover: #161514;
+}
+
+
+
+#BIORELS_NAME {
+    display: block;
+    text-align: center;
+}
+.home-icon
+{
+    font-size: 1.8em;
+}
+
+
+.human-check {
+	position: relative;
+	top: 5px;
+}
+
+#search_options {
+    font-size: 0.65em;
+	height: 36px;
+	border: none;
+	padding: 0;
+	width: 100%;
+}
+
+
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+ WELCOME PAGE
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+*/
+.user-section{
+font-size: 0.85rem;
+font-weight: 600;
+float: unset;
+display: inline-grid;
+}
+.user-avatar
+{
+    margin:0 auto;
+}
+.user-avatar img {border-radius: 20px;max-width:80%;}
+.user-data
+{
+
+    width:100%;
+    text-align:center;
+}
+.user-data span {
+    font-size:0.9em;
+    font-weight:bold;
+}
+.user-data p {
+    font-size:0.7em;
+    font-style: italic;
+}
+
+
+.long_text {font-size:0.75em;}
+
+
+
+.drug_block_name {
+    font-size: 0.8em;
+    width: 100%
+}
+
+.drug_block {
+    width: 95%;
+    margin-top:8px;
+}
+
+.drug_img {
+	width: 100%;
+text-align: center;
+max-width: unset;
+float:unset;
+position: unset;
+}
+.antibody_icon_s,
+.sm_icon_s {
+    padding: 0px 0 80% 80%;
+    position: unset;
+    top:unset;
+ 
+}
+
+.os_icon_s,
+.o_icon_s {
+    padding: 0px 0 75% 90%;
+    
+}
+
+.large_drug_icon {
+    width: 60%;
+}
+
+#transcripts_list  th:nth-child(2),
+#transcripts_list  th:nth-child(3),
+#transcripts_list  th:nth-child(7),
+#transcripts_list  th:nth-child(8),
+#transcripts_list  th:nth-child(9),
+#transcripts_list  td:nth-child(2),
+#transcripts_list  td:nth-child(3),
+#transcripts_list  td:nth-child(7),
+#transcripts_list  td:nth-child(8),
+#transcripts_list  td:nth-child(9)
+  { display: none; }
+
+  .transcript_seq_tool_but{width:15px;}

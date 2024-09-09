@@ -1,0 +1,16 @@
+#clinvar_type	so_name	so_id
+complex
+copy number gain	copy_number_gain	SO:0001742
+copy number loss	copy_number_loss	SO:0001743
+deletion	deletion	SO:0000159
+duplication	duplication	SO:1000035
+fusion	fusion	SO:0000806
+indel	delins	SO:1000032
+insertion	insertion	SO:0000667
+inversion	inversion	SO:1000036
+microsatellite	microsatellite	SO:0000289
+protein_only
+single nucleotide variant	snv	SO:0001483
+tandem duplication	tandem_duplication SO:1000173
+translocation	translocation	SO:0000199
+variation

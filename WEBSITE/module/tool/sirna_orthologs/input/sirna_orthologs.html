@@ -1,0 +1,94 @@
+
+
+<div class="w3-container genomic-portal">
+	<header class="w3-container">
+		<div class="page-title">
+			siRNA Orthologs
+			
+		</div>
+		<p><span style="font-weight:bold;padding-left:10px;">Description: </span> Given a reference siRNA, a number of allowed mismatches, and a reference gene, search all possible matches within the orthologs of that gene</p>
+	</header>
+</div>
+${ALERT}
+<div class="alert alert-info " id="fail_job" style="display: none">Unable to retrieve results</div>
+<div class="w3-row-padding w3-margin-bottom container-grey">
+	<form method="POST" action="/SIRNA_ORTHOLOGS">
+		<div class="w3-col s6 m6 l6">
+			<h4 style="text-align: center;">Input sequence(s):</h4>
+			<input style="width: 90%;
+			margin: 5%;" name="input_sequence" id="input_sequence" rows="30" value="${input_sequence}"/>
+			<br/>
+			<br/>
+			<h4 style="text-align: center;">Human gene:</h4>
+			<div class="w3-col s12 l12 m12 w3-center">${GENE_VALIDATE}</div>
+		</div>
+		<div class="w3-col s6 l6 m6">
+			<h4 style="text-align: center;">Parameters:</h4>
+
+			<input type="checkbox" name="region[]" value="transcriptome" id="transcriptome" checked="checked" style="display: none"/>
+			<!-- <div class="w3-col s4">
+			<h5>Region:</h5>
+			
+			<table class="table">
+				<tr><th><input type="checkbox" name="region[]" value="CDS" id="CDS" ${CDS}/><label style="margin-left:5px" for="CDS">CDS</label></th></tr>
+				<tr><th><input type="checkbox" name="region[]" value="3'UTR" id="3'UTR" ${3'UTR}/><label style="margin-left:5px" for="3'UTR">3'UTR</label></th></tr>
+				<tr><th><input type="checkbox" name="region[]" value="5'UTR" id="5'UTR" ${5'UTR}/><label style="margin-left:5px" for="5'UTR">5'UTR</label></th></tr>
+				<tr><th><input type="checkbox" name="region[]" value="transcriptome" id="transcriptome" ${transcriptome}/><label style="margin-left:5px" for="transcriptome">transcriptome</label></th></tr>
+				<tr><th><input type="checkbox" name="region[]" value="premRNA" id="premRNA" ${premRNA}/><label style="margin-left:5px" for="premRNA">pre-mRNA</label></th></tr>
+				<tr><th><input type="checkbox" name="region[]" value="promoter" id="promoter" ${promoter}/><label style="margin-left:5px" for="promoter">promoter</label></th></tr>
+
+			</table>
+		</div> -->
+		<div class="w3-col s6 m6 l6">
+			<h5>Mismatch:</h5>
+			<select name="mismatch">
+				<option value="0">Exact match</option>
+				<option value="1">1 mismatch</option>
+				<option value="2">2 mismatches</option>
+				<option value="3">3 mismatches</option>
+				<option value="4">4 mismatches</option>
+				<option value="5">5 mismatches</option>
+				</select><br/><br/>
+			<h5>Strand:</h5>
+			<input type="checkbox" name="sense" checked="checked" id="sense"/><label for="sense">Sense strand</label><br/>
+			<input type="checkbox" name="antisense" checked="checked" id="antisense"/><label for="antisense">Antisense strand</label>
+		</div>
+		<div class="w3-col s6 m6 l6">
+			<h5>Organisms:</h5>
+			<table class="table">
+				${ORGANISMS}
+			</table>
+		</div>
+		
+		<div class="w3-col s12 m12 l12" style="text-align: center;">
+			
+			<table class="table">
+				<tr><th>Job name (required):</th><td><input type="text" id="title" name="title" maxlength="500" value="${TITLE}"/></td></tr>
+				<tr><th>Job description:</th><td><input type="text" id="description" name="description"  maxlength="2000" value="${DESCRIPTION}"/></td></tr>
+			</table>
+			<input type="submit" class= "btn" value="Submit"/>
+		</div>
+	</div>
+	</form>
+</div>
+
+${JOB_SUBMIT}
+
+$[MONITOR]
+
+<script>
+	
+	var myInterval;
+	
+
+$(document).ready(function(){
+	
+
+		window.location.replace("/SIRNA_ORTHOLOGS_RESULTS/${HASH}");
+	
+	
+});
+</script>
+
+$[/MONITOR]
+

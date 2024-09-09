@@ -1,0 +1,36 @@
+
+
+<div style="position:relative">
+		<ul class="nav  nav-tabs">
+				<li id="odsa${MD5}_1" class="nav-item nav-link active"><a onclick="toggle${MD5}View(1)">Full sequence</a></li>
+				${LI_BLOCKS}
+				
+		
+			  </ul>
+			  </div>
+
+			  
+<div id="odsv${MD5}_1" class="sequence nav_box" style="white-space: pre" >${SEQUENCE}</div>
+${LIST_BLOCKS}
+<script>
+function toggle${MD5}View(id)
+{
+	for (var i=1;i<=${NBLOCK};++i)
+	{
+		if (i==id)
+		{
+			$("#odsa${MD5}_"+i).addClass("active");
+			$("#odsv${MD5}_"+i).css("display","block");
+		}
+		else
+		{
+			$("#odsa${MD5}_"+i).removeClass("active");
+			$("#odsv${MD5}_"+i).css("display","none");
+		}
+	}
+}
+$(document).ready(function(){
+  $('.ttn').uitooltip({html:true});
+});
+
+</script>

@@ -1,0 +1,42 @@
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<header class="w3-container">
+		<div class="page-title">
+			${SYMBOL} - <span class="sm-caps">${PROT_NAME}</span>
+			
+		</div>
+		<p><span style="font-weight:bold;padding-left:10px;">Organism:</span> ${ORGANISM}</p>
+	</header>
+	<div class="w3-row-padding w3-margin-bottom">
+		
+		
+		<ul class="nav nav-tabs">
+			<li id="gene_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('gene_menu',1,5)">Summary</li>
+			<li id="gene_menu_tab_2" class="nav-item nav-link" onclick="showMenu('gene_menu',2,5);loadModule('gene_menu_view_2','/CONTENT/GENEID/${GENE_ID}/GENE_TISSUE_EXPR/PARAMS/${TISSUE}/normal')">${TISSUE} Expression</li>
+			<li id="gene_menu_tab_3" class="nav-item nav-link" onclick="showMenu('gene_menu',3,5);loadModule('gene_menu_view_3','/CONTENT/GENEID/${GENE_ID}/RNA_GENE_EXPR_BP')">Overall tissue expression</li>
+			
+			
+		</ul>
+		
+	<div id="gene_menu_view_1" class="container-grey w3-container w3-padding-16">
+		<div class=" w3-half w3-container  w3-padding-16">
+				<h4>Small molecule Clinical trials</h4>
+		<div class="w3-col s12"><a href="GENEID/${GENE_ID}/CLINICAL_TRIALS" class="blk_font">
+		${SM_DRUG}
+		</div>
+		<br/>
+		<h4>Small molecule activity data:</h4>
+		<table class="w3-table w3-bordered w3-border w3-hoverable w3-white w3-centered">
+				<tr><th>>1mM </th><th>${mM}</th></tr>
+			<tr><th>]1mM - 1&#x03BC;M]</th><th>${uM}</th></tr>
+			<tr><th>]1&#x03BC;M - 1nM]</th><th>${nM}</th></tr>
+			<tr><th>&lt;1nM</th><th>${pM}</th></tr>
+		</table>
+	</a>
+	</div>
+	<div class=" w3-half overflow_y_simple long_text" >${FUNCTION}</div>
+	</div>
+	<div id="gene_menu_view_2" class="container-grey w3-container w3-padding-16" style="display:none">
+		</div>
+		<div id="gene_menu_view_3" class="container-grey w3-container w3-padding-16" style="display:none">
+			</div>
+			

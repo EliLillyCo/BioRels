@@ -1,0 +1,51 @@
+$[HAS_DATA]
+<h4>Clinical trials over the years</h4>
+<div class=" w3-col s12 l12 m12">
+	<select class="form-select" id="dr_${ID}_sel" onchange="changeViewDCY_${ID}()">
+		<option value="arm" selected>Colored by Arm type</option>
+		<option value="phase">Colored by Year</option>
+		<option value="status">Colored by clinical status</option>
+</select>
+	<div id="dr_${ID}_arm" style="display:block">
+		${ARM_TYPE}
+	</div>
+	<div id="dr_${ID}_year" style="display:none">
+		${DATE_PART}
+	</div>
+	<div id="dr_${ID}_status" style="display:none">
+		${CLINICAL_STATUS}
+	</div>
+</div>
+<script type="text/javascript">
+function changeViewDCY_${ID}()
+{
+	var sel=$("#dr_${ID}_sel").val();
+	if(sel=="arm")
+	{
+		$("#dr_${ID}_arm").show();
+		$("#dr_${ID}_year").hide();
+		$("#dr_${ID}_status").hide();
+	}
+	else if(sel=="phase")
+	{
+		$("#dr_${ID}_arm").hide();
+		$("#dr_${ID}_year").show();
+		$("#dr_${ID}_status").hide();
+	}
+	else if(sel=="status")
+	{
+		$("#dr_${ID}_arm").hide();
+		$("#dr_${ID}_year").hide();
+		$("#dr_${ID}_status").show();
+	}
+}
+
+</script>
+$[/HAS_DATA]
+$[NODATA]
+<div class=" w3-col s12 l12 m12">
+	<h4>Clinical trials over the years</h4>
+	<div class="w3-col s12 l12 m12">
+		No data available
+	</div>
+$[/NODATA]

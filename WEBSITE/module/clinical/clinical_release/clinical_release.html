@@ -1,0 +1,31 @@
+${STATUS}
+<script>
+      var list_tooltips = JSON.parse('${TOOLTIPS}');
+
+    	$('.ttl_tr').uitooltip({
+		open: function (event, ui) {
+			ui.tooltip.css("width", "fit-content");
+		},
+		hide: {
+			effect: "slideDown",
+			delay: 2000
+		},
+		track: true,
+		content: function () {
+			console.log($(this).data('pos'));
+			return list_tooltips[$(this).data('pos')];;
+		}
+	});
+
+
+data=JSON.parse('${JS_DATA}');
+function showContent(id)
+{
+    $(".ct_all").css("display",'none');
+    $.each (data[id],function(index,value){
+        
+$("#CT_"+value).css("display","block");
+
+    });
+}
+</script>

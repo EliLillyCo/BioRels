@@ -1,0 +1,30 @@
+
+
+<h3> Post Translational Modification Sites for ${ENTRY_NAME}</h3>
+
+
+
+
+<div class="w3-container w3-col s12"  style="margin:10px auto;">
+        <table id="ptm_sites_tb1" class="w3-table w3-striped w3-bordered w3-centered w3-border w3-hoverable w3-white" >
+        <thead>
+            <tr>
+                <th> Uniprot ID</th>
+                <th> Amino acid</th>  
+                <th> residue number </th>
+                
+                <th> PTM type </th>
+                <th> More information</th>  
+            </tr>
+        </thead>
+        <tbody id="ptmome_data">
+            ${LIST_SITES}
+        </tbody>
+        </table>
+</div>
+
+<script>
+  $(document).ready( function () {
+    $('#ptm_sites_tb1').DataTable();
+} );
+</script>

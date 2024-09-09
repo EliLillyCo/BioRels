@@ -1,0 +1,8 @@
+<input type="text" id="cpdval_input_${TAG}" />
+<input id="cpdval_val_${TAG}" type="button" value="validate" onclick="validateCompound('${TAG}')" />
+<select id="cpdval_sel_${TAG}" name="cpdval_sel_${TAG}" style="display: none;">
+    <option value=""></option>
+</select>
+<input id="cancel_cpd_${TAG}" style="display: none;" type="button" class="default_button"
+    onclick="cancelCompoundValidate('${TAG}')" value="Cancel" />
+<span class="alert alert-info" style="display:none;" id="cpd_status_${TAG}"></span>

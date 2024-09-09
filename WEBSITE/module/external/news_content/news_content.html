@@ -1,0 +1,62 @@
+<div ${STYLE}>
+
+
+<div style="width:100%;${OVERFLOW}">
+
+<h1 class="news_title_content">${TITLE}</h1>
+
+	<div id="authors" style="width:100%"></div>
+	${VALUE}
+</div>
+<div class="w3-col s12 m12 l12">
+${TAGS}
+</div>
+<div class="w3-col s12 m12 l12" style="height:45px">
+	${BUTTONS}
+	</div>
+</div>
+
+<script>
+	$[HAS_AUTHOR]
+	$(document).ready(function(){showAuthor_${HASH_SM}()});
+	function showAuthor_${HASH_SM}()
+	{
+		data_users=JSON.parse('${AUTHOR}');
+		
+		
+		
+		showUserPicture("authors",data_users,"right",'${HASH_SM}');
+	}
+	$[/HAS_AUTHOR]
+	function showNewsInfo_${HASH_SM}(HASH,TYPE)
+	{
+		$("#info_"+HASH).html('please wait while we load the content');
+		urlv='/CONTENT/NEWS_INFO/PARAMS/'+HASH+'/'+TYPE;
+		$.ajax({
+    type: 'POST',
+    // make sure you respect the same origin policy with this url:
+    // http://en.wikipedia.org/wiki/Same_origin_policy
+    url: urlv,
+    data:{},
+    success: function(data){
+		
+		var v=jQuery.parseJSON(data);
+		$("#info_"+HASH).html(v.code);
+		
+	},
+	error:function(data){$("#info_"+HASH).html("An issue occured.");}
+		});///END AJAX
+		return false;		
+}
+
+$('.sel_file').on('change', function() {
+
+  var selected_option_value = $(this).find(":selected").val();
+  
+  $("<a>").prop({
+            target: "_blank",
+            href:selected_option_value
+        })[0].click();
+  
+});
+</script>

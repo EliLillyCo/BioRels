@@ -1,0 +1,56 @@
+#DB_ID	DB_TISSUE_NAME				DB_ORGAN_NAME	GTEX_ORGAN	GTEX_TISSUE
+56	Adipose - Subcutaneous			Adipose Tissue	Adipose Tissue	Adipose - Subcutaneous
+15	Visceral (Omentum)			Adipose Tissue	Adipose Tissue	Adipose - Visceral (Omentum)
+3	Adrenal Gland				Adrenal Gland	Adrenal Gland	Adrenal Gland
+57	Bladder					Bladder		Bladder		Bladder
+30	Cells - EBV-transformed lymphocytes	Blood		Blood		Cells - EBV-transformed lymphocytes
+32	Artery - Aorta				Blood Vessel	Blood Vessel	Artery - Aorta
+33	Artery - Coronary			Blood Vessel	Blood Vessel	Artery - Coronary
+34	Artery - Tibial				Blood Vessel	Blood Vessel	Artery - Tibial
+31	Whole Blood				Blood		Blood		Whole Blood
+51	Leukemia cell line (CML)		Bone Marrow	Bone Marrow	Cells - Leukemia cell line (CML)
+37	Amygdala				Brain		Brain		Brain - Amygdala
+38	Anterior cingulate cortex (BA24)	Brain		Brain		Brain - Anterior cingulate cortex (BA24)
+39	Caudate (basal ganglia)			Brain		Brain		Brain - Caudate (basal ganglia)
+40	Cerebellar Hemisphere			Brain		Brain		Brain - Cerebellar Hemisphere
+41	Cerebellum				Brain		Brain		Brain - Cerebellum
+42	Cortex					Brain		Brain		Brain - Cortex
+43	Frontal Cortex (BA9)			Brain		Brain		Brain - Frontal Cortex (BA9)
+44	Hippocampus				Brain		Brain		Brain - Hippocampus
+45	Hypothalamus				Brain		Brain		Brain - Hypothalamus
+46	Nucleus accumbens (basal ganglia)	Brain		Brain		Brain - Nucleus accumbens (basal ganglia)
+47	Putamen (basal ganglia)			Brain		Brain		Brain - Putamen (basal ganglia)
+48	Spinal cord (cervical c-1)		Brain		Brain		Brain - Spinal cord (cervical c-1)
+49	Substantia nigra			Brain		Brain		Brain - Substantia nigra
+27	Mammary Tissue				Breast		Breast		Breast - Mammary Tissue
+25	Ectocervix				Cervix Uteri	Cervix Uteri	Cervix - Ectocervix
+26	Entocervix				Cervix Uteri	Cervix Uteri	Cervix - Endocervix
+9	Sigmoid					Colon		Colon		Colon - Sigmoid
+10	Transverse				Colon		Colon		Colon - Transverse
+6	Gastroesophageal Junction		Esophagus	Esophagus	Esophagus - Gastroesophageal Junction
+7	Mucosa					Esophagus	Esophagus	Esophagus - Mucosa
+8	Muscularis				Esophagus	Esophagus	Esophagus - Muscularis
+20	Fallopian Tube				Fallopian Tube	Fallopian Tube	Fallopian Tube
+35	Atrial Appendage			Heart		Heart		Heart - Atrial Appendage
+36	Left Ventricle				Heart		Heart		Heart - Left Ventricle
+21	Cortex					Kidney		Kidney		Kidney - Cortex
+22	Medulla					Kidney		Kidney		Kidney - Medulla
+14	Liver					Liver		Liver		Liver
+1	Lung					Lung		Lung		Lung
+5	Skeletal				Muscle		Muscle		Muscle - Skeletal
+50	Nerve - Tibial				Nerve		Nerve		Nerve - Tibial
+23	Ovary					Ovary		Ovary		Ovary
+13	Pancreas				Pancreas	Pancreas	Pancreas
+4	Pituitary				Pituitary	Pituitary	Pituitary
+24	Prostate				Prostate	Prostate	Prostate
+16	Minor Salivary Gland			Salivary Gland	Salivary Gland	Minor Salivary Gland
+53	fibroblasts				Skin		Skin		Cells - Cultured fibroblasts
+54	Suprapubic				Skin		Skin		Skin - Not Sun Exposed (Suprapubic)
+55	Sun Exposed (Lower leg)			Skin		Skin		Skin - Sun Exposed (Lower leg)
+11	Terminal Ileum				Small Intestine	Small Intestine	Small Intestine - Terminal Ileum
+52	Spleen					Spleen		Spleen		Spleen
+12	Stomach					Stomach		Stomach		Stomach
+17	Testis					Testis		Testis		Testis
+2	Thyroid					Thyroid		Thyroid		Thyroid
+18	Uterus					Uterus		Uterus		Uterus
+19	Vagina					Vagina		Vagina		Vagina

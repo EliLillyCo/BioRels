@@ -1,0 +1,199 @@
+<h3>Publications related to ${SYMBOL}</h3>
+
+
+<div class="w3-container w3-col s12 l12 m12" style="margin:10px auto;">
+	<div class="w3-col s12 m3 l3"><span id="g_n_pub1"> ${COUNT} </span> publications</div>
+
+	<div class="w3-col s12 m9 l9  m-al-right l-al-right" >
+		<span class="w3-scol12">Number per page:</span>
+		<select id="g_per_page1" name="g_per_page1" style="position:relative; top:2px" onchange="g_updatePageCount(true,1)">
+			<option value="10" selected="selected">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+		</select>
+		<input type="button" class="button" value='&lt;' onclick="g_prevPage()" />
+		<input type="text" size="5" class="button" value="1" id="g_page1" />/<input size="5" type="text" value="${NPAGE}"
+			id="g_pagemax" />
+		<input type="button" class="button" value='&gt;' onclick="g_nextPage()" />
+		<div id="g_muts_options" style="display: initial">
+			<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="g_showFilters()">
+		</div>
+	</div>
+</div>
+
+<div class="w3-container w3-col s12" id="g_data"></div>
+<div class="w3-container w3-col s12" style="margin:10px auto;">
+	<div id="trsq_options" style="margin:10px auto;">
+		<div class="w3-col s12 m3 l3"><span id="g_n_pub2"> ${COUNT} </span> publications</div>
+		<div class="w3-col s12 m9 l9  m-al-right l-al-right" style="padding-right: 27px;">
+			<span class="w3-scol12"> Number per page:</span>
+			<select id="g_per_page2" name="g_per_page2"  style=" position:relative; top:2px"
+				onchange="g_updatePageCount(true,2)">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+
+			<input type="button" class="button" value='&lt;' onclick="g_prevPage()" />
+			<input type="text" class="button" size="5" value="1" id="g_page2" />/<input type="text" size="5"
+				value="${NPAGE}" id="g_pagemax2" />
+			<input type="button" class="button" value='&gt;' onclick="g_nextPage()" />
+		</div>
+		<div id="g_filters_options" title="Publication filtering options" style="display: none">
+			<table class="table">
+				<tr>
+					<th>Gene:</th>
+					<td id="g_gene_filter">${LIST_GENES}</td>
+				</tr>
+				<tr>
+					<th>Disease:</th>
+					<td id="g_disease_filter">${LIST_DISEASES}</td>
+				</tr>
+				<tr>
+					<th>Topic:</th>
+					<td><select id="g_topic" name="g_topic" style="border:1px solid black">
+							<option value=""></option>${LIST_TOPICS}
+						</select></td>
+				</tr>
+			</table>
+			<button type="button" onclick="g_addFilter()">Add filter</button>
+			<br />
+			<h3>Current filter(s) applied:</h3>
+			<div id="g_filter_list">
+
+			</div>
+
+
+		</div>
+		<script type="text/javascript">
+			var g_n_filters = 0;
+			function g_addFilter() {
+				console.log($("#dsval_sel_2  option:selected").val() + "|" + $("#gnval_sel_1  option:selected").val());
+				if ($("#dsval_sel_2  option:selected").val() != "") {
+					$("#g_filter_list").append(
+						'<div class="tags tags_p2" data-value="disease-' + $("#dsval_sel_2  option:selected").val() + '">\
+					<a>Disease: '+ $("#dsval_sel_2  option:selected").text() + '</a>\
+					<span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span>\
+					</div>');
+					loadModule("g_disease_filter", "/CONTENT/DISEASE_VALIDATE/PARAMS/2");
+
+
+				}
+				if ($("#gnval_sel_1  option:selected").val() != "") {
+					$("#g_filter_list").append('<div class="tags tags_p1" data-value="gene-' + $("#gnval_sel_1  option:selected").val() + '"><a>Gene: ' + $("#gnval_sel_1  option:selected").text() + '</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+					loadModule("g_gene_filter", "/CONTENT/GENE_VALIDATE/PARAMS/1");
+
+
+				}
+				if ($("#g_topic  option:selected").val() != "") {
+
+					$("#g_filter_list").append('<div class="tags tagsgreen" data-value="topic-' + $("#topic  option:selected").val() + '"><a>Topic: ' + $("#topic  option:selected").text() + '</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+
+					$("#g_topic").val($("#topic option:first").val());
+				}
+			}
+			function g_updatePageCount(with_submit = true, pos = 1) {
+				var tot = $("#g_n_pub1").html();
+				var per_page = parseInt($('#g_per_page' + pos).val());
+				var totmax = Math.ceil(tot / per_page);
+				$("#g_pagemax").val(totmax);
+				$("#g_pagemax2").val(totmax);
+				$("#g_per_page2").val(per_page);
+				$("#g_per_page1").val(per_page);
+				if (with_submit) g_submit();
+			}
+			function g_prevPage() {
+				var val = parseInt($("#g_page1").val());
+				if (val == 1) return;
+				$("#g_page1").val(val - 1);
+				$("#g_page2").val(val - 1);
+				g_submit();
+
+			}
+
+			function g_nextPage() {
+				var val = parseInt($("#g_page1").val());
+				var m = parseInt($("#g_pagemax").val());
+				if (val >= m) return;
+				$("#g_page1").val(val + 1);
+				$("#g_page2").val(val + 1);
+				g_submit();
+
+			}
+
+
+			function g_submit() {
+				var n_curr_filter = 0;
+				var filters = '';
+				$('#g_filter_list').children('div').each(function () {
+					filters += $(this).data("value") + ";"; // "this" is the current element in the loop
+					n_curr_filter++;
+				});
+				if (n_curr_filter != g_n_filters) {
+					$("#g_page1").val(1);
+					$("#g_page2").val(1);
+					g_n_filters = n_curr_filter;
+				}
+
+				var per_page = $('#g_per_page1').val();
+				var page = $('#g_page1').val();
+				$("#g_data").html("Please wait while the query is running");
+				var filters = '';
+				$('#g_filter_list').children('div').each(function () {
+					filters += $(this).data("value") + ";"; // "this" is the current element in the loop
+				});
+				urlv = "/CONTENT/GENEID/${GENE_ID}/PUBLI_GENE_SEARCH";
+
+				// -- SEARCHING BY TTHIS HERE
+				// http://localhost:8080/COMPOUND/CHEMBL256997/PUBLI_COMPOUND
+
+				// modify path here
+				$.ajax({
+					type: 'POST',
+					// make sure you respect the same origin policy with this url:
+					// http://en.wikipedia.org/wiki/Same_origin_policy
+					url: urlv,
+					data: { "PER_PAGE": per_page, 'PAGE': page, 'FILTERS': filters },
+					success: function (data) {
+						try {
+							var v = jQuery.parseJSON(data);
+							$("#g_data").html(v.code);
+							$("#g_n_pub1").html(v.STAT.CO);
+							$("#g_n_pub2").html(v.STAT.CO);
+							console.log(v.STAT.CO);
+							$("#g_info").html("");
+							g_updatePageCount(false, 1);
+						} catch (err) {
+							$("#g_data").html("<p class='alert alert-info'>We are unable to retrieve publications at the moment. We apologize for the inconvenience</p>");
+						}
+					},
+					error: function (data) { $("#g_info").html("<p class='alert alert-info'>We are unable to retrieve publications at the moment. We apologize for the inconvenience</p>"); }
+				});///END AJAX
+				return false;
+			}
+			$(document).ready(function () {
+				//$('#mutation_search_res').DataTable();
+				g_submit();
+			});
+
+			function g_showFilters() {
+				$("#g_filters_options").dialog({
+					width: "60%", modal: true,
+					buttons: {
+						"Confirm": function () {
+
+							$(this).dialog("close");
+							submit();
+						},
+
+					}
+				});
+
+			}
+		</script>

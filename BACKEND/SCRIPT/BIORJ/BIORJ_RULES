@@ -1,0 +1,448 @@
+# BIORJ RULES
+# This file contains the rules for the biorj format
+# The rules are used to generate the biorj format from the database
+# Author: DESAPHY Jeremy
+# Version: 1.0
+# Date: 2024-05-01
+
+
+# Description of the rules
+# Each scientific concept is defined by a "main table"
+# Subsequent specification of that concept are defined by "child tables"
+# While critical dependencies are defined by "parent tables"
+# The "main table" is defined by the keyword "BLOCK" followed by the name of the table
+# The "child table" is defined by the keyword "CHILD" followed by some rules
+# The "parent table" is defined by the keyword "PARENT" followed by some rules
+# The end of a block is defined by "END"
+# A rule:
+#   - IF CHILD:  always starts by a table name that has a foreign key with the main table
+#   - IF PARENT: always starts by a table name that the main table has a foreign key with
+#   - Can be followed by one or multiple tables to include into that rule:
+#	     - Each additional table must be separated by a < or > defining the direction of the relationship
+#		 - The direction  A>B implies that B has a foreign key defined to A
+#		 - The direction  A<B implies that A has a foreign key defined to B
+#		 - The direction  A>B<C implies that B has 2 foreign keys: to A and to C.
+#   - If a table name is followed by :E, it means that it that the table will be considered as a "main table" and its rules will be called
+#   - If the FIRST table name is followed by :P, it means that the relationship to the main table will be reversed
+#       -> Usually the main table will have a foreign key column to a parent table
+#       -> BUT in some instances, the parent table will have a foreign key column to the main table, such as in the case of _map tables	
+#		-> Thus, that parent table is still a parent table but the relationship must be reserved to work properly
+#
+#
+#
+# The KEYS block is used to define the unique columns for each table
+# This is used to find whether a record already exists in the given table or not
+
+
+BLOCK	prot_entry
+PARENT	taxon
+CHILD	prot_ac
+CHILD	prot_name_map<prot_name
+CHILD	prot_seq>prot_seq_pos
+CHILD	prot_dom>prot_dom_seq<prot_seq_pos
+CHILD	prot_extdb_map<prot_extdb
+CHILD	prot_extdb_map<prot_seq
+CHILD	prot_go_map<go_entry
+CHILD	prot_seq>prot_feat<prot_feat_type
+CHILD	prot_seq>prot_feat>prot_feat_pmid<pmid_entry:E
+CHILD	prot_seq>prot_feat>prot_feat_pmid<eco_entry
+CHILD	prot_desc>prot_desc_pmid<pmid_entry:E
+CHILD	prot_desc>prot_desc_pmid<eco_entry
+CHILD	prot_pmid_map<pmid_entry:E
+CHILD	gn_prot_map<gn_entry:E
+END
+
+
+BLOCK	gn_entry
+PARENT	chr_gn_map:P<chr_map<chromosome<taxon
+CHILD	gn_syn_map<gn_syn
+END
+
+BLOCK	pw_entry
+CHILD	pw_gn_map<gn_entry:E
+END
+
+BLOCK	anatomy_entry
+PARENT	source
+CHILD	anatomy_extdb<source
+CHILD	anatomy_syn<source
+END
+
+BLOCK	go_entry
+CHILD	go_dbref<source
+CHILD	go_syn
+END
+
+
+BLOCK	pmid_entry
+PARENT	pmid_journal
+CHILD	pmid_author_map<pmid_author<pmid_instit
+CHILD	pmid_abstract
+END
+
+
+
+BLOCK	pmc_entry
+CHILD	pmc_pmid_map<pmid_entry:E
+CHILD	pmc_fulltext_company_map<company_entry
+CHILD	pmc_fulltext_disease_map<disease_entry:E
+CHILD	pmc_fulltext_drug_map<drug_entry:E
+CHILD	pmc_fulltext_gn_map<gn_entry:E
+CHILD	pmc_fulltext_go_map<go_entry:E
+CHILD	pmc_fulltext_clinical_map<clinical_entry:E
+CHILD	pmc_fulltext_cell_map<cell_entry:E
+CHILD	pmc_fulltext_anatomy_map<anatomy_entry:E
+CHILD	pmc_fulltext_assay_map<assay_entry:E
+CHILD	pmc_fulltext_sm_map<sm_entry:E
+CHILD	pmc_fulltext_pub_map<pmid_entry:E
+END
+
+
+BLOCK	ip_entry
+#CHILD	ip_pmid_map<pmid_entry:E
+#CHILD	ip_ext_db
+CHILD	ip_signature>ip_sign_prot_seq<prot_seq<prot_entry:E
+#CHILD	ip_go_map<go_entry:E
+END
+
+
+BLOCK	cell_entry
+CHILD	cell_syn<source
+CHILD	cell_disease<disease_entry:E
+CHILD	cell_patent_map<patent_entry
+CHILD	cell_patent_map<source
+CHILD	cell_pmid_map<pmid_entry:E
+CHILD	cell_pmid_map<source
+CHILD	cell_taxon_map<taxon
+CHILD	cell_taxon_map<source
+PARENT	cell_tissue<anatomy_entry:E
+END
+
+
+BLOCK	disease_entry
+PARENT	source
+CHILD	disease_syn<source
+CHILD	disease_pmid<pmid_entry:E
+CHILD	disease_anatomy_map<anatomy_entry:E
+CHILD	disease_anatomy_map<source
+CHILD	disease_extdb<source
+CHILD	disease_info<source
+END
+
+
+
+BLOCK	clinical_trial
+PARENT	source
+CHILD	clinical_trial_pmid_map<pmid_entry:E
+CHILD	clinical_trial_alias
+CHILD	clinical_trial_arm
+CHILD	clinical_trial_condition<disease_entry:E
+CHILD	clinical_trial_date
+CHILD	clinical_trial_intervention>clinical_trial_intervention_drug_map<drug_entry:E
+CHILD	clinical_trial_intervention>clinical_trial_intervention_drug_map<source
+CHILD	clinical_trial_arm_intervention_map
+END
+
+#Good
+BLOCK	drug_entry
+CHILD	drug_description<source
+CHILD	drug_disease<disease_entry:E
+CHILD	drug_disease<gn_entry:E
+CHILD	drug_extdb<source
+CHILD	drug_name<source
+CHILD	drug_type_map<drug_type
+CHILD	drug_atc_map<atc_entry
+#CHILD	drug_mol_entity_map
+END
+
+BLOCK	clinical_variant
+PARENT	clinical_variant_review_status
+CHILD	clinical_variant_disease_map<disease_entry
+CHILD	clinical_variant_gn_map<gn_entry
+CHILD	clinical_variant_map<variant_entry
+CHILD	clinical_variant_pmid_map<pmid_entry:E
+CHILD	clinical_variant_submission<clinical_variant_review_status
+CHILD	clinical_variant_submission<clinical_significance
+END
+
+
+# CHILD	
+# CHILD	
+# CHILD	
+# CHILD	
+
+
+BLOCK	gene_seq
+PARENT	gn_entry
+PARENT	seq_btype
+PARENT	chr_seq<genome_assembly<taxon
+CHILD	transcript:E
+END
+
+
+
+
+BLOCK	transcript
+PARENT	gene_seq:E
+PARENT	seq_btype
+PARENT	chr_seq<chromosome<taxon
+CHILD	transcript_pos<chr_seq_pos<chr_seq<chromosome<taxon
+CHILD	transcript_pos<chr_seq_pos<chr_seq<genome_assembly<taxon
+CHILD	transcript_pos<transcript_pos_type
+END
+
+BLOCK	variant_entry
+CHILD	variant_position<chr_seq_pos<chr_seq<chromosome<taxon
+CHILD	variant_position<chr_seq_pos<chr_seq<genome_assembly<taxon
+CHILD	variant_position<variant_allele
+CHILD	variant_position>variant_change<variant_type<so_entry
+CHILD	variant_position>variant_change<variant_allele
+CHILD	variant_position>variant_change>variant_frequency<variant_freq_study<source
+CHILD	variant_position>variant_change>variant_transcript_map<transcript:E
+CHILD	variant_position>variant_change>variant_transcript_map<transcript_pos
+CHILD	variant_position>variant_change>variant_transcript_map<so_entry
+CHILD	variant_position>variant_change>variant_transcript_map<variant_allele
+CHILD	variant_position>variant_change>variant_transcript_map>variant_protein_map<prot_seq<prot_entry:E
+CHILD	variant_position>variant_change>variant_transcript_map>variant_protein_map<so_entry
+CHILD	variant_position>variant_change>variant_transcript_map>variant_protein_map<variant_prot_allele
+CHILD	variant_pmid_map<pmid_entry:E
+END
+
+
+
+
+BLOCK	sm_entry
+PARENT	sm_molecule<sm_scaffold
+PARENT	sm_counterion
+CHILD	sm_description<source
+# CHILD	sm_publi_map<pmid_entry:E
+# CHILD	sm_publi_map<source
+# CHILD	sm_publi_map<disease_entry:E
+CHILD	sm_source<source
+CHILD	sm_patent_map<patent_entry
+END
+
+
+BLOCK	assay_entry
+PARENT	assay_cell<cell_entry:E
+PARENT	assay_cell<taxon
+PARENT	assay_tissue<anatomy_entry:E
+PARENT	taxon
+PARENT	source
+PARENT	assay_confidence
+PARENT	assay_type
+PARENT	assay_target<taxon
+PARENT	assay_target<assay_target_type
+PARENT	assay_target>assay_target_genetic_map<assay_genetic<taxon
+PARENT	assay_target>assay_target_genetic_map<assay_genetic<gene_seq:E
+PARENT	assay_target>assay_target_genetic_map<assay_genetic<transcript:E
+PARENT	assay_target>assay_target_protein_map<assay_protein<prot_seq<prot_entry:E
+PARENT	assay_target>assay_target_protein_map<assay_protein<gn_entry:E
+CHILD	assay_pmid<pmid_entry:E
+CHILD	activity_entry<source
+CHILD	activity_entry<bioassay_onto_entry
+CHILD	activity_entry<molecular_entity:E
+PARENT	assay_variant<prot_seq<prot_entry:E
+# PARENT	assay_variant<assay_variant_pos<prot_seq_pos<prot_seq<prot_entry:E
+# PARENT	assay_variant<assay_variant_pos>variant_protein_map<prot_seq<prot_entry:E
+# CHILD	assay_variant<assay_variant_pos<variant_protein_map>variant_protein_map<so_entry
+# CHILD	assay_variant<assay_variant_pos<variant_protein_map>variant_prot_allele
+END
+
+
+BLOCK	molecular_entity
+CHILD	molecular_entity_component_map<molecular_component>molecular_component_sm_map<sm_entry:E
+# CHILD	molecular_entity_component_map<molecular_component<molecular_component_na_map<sm_entry:E
+# CHILD	molecular_entity_component_map<molecular_component<molecular_component_conj_map<sm_entry:E
+END
+
+
+BLOCK	activity_entry
+PARENT	source
+PARENT	assay_entry:E
+PARENT	molecular_entity:E
+PARENT	bioassay_onto_entry
+END
+
+KEYS
+activity_entry	molecular_entity_id|assay_entry_id|value|unit_type
+anatomy_entry	anatomy_tag
+anatomy_extdb	source_id|anatomy_extdb|anatomy_entry_id
+anatomy_syn		anatomy_entry_id|syn_type|syn_value|source_id
+assay_confidence	description
+assay_cell	cell_name|taxon_id
+assay_target_type	assay_target_type_name
+assay_protein	accession|sequence_md5sum
+assay_pmid	assay_entry_id|pmid_entry_id
+assay_genetic	gn_entry_id|assay_entry_idtaxon_id|genetic_description|accession
+assay_entry	assay_name
+assay_target	assay_target_name
+assay_target_genetic_map	assay_target_id|assay_genetic_id
+assay_target_protein_map	assay_target_id|assay_protein_id
+assay_tissue	assay_tissue_name
+assay_type	assay_desc
+assay_variant	prot_seq_id|mutation_list|ac
+assay_variant_pos	assay_variant_id|prot_seq_pos_id
+atc_entry	atc_code
+biorels_timestamp	job_name
+bioassay_onto_entry	bioassay_tag_id
+cell_disease	cell_entry_id|disease_entry_id|source_id
+cell_entry	cell_acc
+cell_taxon	cell_entry_id|taxon_id|source_id
+cell_pmid	cell_entry_id|pmid_entry_id|source_id
+cell_tissue	cell_tissue_name
+cell_patent_map	cell_entry_id|patent_entry_id|source_id
+cell_syn	cell_entry_id|cell_syn_name|source_id
+chr_gn_map	gn_entry_id|chr_map_id
+chr_map	chr_id|map_location
+chr_seq	md5_seq_hash|genome_assembly_id
+chr_seq_pos	chr_seq_id|chr_pos
+chromosome	chr_num|taxon_id
+clinical_significance	clin_sign
+clinical_trial	trial_id
+clinical_trial_arm	arm_label|arm_description|clinical_trial_id
+clinical_trial_condition	clinical_trial_id|condition_name
+clinical_trial_intervention	intervention_name|clinical_trial_id|intervention_type
+clinical_trial_intervention_drug_map	clinical_trial_intervention_id|drug_entry_id|source_id
+clinical_trial_arm_intervention_map	clinical_trial_arm_id|clinical_trial_intervention_id
+clinical_trial_alias	alias_name|clinical_trial_id
+clinical_variant_disease_map	disease_entry_id|clinvar_submission_id
+clinical_variant_gn_map	gn_entry_id|clinvar_submission_id
+clinical_variant_map	clinvar_entry_id|variant_entry_id
+clinical_variant_pmid_map	clinvar_submission_id|pmid_entry_id
+clinical_variant_review_status	clinvar_review_status_name
+clinical_variant_submission	clinvar_entry_id|scv_id
+clinical_variant_type	clinical_variant_type
+company_entry	company_name
+company_synonym	company_entry_id|company_syn_name
+disease_anatomy_map	disease_entry_id|anatomy_entry_id|source_id
+disease_entry	disease_tag
+disease_extdb	disease_entry_id|source_id|disease_extdb
+disease_info	disease_entry_id|source_id|info_type
+disease_syn		disease_entry_id|syn_type|syn_value
+drug_atc_map	drug_entry_id|atc_entry_id
+drug_entry	drug_primary_name
+drug_extdb	drug_entry_id|source_id|source_origin_id|drug_extdb_value
+drug_mol_entity_map	drug_entry_id|molecular_entity_id|source_id
+drug_name	drug_entry_id|source_id|drug_name
+drug_type	drug_type_name
+drug_type_map	drug_entry_id|drug_type_id
+drug_disease	drug_entry_id|disease_entry_id|gn_entry_id
+drug_description	drug_entry_id|source_id|text_type
+drug_mol_entity_map	drug_entry_id|molecular_entity_id|source_id
+eco_entry	eco_id
+gene_seq	chr_seq_id|gene_seq_version|gene_seq_name
+genome_assembly	assembly_accession
+gn_entry	gene_id
+gn_syn		syn_type|syn_value
+gn_syn_map	gn_entry_id|gn_syn_id
+gn_prot_map	gn_entry_id|prot_entry_id
+gn_rel	gn_entry_r_id|gn_entry_c_id
+go_entry	ac
+go_syn	go_entry_id|syn_value|syn_type
+go_dbref	db_value|go_entry_id|source_id
+go_prot_map_prev	source|evidence|prot_entry_id|go_entry_id
+go_rel	go_to_id|go_from_id|subrel_type|rel_type
+gwas_descriptor	gwas_descriptor_name
+gwas_phenotype	phenotype_tag|gwas_study_id
+gwas_study	cohort_size|gwas_study_type|gwas_study_name
+gwas_variant	variant_change_id|gwas_phenotype_id|variant_change_id|gwas_phenotype_id
+gwas_variant_prop	gwas_descriptor_id|gwas_variant_id
+ip_entry	ipr_id
+ip_ext_db	ip_entry_id|db_name|db_val
+ip_signature	ip_entry_id|ip_sign_dbname|ip_sign_dbkey
+ip_sign_prot_seq	ip_signature_id|prot_seq_id|start_pos|end_pos
+ip_pmid_map	ip_entry_id|pmid_entry_id
+ip_go_map	ip_entry_id|go_entry_id
+lipid_entry	lipid_tag
+meddra_entry	meddra_code
+molecular_component	molecular_component_hash
+molecular_component_sm_map	sm_entry_id|molecular_component_id
+molecular_entity	molecular_entity_hash|molecular_components
+molecular_entity_component_map	molecular_entity_id|molecular_component_id
+molecular_component_na_map	molecular_component_id|nucleic_acid_seq_id
+molecular_component_conj_map	molecular_component_id|conjugate_entry_id
+mod_sirna_base	mod_base_name|mod_base_format
+mod_sirna_bond	mod_bond_name|mod_bond_format
+mod_sirna_ribose	mod_ribose_name|mod_ribose_format
+news	news_title|source_id|news_release_date
+news_clinical_trial_map	clinical_trial_id|news_id
+news_company_map	company_entry_id|news_id
+news_disease_map	news_id|disease_entry_id
+news_document	document_version|news_id|document_name
+news_drug_map	drug_entry_id|news_id
+news_gn_map	news_id|gn_entry_id
+nucleic_acid_seq_prop	prop_name|nucleic_acid_seq_id
+org_group	org_group_name
+pmc_entry	pmc_id
+pmid_entry	pmid
+pmid_author	md5_hash
+pmid_author_map	pmid_entry_id|pmid_author_id|position
+pmid_abstract	pmid_entry_id|abstract_type
+pmid_citation	pmid_entry_id|citation_pmid_entry_id
+pmid_company_map	company_entry_id|pmid_entry_id
+pmid_instit	instit_hash
+pmid_journal	journal_name
+prot_ac	ac|prot_entry_id
+prot_desc	prot_entry_id|desc_type|description
+prot_desc_pmid	prot_desc_id|pmid_entry_id
+prot_dom	domain_name|prot_entry_id|pos_end|domain_type|pos_start
+prot_dom_seq	position|prot_dom_id
+prot_extdb	prot_extdbac
+prot_entry	prot_identifier
+prot_extdb_map	prot_entry_id|prot_extdb_value|prot_seq_id|prot_extdb_id
+prot_feat_pmid	eco_entry_id|prot_feat_id|pmid_entry_id
+prot_feat_seq	position|prot_feat_id
+prot_feat_type	feat_name
+prot_go_map	evidence|prot_entry_id|source_id|go_entry_id
+prot_name	protein_name|ec_number
+prot_name_map	prot_entry_id|prot_name_id|group_id|class_name|name_type|name_subtype
+prot_seq	prot_entry_id|iso_id
+prot_feat	prot_feat_type_id|prot_seq_id|start_pos|end_pos|feat_value
+prot_seq_pos	prot_seq_id|position
+ptm_abbreviations	ptm_abv_name
+ptm_syn	ptm_syn_name
+ptm_type	ptm_type_name
+pw_entry	reac_id
+pw_gn_map	gn_entry_id|pw_entry_id|gn_entry_id|pw_entry_id
+pw_rel	pw_from_id|pw_to_id
+rna_sample	sample_id|sample_id|rna_tissue_id|rna_tissue_id
+rna_tissue	organ_name|tissue_name
+rna_transcript	transcript_id|rna_sample_id
+seq_btype	seq_type
+so_entry	so_id
+sm_description	sm_entry_id|source_id|description_type
+sm_publi_map	sm_entry_id|pmid_entry_id|source_id|sub_type|disease_entry_id
+sm_source	sm_entry_id|sm_name|source_id
+source	source_name|version|user_name
+sm_entry	sm_molecule_id|sm_counterion_id|md5_hash
+sm_patent_map	sm_entry_id|patent_entry_id|source_id
+sm_publi_map	sm_entry_id|pmid_entry_id|source_id|disease_entry_id
+sm_molecule	smiles
+sm_counterion	sm_counterion_id|counterion_smiles
+sm_scaffold	scaffold_smiles
+taxon	tax_id
+transcript	transcript_name|chr_seq_id|gene_seq_id|transcript_version
+transcript_al	transcript_comp_id|transcript_ref_id
+transcript_al_pos	al_pos|transcript_al_id
+transcript_pos	seq_pos|transcript_id
+transcript_pos_type	transcript_pos_type
+variant_change	variant_position_id|alt_all
+variant_frequency	variant_freq_study_id|variant_change_id
+variant_freq_study	variant_freq_study_name
+variant_pmid_map	pmid_entry_id|variant_entry_id
+variant_position	chr_seq_pos_id|variant_entry_id|ref_all
+variant_transcript_map	tr_alt_all|variant_change_id|tr_ref_all|transcript_pos_id|transcript_id|so_entry_id
+variant_prot_allele	variant_prot_seq
+variant_protein_map	variant_transcript_id|prot_seq_id|so_entry_id|prot_ref_all|prot_alt_all
+variant_type	variant_name
+variant_allele	variant_seq
+variant_entry	rsid
+web_job_document	web_job_id|document_hash
+web_user	global_id
+xr_element	symbol|name
+xr_entry	full_common_name
+xr_inter_type	interaction_name
+xr_ppi	xr_chain_r_id|xr_chain_c_id
+xr_tpl_bond	xr_tpl_atom_id_1|xr_tpl_atom_id_2
+END

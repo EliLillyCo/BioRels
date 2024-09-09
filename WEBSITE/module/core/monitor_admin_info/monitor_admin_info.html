@@ -1,0 +1,22 @@
+<h3>Monitoring for the last ${DAYS} days</h3>
+
+<div class="w3-container w3-col s12">
+    <h4></h4>
+<div  class="w3-col s12 m6 l6">${MONTHLY}</div>
+<div   class="w3-col s12 m6 l6">${SUNBURST}</div>
+<div id="my_dataviz3"  class="w3-col s12 m12 l12">
+  <h4>Overall</h4>
+<table id="tbl_${DT}"><thead>
+  <tr><th>Count</th><th>Last Name</th><th>First Name</th><th>Job Level</th><th>Job family</th><th>Distinct days</th></tr></thead><tbody>${USERS}</tbody>
+</table></div>
+
+
+<div id="user_growth" class="w3-col s12 m6 l6">
+  <h4>User Growth</h4>
+  ${USER_GROWTH}
+  </div>
+  <script>
+
+
+    $(document).ready(function (){table=$('#tbl_${DT}').DataTable( {order:[[0,'desc']]});});
+</script>   

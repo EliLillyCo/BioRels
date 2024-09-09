@@ -1,0 +1,8 @@
+<?php
+
+$PDB_ID = $USER_INPUT['PAGE']['VALUE'];
+$USER_INPUT['PAGE']['VALUE'] = $PDB_ID;
+
+$MODULE_DATA = getPDBInfo($PDB_ID);
+
+?>

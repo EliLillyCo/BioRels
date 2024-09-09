@@ -1,0 +1,95 @@
+<div class="main_core_title" style="width:90%">Lipid Ontology</div>
+
+
+<div style="width:49%;display:inline-block">
+		<div id="SimpleJSTree"></div>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<script type="text/javascript">
+		$(function () {
+            $.ajax({
+                async: true,
+                type: "GET",
+                url: "/JSON/LIPID_TREE",
+                dataType: "json",
+                success: function (json) {
+                    createJSTree(json);
+                },
+
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });            
+        });
+
+        // function createJSTree(jsondata) {            
+        //     $('#SimpleJSTree').jstree({
+        //         'core': {
+        //             'data': jsondata
+        //         }
+        //     });
+		// }
+var t;		
+var tree;
+		function createJSTree(jsondata) {            
+
+tree=$('#SimpleJSTree').on('changed.jstree', function (e, data) {
+	var i, j, r = [];
+	var str='';
+    for(i = 0, j = data.selected.length; i < j; i++) {
+		str+=data.instance.get_node(data.selected[i]).text+"\n";
+    //   loadModule("event_result","/CONTENT/DISEASE_SUMMARY/PARAMS/"+data.instance.get_node(data.selected[i]).id);
+    //   $("#event_result").css("top",$("#"+data.selected[i])[0].offsetTop);
+      // console.log(data.instance.get_node(data.selected[i]));
+      // r.push(data.instance.get_node(data.selected[i]).text);
+    }
+    $('#parent').html(str);
+  }).jstree({
+  "core" : {
+    "animation" : 0,
+    "check_callback" : true,
+    "themes" : { "stripes" : true },
+    'data' : {
+		
+      'url' : function (node) {
+		  
+        return node.id === '#' ?
+		"/JSON/LIPID_TREE" :  "/JSON/LIPID_TREE/PARAMS/" + node.id+"/"+node.data.level;
+      },
+      'data' : function (node) {
+        console.log(node);
+        return { 'id' : node.id };
+      }
+    }
+  },
+  rules:{
+multiple: true,
+multitree:true,
+clickable : "all"},
+  "types" : {
+    "#" : {
+      "max_children" : 1,
+      "max_depth" : 4,
+      "valid_children" : ["root"]
+    },
+    "root" : {
+      "icon" : "/static/3.3.11/assets/images/tree_icon.png",
+      "valid_children" : ["default"]
+    },
+    "default" : {
+      "valid_children" : ["default","file"]
+    },
+    "file" : {
+      "icon" : "glyphicon glyphicon-file",
+      "valid_children" : []
+    }
+  },
+  "plugins" : [
+    "contextmenu", "dnd", "search",
+    "state", "types", "wholerow"
+  ]
+});
+}
+
+</script>

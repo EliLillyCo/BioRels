@@ -1,0 +1,122 @@
+$[VALID]
+<h3>Clinical trials</h3>
+<div class="w3-opts-right">
+		<a href="CSV/${PATH}/CLINICAL_TRIALS"><img alt="Download" src="/require/img/download.png" style="width: 20px;"></a>
+    <div class="help-tip" style="position:unset;margin-left:5px;" onclick="showDialog('/CONTENT/HELP/clinical_trial')"></div>
+</div>
+<div class="w3-container w3-col s12"  style="margin:10px auto;min-height:800px;height:800px">	
+        <table id="clinical_trials_tbl" class="w3-table w3-striped w3-bordered w3-centered w3-border w3-hoverable w3-white" >
+    
+$[VALID_GENE]
+
+
+        <thead>
+            <tr>
+                <th>Trial ID</th>
+                <th>Drug name</th>
+                <th>Disease Name</th>
+                <th>Clinical Phase</th>
+                <th>Start date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${LIST}
+        </tbody>
+        
+        $[/VALID_GENE]
+        $[VALID_DISEASE]
+        
+                <thead>
+                    <tr>
+                        <th>Trial ID</th>
+                        <th>Drug name</th>
+                        <th>Gene Symbol</th>
+                        <th>Gene ID</th>
+                        <th>Clinical Phase</th>
+                        <th>Start date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${LIST}
+                </tbody>
+                
+        $[/VALID_DISEASE]
+        $[VALID_DRUG]
+        
+                <thead>
+                    <tr>
+                        <th>Trial ID</th>
+                        <th>Disease Name</th>
+                        <th>Gene Symbol</th>
+                        <th>Gene ID</th>
+                        <th>Clinical Phase</th>
+                        <th>Start date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${LIST}
+                </tbody>
+                
+        $[/VALID_DRUG]
+    </table>
+    </div>
+            <script src="https://d3js.org/d3.v4.js"></script>	
+<div style="width:100%">
+
+<div style="display:inline-block;" id="my_dataviz"></div>
+</div>
+
+<pre id="data" style="display:none">${RESULTS_STR}</pre>
+
+
+        
+<h4 style="display: contents">Source: </h3><a href="https://clinicaltrials.gov" title="Information on Clinical Trials and Human Research Studies">ClinicalTrials.gov</a>  via Open Targets<div class="plus radius" style="--l:17px;--t:1.2px;--s:4px;margin-left:10px" onclick="togglePubView('clintrial_pub',this)"></div>
+<div id="clintrial_pub" style="display:none">
+${SOURCE}
+</div>
+<link rel="stylesheet" href="/require/css/dev/searchPanes.dataTables.min.css" 		       type="text/css"/>
+       <script src="/require/js/dataTables.searchPanes.min.js" ></script>
+<script>
+    
+$(document).ready(function() {
+    // Create date inputs
+    
+ 
+    // DataTables initialisation
+    var table = $('#clinical_trials_tbl').DataTable({
+    
+      responsive: true,
+		buttons: [
+            {
+				
+                extend: 'searchPanes',
+                config: {
+                    cascadePanes: true
+                }
+            }
+        ],
+	
+		
+        dom: 'Blfrtip',
+        language: {
+            searchPanes: {
+				clearMessage: 'Clear Selections',
+                collapse: {0: 'Search Options', _: 'Search Options (%d)'},
+                count: '{total} found',
+                countFiltered: '{shown} / {total}'
+            }
+        }
+	, "order": [[ 4, "desc" ]]});
+ 
+});
+</script>
+$[/VALID]
+$[INVALID]
+<div class="main_core_title">Clinical Trials</div>
+<br/>
+<div class="alert alert-info">No reported clinical trials</div>
+
+$[/INVALID]

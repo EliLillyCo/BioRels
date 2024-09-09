@@ -1,0 +1,15 @@
+.table>:not(caption)>*>* {
+    border-bottom: none;
+}
+
+table.sequences tbody td {
+    border-left: 1px solid #dee2e6;
+}
+
+table.sequences tbody td:last-child {
+    border-right: 1px solid #dee2e6;
+}
+
+.table.sequences thead th {
+    border-bottom: 1px solid #dee2e6;
+}

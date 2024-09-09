@@ -1,0 +1,204 @@
+<div class="w3-container w3-col s12 s_no_padding" style="margin:10px auto;">
+	${TITLE}
+	<div class="w3-col s12 m4 l4">
+		<span id="n_pub1"> ${COUNT} </span> news since last month
+	</div>
+
+	<div  class="w3-col s12 l8 m8 m-al-right l-al-right">
+		Number per page:<div style="display: inline-block" class="m_hide l_hide"><br/></div>
+		<select id="per_page1" name="per_page1" style="position:relative; top:2px" onchange="updatePageCount(true,1)">
+			<option value="10" selected="selected">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+		</select>
+		<input type="button" class="button" value='&lt;' onclick="prevPage()" />
+		<input type="text" size="5" class="button" value="1" id="page1" />/<input size="5" type="text" value="${NPAGE}"
+			id="pagemax" />
+		<input type="button" class="button" value='&gt;' onclick="nextPage()" />
+		<div id="muts_options" style="display: initial">
+			<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="showFilters()">
+		</div>
+	</div>
+	
+</div>
+
+<div class="w3-col s12" id="data"></div>
+<div class="w3-container w3-col s12 s_no_padding" style="margin:10px auto;">
+	<div id="trsq_options" style="margin:10px auto;">
+		<div class="w3-col s12 m4 l4">
+			<span id="n_pub2"> ${COUNT} </span> news since last month
+		</div>
+	
+		<div  class="w3-col s12 l8 m8 m-al-right l-al-right">
+			Number per page:<div style="display: inline-block" class="m_hide l_hide"><br/></div>
+			<select id="per_page2" name="per_page2" style=" position:relative; top:2px"
+				onchange="updatePageCount(true,2)">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+
+			<input type="button" class="button" value='&lt;' onclick="prevPage()" />
+			<input type="text" class="button" size="5" value="1" id="page2" />/<input type="text" size="5"
+				value="${NPAGE}" id="pagemax2" />
+			<input type="button" class="button" value='&gt;' onclick="nextPage()" />
+		</div>
+	</div>
+		<div id="filters_options" title="Publication filtering options" style="display: none">
+			<table class="table">
+				<tr>
+					<th>Gene:</th>
+					<td id="gene_filter">${LIST_GENES}</td>
+				</tr>
+				<tr>
+					<th>Disease:</th>
+					<td id="disease_filter">${LIST_DISEASES}</td>
+				</tr>
+				<tr>
+					<th>Topic:</th>
+					<td><select id="topic" name="topic" style="border:1px solid black">
+							<option value=""></option>${LIST_TOPICS}
+						</select></td>
+				</tr>
+			</table>
+			<button type="button" onclick="addFilter()">Add filter</button>
+			<br />
+			<h3>Current filter(s) applied:</h3>
+			<div id="filter_list">
+
+			</div>
+
+
+		</div>
+		<script type="text/javascript">
+			var n_filters = 0;
+			function addFilter() {
+				console.log($("#dsval_sel_2  option:selected").val() + "|" + $("#gnval_sel_1  option:selected").val());
+				if ($("#dsval_sel_2  option:selected").val() != "") {
+					$("#filter_list").append(
+						'<div class="tags tags_p2" data-value="disease-' + $("#dsval_sel_2  option:selected").val() + '">\
+					<a>Disease: '+ $("#dsval_sel_2  option:selected").text() + '</a>\
+					<span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span>\
+					</div>');
+					loadModule("disease_filter", "/CONTENT/DISEASE_VALIDATE/PARAMS/2");
+
+
+				}
+				if ($("#gnval_sel_1  option:selected").val() != "") {
+					$("#filter_list").append('<div class="tags tags_p1" data-value="gene-' + $("#gnval_sel_1  option:selected").val() + '"><a>Gene: ' + $("#gnval_sel_1  option:selected").text() + '</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+					loadModule("gene_filter", "/CONTENT/GENE_VALIDATE/PARAMS/1");
+
+
+				}
+				if ($("#topic  option:selected").val() != "") {
+
+					$("#filter_list").append('<div class="tags tagsgreen" data-value="topic-' + $("#topic  option:selected").val() + '"><a>Topic: ' + $("#topic  option:selected").text() + '</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+
+					$("#topic").val($("#topic option:first").val());
+				}
+			}
+			function updatePageCount(with_submit = true, pos = 1) {
+				var tot = $("#n_pub1").html();
+				var per_page = parseInt($('#per_page' + pos).val());
+				var totmax = Math.ceil(tot / per_page);
+				$("#pagemax").val(totmax);
+				$("#pagemax2").val(totmax);
+				$("#per_page2").val(per_page);
+				$("#per_page1").val(per_page);
+				if (with_submit) submit();
+			}
+			function prevPage() {
+				var val = parseInt($("#page1").val());
+				if (val == 1) return;
+				$("#page1").val(val - 1);
+				$("#page2").val(val - 1);
+				submit();
+
+			}
+
+			function nextPage() {
+				var val = parseInt($("#page1").val());
+				var m = parseInt($("#pagemax").val());
+				if (val >= m) return;
+				$("#page1").val(val + 1);
+				$("#page2").val(val + 1);
+				submit();
+
+			}
+
+
+			function submit() {
+				var n_curr_filter = 0;
+				var filters = '';
+				$('#filter_list').children('div').each(function () {
+					filters += $(this).data("value") + ";"; // "this" is the current element in the loop
+					n_curr_filter++;
+				});
+				if (n_curr_filter != n_filters) {
+					$("#page1").val(1);
+					$("#page2").val(1);
+					n_filters = n_curr_filter;
+				}
+
+				var per_page = $('#per_page1').val();
+				var page = $('#page1').val();
+				$("#data").html("Please wait while the query is running");
+				var filters = '${INI_FILTERS}';
+				$('#filter_list').children('div').each(function () {
+					filters += $(this).data("value") + ";"; // "this" is the current element in the loop
+				});
+
+				console.log('logging filters', filters);
+
+				urlv = "/CONTENT/NEWS_SEARCH/PUBLI_NEWS_SEARCH";
+				$.ajax({
+					type: 'POST',
+					// make sure you respect the same origin policy with this url:
+					// http://en.wikipedia.org/wiki/Same_origin_policy
+					url: urlv,
+					data: { "PER_PAGE": per_page, 'PAGE': page, 'FILTERS': filters },
+					success: function (data) {
+						try {
+							var v = jQuery.parseJSON(data);
+							$("#data").html(v.code);
+							$("#n_pub1").html(v.STAT.CO);
+							$("#n_pub2").html(v.STAT.CO);
+							$("#info").html("");
+							updatePageCount(false, 1);
+						} catch (err) {
+							console.log(err);
+							$("#data").html("<p class='alert alert-info'>We are unable to retrieve News at the moment. We apologize for the inconvenience</p>");
+						}
+					},
+					error: function (data) { $("#info").html("<p class='alert alert-info'>We are unable to retrieve News at the moment. We apologize for the inconvenience</p>"); }
+				});///END AJAX
+				return false;
+			}
+			$(document).ready(function () {
+				//$('#mutation_search_res').DataTable();
+				submit();
+			});
+
+			function showFilters() {
+				$("#filters_options").dialog({
+					width: "60%", modal: true,
+					buttons: {
+						"Confirm": function () {
+
+							$(this).dialog("close");
+							submit();
+						},
+
+					}
+				});
+
+			}
+		</script>
+	</div>
+</div>

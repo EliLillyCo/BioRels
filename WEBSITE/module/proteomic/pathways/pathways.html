@@ -1,0 +1,60 @@
+$[VALID]
+<h3>Pathways involving ${ENTRY_NAME}</h3>
+
+<div  class="w3-opts-right">
+			
+		<a target="_blank" href="/CSV/${LINK}/PATHWAYS" ><img alt='Download' src="/require/img/download.png" style="width: 20px;" /></a>
+		<div class="help-tip" style="position:unset;margin-left:5px;" onclick="$( '#pathways_info' ).dialog({width: '70%' });"></div>
+		</div>
+
+
+	<div class="w3-col s12">
+<table id="tbl-pathways" class="table"  >
+		<thead>
+			<tr>
+			    <th>Reactome Identifier</th>
+			    <th>Pathway name</th>
+				<th>Link</th>
+			</tr>
+		</thead>
+		<tbody>
+			${TBL}
+		</tbody>
+	</table>
+
+
+</div>
+<br/>
+<div style="margin-bottom:30px;">
+<h4 style="display:contents">Source:</h4>
+Reactome <a href="https://reactome.org/" rel="noopener" target="_blank">https://reactome.org/</a>
+
+<div class="plus radius" id="pathways_plus" style="--l:17px;--t:1.2px;--s:4px;margin-left:10px" onclick="togglePlusView('pathways_plus')"></div>
+<div id="pathways_plus_view" style="display:none">
+${REAC_SOURCE}
+</div>
+</div>
+<div id="pathways_info" title="Pathway description">
+
+</div>
+
+<script type="text/javascript">
+
+
+$(document).ready( function () {
+    $('#tbl-protseqs').DataTable({"ordering":false});
+} );
+</script>
+
+
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info w3-col s12" role="alert">
+  No pathways reported for ${ENTRY_NAME}.
+</div>
+$[/INVALID]
+$[ERROR]
+<div class="alert alert-info w3-col s12" role="alert">
+
+</div>
+$[/ERROR]

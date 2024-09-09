@@ -1,0 +1,30 @@
+$[VALID]
+
+<div style="position:relative">
+		<ul class="nav  nav-tabs">
+				<li id="iso_al_${MD5}_tab_1" class="nav-item nav-link active" onclick="showMenu('dom_al_${MD5}',1,${NBLOCK})">Full sequence</li>
+				${LI_BLOCKS}
+				
+		
+			  </ul>
+			  </div>
+
+			  
+<div id="dom_al_${MD5}_view_1" class="container-grey sequence_bold sequence w3-col s12 pre " style="white-space: pre" >${SEQUENCE}</div>
+${LIST_BLOCKS}
+<script>
+var list_dom_tooltips=JSON.parse('${LIST}');
+
+$(document).ready(function(){
+  $('.ttl').uitooltip({track: true,
+	content: function () {
+		
+        return list_dom_tooltips[$(this).data('pos')];
+    }});
+});
+
+</script>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">${ERROR}</div>
+$[/INVALID]

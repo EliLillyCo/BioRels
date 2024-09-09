@@ -1,0 +1,1343 @@
+
+START	LSO_0000001
+NAME	Root
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Ontology root. 
+END
+
+START	LSO_0000025
+NAME	Route of administration
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Route of administration
+CHILDOF	LSO_0046731
+
+END
+
+
+START	LSO_0000047
+NAME	Intradermal route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Injection administered in the skin, more precisely into the dermis.
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	ID route
+SYNONYM	Injection within the dermis
+SYNONYM	Intradermal injection
+SYNONYM	Intradermal injections
+SYNONYM	Superficial injection
+SYNONYM	Superficial injections
+SYNONYM	Dermal route
+SYNONYM	Intracutaneous route
+SYNONYM	Intracutaneous injection
+SYNONYM	Intracutaneous injections
+END
+
+START	LSO_0000048
+NAME	Intragastric route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration of a drug into the stomach
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Intragastric administration
+SYNONYM	Gastric administration
+SYNONYM	Intragastric route
+SYNONYM	Stomach administration
+SYNONYM	Intragastric delivery
+SYNONYM	Gastric delivery
+SYNONYM	Intragastric injection
+SYNONYM	Intragastric injections
+END
+
+START	LSO_0000049
+NAME	Intramuscular route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration of a drug into the muscle
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	IM administration
+SYNONYM	Injection into muscle
+SYNONYM	Muscular administration
+SYNONYM	Intramuscular injection
+SYNONYM	Intramuscular injections
+SYNONYM	Intramuscular
+END
+
+START	LSO_0000050
+NAME	Intranasal route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration of a drug via insufflation in the nose
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Intranasal administration
+SYNONYM	Nasal delivery
+SYNONYM	Rhinopharyngeal administration
+SYNONYM	Nasal route
+SYNONYM	Nasal administration
+END
+
+
+START	LSO_0046741
+NAME	Inhalation route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration of a drug via inhalation
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Inhalation therapy
+SYNONYM	Respiratory administration
+SYNONYM	Pulmonary administration
+END
+
+START	LSO_0000051
+NAME	Intraperitoneal route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Intraperitoneally applied drug are administered in the peritoneal cavity - the area that contains the abdominal organs
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	IP route (abbreviation for intraperitoneal)
+SYNONYM	Peritoneal injection
+SYNONYM	Intraperitoneal injection
+SYNONYM	Intraperitoneal injections
+SYNONYM	Peritoneal administration
+SYNONYM	Peritoneal administrations
+SYNONYM	Intraperitoneal infusion
+SYNONYM	Intraperitoneal delivery
+SYNONYM	Abdominal route
+END
+
+START	LSO_0000052
+NAME	Intravaginal route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via the vagina
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Vaginal administration
+SYNONYM	Intravaginal administration
+SYNONYM	Intravaginal delivery
+SYNONYM	Intravaginal injection
+SYNONYM	Intravaginal injections
+SYNONYM	Vaginal delivery
+SYNONYM	Vaginal route
+SYNONYM	Local administration to the vagina
+END
+
+START	LSO_0000053
+NAME	Intravenous route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via a vein
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	IV route
+SYNONYM	IV administration
+SYNONYM	Injection into a vein
+SYNONYM	Parenteral administration
+SYNONYM	Venous administration
+SYNONYM	Intravenous injection
+SYNONYM	Intravenous injections
+SYNONYM	Intravenous delivery
+END
+
+START	LSO_0000054
+NAME	Intravesical route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via the outside anatomical access to the bladder
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Intrabladder route
+SYNONYM	Intravesical instillation
+SYNONYM	Bladder instillation
+SYNONYM	Bladder administration
+SYNONYM	Intravesical injection
+SYNONYM	Intravesical therapy
+SYNONYM	Intravesical delivery
+END
+
+START	LSO_0000055
+NAME	Oral route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via the mouth
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Peroral administration
+SYNONYM	Ingestion
+SYNONYM	By mouth
+SYNONYM	Enteral administration
+END
+
+START	LSO_0000056
+NAME	Percutaneous route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via the skin
+CHILDOF	LSO_0000025
+SYNONYM	Transdermal route
+SYNONYM	Through the skin administration
+SYNONYM	Percutaneous absorption
+SYNONYM	Topical administration
+SYNONYM	Epidermal route
+SYNONYM	Epidermal injection
+SYNONYM	Epidermal injections
+SYNONYM	Dermatologic route
+SYNONYM	Cutaneous administration
+PUBMED	T
+END
+
+START	LSO_0000057
+NAME	Subcutaneous route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration under the skin
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	SubQ route
+SYNONYM	SubQ administration
+SYNONYM	SC administration
+SYNONYM	Injection under the skin
+SYNONYM	Hypodermic administration
+SYNONYM	Hypodermic route
+END
+
+START	LSO_0000058
+NAME	Subtenon route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration in the eye
+CHILDOF	LSO_0000025
+SYNONYM	Ophthalmic administration
+SYNONYM	Ophthalmic route
+SYNONYM	Ophthalmic injection
+SYNONYM	Eye drops
+SYNONYM	Ocular delivery
+PUBMED	T
+END
+
+START	LSO_0046739
+NAME	Topical route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration on the skin
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Topical administration
+SYNONYM	Topical application
+SYNONYM	Local application
+SYNONYM	Local administration
+SYNONYM	Cutaneous administration
+SYNONYM	Cutaneous application
+SYNONYM	Epidermal application
+SYNONYM	Epidermal administration
+SYNONYM	Dermatological administration
+SYNONYM	Dermatological application
+END
+
+
+START	LSO_0046740
+NAME	Rectal route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via the rectum
+CHILDOF	LSO_0000025
+PUBMED	T
+SYNONYM	Rectal delivery
+SYNONYM	Rectal suppository
+SYNONYM	Anorectal administration
+END
+
+
+START	LSO_0000059
+NAME	Intrathecal route
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Administration via the spine
+PUBMED	T
+SYNONYM	Intrathecal route
+SYNONYM	Intrathecal delivery
+SYNONYM	Intrathecal injection
+SYNONYM	Intrathecal administration
+SYNONYM	Intrathecal administrations
+SYNONYM	Subarachnoid injection
+SYNONYM	Spinal injection
+SYNONYM	Spinal delivery
+SYNONYM	Spinal route
+SYNONYM	Intraspinal administration
+SYNONYM	Subarachnoid administration
+SYNONYM	Subarachnoid space delivery
+CHILDOF	LSO_0000025
+
+END
+
+
+
+
+
+
+
+
+
+
+START	LSO_1000000
+NAME	Mode of inheritance
+CR_DATE	2024/02/21
+DESCRIP	Mode of inheritance
+EXACT	HP:0000005
+CHILDOF	LSO_0000001
+END
+
+START	LSO_1000001
+NAME	Mendelian inheritance
+DESCRIP	A mode of inheritance of diseases whose pathophysiology can be traced back to variants in a single gene. The inheritance patterns of these single-gene (monogenic) diseases are often referred to as Mendelian in honor of Gregor Mendel. 
+EXACT	HP:0034345
+SOURCE	HP:0034345
+CHILDOF	LSO_1000000
+PUBMED	T
+SYNONYM	Mendelian genetics
+SYNONYM	Mendelian transmission
+SYNONYM	Mendelian pattern
+SYNONYM	Mendelian heredity
+SYNONYM	Mendelian genetic traits
+SYNONYM	Mendelian genetic variation
+SYNONYM	Mendelian mode of inheritance
+SYNONYM	Mendelian genetic mechanisms
+END
+
+START	LSO_1000002
+NAME	Autosomal dominant inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for traits related to a alleles encoded on one of the autosomes (i.e., the human chromosomes 1-22) in which a trait manifests in heterozygotes. In the context of medical genetics, an autosomal dominant disorder is caused when a single copy of the mutant allele is present. Males and females are affected equally, and can both transmit the disorder with a risk of 50% for each child of inheriting the mutant allele.
+EXACT	HP:0000005
+SOURCE	HP:0000005
+CHILDOF	LSO_1000001
+SYNONYM	dominant inheritance
+SYNONYM	autosomal dominancy
+SYNONYM	mendelian dominant inheritance
+SYNONYM	dominant genetic trait
+SYNONYM	dominant heredity
+SYNONYM	dominant gene transmission
+SYNONYM	dominant allele transmission
+SYNONYM	autosomal dominion
+SYNONYM	autosomal dominant
+SYNONYM	monoallelic autosomal
+SYNONYM	heterozygous autosomal
+PUBMED	T
+END
+
+
+
+START	LSO_1000003
+NAME	Autosomal recessive inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for traits related to an allele encoded on one of the autosomes (i.e., the human chromosomes 1-22) in which a trait manifests in individuals with two pathogenic alleles, either homozygotes (two copies of the same mutant allele) or compound heterozygotes (whereby each copy of an allele has a distinct mutant allele).
+EXACT	HP:0000007
+SOURCE	HP:0000007
+CHILDOF	LSO_1000001
+SYNONYM	recessive inheritance
+SYNONYM	autosomal recessivity
+SYNONYM	mendelian recessive inheritance
+SYNONYM	recessive genetic trait
+SYNONYM	recessive heredity
+SYNONYM	recessive gene transmission
+SYNONYM	autosomal recedence
+SYNONYM	autosomal recessive
+SYNONYM	biallelic autosomal
+SYNONYM	homozygous autosomal
+PUBMED	T
+END
+
+
+START	LSO_1000004
+NAME	Mitochondrial inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for traits related to an allele encoded on the mitochondrial genome. Because the mitochondrial genome is essentially always maternally inherited, a mitochondrial condition can only be transmitted by females, although the condition can affect both sexes. The proportion of mutant mitochondria can vary (heteroplasmy).
+EXACT	HP_0001427
+SOURCE	HP_0001427
+CHILDOF	LSO_1000001
+SYNONYM	maternal inheritance
+SYNONYM	matrilineal inheritance
+SYNONYM	mitochondrial DNA inheritance
+SYNONYM	maternal transmission
+SYNONYM	maternal genetic inheritance
+SYNONYM	maternal trait inheritance
+SYNONYM	mitochondrial genetics
+SYNONYM	mitochondrial transmission
+SYNONYM	mitochondrial genetic inheritance
+SYNONYM	mitochondrial mode of inheritance
+SYNONYM	mitochondrial heredity
+SYNONYM	mitochondrial genetic trait
+PUBMED	T
+END
+
+
+START	LSO_1000005
+NAME	Pseudoautosomal inheritance
+CR_DATE	2024/02/21
+DESCRIP	A pattern of inheritance observed for alleles in the X-Y identical regions is referred to as pseudoautosomal inheritance, because it resembles the pattern seen for alleles located on autosomes.
+EXACT	HP_0034339
+SOURCE	HP_0034339
+CHILDOF	LSO_1000001
+PUBMED	T
+END
+
+
+
+
+START	LSO_1000006
+NAME	Pseudoautosomal dominant inheritance
+CR_DATE	2024/02/21
+DESCRIP	A type of pseudoautosomal inheritance that is dominant and in which heterozygous males and females both manifest a disease phenotype.
+EXACT	HP_0034339
+SOURCE	HP_0034339
+CHILDOF	LSO_1000005
+PUBMED	T
+END
+
+
+
+
+START	LSO_1000007
+NAME	Pseudoautosomal recessive inheritance
+CR_DATE	2024/02/21
+DESCRIP	A type of pseudoautosomal inheritance that is recessive and in which heterozygous males and females both manifest a disease phenotype.
+EXACT	HP_0034341
+SOURCE	HP_0034341
+CHILDOF	LSO_1000005
+PUBMED	T
+END
+
+
+START	LSO_1000008
+NAME	Semidominant inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for traits related to an allele encoded on chromosomes in which a trait can manifest in a monoallelic (e.g. heterozygotes) and biallelic (e.g. homozygotes, compound heterozygotes) state, with similar or differing phenotype severity present dependent on the number of alleles affected.
+EXACT	HP_0034341
+SOURCE	HP_0034341
+CHILDOF	LSO_1000001
+PUBMED	T
+END
+
+
+
+START	LSO_1000009
+NAME	X-linked inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for traits related to an allele encoded on the X chromosome.
+EXACT	HP_0001417
+SOURCE	HP_0001417
+CHILDOF	LSO_1000001
+PUBMED	T
+SYNONYM	X-linked transmission
+SYNONYM	X-linked genetic inheritance
+SYNONYM	X-chromosomal inheritance
+SYNONYM	X-linked mode of inheritance
+SYNONYM	X-linked heredity
+SYNONYM	X-linked genetic trait
+SYNONYM	X-linked pattern
+SYNONYM	X-linked gene
+SYNONYM	X-linked genes
+SYNONYM	X-linked form
+SYNONYM	X-linked forms
+SYNONYM	X-linked locus
+SYNONYM	X-linked disease
+SYNONYM	X-linked diseases
+SYNONYM	X-chromosome linkage
+SYNONYM	X-linked genetic transmission
+END
+
+
+
+START	LSO_1000010
+NAME	X-linked dominant inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for dominant traits related to an allele encoded on the X chromosome. In the context of medical genetics, X-linked dominant disorders tend to manifest very severely in affected males. The severity of manifestation in females may depend on the degree of skewed X inactivation.
+EXACT	HP_0001423
+SOURCE	HP_0001423
+CHILDOF	LSO_1000009
+PUBMED	T
+SYNONYM	dominant X-linked inheritance
+SYNONYM	X-linked dominant transmission
+SYNONYM	X-linked dominancy
+SYNONYM	X-linked dominant pattern
+SYNONYM	dominant X-linked mode
+SYNONYM	X-linked dominance
+SYNONYM	X-linked dominant heredity
+SYNONYM	X-linked dominant genetic trait
+END
+
+
+
+START	LSO_1000011
+NAME	X-linked recessive inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for recessive traits related to an allele encoded on the X chromosome. In the context of medical genetics, X-linked recessive disorders manifest in males (who have one copy of the X chromosome and are thus hemizygotes), but generally not in female heterozygotes who have one mutant and one normal allele.
+EXACT	HP_0001419
+SOURCE	HP_0001419
+CHILDOF	LSO_1000009
+PUBMED	T
+SYNONYM	recessive X-linked inheritance
+SYNONYM	X-linked recessive transmission
+SYNONYM	X-linked recedence
+SYNONYM	X-linked recessive pattern
+SYNONYM	recessive X-linked mode
+SYNONYM	X-linked recessive heredity
+SYNONYM	X-linked recessive genetic trait
+SYNONYM	X-linked recessive genetic transmission
+END
+
+
+
+START	LSO_1000012
+NAME	Y-linked inheritance
+CR_DATE	2024/02/21
+DESCRIP	A mode of inheritance that is observed for traits related to an allele encoded on the Y chromosome.
+EXACT	HP:0001450
+SOURCE	HP:0001450
+CHILDOF	LSO_1000001
+SYNONYM	Y-linked transmission
+SYNONYM	Y-linked genetic inheritance
+SYNONYM	Y-chromosomal inheritance
+SYNONYM	Y-linked mode of inheritance
+SYNONYM	Y-linked heredity
+SYNONYM	Y-linked genetic trait
+SYNONYM	Y-linked pattern
+SYNONYM	Y-chromosome linkage
+SYNONYM	Y-linked genetic transmission
+SYNONYM	Y-linked gene
+SYNONYM	Y-linked locus
+SYNONYM	Y-linked genes
+SYNONYM	Y-linked disease
+SYNONYM	Y-linked diseases
+PUBMED	T
+END
+
+
+
+START	LSO_1000013
+NAME	Non-Mendelian inheritance
+DESCRIP	The observed inheritance for a multifactorial genetic trait or disorder, but not a "simple" definition of dominant or recessive alleles
+EXACT	HP:0001426
+SOURCE	HP:0001426
+CHILDOF	LSO_1000000
+SYNONYM	non-Mendelian genetics
+SYNONYM	non-Mendelian transmission
+SYNONYM	complex inheritance
+SYNONYM	non-Mendelian pattern
+SYNONYM	non-Mendelian heredity
+SYNONYM	non-Mendelian genetic traits
+SYNONYM	non-Mendelian genetic variation
+SYNONYM	non-Mendelian mode of inheritance
+SYNONYM	non-Mendelian genetic mechanisms
+PUBMED	T
+END
+
+
+
+START	LSO_1000014
+NAME	Digenic inheritance
+DESCRIP	A type of multifactorial inheritance governed by the simultaneous action of two gene loci
+EXACT	HP_0010984
+SOURCE	HP_0010984
+CHILDOF	LSO_1000013
+PUBMED	T
+SYNONYM	bigenic inheritance
+SYNONYM	dual-gene inheritance
+SYNONYM	two-gene inheritance
+SYNONYM	biallelic inheritance
+SYNONYM	two-locus inheritance
+END
+
+
+
+START	LSO_1000015
+NAME	Oligogenic inheritance
+DESCRIP	A type of multifactorial inheritance governed by the simultaneous action of a few gene loci. It is recommended this term be used for traits governed by three loci, although it is noted that usage of this term in the literature is not uniform
+EXACT	HP_0010983
+SOURCE	HP_0010983
+CHILDOF	LSO_1000013
+PUBMED	T
+SYNONYM	multigenic inheritance
+SYNONYM	few-gene inheritance
+SYNONYM	oligogenic transmission
+SYNONYM	multiple-gene inheritance
+SYNONYM	limited-gene inheritance
+END
+
+
+
+
+START	LSO_1000016
+NAME	Polygenic inheritance
+DESCRIP	A mode of inheritance that depends on a mixture of major and minor genetic determinants possibly together with environmental factors. Diseases inherited in this manner are termed complex diseases.
+EXACT	HP_0010982
+SOURCE	HP_0010982
+CHILDOF	LSO_1000013
+PUBMED	T
+SYNONYM	multifactorial inheritance
+SYNONYM	multigenic inheritance
+SYNONYM	quantitative inheritance
+SYNONYM	complex inheritance
+SYNONYM	continuous inheritance
+SYNONYM	multiple-gene inheritance
+SYNONYM	polygenic transmission
+SYNONYM	cumulative inheritance
+SYNONYM	multigenetic inheritance
+SYNONYM	multigenotypic inheritance
+SYNONYM	multifactorial inheritance
+END
+
+
+
+START	LSO_1100000
+NAME	Genetic alteration
+CR_DATE	2024/02/21
+DESCRIP	Type of alteration in the genetic material that is inherited or acquired.
+CHILDOF	LSO_0000001
+END
+
+
+START	LSO_1100001
+NAME	Point mutation
+CR_DATE	2024/02/21
+DESCRIP	Type of mutation that involves a change in a single nucleotide in the DNA sequence
+CHILDOF	LSO_1100000
+SYNONYM	single nucleotide mutation
+SYNONYM	base substitution
+SYNONYM	nucleotide substitution
+SYNONYM	base pair mutation
+SYNONYM	single base mutation
+SYNONYM	SNP
+SYNONYM	base change
+SYNONYM	point nucleotide mutation
+SYNONYM	single-base substitution
+SYNONYM	nucleotide alteration
+SYNONYM	single nucleotide polymorphism
+SYNONYM	single base substitution
+SYNONYM	nucleotide change
+PUBMED	T
+END
+
+
+START	LSO_1100002
+NAME	Insertion (genetics)
+CR_DATE	2024/02/21
+DESCRIP	Addition of one or more nucleotides into the DNA sequence
+CHILDOF	LSO_1100000
+SYNONYM	insertional mutation
+SYNONYM	nucleotide insertion
+SYNONYM	insertion mutation
+SYNONYM	nucleotide addition
+SYNONYM	base pair insertion
+SYNONYM	inserted sequence
+SYNONYM	genetic insertion
+SYNONYM	DNA insertion
+SYNONYM	addition mutation
+PUBMED	T
+END
+
+
+START	LSO_1100003
+NAME	Deletion (genetics)
+CR_DATE	2024/02/21
+DESCRIP	Addition of one or more nucleotides into the DNA sequence
+CHILDOF	LSO_1100000
+SYNONYM	deletion mutation
+SYNONYM	nucleotide deletion
+SYNONYM	DNA deletion
+SYNONYM	base pair deletion
+SYNONYM	genetic deletion
+PUBMED	T
+END
+
+
+START	LSO_1100004
+NAME	Frameshift (genetics)
+CR_DATE	2024/02/21
+DESCRIP	Type of mutation that results in the insertion or deletion of nucleotides, causing a shift in the reading frame of the genetic code
+CHILDOF	LSO_1100000
+SYNONYM	frameshift mutation
+SYNONYM	reading frame shift
+SYNONYM	reading frame mutation
+SYNONYM	insertion-deletion mutation
+SYNONYM	base pair shift
+SYNONYM	nucleotide shift
+SYNONYM	coding sequence shift
+SYNONYM	reading phase mutation
+SYNONYM	reading frame alteration
+SYNONYM	shift mutation
+SYNONYM	reading frame change
+SYNONYM	reading frame alteration
+PUBMED	T
+END
+
+
+
+START	LSO_1100005
+NAME	Repeat copy number
+CR_DATE	2024/02/21
+DESCRIP	DNA sequence containing repeating units increases in length due to an increase in the number of repeats
+CHILDOF	LSO_1100000
+SYNONYM	trinucleotide repeat expansion
+SYNONYM	repeat lengthening
+SYNONYM	expansion mutation
+SYNONYM	repeat sequence expansion
+SYNONYM	tandem repeat expansion
+SYNONYM	microsatellite expansion
+SYNONYM	repetitive sequence expansion
+SYNONYM	expanding repeats
+SYNONYM	trinucleotide repeat lengthening
+SYNONYM	increased repeat copy number
+PUBMED	T
+END
+
+
+
+START	LSO_1100006
+NAME	Microsatellite instability
+CR_DATE	2024/02/21
+DESCRIP	Condition characterized by a change in the length of microsatellite DNA sequences
+CHILDOF	LSO_1100000
+SYNONYM	mSI
+SYNONYM	repetitive DNA instability
+SYNONYM	short tandem repeat instability
+SYNONYM	satellite instability
+SYNONYM	simple sequence repeat instability
+SYNONYM	sSR instability
+SYNONYM	mismatch repair deficiency
+SYNONYM	repetitive sequence instability
+SYNONYM	dNA microsatellite variation
+SYNONYM	microsatellite length alteration
+PUBMED	T
+END
+
+
+
+
+START	LSO_1100007
+NAME	Inversion (genetics)
+CR_DATE	2024/02/21
+DESCRIP	reversal of the orientation of a segment of DNA within a chromosome
+CHILDOF	LSO_1100000
+SYNONYM	chromosomal inversion
+SYNONYM	inverted mutation
+SYNONYM	chromosomal rearrangement
+SYNONYM	inverted segment
+SYNONYM	inversion mutation
+SYNONYM	segmental inversion
+SYNONYM	inverted chromosomal region
+SYNONYM	chromosomal flip
+SYNONYM	inverted DNA fragment
+PUBMED	T
+END
+
+
+
+START	LSO_1100008
+NAME	Gene duplication
+CR_DATE	2024/02/21
+DESCRIP	an alleletic event where a copy of an allele is produced, resulting in multiple copies of that gene within the genome
+CHILDOF	LSO_1100000
+SYNONYM	genetic duplication
+SYNONYM	copy number variation
+SYNONYM	gene replication
+SYNONYM	gene amplification
+SYNONYM	duplication event
+SYNONYM	gene copying
+SYNONYM	repetitive gene sequence
+SYNONYM	genomic duplication
+SYNONYM	gene redundancy
+SYNONYM	replicated gene
+PUBMED	T
+END
+
+
+
+START	LSO_1100009
+NAME	Aneuploidy
+CR_DATE	2024/02/21
+DESCRIP	abnormal number of chromosomes in a cell
+CHILDOF	LSO_1100000
+SYNONYM	chromosomal imbalance
+SYNONYM	numerical chromosomal aberration
+SYNONYM	chromosome number variation
+SYNONYM	abnormal chromosome count
+SYNONYM	aneuploid condition
+SYNONYM	aneuploid state
+SYNONYM	chromosomal aneuploidy
+SYNONYM	aberrant chromosomal number
+SYNONYM	aneuploid disorder
+SYNONYM	chromosomal numerical abnormality
+PUBMED	T
+END
+
+
+
+START	LSO_1100010
+NAME	Polyploidy
+CR_DATE	2024/02/21
+DESCRIP	presence of more than two sets of chromosomes in an organism's cells
+CHILDOF	LSO_1100000
+SYNONYM	chromosomal duplication
+SYNONYM	whole-genome duplication
+SYNONYM	polysomy
+SYNONYM	polyploid state
+SYNONYM	chromosomal triplication
+SYNONYM	chromosomal multiplication
+SYNONYM	polyploid condition
+SYNONYM	triploidy
+SYNONYM	tetraploidy
+SYNONYM	hexaploidy
+PUBMED	T
+END
+
+
+
+
+
+START	LSO_1200000
+NAME	Funtional Genetic impact
+CR_DATE	2024/02/21
+DESCRIP	Type of alteration in the genetic material that is inherited or acquired.
+CHILDOF	LSO_0000001
+END
+
+
+START	LSO_1200001
+NAME	Haploinsufficiency
+CR_DATE	2024/02/21
+DESCRIP	condition where a single functional copy of an allele is not sufficient to maintain normal function
+CHILDOF	LSO_1200000
+SYNONYM	haploid insufficiency
+SYNONYM	haploid deficiency
+SYNONYM	single gene insufficiency
+SYNONYM	partial gene dosage
+SYNONYM	half gene function
+SYNONYM	allelic insufficiency
+SYNONYM	monosomic expression
+SYNONYM	single-copy inadequacy
+SYNONYM	reduced gene dosage
+SYNONYM	suboptimal gene dosage
+PUBMED	T
+END
+
+
+START	LSO_1200002
+NAME	Dominant-negative mutation
+CR_DATE	2024/02/21
+DESCRIP	A mutation that produces an altered gene product that acts antagonistically to the normal gene product.
+CHILDOF	LSO_1200000
+SYNONYM	dominant-negative allele
+SYNONYM	dominant-negative effect
+SYNONYM	dominant-negative mutation
+SYNONYM	antimorphic mutation
+SYNONYM	inhibitory mutation
+SYNONYM	suppressing mutation
+SYNONYM	negative-acting allele
+SYNONYM	interfering mutation
+SYNONYM	counteracting mutation
+SYNONYM	inhibitory allele
+PUBMED	T
+END
+
+
+START	LSO_1200003
+NAME	Loss-of-function mutation
+CR_DATE	2024/02/21
+DESCRIP	A mutation that completely eliminates the function of an allele
+CHILDOF	LSO_1200000
+SYNONYM	amorphic mutation
+SYNONYM	null mutation
+SYNONYM	deleterious mutation
+SYNONYM	inactivating mutation
+SYNONYM	nonfunctional mutation
+SYNONYM	knockout mutation
+SYNONYM	nonviable mutation
+SYNONYM	nonexpressing mutation
+SYNONYM	afunctional mutation
+SYNONYM	abrogating mutation
+PUBMED	T
+END
+
+
+START	LSO_1200004
+NAME	Functional haplotype
+CR_DATE	2024/02/21
+DESCRIP	Refers to a combination of alleles that collectively influence the function of an allele.
+CHILDOF	LSO_1200000
+SYNONYM	allelic combination
+SYNONYM	genomic variant combination
+SYNONYM	functional allele grouping
+SYNONYM	functional variant haplotype
+SYNONYM	cooperative allelic set
+SYNONYM	combined allele function
+SYNONYM	allele synergy
+SYNONYM	functionally relevant haplotype
+SYNONYM	allele collaboration
+SYNONYM	variant ensemble
+PUBMED	T
+END
+
+
+
+START	LSO_1200005
+NAME	Gain-of-function mutation
+CR_DATE	2024/02/21
+DESCRIP	A mutation that leads to an increased activity or function of the gene or protein.
+CHILDOF	LSO_1200000
+SYNONYM	enhanced function mutation
+SYNONYM	overactive mutation
+SYNONYM	hypermorphic mutation
+SYNONYM	superactive mutation
+SYNONYM	amplifying mutation
+SYNONYM	hyperactive allele
+SYNONYM	excessive function mutation
+SYNONYM	upregulated mutation
+SYNONYM	accelerated function mutation
+SYNONYM	potentiating mutation
+PUBMED	T
+END
+
+
+START	LSO_1200006
+NAME	Neomorphic mutation
+CR_DATE	2024/02/21
+DESCRIP	A mutation that results in a novel function not found in the wild-type gene.
+CHILDOF	LSO_1200000
+SYNONYM	novel function mutation
+SYNONYM	noncanonical function mutation
+SYNONYM	atypical function mutation
+SYNONYM	unconventional function mutation
+SYNONYM	new activity mutation
+SYNONYM	altered function mutation
+SYNONYM	unusual function mutation
+SYNONYM	unforeseen function mutation
+SYNONYM	unprecedented function mutation
+SYNONYM	nonstandard function mutation
+PUBMED	T
+END
+
+
+
+
+START	LSO_1200007
+NAME	Partial loss of function
+CR_DATE	2024/02/21
+DESCRIP	Refers to a mutation that reduces the normal function of an allele but does not completely eliminate it
+CHILDOF	LSO_1200000
+SYNONYM	suboptimal function
+SYNONYM	reduced function mutation
+SYNONYM	partial inactivation
+SYNONYM	incomplete loss-of-function
+SYNONYM	impaired function mutation
+SYNONYM	diminished activity mutation
+SYNONYM	partially compromised function
+SYNONYM	weakened function mutation
+SYNONYM	subnormal function
+SYNONYM	moderately impaired function
+PUBMED	T
+END
+
+
+
+START	LSO_1200008
+NAME	Premature stop codon
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+CHILDOF	LSO_1200000
+DESCRIP	type of mutation in a DNA sequence that results in the generation of a stop codon earlier than the normal termination codon
+PUBMED	T
+SYNONYM	Premature stop mutation
+SYNONYM	nonsense codon mutation
+SYNONYM	non-sense mutation
+SYNONYM	non-sense codon mutation
+SYNONYM	truncated protein
+SYNONYM premature termination codon
+SYNONYM nonsense codon
+SYNONYM non-sense codon
+END
+
+
+
+
+
+START	LSO_1400000
+NAME	Biological effect
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Effect of a molecular entity on a biological system
+CHILDOF	LSO_0000001
+END
+
+
+
+
+START	LSO_1400001
+NAME	Loss-of-function
+CR_DATE	2024/02/21
+DESCRIP	Decrease or loss of the gene's ability to produce a functional product, such as a protein or RNA molecule
+CHILDOF	LSO_1400000
+SYNONYM	gene inactivation
+SYNONYM	knockout
+SYNONYM	nonfunctional
+SYNONYM	loss-of-function
+SYNONYM	loss of function
+SYNONYM	deactivation
+SYNONYM	loss of gene activity
+SYNONYM	gene inactivity
+SYNONYM	functional impairment
+SYNONYM	gene silencing
+SYNONYM	suboptimal function
+SYNONYM	reduced function
+SYNONYM	partial inactivation
+SYNONYM	impaired function
+SYNONYM	diminished activity
+SYNONYM	partially compromised function
+SYNONYM	weakened function
+SYNONYM	subnormal function
+SYNONYM	moderately impaired function
+PUBMED	T
+END
+
+
+
+START	LSO_1400002
+NAME	Gain of function
+CR_DATE	2024/02/21
+DESCRIP	Increase or gain of the gene's ability to produce a functional product, such as a protein or RNA molecule
+CHILDOF	LSO_1400000
+SYNONYM	activation
+SYNONYM	enhancement
+SYNONYM	overactivity
+SYNONYM	gain-of-function
+SYNONYM	gain of function
+SYNONYM	augmentation
+SYNONYM	increased function
+SYNONYM	hyperactivation
+SYNONYM	potentiation
+SYNONYM	gene upregulation
+SYNONYM	amplification
+PUBMED	T
+END
+
+
+
+START	LSO_1400003
+NAME	Alternative splicing
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Process in eukaryotic gene expression where different combinations of exons are spliced together to generate multiple mRNA transcripts from a single gene
+CHILDOF	LSO_0000001
+PUBMED	T
+END
+
+
+
+
+
+START	LSO_1400004
+NAME	Cryptic exon
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	sequence in an allele that has features of an exon but is not typically included in the mature mRNA
+SYNONYM	latent exon
+SYNONYM	hidden exon
+SYNONYM	noncanonical exon
+SYNONYM	silent exon
+SYNONYM	intronic exon
+SYNONYM	aberrant exon
+SYNONYM	disguised exon
+SYNONYM	occult exon
+SYNONYM	unexpressed exon
+SYNONYM	unconventional exon
+CHILDOF	LSO_1400003
+PUBMED	T
+END
+
+
+START	LSO_1400005
+NAME	Exon skipping
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	An exon is excluded from the mature mRNA transcript, leading to the skipping of that exon.
+PUBMED	T
+CHILDOF	LSO_1400003
+SYNONYM exon skipping
+SYNONYM exon exclusion
+END
+
+START	LSO_1400006
+NAME	Intron retention
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+CHILDOF	LSO_1400003
+DESCRIP	One or more introns are retained in the mature mRNA transcript instead of being spliced out.
+PUBMED	T
+SYNONYM intron retention
+SYNONYM intron inclusion
+SYNONYM intron-containing isoform
+SYNONYM intron-containing transcript
+SYNONYM intron-containing mRNA
+END
+
+
+START	LSO_1400007
+NAME	Alternative 5' splice site
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+CHILDOF	LSO_1400003
+DESCRIP	Different 5' splice sites are used to generate alternative mRNA transcripts.
+PUBMED	T
+SYNONYM	alternative donor site
+SYNONYM	alternative 5' splice site
+SYNONYM	different 5' splice site
+SYNONYM	different donor site
+SYNONYM	different donor splice site
+END
+
+START	LSO_1400008
+NAME	Alternative 3' splice site
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+CHILDOF	LSO_1400003
+DESCRIP	Different 3' splice sites are used to generate alternative mRNA transcripts.
+PUBMED	T
+SYNONYM	alternative acceptor site
+SYNONYM	alternative 3' splice site
+SYNONYM	different 3' splice site
+SYNONYM	different acceptor site
+END
+
+START	LSO_1400009
+NAME	Alternative polyadenylation
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+CHILDOF	LSO_1400003
+DESCRIP	Different polyadenylation sites are used, resulting in mRNA transcripts with different 3' untranslated regions (UTRs).
+PUBMED	T
+SYNONYM	alternative poly(A) site
+SYNONYM	alternative cleavage and polyadenylation
+SYNONYM	different polyadenylation site
+SYNONYM	different poly(A) site
+SYNONYM	different cleavage and polyadenylation
+END
+
+START	LSO_1400010
+NAME	Alternative first exon
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+CHILDOF	LSO_1400003
+DESCRIP	Different first exons are used, often leading to the inclusion of specific promoter regions in the mRNA.
+PUBMED	T
+SYNONYM	alternative 5' leader exon
+SYNONYM	alternative initial exon
+SYNONYM	different 5' leader exon
+SYNONYM	different initial exon
+END
+
+
+
+START	LSO_1500000
+NAME	Annotation terms
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Additional annotation terms which are only selective in combination of
+CHILDOF	LSO_0000001
+END
+
+
+
+START	LSO_1510000
+NAME	Clinical study
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Clinical study categories - Taken from https://pubmed.ncbi.nlm.nih.gov/help/#clinical-study-categories-bibliography
+CHILDOF	LSO_1500000
+END
+
+
+START	LSO_1510001
+NAME	Therapy
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Clinical trial
+CHILDOF	LSO_1510000
+PMID_Q	((clinical[Title/Abstract] AND trial[Title/Abstract]) OR clinical trials as topic[MeSH Terms] OR clinical trial[Publication Type] OR random*[Title/Abstract] OR random allocation[MeSH Terms] OR therapeutic use[MeSH Subheading])
+PUBMED	T
+END
+
+
+
+
+START	LSO_1510002
+NAME	Diagnosis
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Identification of the nature and cause of a pathology
+CHILDOF	LSO_1510000
+PMID_Q	(sensitiv*[Title/Abstract] OR sensitivity and specificity[MeSH Terms] OR diagnose[Title/Abstract] OR diagnosed[Title/Abstract] OR diagnoses[Title/Abstract] OR diagnosing[Title/Abstract] OR diagnosis[Title/Abstract] OR diagnostic[Title/Abstract] OR diagnosis[MeSH:noexp] OR (diagnostic equipment[MeSH:noexp] OR diagnostic errors[MeSH:noexp] OR diagnostic imaging[MeSH:noexp] OR diagnostic services[MeSH:noexp]) OR diagnosis, differential[MeSH:noexp] OR diagnosis[Subheading:noexp])
+PUBMED	T
+END
+
+
+
+START	LSO_1510003
+NAME	Etiology
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Study of the cause 
+CHILDOF	LSO_1510000
+PMID_Q	(risk*[Title/Abstract] OR risk*[MeSH:noexp] OR (risk adjustment[MeSH:noexp] OR risk assessment[MeSH:noexp] OR risk factors[MeSH:noexp] OR risk management[MeSH:noexp] OR risk taking[MeSH:noexp]) OR cohort studies[MeSH Terms] OR group[Text Word] OR groups[Text Word] OR grouped [Text Word])
+PUBMED	T
+END
+
+
+
+START	LSO_1510004
+NAME	Prognosis
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Likelihood or expected development of the disease
+CHILDOF	LSO_1510000
+PMID_Q	(incidence[MeSH:noexp] OR mortality[MeSH Terms] OR follow up studies[MeSH:noexp] OR prognos*[Text Word] OR predict*[Text Word] OR course*[Text Word])
+PUBMED	T
+END
+
+
+
+START	LSO_1510005
+NAME	Clinical prediction guides
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Prediction guidelines
+CHILDOF	LSO_1510000
+PMID_Q	(predict*[Title/Abstract] OR predictive value of tests[MeSH Terms] OR score[Title/Abstract] OR scores[Title/Abstract] OR scoring system[Title/Abstract] OR scoring systems[Title/Abstract] OR observ*[Title/Abstract] OR observer variation[MeSH Terms])
+PUBMED	T
+END
+
+
+START	LSO_1510006
+NAME	Prevalence
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Proportion of the population
+CHILDOF	LSO_1510000
+SYNONYM spread
+SYNONYM burden
+SYNONYM occurrence
+SYNONYM pervasiveness
+SYNONYM prevalence
+SYNONYM rate
+SYNONYM frequency
+SYNONYM incidence
+SYNONYM case
+SYNONYM proportion
+PUBMED	T
+END
+
+
+
+
+START	LSO_1520000
+NAME	Medical genetics
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Medical genetics categories - Taken from https://pubmed.ncbi.nlm.nih.gov/help/#clinical-study-categories-bibliography
+CHILDOF	LSO_1500000
+END
+
+
+
+START	LSO_1520001
+NAME	Genetics Diagnosis
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Genetic analysis leading to a diagnosis
+CHILDOF	LSO_1520000
+PMID_Q	(Diagnosis AND Genetics)
+PUBMED	T
+END
+
+
+START	LSO_1520002
+NAME	Genetics Differential Diagnosis
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Genetic analysis with a differential diagnosis
+CHILDOF	LSO_1520000
+PMID_Q	(Differential Diagnosis[MeSH] OR Differential Diagnosis[Text Word] AND Genetics)
+PUBMED	T
+END
+
+
+START	LSO_1520003
+NAME	Genetics Clinical description
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Clinical description of a genetic disease
+CHILDOF	LSO_1520000
+PMID_Q	(Natural History OR Mortality OR Phenotype OR Prevalence OR Penetrance AND Genetics)
+PUBMED	T
+END
+
+
+
+START	LSO_1520004
+NAME	Genetics Management
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Treatment of genetic diseases
+CHILDOF	LSO_1520000
+PMID_Q	(therapy[Subheading] OR treatment[Text Word] OR treatment outcome OR investigational therapies AND Genetics)
+PUBMED	T
+END
+
+START	LSO_1520005
+NAME	Genetics Counseling
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Genetic counseling
+CHILDOF	LSO_1520000
+PMID_Q	(Genetic Counseling OR Inheritance pattern AND genetics)
+PUBMED	T
+END
+
+
+START	LSO_1520007
+NAME	Molecular genetics
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Molecular genetics
+CHILDOF	LSO_1520000
+PMID_Q	(Medical Genetics OR genotype OR genetics[Subheading] AND genetics)
+PUBMED	T
+END
+
+
+START	LSO_1520008
+NAME	Genetic testing
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Testing for a genetic marker
+CHILDOF	LSO_1520000
+PMID_Q	(DNA Mutational Analysis OR Laboratory techniques and procedures OR Genetic Markers OR diagnosis OR testing OR test OR screening OR mutagenicity tests OR genetic techniques OR molecular diagnostic techniques AND genetics)
+PUBMED	T
+END
+
+
+START	LSO_1520009
+NAME	Medical genetics
+CR_NAME	DESAPHY Jeremy
+CR_DATE	2023/03/14
+DESCRIP	Testing for a genetic marker
+CHILDOF	LSO_1520000
+PMID_Q	((Diagnosis AND genetics) OR (Differential Diagnosis[MeSH] OR Differential Diagnosis[Text Word] AND genetics) OR (Natural History OR Mortality OR Phenotype OR Prevalence OR Penetrance AND genetics) OR (therapy[Subheading] OR treatment[Text Word] OR treatment outcome OR investigational therapies AND genetics) OR (Genetic Counseling OR Inheritance pattern AND genetics) OR (Medical Genetics OR genotype OR genetics[Subheading] AND genetics) OR (DNA Mutational Analysis OR Laboratory techniques and procedures OR Genetic Markers OR diagnosis OR testing OR test OR screening OR mutagenicity tests OR genetic techniques OR molecular diagnostic techniques AND genetics))
+PUBMED	T
+END

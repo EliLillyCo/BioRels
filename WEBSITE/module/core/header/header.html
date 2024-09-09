@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>${TITLE}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="reply-to" content="" />
+  <meta name="publisher" content="DESAPHY Jeremy" />
+  <meta name="Robots" content="all" />
+  <meta name="robots" content="index, follow" />
+  <meta name="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta name="Cache-Control" content="post-check=0, pre-check=0" />
+  <meta name="Pragma" content="no-cache" />
+  <meta name="Accept-Encoding" content="gzip, deflate" />
+  <meta name="Content-Encoding" content="gzip" />
+  <meta name="distribution" content="global" />
+  <meta name="keywords" lang="en" content="global" />
+  <meta name="description" lang="en" content="${WEBSITE_NAME}" />
+  <meta name="author" lang="en" content="DESAPHY Jeremy" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+
+  ${F:link}
+</head>
+
+<body>
+  <mgt-msal2-provider client-id="${CLIENT_ID}" login-type="redirect/popup"
+    scopes="user.read, profile, email, offline_access" redirect-uri="${REDIRECT_URL}" authority="${AUTHORITY}">
+  </mgt-msal2-provider>
+  
+  <div class="overlay"></div>
+	<div class="spinner">
+		<div class="loader"></div>
+		<p>Content loading, Please wait...</p>
+	</div>
+	<div id="msg_div" style="display:none">
+		Please wait while we update the visualization
+	</div>
+	<div id="help_dialog" title="Help" style="display: none;z-index:100000"></div>
+  <div class="w3-bar w3-top w3-lly w3-large ${PORTAL_COLOR}" id="body_top">
+   
+    <div class="w3-col s12 m2 l2 logo" id="BIORELS_NAME">
+      <a href="/" class="home-icon">BioRels</a>
+      <br/>
+      $[FULL_ACCESS]<span class="portal_col4 w3-round-xlarge" style="padding: 0px 5px;">Private Access</span>$[/FULL_ACCESS]
+      $[PUBLIC_ACCESS]<span class="w3-round-xlarge" style="background-color:green;paddin: 0px 5px;">Public Access</span>$[/PUBLIC_ACCESS]
+    </div>
+    <div class="w3-col s12 m7 l8">
+      <form id="start_form" onsubmit="return submitWelcomeSearch()">
+        <div class="w3-col m3 l3 s12" id="BIORELS_search_opts">
+          <select id="search_options" onchange="changeHeadSearchPlace(this)" class="search-options w3-col s9 s_dib">
+            <optgroup label="Genomic">
+              <option value="GENOMIC_SEARCH/GENE_ANY">Any Genomic field</option>
+              <option value="GENOMIC_SEARCH/GENE_SYMBOL">Gene Symbol</option>
+              <option value="GENOMIC_SEARCH/GENE_NAME">Gene Name</option>
+              <option value="GENOMIC_SEARCH/GENE_NCBI">NCBI Gene ID</option>
+              <option value="GENOMIC_SEARCH/GENE_ENS">Ensembl Gene ID</option>
+              <option value="GENOMIC_SEARCH/GENE_TR">Transcript Name</option>
+              <option value="GENOMIC_SEARCH/SNP">Mutation</option>
+            </optgroup>
+            <optgroup label="Protein">
+              <option value="PROTEIN_SEARCH/PROT_ANY">Any field</option>
+              <option value="PROTEIN_SEARCH/PROT_NAME">Protein name</option>
+              <option value="PROTEIN_SEARCH/PROT_ID">UniProt Identifier</option>
+              <option value="PROTEIN_SEARCH/PROT_AC">UniProt Accession</option>
+              <option value="PROTEIN_SEARCH/PROT_SEQ">Protein Sequence Name</option>
+              <option value="PROTEIN_SEARCH/PROT_DOM">Protein Domain</option>
+            </optgroup>
+            <optgroup label="Publication">
+              <option value="PUBLICATION_SEARCH/PUBLI_ANY">Any field</option>
+              <option value="PUBLICATION_SEARCH/PUBLI_TITLE">Title</option>
+              <option value="PUBLICATION_SEARCH/PUBLI_AUTHOR">Author</option>
+              <option value="PUBLICATION_SEARCH/PUBLI_INSTIT">Institution</option>
+              <option value="PUBLICATION_SEARCH/PUBLI_PMID">Pubmed ID</option>
+              <option value="PUBLICATION_SEARCH/PUBLI_DOI">DOI</option>
+              <option value="PUBLICATION_SEARCH/PUBLI_ORCID">ORCID ID</option>
+          <!--    <option value="PUBLICATION_SEARCH/PUBLI_PUBMED">Pubmed Search</option>-->
+            </optgroup>
+            <!--
+						<optgroup label="Pathway">
+							<option value="PATHWAY_SEARCH/PW_REAC">Pathway Name</option>
+							<option value="PATHWAY_SEARCH/PW_REAC_ID">Reactome Identifier</option>
+						</optgroup>
+						-->
+            <optgroup label="Disease">
+              <option value="DISEASE_SEARCH/DISEASE_ANY">Any field</option>
+              <option value="DISEASE_SEARCH/DISEASE_NAME">Disease Name</option>
+              <option value="DISEASE_SEARCH/DISEASE_ID">Disease identifier</option>
+            </optgroup>
+            <!--
+            <optgroup label="Compound">
+              <option value="COMPOUND_SEARCH/COMPOUND_ANY">Any field</option>
+              <option value="COMPOUND_SEARCH/COMPOUND_NAME">Compound/Drug Name</option>
+              	<option value="COMPOUND_SEARCH/COMPOUND_SMILES">SMILES</option>
+              <option value="COMPOUND_SEARCH/COMPOUND_INCHI">InChI/InChI-KEY</option>
+
+            </optgroup>
+          -->
+            <optgroup label="Drug">
+              <option value="DRUG_SEARCH/DRUG_ANY">Any field</option>
+              <option value="DRUG_SEARCH/DRUG_NAME">Drug Name</option>
+            </optgroup>
+            <optgroup label="Clinical">
+              <option value="CLINICAL_SEARCH/CLINICAL_ANY">Any field</option>
+              <option value="CLINICAL_SEARCH/CLINICAL_ID">Clinical trial Id</option>
+              <option value="CLINICAL_SEARCH/CLINICAL_TITLE">Clinical trial Title</option>
+            </optgroup>
+            <!--
+						<optgroup label="Tissue">
+							<option value="TISSUE_SEARCH/TISSUE_ANY">Any field</option>
+							<option value="TISSUE_SEARCH/TISSUE_NAME">Tissue Name</option>
+							
+							<option value="TISSUE_SEARCH/TISSUE_ID">Tissue Identifier</option>
+						</optgroup>
+					-->
+            <optgroup label="Assay">
+              <option value="ASSAY_SEARCH/ASSAY_ANY">Any field</option>
+              <option value="ASSAY_SEARCH/ASSAY_NAME">Assay Name</option>
+            </optgroup>
+            <optgroup label="News">
+              <option value="NEWS_SEARCH/NEWS_COMPLEX">News</option>
+            </optgroup>
+          </select>
+          <div class="human-check w3-col s3 s_dib">
+            <input type="checkbox" id="search_human" checked="checked" />
+            <label class="search_human_label" for="search_human" id="search_human_label">Human</label>
+          </div>
+        </div>
+        <div class="w3-col m7 l8 s9" id="search_input_div">
+          <input class="search_input w3-col s12 m12 l12" type="text" name="search_input" id="search_input"
+            placeholder="Gene ID: 1017 ; Ensembl ID: ENSG00000123374.11 / ENST00000266970.9 ; RefSeq: NM_001798.5; Symbol: CDK2 ; Name: Cyclin Dependent kinase 2 (slower)" />
+        </div>
+        <div class="w3-col l1 m1 s3 text-center">
+          <button class="search_button btn btn-primary" id="search_run" type="button" onclick="submitWelcomeSearch()"
+            value="Search">Search</button>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="w3-col s3 l2 m3 l-al-right">
+      <mgt-login ></mgt-login>
+
+    </div>
+  </div>
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer"
+    title="close side menu" id="myOverlay">
+  </div>
+  <script type="text/javascript">
+    let isTokenExists = Object.keys(localStorage).filter(x => localStorage.getItem(x).includes('tokenType'));
+    if (isTokenExists.length === 0) {
+      mgt.Providers.globalProvider.login();
+    }
+  </script>
+  <div id="news_search_help" style="display:none">
+    <h3>Guidance for news search</h3>
+
+      You can search news & documents by multiple topics of interest. Each topic must be separated by AND.<br/>
+      TOPIC1=VALUE1 AND TOPIC2=VALUE2 AND TOPIC3=VALUE3 ....<br/>
+      The same topic can be used multiple times:<br/>
+      TOPIC1=VALUE AND TOPIC1=VALUE1 ....<br/>
+      <br/> Please find below a list of topics and possible values:
+    <table class="table">
+      <tr><th>GENE</th><td>KRAS or Cyclin-dependent kinase 2</td></tr>
+      <tr><th>DISEASE</th><td>Diabetes mellitus</td></tr>
+      <tr><th>DRUG</th><td>Omeprazole</td></tr>
+      <tr><th>CLINICAL</th><td>NCT03288545</td></tr>
+      <tr><th>TITLE</th><td>(News title)</td></tr>
+    </table>
+    <br/>
+    <h4>Examples</h4>
+    <ul>
+      <li>GENE=KRAS AND SOURCE=ONCOLOGY</li>
+      <li>GENE=KRAS AND COMPANY=Jacobio</li>
+    </ul>
+  </div>

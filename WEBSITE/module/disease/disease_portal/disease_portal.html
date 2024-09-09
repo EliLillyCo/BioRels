@@ -1,0 +1,92 @@
+<header class="w3-container">
+	<div class="page-title">
+		${DISEASE_NAME} <br/>
+		<p style="font-size:0.7em;"><span style="font-weight:bold;padding-left:10px;">Description:</span> ${DISEASE_DEFINITION}</p>
+		
+	</div>
+</header>
+<div class="w3-row-padding w3-margin-bottom">
+	
+
+	<ul class="nav nav-tabs s_hide">
+		<li id="disease_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('disease_menu',1,4)">Summary</li>
+		<li id="disease_menu_tab_2" class="nav-item nav-link" onclick="showMenu('disease_menu',2,4)">Ongoing trials</li>
+		<li id="disease_menu_tab_3" class="nav-item nav-link" onclick="showMenu('disease_menu',3,4)">News</li>
+		
+	</ul>
+	
+<div id="disease_menu_view_1" class="container-grey w3-container ">
+	
+	<div class=" w3-col s12 m12 l6" >
+		<div class=" w3-col s12 m12 l12" id="disease_onto"></div>
+	</div>
+	<div class=" w3-col s12 m6 l6">
+		<h3>Summary</h3>
+		${OPTS_DEF}
+		<div class="container-grey w3-container w3-padding-16 s-always-show long_text" style="font-size:1em;margin-top:${MARGIN}px;height:500px;max-height: 500px;overflow-y: auto;" >
+			${DEFS}
+		</div>
+	</div>
+	<div class=" w3-col s12 m12 l12">
+		<div class=" w3-col s12 m12 l6" id="pub_distrib"></div>
+		<div class=" w3-col s12 m12 l6">
+			<h4>Alternative names:</h4>
+			${SYNONYMS}
+		</div>
+
+	</div>
+</div>
+<div  id="disease_menu_view_2"  class="container-grey w3-container w3-padding-16 s-always-show" style="display: none;">
+	<div id="ongoing_trials">
+
+	</div>
+	<div class="  w3-col s12 m6 l6 ">
+		<h3>Clinical trials</h3>
+		
+		<div class=" w3-col s12 m12 l12" id="trial_distrib">
+			
+		</div>
+	</div>
+	<div class="  w3-col s12 m6 l6 ">
+		<div class="w3-col s12 m12 l12" id="phase_distrib">
+			
+		</div>
+	
+	<script>
+		
+	$(document).ready(function() {
+
+		loadModule('disease_onto','/CONTENT/DISEASE/${DISEASE_TAG}/DISEASE_ONTOLOGY');
+		loadModule('pub_distrib','/CONTENT/DISEASE/${DISEASE_TAG}/DISEASE_PUB_GRAPH');
+		loadModule('phase_distrib','/CONTENT/DISEASE/${DISEASE_TAG}/DISEASE_PHASE_GRAPH');
+		loadModule('trial_distrib','/CONTENT/DISEASE/${DISEASE_TAG}/DISEASE_CLINPHASE');
+		loadModule('ongoing_trials','/CONTENT/DISEASE/${DISEASE_TAG}/DISEASE_ONGOING_TRIAL');
+		// Create date inputs
+		$("#ds_list").DataTable();    
+		$("#tr_list").DataTable();    
+		$("#units").DataTable();
+		showDesc();
+		
+	});
+
+	function showDesc()
+	{
+		$("#DESC_SELECT > option").each(function() {
+			$("#"+this.value).css("display","none");
+    });
+		$("#"+$('#DESC_SELECT').find(":selected").val()).css("display","block");
+		
+	}
+	</script>
+	</div>
+	</div>
+<div  id="disease_menu_view_3" class="container-grey w3-container w3-padding-16 s-always-show" style="display: none;">
+		
+				${NEWS}
+		
+		
+			
+		
+</div>
+</div>
+

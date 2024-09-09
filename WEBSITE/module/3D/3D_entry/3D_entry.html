@@ -1,0 +1,143 @@
+<div style="margin-top:25px;padding-left:10px;font-size:2em;">${PDB_ID} -<span style="font-variant: small-caps"> ${TITLE}</span></div>
+	<p><span style="font-weight:bold;padding-left:10px;">Experimental type:</span> ${TYPE} ${RESOLUTION}</p>
+	<p><span style="font-weight:bold;padding-left:10px;">Deposition date:</span> ${DATE}</p>
+
+
+<div style="position:relative">
+	<ul class="nav nav-tabs">
+			<li id="ca_1" class="nav-item nav-link active"><a onclick="toggleView(1)">Macromolecule</a></li>
+			<li id="ca_2" class="nav-item nav-link"><a  onclick="toggleView(2);loadMole()">Ligand</a></li>
+			<li id="ca_3"class="nav-item nav-link"><a  onclick="toggleView(3)">Protein/Protein Interface</a></li>
+			
+	
+		  </ul>
+		<div id="menu" style="right: 5px;
+		  position: absolute;
+		  top: 15px;">
+		  	<div class="dropdown">
+				<span class="dropbtn"><img id="transcript_seq_tool_but" src="/require/img/tools.png" style="width: 20px;"></span>
+				<div class="dropdown-content" style="left:-130px">
+					<h3 style="text-align: center">Full structure</h3>
+					<a href="/3D_VIEW/${PDB_ID}" class="btn">View 3D structure</a>
+					<a href="/PDB/3D_FILE/${PDB_ID}" class="btn">Download PDB File</a>
+					<a href="/MOL2/3D_FILE/${PDB_ID}" class="btn">Download MOL2 File</a>
+				</div>
+			</div>
+		</div>
+
+<div id="cv_1"  class="nav_box">
+
+${UN_SEQ_BLOCK}
+
+
+</div>
+
+<div id="cv_2"  style="display:none"  class="nav_box">
+	<h2>Ligand:</h2>
+	${LIGANDS}
+</div>
+
+<div id="cv_3" style="display:none" class="nav_box">
+		<h2>Protein/Protein Interface:</h2>
+		${PPI}
+	</div>
+
+<style>
+	.list_container {
+		transform: scaleX(-1); 
+  overflow:auto;
+  position: relative;
+    left: -10px;
+}
+
+/* optionally add id="item_direction to each item to change the direction of the text flow back, while preserving the container direction */
+#item_direction {
+	transform: scaleX(-1);
+}
+
+		/* width */
+		::-webkit-scrollbar {
+		  width: 10px;
+		}
+		
+		/* Track */
+		::-webkit-scrollbar-track {
+		  background: #f1f1f1; 
+		}
+		 
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+		  background: #888; 
+		}
+		
+		/* Handle on hover */
+		::-webkit-scrollbar-thumb:hover {
+		  background: #555; 
+		}
+		</style>
+<style> 
+
+		.box
+		{
+		  
+		  position:absolute;
+		  color: black;
+		  top: 19px;
+		  left: 30px;
+		  min-width: 50px;
+		  z-index: 200000;
+		  width:fit-content;
+		  background-color: #efefef;
+		}
+		</style>
+		<script>
+
+function toggleView(id)
+{
+	for (var i=1;i<=3;++i)
+	{
+		if (i==id)
+		{
+			$("#ca_"+i).addClass("active");
+			$("#cv_"+i).css("display","block");
+		}
+		else
+		{
+			$("#ca_"+i).removeClass("active");
+			$("#cv_"+i).css("display","none");
+		}
+	}
+}
+
+		$().ready(function(){
+		$( "a" ).hover(
+		  function() {   
+		   var title = $(this).attr("data-title");  // extracts the title using the data-title attr applied to the 'a' tag
+		   console.log($("#info"+id));
+		   var id = $(this).attr("data-block");  // extracts the title using the data-title attr applied to the 'a' tag
+			$("#info"+id).html(title);
+		
+		  
+		  });});
+		</script>
+
+<script src="require/js/ngl/ngl-2.0.0-dev.39/dist/ngl.js"></script>
+<script>
+  // Datasources
+  NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource("../data/"))
+
+  
+  function loadMole(){
+  
+	NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource( window.location.origin+"/" ));
+	${JS_CHEM_VIEW}
+
+
+
+};
+
+window.addEventListener( "resize", function( event ){
+   ${JS_RESIZE}
+}, false );
+</script>
+</div>

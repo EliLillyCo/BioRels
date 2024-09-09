@@ -1,0 +1,254 @@
+$[VALID_TRANSCRIPT_SEL]
+$[W_HEAD]
+<div style="width: 95%;
+margin-bottom: 20px;
+float: left;
+margin-left: 2.5%;position:relative" id="summary_blk_${RANGE}">
+${HEADER}
+</div>
+$[/W_HEAD]
+<div id="transcript_sel_all_${RANGE}">
+<span class="verticalTrackerLine" id="verticalTrackerLine_${RANGE}"></span>
+
+<div class="sequence w3-container"  style="float: unset;padding: unset;max-width:100%;width:${OVERALL_WIDTH}px;position:relative" id="transcript_sel_view_${RANGE}">
+    
+${SEQ}
+
+<div id="sortable_${RANGE}">
+
+<script>
+  $[W_HEAD]
+  $(document).ready(function () {
+  $('#summary_blk_${RANGE}').click(function(e){
+    var client_x = e.pageX;
+    var client_y = e.pageY;
+    var elementOffset = $(this).offset();
+    client_x -= elementOffset.left;
+    client_y -= elementOffset.top;
+    width_div=parseFloat($('#summary_blk').css("width"));
+    len_seq=${LEN_SEQ};
+    pos=Math.floor(client_x/width_div*len_seq);
+    var ratio=9.601907;
+    n_char=Math.floor((width_div/ratio)/2);
+    min=Math.max(1,pos-n_char);
+    max=Math.min(len_seq,pos+n_char);
+		loadModule("transcript_sel_all_${RANGE}",'/CONTENT/TRANSCRIPT_SEL/${TRANSCRIPT_NAME}/PARAMS/RNA/'+min+'/'+max+'${OPTIONS}');
+    $("#area_sel").css("left",Math.floor(min/len_seq*100)+"%");
+    // save x, y.
+});
+  });
+$[/W_HEAD]
+$(function() {
+    var topBarHeight = 0
+    var bottomHeight = 0;
+    var $line_${RANGE} = $('#verticalTrackerLine_${RANGE}');
+    var $charts_${RANGE} = $("#transcript_sel_view_${RANGE}");
+    
+
+    function showVerticalLine_${RANGE}(e) {
+      var startX_div = $(this).offset().left;
+      var startY_div = $(this).offset().top;
+      var width_div = $(this).width();
+      var height_div = $(this).height();
+      var endX_div= startX_div+width_div;
+      var endY_div= startY_div+height_div;
+      var x = e.pageX;
+      var y2= e.pageY;
+      if (x < startX_div || x > endX_div) {
+        hideVerticalLine_${RANGE}();
+        return;
+      }
+      if (y2 < startY_div || y2 > endY_div) {
+        hideVerticalLine_${RANGE}();
+        return;
+      }
+
+      console.log("${RANGE}"+" "+startX_div+"<"+x+"<"+endX_div+" "+startY_div+"<"+y2+"<"+endY_div+" "+startY_div+" "+height_div);
+      //Change line so that it appears at the position of the cursor
+      $line_${RANGE}.css({
+        'opacity': 1,
+        'left': x,
+        'top': startY_div-window.pageYOffset,
+        'height':height_div
+      });
+
+      //Update string to show when the charts are being hovered over
+      
+    };
+
+    function hideVerticalLine_${RANGE}() {
+      //Hide the line
+      $line_${RANGE}.css('opacity', 0);
+
+      //Update string to show when the charts are being hovered over
+      
+    }
+
+    $charts_${RANGE}
+      .mousemove(showVerticalLine_${RANGE})
+      .mouseout(hideVerticalLine_${RANGE});
+});
+
+</script>
+<style>
+  .verticalTrackerLine {
+  border-left: 2px dashed RGB(68, 74, 79);
+  position: fixed;
+  z-index: 1;
+  opacity: 0;
+  transition: left 0.1s;/* <------ this was moved from JS */
+  pointer-events: none; /* <------ this was added */
+}
+</style>
+$[W_MATCH]
+<div class=" ui-state-default  seq scroll " id="transcript_sel" style="float:left;width:100%;margin-top:20px">
+  <div style="display:block;font-family:auto;font-size:1em;width:${OVERALL_WIDTH}px;background-color:lightgrey">Sequence match</div>
+  ${MATCHES}
+</div>
+$[/W_MATCH]
+
+$[W_CLIN]
+${CLINVAR}
+<script>
+  var list_tooltips_clv_${RANGE} = JSON.parse('${TOOLTIPS_CLIN}');
+
+$(document).ready(function () {
+
+$('.ttl_clv_${RANGE}').uitooltip({
+  open: function (event, ui) {
+    ui.tooltip.css("width", "800px");
+    ui.tooltip.css("min-width", "800px");
+  },
+  hide: {
+    effect: "slideDown",
+    delay: 400
+  },
+  track: true,
+  content: function () {
+    console.log($(this).data('pos'));
+    return list_tooltips_clv_${RANGE}[$(this).data('pos')];;
+  }
+});
+});
+</script>
+
+$[/W_CLIN]
+$[W_PROT]
+<div class=" ui-state-default  seq scroll " style="float:left;  scrollbar-width: thin;width:100%;margin-top:16px">
+${PROT}
+</div>
+
+<style>
+  .blk_V
+  {
+    float:left;
+    height: 20px;
+  }
+  
+.scroll::-webkit-scrollbar {
+    width: 12px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+</style>
+$[/W_PROT]
+$[W_ORTHO]
+
+${ORTHO}
+<script>
+   $( function() {
+    $( "#sortable_${RANGE}" ).sortable({
+      revert: true
+    });
+   
+    $( "ul, li" ).disableSelection();
+  } );
+</script>
+$[/W_ORTHO]
+
+$[W_SIM]
+
+${SIM}
+<script>
+   $( function() {
+    $( "#sortable_${RANGE}" ).sortable({
+      revert: true
+    });
+   
+    $( "ul, li" ).disableSelection();
+  } );
+</script>
+$[/W_SIM]
+
+$[W_MUT]
+<div class=" ui-state-default  seq scroll " id="transcript_sel_mut" style="float:left;width:${WIDTH_MUT}px;margin-top:20px">
+${MUTS}
+</div>
+<script>
+  	var list_tooltips_mut_${RANGE} = JSON.parse('${TOOLTIPS}');
+
+$(document).ready(function () {
+  
+  $('.ttl_${RANGE}').uitooltip({
+    open: function (event, ui) {
+      ui.tooltip.css("width", "fit-content");
+    },
+    hide: {
+      effect: "slideDown",
+      delay: 400
+    },
+    track: true,
+    content: function () {
+      console.log($(this).data('pos'));
+      return list_tooltips_mut_${RANGE}[$(this).data('pos')];;
+    }
+  });
+});
+</script>
+<style>
+  .blk_V
+  {
+    float:left;
+    height: 20px;
+  }
+  
+.scroll::-webkit-scrollbar {
+    width: 12px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+</style>
+$[/W_MUT]
+
+
+</div>
+</div>
+</div>
+$[/VALID_TRANSCRIPT_SEL]
+$[INVALID_TRANSCRIPT_SEL]
+<div class="alert alert-info" role="alert">
+  This area is not covered by ${TRANSCRIPT_NAME}
+</div>
+$[/INVALID_TRANSCRIPT_SEL]
+
+$[INCOMPLETE_TRANSCRIPT_SEL]
+<div class="alert alert-info" role="alert">
+  This area is only partially covered by ${TRANSCRIPT_NAME}
+</div>
+$[/INCOMPLETE_TRANSCRIPT_SEL]

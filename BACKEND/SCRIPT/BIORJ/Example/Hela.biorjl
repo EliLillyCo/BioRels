@@ -1,0 +1,42 @@
+TABLE	taxon
+taxon_id,scientific_name,tax_id,rank
+7716,"Homo sapiens",9606,species
+END TABLE	taxon
+#
+#
+#
+TABLE	source
+source_id,source_name,version,user_name,subgroup,source_type,source_metadata
+259,Cellausorus,NULL,NULL,NULL,NULL,NULL
+END TABLE	source
+#
+#
+#
+TABLE	cell_entry
+cell_entry_id,cell_acc,cell_name,cell_type,cell_donor_sex,cell_donor_age,cell_version,date_updated,cell_tissue_id
+78433,CVCL_0030,HeLa,"Cancer cell line",F,30Y6M,47,"2024-05-02 00:00:00",NULL
+END TABLE	cell_entry
+#
+#
+#
+TABLE	cell_syn
+cell_syn_id,cell_syn_name,cell_entry_id,source_id
+140621,CVCL_0030,78433,259
+140623,Hela,78433,259
+140624,"He La",78433,259
+140625,He-La,78433,259
+140622,HELA,78433,259
+140626,HeLa-CCL2,78433,259
+140628,"Helacyton gartleri",78433,259
+140627,"Henrietta Lacks cells",78433,259
+END TABLE	cell_syn
+#
+#
+#
+TABLE	cell_taxon_map
+cell_taxon_id,cell_entry_id,taxon_id,source_id
+79141,78433,7716,259
+END TABLE	cell_taxon_map
+#
+#
+#

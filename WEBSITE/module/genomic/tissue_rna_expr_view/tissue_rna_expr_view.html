@@ -1,0 +1,143 @@
+<h3>RNA Expression in ${TISSUE} tissue</h3>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<div id="trsq_options" style="margin:10px auto;">	
+		<span id="n_pub1"> ${COUNT}</span> genes; Number per page:</span>
+		<select id="per_page" name="per_page" onchange="updatePageCount()">
+			<option value="10" selected="selected">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+		</select>
+		<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+		<input type="text" class="button" value="1" id="page"/>/<input type="text" value="${NPAGE}" id="pagemax"/>
+		<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+		<div id="muts_options" style="display: initial">
+			<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="showFilters()">
+		</div>
+	</div>
+<div class="w3-container w3-col s12">
+	<table class="w3-table w3-bordered w3-border w3-hoverable w3-white w3-centered"><thead><tr><th>View</th><th>Gene Symbol</th><th>Gene ID</th><th>min(TPM)</th>
+		<th>Q1(TPM)</th>
+		<th>Med(TPM)</th>
+		<th>Q3(TPM)</th>
+		<th>Max(TPM)</th>
+		<th>N Sample</th></tr></thead><tbody id="data_tbl"></tbody></table>
+
+
+</div>
+
+	<div id="trsq_options" style="margin:10px auto;">	
+			<span id="n_pub12"> ${COUNT}</span> genes; Number per page:</span>
+			<select id="per_page2" name="per_page" onchange="updatePageCount()">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+			<input type="text" class="button" value="1" id="page2"/>/<input type="text" value="${NPAGE}" id="pagemax2"/>
+			<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+			</div>
+		<div id="filters_options"  title="RNA Expression filtering options" style="display: none">
+			Please choose one or multiple filtering options. Those filters will not be applied as AND but as OR.
+				<table class="table">
+				<tr><th>Cell Surface Protein:</th><td><input type="checkbox" id="cell_surf"/></td></tr>
+				<tr><th>Lipid transporter activity:</th><td><input type="checkbox" id="lipid_trans"/></td></tr>
+				<tr><th>Any Transmembrane transport:</th><td><input type="checkbox" id="trans"/></td></tr>
+				<tr><th>GPCR Activity:</th><td><input type="checkbox" id="gpcr_trans"/></td></tr>
+				</table>
+	
+	
+	
+		</div>
+		<script type="text/javascript">
+		
+			function updatePageCount(with_refresh=true)
+			{
+				var tot=$("#n_pub1").html();
+				var per_page = parseInt($('#per_page').val());
+				var totmax=Math.ceil(tot/per_page);
+				$("#pagemax").val(totmax);
+				$("#pagemax2").val(totmax);
+				$("#per_page2").val($('#per_page').val());
+				if (with_refresh)submit();
+			}
+			function prevPage()
+			{
+				var val=parseInt($("#page").val());
+				if (val==1)return;
+				$("#page").val(val-1);
+				$("#page2").val(val-1);
+				submit();
+			
+			}
+			
+			function nextPage()
+			{
+				var val=parseInt($("#page").val());
+				var m=parseInt($("#pagemax").val());
+				if (val>=m)return;
+				$("#page").val(val+1);
+				$("#page2").val(val+1);
+				submit();
+			
+			}
+	
+			
+	function submit()
+	{
+		
+		var per_page = $('#per_page').val();
+		var page = $('#page').val();
+		$("#info").html("Please wait while the query is running");
+		var filters='';
+		if ($('#cell_surf').is(":checked"))filters+='cell_surf/';
+		if ($('#lipid_trans').is(":checked"))filters+='lipid_trans/';
+		if ($('#gpcr_trans').is(":checked"))filters+='gpcr_trans/';
+		if ($('#trans').is(":checked"))filters+='trans/';
+		urlv="/CONTENT/TISSUE/${TISSUE}/TISSUE_RNA_EXPR_TBL";
+		$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: urlv,
+		data:{ "PER_PAGE":per_page,'PAGE':page,'FILTERS':filters},
+		success: function(data){
+			
+			var v=jQuery.parseJSON(data);
+			
+			$("#data_tbl").html(v.code);
+			$("#n_pub1").html(v.STAT);
+			$("#n_pub12").html(v.STAT);
+			
+			$("#info").html("");
+			updatePageCount(false);
+		},
+		error:function(data){$("#info").html("An issue occured.");}
+			});///END AJAX
+			return false;		
+	}
+		$(document).ready( function () {
+			//$('#mutation_search_res').DataTable();
+			submit();
+		} );
+	
+		function showFilters()
+		{
+		$( "#filters_options" ).dialog({width: "60%",modal: true,
+		  buttons: {
+			"Confirm": function() {
+				
+			  $( this ).dialog( "close" );
+			  submit();
+			},
+			
+		  }});	
+	
+		}
+		</script>
+

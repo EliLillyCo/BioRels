@@ -1,0 +1,1135 @@
+Abdomen	UBERON_0000916	abdomen
+Abdomen; aorta; endothelium	UBERON_0004851	aorta endothelium
+Abdomen; muscle	UBERON_0002378	muscle of abdomen
+Abdomen; skin	UBERON_0001416	skin of abdomen
+Abdomen; skin; dermis	UBERON_0001003	skin epidermis
+Adipose tissue	UBERON_0001013	adipose tissue
+Adrenal cortex	UBERON_0001235	adrenal cortex
+Adrenal gland	UBERON_0002369	adrenal gland
+Amnion	UBERON_0000305	amnion
+Amniotic fluid	UBERON_0000173	amniotic fluid
+Amniotic fluid; amniocyte	CL_0002323	amniocyte
+Amygdala	UBERON_0001876	amygdala
+Anal fin	UBERON_4000163	anal fin
+Ankle; tendon sheath	UBERON_0000304	tendon sheath
+Anterior mediastinum	UBERON_0008820	anterior mediastinum
+Aorta	UBERON_0000947	aorta
+Aorta; endothelium	UBERON_0004851	aorta endothelium
+Aorta; fibroblast	CL_0002547	fibroblast of the aortic adventitia
+Aorta; smooth muscle	UBERON_0004178	aorta smooth muscle tissue
+Arm; skeletal muscle	UBERON_0001134	skeletal muscle tissue
+Arm; skin	UBERON_0002427	arm skin
+Arm; skin; dermis	UBERON_0001003	skin epidermis
+Artery; endothelium	UBERON_0001917	endothelium of artery
+Articular cartilage; chondrocyte	CL_1001607	articular chondrocyte
+Axilla; skin	UBERON_0015474	axilla skin
+Axillary lymph node	UBERON_0001097	axillary lymph node
+Back	UBERON_0005462	lower back
+Back; skin	UBERON_0001068	skin of back
+Back; skin	UBERON_0009014	lower back skin
+Back; skin; epidermis; keratinocyte	UBERON_0001003	skin epidermis
+Barbel	UBERON_2000622	barbel
+Bile duct	UBERON_0002394	bile duct
+Blood	UBERON_0000178	blood
+Bone	UBERON_0001474	bone element
+Bone marrow. Cell type=Stromal cell	UBERON_0002371  bone marrow
+Bone marrow	UBERON_0002371	bone marrow
+Bone marrow; macrophage	CL_0002476	bone marrow macrophage
+Bone marrow; myeloblast	CL_0000835	myeloblast
+Bone marrow; stroma	UBERON_0007195	stroma of bone marrow
+Bone; calvaria; osteoblast	CL_2000058	calvarial osteoblast
+Bone; coccyx	UBERON_0001350	coccyx
+Bone; cranial	UBERON_0004766	cranial bone
+Bone; cranium; clivus	UBERON_0004108	clivus of occipital bone
+Bone; femur	UBERON_0000981	femur
+Bone; femur; periosteum; osteoblast	CL_2000057	femural osteoblast
+Bone; fibula	UBERON_0001446	fibula
+Bone; humerus	UBERON_0000976	humerus
+Bone; jaw	UBERON_0012360	bone of jaw
+Bone; jaw; mandible	UBERON_0001684	mandible
+Bone; knee	UBERON_0001465	knee
+Bone; leg	UBERON_0005893	leg bone
+Bone; long bones; osteocyte	CL_0000137	osteocyte
+Bone; osteoblast	CL_0000062	osteoblast
+Bone; pelvis	UBERON_0012179	bone of pelvis
+Bone; radius	UBERON_0001423	radius bone
+Bone; rib	UBERON_0002228	rib
+Bone; sacrum	UBERON_0003690	fused sacrum
+Bone; scapula	UBERON_0006849	scapula
+Bone; spine	UBERON_0013706	bone spine
+Bone; tail	UBERON_0006068	bone of tail
+Bone; thorax	UBERON_0003459	chest bone
+Bone; tibia	UBERON_0006836	medial tibial tarsal bone
+Bone; vertebra	UBERON_0002412	vertebra
+Brain	UBERON_0000955	brain
+Brain; astrocyte	CL_0000127	astrocyte
+Brain; cerebellum	UBERON_0002037	cerebellum
+Brain; cerebellum; astrocyte	CL_0002603	astrocyte of the cerebellum
+Brain; cerebral cortex	UBERON_0000956	cerebral cortex
+Brain; cerebral cortex; neurons	CL_0010012	cerebral cortex neuron
+Brain; choroid plexus	UBERON_0003947	brain ventricle/choroid plexus
+Brain; cortex	UBERON_0001851	cortex
+Brain; diencephalon	UBERON_0001894	diencephalon
+Brain; dura mater; fibroblast	UBERON_0002092	brain dura mater
+Brain; endothelium	UBERON_0013694	brain endothelium
+Brain; fourth ventricle	UBERON_0002422	fourth ventricle
+Brain; frontal lobe	UBERON_0016525	frontal lobe
+Brain; hippocampus	UBERON_0002421	hippocampal formation
+Brain; hippocampus; neurons	UBERON_0002421	hippocampal formation
+Brain; hypothalamus	UBERON_0001898	hypothalamus
+Brain; hypothalamus; anteroventral periventricular nucleus	UBERON_0002690	anteroventral periventricular nucleus
+Brain; hypothalamus; arcuate nucleus	UBERON_0001932	arcuate nucleus of hypothalamus
+Brain; hypothalamus; arcuate nucleus; KNDy neurons	UBERON_0001932	arcuate nucleus of hypothalamus
+Brain; hypothalamus; GnRH neurons	UBERON_0001898	hypothalamus
+Brain; hypothalamus; preoptic area; GnRH neurons	UBERON_0001928	preoptic area
+Brain; hypothalamus; preoptic area; kisspeptin neurons	UBERON_0001928	preoptic area
+Brain; lateral ventricle; third ventricle	UBERON_0002286	third ventricle
+Brain; left frontal lobe	UBERON_0002811	left frontal lobe
+Brain; left occipital lobe	UBERON_0002806	left occipital lobe
+Brain; left parietal lobe	UBERON_0002802	left parietal lobe
+Brain; left temporal lobe	UBERON_0002808	left temporal lobe
+Brain; meninges	UBERON_0003548	forebrain meninges
+Brain; meninges; dura mater; fibroblast	UBERON_0002092	brain dura mater
+Brain; microvascular endothelium	UBERON_0008339	microvascular endothelium
+Brain; occipital lobe	UBERON_0002021	occipital lobe
+Brain; parietal lobe	UBERON_0001872	parietal lobe
+Brain; pineal gland	UBERON_0011768	pineal gland stalk
+Brain; right frontal lobe	UBERON_0002810	right frontal lobe
+Brain; right lateral ventricle	UBERON_0013162	right lateral ventricle
+Brain; right occipital lobe	UBERON_0002807	right occipital lobe
+Brain; right parietal lobe	UBERON_0002803	right parietal lobe
+Brain; right temporal lobe	UBERON_0002809	right temporal lobe
+Brain; striatum; neuron	CL_0002613	striatum neuron
+Brain; substantia nigra	UBERON_0002038	substantia nigra
+Brain; subventricular zone	UBERON_0014940	cerebral cortex subventricular zone
+Brain; temporal lobe	UBERON_0001871	temporal lobe
+Brain; temporal lobe; microvessel; endothelial cells	UBERON_0001871	temporal lobe
+Brain; ventricle	UBERON_0004086	brain ventricle
+Breast	UBERON_0000310	breast
+Breast; epithelial cell; milk	CL_0000314	milk secreting cell
+Breast; epithelium	UBERON_0008367	breast epithelium
+Breast; interlobular stroma; fibroblast	CL_4006000	fibroblast of breast
+Breast; skin	UBERON_0008367	breast epithelium
+Breast; stroma	UBERON_0003891	stroma
+Bulbus arteriosus	UBERON_0004152	bulbus arteriosus
+Bulbus arteriosus; fibroblast	UBERON_0004152	bulbus arteriosus
+Buttock; skin	UBERON_0001415	skin of pelvis
+Calf; skin	UBERON_0004264	lower leg skin
+Carotid artery	UBERON_0005396	carotid artery segment
+Carotid; artery; smooth muscle	CL_0002596	smooth muscle cell of the carotid artery
+Caudal fin	UBERON_4000164	caudal fin
+Caudal peduncle	UBERON_2000178	caudal peduncle
+Cementocyte	CL_0000141	cementocyte
+Cerebrospinal fluid	UBERON_0001359	cerebrospinal fluid
+Cervical lymph node	UBERON_0002429	cervical lymph node
+Cheek; skin	UBERON_0008803	skin of cheek
+Chest wall	UBERON_0016435	chest wall
+Chest; skin	UBERON_0001868	skin of chest
+Chondrocyte	CL_0000138	chondrocyte
+Chorionic villus	UBERON_0007106	chorionic villus
+Colon	UBERON_0001155	colon
+Colon; ascending	UBERON_0001156	ascending colon
+Colon; descending	UBERON_0001158	descending colon
+Colon; intestinal crypt; epithelial cells	CL_0009043	intestinal crypt stem cell of colon
+Colon; mucosa	UBERON_0000317	colonic mucosa
+Colon; sigmoid	UBERON_0001159	sigmoid colon
+Colon; transverse	UBERON_0001157	transverse colon
+Connective tissue	UBERON_0002384	connective tissue
+Coronary artery; smooth muscle	CL_0002592	smooth muscle cell of the coronary artery
+Dental follicle	UBERON_0008969	dental follicle
+Diaphragm	UBERON_0001103	diaphragm
+Diaphragm; muscle	UBERON_0036071	diaphragmaticus muscle
+Dorsal fin	UBERON_0003097	dorsal fin
+Ear	UBERON_0001690	ear
+Ear; inner ear; cochlea	UBERON_0006106	cochlear canal
+Ear; inner ear; cochlea; marginal cells	UBERON_0006106	cochlear canal
+Ear; inner ear; cochlea; organ of Corti	UBERON_0005972	tunnel of Corti
+Ear; inner ear; endolymphatic sac; epithelial cells	UBERON_0006937	inner ear epithelium
+Ear; middle ear; epithelial cells	UBERON_0015813	middle ear epithelium
+Ear; pinna	UBERON_0001757	pinna
+Ear; skin	UBERON_0001459	skin of external ear
+Ear; skin; fibroblast	CL_0002620	skin fibroblast
+Elbow	UBERON_0001461	elbow
+Elbow; skin	UBERON_0001517	skin of elbow
+Embryonic eye; retina	UBERON_0006253	embryonic intraretinal space
+Endometrium	UBERON_0001295	endometrium
+Erythroblast	CL_0000765	erythroblast
+Erythrophore	CL_0000574	erythrophore
+Esophagus	UBERON_0001043	esophagus
+Esophagus; distal	UBERON_0001043	esophagus
+Extraembryonic membrane	UBERON_0005631	extraembryonic membrane
+Eye	UBERON_0000970	eye
+Eye lid; sebaceous gland	UBERON_0013231	sebaceous gland of eyelid
+Eye; conjunctiva	UBERON_0001811	conjunctiva
+Eye; conjunctiva; fibroblast	CL_0002550	fibroblast of the conjunctiva
+Eye; cornea	UBERON_0000964	cornea
+Eye; cornea; endothelial cells	UBERON_0001985	corneal endothelium
+Eye; cornea; endothelium	UBERON_0001985	corneal endothelium
+Eye; cornea; epithelium	UBERON_0001772	corneal epithelium
+Eye; cornea; epithelium; keratinocyte	UBERON_0001772	corneal epithelium
+Eye; cornea; fibroblast	UBERON_0000964	cornea
+Eye; cornea; keratocyte	UBERON_0000964	cornea
+Eye; iris	UBERON_0001769	iris
+Eye; muscle	UBERON_0004277	eye muscle
+Eye; retina	UBERON_0000966	retina
+Eye; retina; cone cells	UBERON_0000966	retina
+Eye; retina; endothelium	UBERON_0000966	retina
+Eye; retina; Muller glia	UBERON_0000966	retina
+Eye; trabecular meshwork	UBERON_0005969	eye trabecular meshwork
+Eye; uvea	UBERON_0001768	uvea
+Face; preauricular area; skin; sebaceous gland; sebocyte	UBERON_0003487	skin sebaceous gland
+Face; skin	UBERON_1000021	skin of face
+Face; skin; sebaceous gland; sebocyte	UBERON_0003487	skin sebaceous gland
+Fallopian tube	UBERON_0003889	fallopian tube
+Falx cerebri	UBERON_0006059	falx cerebri
+Fascia	UBERON_0008982	fascia
+Fat body	CL_0000565	fat body cell
+Fat body	UBERON_0003917	arthropod fat body
+Fat; brown adipose tissue	UBERON_0001348	brown adipose tissue
+Fat; white adipose tissue	UBERON_0001347	white adipose tissue
+Femur; bone marrow	UBERON_0002371	bone marrow
+Fibroblast	CL_0000057	fibroblast
+Fin	UBERON_0008897	fin
+Forearm; skin	UBERON_0003403	skin of forearm
+Forearm; skin; dermis	UBERON_0001003	skin epidermis
+Foreskin; skin; epidermis; keratinocyte	CL_1001606	foreskin keratinocyte
+Foreskin; skin; fibroblast	CL_1001608	foreskin fibroblast
+Foreskin; skin; melanocyte	CL_2000045	foreskin melanocyte
+Gallbladder	UBERON_0002110	gall bladder
+Gill	UBERON_0002535	gill
+Gingiva; fibroblast	CL_0002552	fibroblast of gingiva
+Gonad	UBERON_0000991	gonad
+Hair follicle; keratinocyte	CL_2000092	hair follicular keratinocyte
+Hair root; keratinocyte	CL_2000092	hair follicular keratinocyte
+Hair; keratinocyte	CL_2000092	hair follicular keratinocyte
+Hand; skin	UBERON_0001519	skin of manus
+Head kidney	UBERON_0007132	head kidney
+Head; skin	UBERON_0001084	skin of head
+Heart	UBERON_0000948	heart
+Heart; atrium; fibroblast	CL_2000067	cardiac atrium fibroblast
+Heart; blood vessel; endothelial cells	UBERON_0003498	heart blood vessel
+Heart; cardiomyocyte	CL_0000746	cardiac muscle cell
+Heart; fibroblast	CL_0002548	fibroblast of cardiac tissue
+Heart; left atrium; cardiomyocyte	UBERON_0003380	cardiac muscle of left atrium
+Heart; right atrium	UBERON_0005208	right atrium valve
+Heart; right atrium; cardiac progenitor cells	UBERON_0005208	right atrium valve
+Heel; skin	UBERON_0015873	heel skin
+Hindlimb	UBERON_0002103	hindlimb
+Hip	UBERON_0001464	hip
+Hip; skin	UBERON_0001554	skin of hip
+Hip; tendon sheath	UBERON_0000304	tendon sheath
+Hypodermis	UBERON_0002072	hypodermis
+Hypopharynx	UBERON_0001051	hypopharynx
+Iliac artery; endothelium	UBERON_0019196	iliac artery endothelium
+Iliac artery; smooth muscle	CL_0019018	blood vessel smooth muscle cell
+Iliac vein; endothelium	UBERON_0001919	endothelium of vein
+Imaginal disc	UBERON_0000939	imaginal disc
+Imaginal disc; antenna	UBERON_6001767	insect antennal disc
+Imaginal disc; eye-antenna	UBERON_6001766	insect eye-antennal disc
+Imaginal disc; haltere	UBERON_6001779	insect haltere disc
+Imaginal disc; prothoracic leg	UBERON_6001781	insect prothoracic leg disc
+Imaginal disc; wing	UBERON_0000984	imaginal disc-derived wing
+Inferior vena cava; endothelium	UBERON_0004698	vena cava endothelium
+Inguinal area; skin	UBERON_8410021	inguinal region skin
+Inguinal fat pad; adipose	UBERON_0010410	inguinal fat pad
+Inguinal lymph node	UBERON_0001542	inguinal lymph node
+Intervertebral disc; nucleus pulposus	CL_0002564	nucleus pulposus cell of intervertebral disc
+Intestine	UBERON_0000160	intestine
+Jaw	UBERON_0011595	jaw region
+Jaw; mandible	UBERON_0001684	mandible
+Jaw; mandible; ameloblast	CL_0000059	ameloblast
+Jaw; maxilla	UBERON_0002397	maxilla
+Keloid; skin; fibroblast	CL_0002620	skin fibroblast
+Keratinocyte	CL_0000312	keratinocyte
+Skin; epidermis. Cell type=Keratinocyte	CL_0000312	keratinocyte
+Peripheral blood. Cell type=T-cell
+Kidney	UBERON_0002113	kidney
+Kidney; cortical collecting duct	UBERON_0004203	cortical collecting duct
+Kidney; distal tubule	UBERON_0004135	distal tubule
+Kidney; distal tubule; epithelial cells	CL_0002305	epithelial cell of distal tubule
+Kidney; epithelium	UBERON_0004819	kidney epithelium
+Kidney; fibroblast	CL_1000691	kidney interstitial myofibroblast
+Kidney; fibroblast	CL_1000692	kidney interstitial fibroblast
+Kidney; glomerulus; mesangial cells	UBERON_0000074	renal glomerulus
+Kidney; glomerulus; visceral epithelial cells	UBERON_0000074	renal glomerulus
+Kidney; macula densa	UBERON_0002335	macula densa
+Kidney; mesangium	UBERON_0002319	mesangium
+Kidney; nephron; thick ascending limb of loop of Henle	UBERON_0001291	thick ascending limb of loop of Henle
+Kidney; proximal tubule	UBERON_0004134	proximal tubule
+Kidney; proximal tubule; epithelial cells	CL_0002306	epithelial cell of proximal tubule
+Kidney; renal papilla	UBERON_0001228	renal papilla
+Kidney; renal pelvis	UBERON_0001224	renal pelvis
+Kidney; renal tubule; epithelial cells	UBERON_0009773	renal tubule
+Knee; articular cartilage	UBERON_0011002	articular cartilage element
+Labialscrotal fold; skin	UBERON_0015479	scrotum skin
+Lacrimal gland	UBERON_0001817	lacrimal gland
+Larynx	UBERON_0001737	larynx
+Larynx; glottis	UBERON_0002486	glottis
+Larynx; glottis; posterior commissure	UBERON_0000936	posterior commissure
+Larynx; subglottis	UBERON_0036068	subglottis
+Larynx; ventricle	UBERON_0035453	laryngeal ventricle
+Larynx; vocal fold; epithelial cells	UBERON_0003706	laryngeal vocal fold
+Larynx; vocal fold; lamina propria; fibroblast	UBERON_0000030	lamina propria
+Left calf; skin	UBERON_0004264	lower leg skin
+Left leg; skeletal muscle	UBERON_0001134	skeletal muscle tissue
+Leg	UBERON_0000978	leg
+Leg; skin	UBERON_0001511	skin of leg
+Leg; skin; dermis	UBERON_0001003	skin epidermis
+Leg; tendon	UBERON_0000043	tendon
+Limb; saphenous vein; endothelial cells	UBERON_0007318	saphenous vein
+Lip	UBERON_0001833	lip
+Liver	UBERON_0002107	liver
+Liver; fibroblast	CL_0000057	fibroblast
+Liver; fibroblast	UBERON_0002107	liver
+Liver; hepatocyte	UBERON_0002107	liver
+Liver; hepatocyte	CL_0000182	hepatocyte
+Liver; intrahepatic bile duct	UBERON_0003704	intrahepatic bile duct
+Liver; left lateral lobe	UBERON_0006727	liver left lateral lobe
+Liver; myofibroblast	CL_0000186	myofibroblast cell
+Lower back; skin	UBERON_0009014	lower back skin
+Lung	UBERON_0002048	lung
+Lung; artery; endothelium	UBERON_0005317	pulmonary artery endothelium
+Lung; artery; smooth muscle	CL_0002591	smooth muscle cell of the pulmonary artery
+Lung; bronchus	UBERON_0002185	bronchus
+Lung; fibroblast	CL_0002553	fibroblast of lung
+Lung; myofibroblast	CL_0000186	myofibroblast cell
+Lung; pericyte	CL_0000669	pericyte cell
+Lung; pleura; mesothelial cells	UBERON_0000977	pleura
+Lung; pleural fluid; mesothelial cells	UBERON_0001087	pleural fluid
+Lung; vein; endothelium	UBERON_0001919	endothelium of vein
+Lymph node	UBERON_0000029	lymph node
+Mammary gland	UBERON_0001911	mammary gland
+Mammary gland; udder	UBERON_0013216	udder
+Mammary placode	UBERON_0005311	mammary placode
+Mediastinum	UBERON_0003728	mediastinum
+Melanocyte	CL_0000148	melanocyte
+Mesenteric lymph node	UBERON_0002509	mesenteric lymph node
+Mesentery	UBERON_0002095	mesentery
+Midgut	UBERON_0001045	midgut
+Milk	UBERON_0001913	milk
+Muscle	UBERON_0001630	muscle organ
+Muscle; caudal fin	UBERON_2000628	caudal fin musculature
+Muscle; cricopharyngeal	UBERON_0013167	cricopharyngeal ligament
+Muscle; fibroblast	CL_1001609	muscle fibroblast
+Muscle; quadriceps	UBERON_0004498	skeletal muscle tissue of quadriceps femoris
+Muscle; semitendinosus	UBERON_3010032	M. semitendinosus
+Muscle; subscapularis	UBERON_0001129	subscapularis muscle
+Muscle; tail	UBERON_0003665	post-anal tail muscle
+Muscle; trunk	UBERON_0001774	skeletal muscle of trunk
+Muscle; vastus lateralis; myoblast	CL_0000515	skeletal muscle myoblast
+Nail bed	UBERON_0005273	nail bed
+Nasal cavity; maxillary sinus	UBERON_0001764	maxillary sinus
+Nasal cavity; vestibule	UBERON_0013732	vestibule of nasal cavity
+Nasal sinus	UBERON_0001825	paranasal sinus
+Neck	UBERON_0000974	neck
+Neck; skin	UBERON_0001417	skin of neck
+Nervous system	UBERON_0001016	nervous system
+Neural crest	UBERON_0002342	neural crest
+Nose	UBERON_0000004	nose
+Nose; cartilage	UBERON_0001823	nasal cartilage
+Nose; epithelium	UBERON_0019306	nose epithelium
+Nose; ethmoid sinus	UBERON_0002453	ethmoid sinus
+Nose; skin	UBERON_0015476	nose skin
+Optic nerve; oligodendrocyte	CL_0000128	oligodendrocyte
+Oral cavity	UBERON_0000167	oral cavity
+Oral cavity; alveolar ridge	UBERON_0004103	alveolar ridge
+Oral cavity; buccal mucosa	UBERON_0006956	buccal mucosa
+Oral cavity; buccal mucosa; epithelial cells	UBERON_0006956	buccal mucosa
+Oral cavity; buccal mucosa; keratinocyte	CL_0000312	keratinocyte
+Oral cavity; cheek	UBERON_0001567	cheek
+Oral cavity; floor of mouth; keratinocyte	CL_0000312	keratinocyte
+Oral cavity; gingiva	UBERON_0001828	gingiva
+Oral cavity; gingiva; epithelial cells	CL_0002621	gingival epithelial cell
+Oral cavity; gingiva; fibroblast	CL_0002552	fibroblast of gingiva
+Oral cavity; hard palate	UBERON_0003216	hard palate
+Oral cavity; hard palate; keratinocyte	UBERON_0003216	hard palate
+Oral cavity; hard palate; keratinocyte	CL_0000312	keratinocyte
+Oral cavity; keratinocyte	CL_0000312	keratinocyte
+Oral cavity; lower lip	UBERON_0001835	lower lip
+Oral cavity; mucosa; epithelial cells	UBERON_0003350	epithelium of mucosa
+Oral cavity; mucosa; epithelial stem cells	UBERON_0000344	mucosa
+Oral cavity; mucosa; fibroblast	UBERON_0000344	mucosa
+Oral cavity; palate; minor salivary gland	UBERON_0001830	minor salivary gland
+Oral cavity; soft palate	UBERON_0001733	soft palate
+Oral cavity; soft palate; keratinocyte	UBERON_0001733	soft palate
+Oral cavity; tongue	UBERON_0001723	tongue
+Oral cavity; tongue; keratinocyte	UBERON_0001723	tongue
+Oral cavity; tongue; lateral border	UBERON_0001723	tongue
+Oral cavity; tonsil	UBERON_0002372	tonsil
+Oral cavity; tonsil; fibroblast	UBERON_0002372	tonsil
+Oral cavity; tonsil; follicular dendritic cells	UBERON_0002372	tonsil
+Oral cavity; tonsil; follicular dendritic reticulum	UBERON_0002372	tonsil
+Otocyst	UBERON_0013526	otocyst lumen
+Ovary	UBERON_0000992	ovary
+Ovary; adipose tissue	UBERON_0001013	adipose tissue
+Ovary; endometrium	UBERON_0001295	endometrium
+Ovary; epithelium	UBERON_0004911	epithelium of femalge gonad
+Ovary; fibroblast	CL_2000063	ovarian fibroblast
+Ovary; ovarian follicle; granulosa cell layer	UBERON_0005170	granulosa cell layer
+Oviduct epithelium	UBERON_0004804	oviduct epithelium
+Pancreas	UBERON_0001264	pancreas
+Pancreas; adipose tissue	UBERON_0001013	adipose tissue
+Pancreas; islets of Langerhans; endothelial cells	UBERON_0000006	islet of Langerhans
+Parathyroid gland	UBERON_0001132	parathyroid gland
+Parotid gland	UBERON_0001831	parotid gland
+Parotid lymph node	UBERON_0015857	parotid lymph node
+Pectoral fin	UBERON_0000151	pectoral fin
+Pelvic cavity	UBERON_0008203	pelvic cavity
+Pelvis	UBERON_0012179	bone of pelvis
+Penis	UBERON_0000989	penis
+Perinea	UBERON_0002379	perineal muscle
+Periodontal ligament	UBERON_0008266	periodontal ligament
+Peripheral blood; erythroblast	CL_0000765	erythroblast
+Peripheral blood; mast cell	CL_0000097	mast cell
+Peritoneal effusion; macrophage	CL_0000581	peritoneal macrophage
+Peritoneum	UBERON_0002358	peritoneum
+Peritoneum; endometrium	UBERON_0001295	endometrium
+Pharynx	UBERON_0006562	pharynx
+Pituitary gland	UBERON_0000007	pituitary gland
+Placenta	UBERON_0001987	placenta
+Placenta; caruncle; epithelial cells	UBERON_0017259	placental caruncle
+Placenta; trophoblast	CL_2000060	placental villous trophoblast
+Pleural effusion	UBERON_0000175	pleural effusion
+Prostate	UBERON_0002367	prostate gland
+Prostate; fibroblast	CL_1000299	fibroblast of connective tissue of prostate
+Rectum	UBERON_0001052	rectum
+Rectus abdominis muscle	UBERON_0002382	rectus abdominis muscle
+Retroperitoneal lymph node	UBERON_0035371	retroperitoneal lymph node
+Rib	UBERON_0002228	rib
+Rib; cartilage	UBERON_0006288	rib cartilage element
+Rib; cartilage	UBERON_0006289	rib pre-cartilage condensation
+Rib; costal cartilage; chondrocyte	UBERON_0002236	costal cartilage
+Salivary gland	CL_0009005	salivary gland cell
+Salivary gland; sublingual gland	UBERON_0001832	sublingual gland
+Scale	UBERON_0002542	scale
+Scalp; hair follicle; outer root sheath	CL_2000083	hair follicle dermal papilla cell of scalp
+Scalp; skin	UBERON_8300000	skin of scalp
+Scalp; skin; dermis	UBERON_0001003	skin epidermis
+Scar; skin; fibroblast	CL_0002620	skin fibroblast
+Seminal vesicle	UBERON_0000998	seminal vesicle
+Shoulder; articulation	UBERON_0004905	articulation
+Shoulder; skin	UBERON_0001483	skin of shoulder
+Silk gland	UBERON_0011146	silk gland
+Skeletal muscle	UBERON_0001134	skeletal muscle tissue
+Skeletal muscle. Cell type=Myoblast	CL_0000515	skeletal muscle myoblast
+Skeletal muscle; fibroblast	CL_0011027	skeletal muscle fibroblast
+Skeletal muscle; myoblast	CL_0000515	skeletal muscle myoblast
+Skin	UBERON_0000014	zone of skin
+Skin; ear	UBERON_0001459	skin of external ear
+Skin; epidermis	UBERON_0001003	skin epidermis
+Skin; epidermis; fibroblast	CL_0002620	skin fibroblast
+Skin; epidermis; fibroblast	UBERON_0001003	skin epidermis
+Skin; fibroblast	CL_0002620	skin fibroblast
+Skin; melanocyte	CL_1000458	melanocyte of skin
+Skin; microvascular endothelium	UBERON_0008339	microvascular endothelium
+Small intestine	UBERON_0002108	small intestine
+Small intestine; duodenum	UBERON_0002114	duodenum
+Small intestine; duodenum; epithelial cells	UBERON_0002114	duodenum
+Small intestine; ileum	UBERON_0002116	ileum
+Small intestine; ileum; epithelial cells	UBERON_0002116	ileum
+Small intestine; ileum; myofibroblast	UBERON_0002116	ileum
+Small intestine; ileum; myofibroblast	CL_0000186	myofibroblast cell
+Small intestine; jejunum	UBERON_0002115	jejunum
+Small intestine; jejunum; epithelial cells	UBERON_0002115	jejunum
+Smooth muscle	CL_0000192	smooth muscle cell
+Snout	UBERON_0006333	snout
+Spinal cord	UBERON_0002240	spinal cord
+Spine	UBERON_0013706	bone spine
+Spleen	UBERON_0002106	spleen
+Spleen; fibroblast	CL_2000051	splenic fibroblast
+Spleen; lymphocyte	CL_0000542	lymphocyte
+Sternum	UBERON_0000975	sternum
+Stomach	UBERON_0000945	stomach
+Stomach; cardia	UBERON_0001162	cardia of stomach
+Stomach; epithelium	UBERON_0001276	epithelium of stomach
+Stomach; fundus	UBERON_0001160	fundus of stomach
+Stomach; muscle	UBERON_0004222	stomach smooth muscle
+Subcutaneous; adipose tissue	UBERON_0002190	subcutaneous adipose tissue
+Submandibular lymph node	UBERON_0002520	submandibular lymph node
+Swim bladder	UBERON_0006860	swim bladder
+Tail	UBERON_0002415	tail
+Tail; skin	UBERON_0003534	tail skin
+Tendon	UBERON_0000043	tendon
+Testis	UBERON_0000473	testis
+Testis. Cell type=Sertoli cell	UBERON_0001343	seminiferous tubule of testis
+Testis; epididymis	UBERON_0001301	epididymis
+Testis; epididymis; distal caput	UBERON_0001301	epididymis
+Testis; epididymis; proximal caput	UBERON_0001301	epididymis
+Testis; tunica albuginea	UBERON_0006643	tunica albuginea of testis
+Testis; tunica vaginalis	UBERON_0006650	tunica vaginalis testis
+Thigh; muscle	UBERON_0001383	muscle of leg
+Thigh; skin	UBERON_0001511	skin of leg
+Thoracic cavity	UBERON_0002224	thoracic cavity
+Thorax; aorta; endothelium	UBERON_0004851	aorta endothelium
+Thorax; skin	UBERON_0001418	skin of thorax
+Thymus	UBERON_0002370	thymus
+Thymus; anterior mediastinum	UBERON_0008820	anterior mediastinum
+Thyroid	UBERON_0002046	thyroid gland
+Tonsillar fossa	UBERON_0035228	tonsillar fossa
+Tooth; dental papilla	CL_0000345	dental papilla cell
+Tooth; dental pulp	UBERON_0001754	dental pulp
+Tooth; dental pulp; fibroblast	UBERON_0001754	dental pulp
+Tooth; incisor; epithelial cells	UBERON_0001098	incisor tooth
+Trachea	UBERON_0003126	trachea
+Trachea; epithelium	UBERON_0001901	epithelium of trachea
+Trophoblast	UBERON_0000088	trophoblast
+Trophoblast; trophectoderm	UBERON_0004345	trophectoderm
+Trunk; skin	UBERON_0001085	skin of trunk
+Umbilical cord	UBERON_0002331	umbilical cord
+Umbilical cord blood	UBERON_0012168	umbilical cord blood
+Umbilical cord; artery; endothelial cells	CL_1000413	endothelial cell of artery
+Umbilical cord; fibroblast	CL_0000057	fibroblast
+Umbilical vein	UBERON_0002066	umbilical vein
+Umbilical vein; smooth muscle	CL_0002588	smooth muscle cell of the umbilical vein
+Upper back; skin	UBERON_0009015	upper back skin
+Urachus	UBERON_0002068	urachus
+Ureter	UBERON_0000056	ureter
+Urethra	UBERON_0000057	urethra
+Urinary bladder	UBERON_0001255	urinary bladder
+Urinary bladder; urethra	UBERON_0000057	urethra
+Urine	UBERON_0001088	urine
+Uterus	UBERON_0000995	uterus
+Uterus; cervix	UBERON_0000002	uterine cervix
+Uterus; cervix; cervical transformation zone epithelium	CL_0002535	epithelial cell of cervix
+Uterus; cervix; ectocervical epithelium	UBERON_0012251	ectocervical epithelium
+Uterus; endometrium	UBERON_0001295	endometrium
+Uterus; smooth muscle	CL_0000192	smooth muscle cell
+Vagina	UBERON_0000996	vagina
+Vagina; mucosa; epithelial cells	UBERON_0004983	mucosa of vagina
+Vas deferens	UBERON_0001000	vas deferens
+Vas deferens; smooth muscle	CL_0000192	smooth muscle cell
+Ventral nerve cord	UBERON_0000934	ventral nerve cord
+Visceral endoderm	UBERON_0004877	visceral endoderm
+Vulva	UBERON_0000997	mammalian vulva
+Yolk sac	UBERON_0001040	yolk sac
+Abdomen; subcutaneous; fat; white adipose tissue
+Abdominal effusion
+Abdominal mass
+Achilles tendon
+Adenoids
+Adipose mesenchymal stem cells
+Adrenal gland; chromaffin cells
+Adrenal gland, gonad and kidney
+Amnion; mesenchymal cells
+Amniotic fluid; mesenchymal stem cells
+Amniotic membrane
+Amniotic sac membrane; epithelial cells
+Arm; subcutaneous
+Arm; skin. Cell type=Fibroblast	UBERON_0002427	arm skin
+Ascites
+Ascites; mesothelial cells
+Blood vessel; endothelial cells
+Bone; branchial arches
+Bone; distal femur
+Bone; distal radius
+Bone; distal tibia
+Bone; left femur
+Bone; left proximal tibia
+Bone; left tibia
+Bone; lumbar spine
+Bone marrow; blood
+Bone marrow; blood microvessel; endothelial cells
+Bone marrow; dendritic cells
+Bone marrow; endothelial cells
+Bone marrow, lymph node and spleen
+Bone marrow; mast cells
+Bone marrow; mesenchymal cells
+Bone marrow; mesenchymal stem cells
+Bone marrow; mesenchymal stromal cells
+Bone marrow; mononuclear cells
+Bone marrow; osteoblast
+Bone marrow, spleen and thymus
+Bone marrow; stromal cells
+Bone; mid-thoracic spine
+Bone; periosteum membrane
+Bone; proximal femur
+Bone; proximal humerus
+Bone; proximal tibia
+Bone; right distal femur
+Bone; right distal radius
+Bone; right femur
+Bone; spine; epidural space
+Brain; cerebellar granule cells
+Brain; cerebellum; macrophage microglia
+Brain; cortical microvessel endothelial cells
+Brain; fibroblast
+Brain; fronto-temporal lobe
+Brain; glia; oligodendrocyte
+Brain; intracranial space
+Brain; left fronto-parietal lobe
+Brain; left occipital-parietal region
+Brain; left parieto-occipital lobe
+Brain; left prefrontal lobe
+Brain; left temporo-medial region
+Brain; left temporo-occipital lobe
+Brain; left temporo-parietal region
+Brain; leptomeninges
+Brain; medullary raphe nucleus
+Brain; microglia
+Brain; microvascular endothelial cells
+Brain; neural cells
+Brain; occipito-medial region
+Brain; oligodendrocyte/type-2 astrocyte progenitor cells
+Brain; optic canal
+Brain; parietal falx
+Brain; parieto-occipital lobe
+Brain; parieto-temporal lobe
+Brain; posterior fossa
+Brain; right frontal parieto-occipital cortex
+Brain; right fronto-parietal lobe
+Brain; right occipital-parietal region
+Brain; right parasagittal parietal region
+Brain; right periatrial region
+Brain; right temporo-occipital lobe
+Brain; right temporo-occipital region
+Brain; right temporo-parietal junction
+Brain; right temporo-parietal lobe
+Brain stem
+Breast; epithelial cells
+Breast; luminal epithelial cells
+Bronchus and lung
+Buttock; ischiadic nerve
+Cartilage; fibroblast
+Caudal trunk
+Cecum
+Cephalic region; epithelial
+Cephalic region; fibroblast
+Colon; fibroblast
+Colon; left sided
+Colon; mucosa; epithelial cells
+Colon; right colic flexure
+Colon; right sided
+Ear; fibroblast
+Ear; utricular macula; epithelial cells
+Embryonic aorta-gonad-mesonephros
+Embryonic eye; retinal pigment epithelium
+Embryonic heart
+Embryonic intestine
+Embryonic liver
+Embryonic mesencephalon
+Embryonic somites
+Endometrium; epithelial cells
+Endometrium; stromal cells
+Epithelial cells
+Esophagus and pharyinx
+Esophagus; epithelial cells
+Esophagus; fibroblast
+Eustachian tube
+Eye; choroidal melanocyte
+Eye; conjunctival epithelium
+Eye; globe
+Eye; ocular lens; epithelium
+Eye; ocular lens; fibroblast
+Eye orbit
+Eye orbit; adipose mesenchymal stem cells
+Eye; retinal pigment epithelium
+Eye; uveal melanocyte
+Fallopian tube; secretory epithelial cells
+Femoral head; cartilage
+Fetal addomen
+Fetal adrenal gland
+Fetal bone; calvaria
+Fetal bone; calvaria; chondrocyte
+Fetal bone; femur
+Fetal bone; femur; mesenchymal stromal cells
+Fetal bone; limb; osteoblast
+Fetal bone marrow
+Fetal bone; osteoblast
+Fetal brain
+Fetal brain; cerebellum
+Fetal brain; choroid plexus
+Fetal brain; fibroblast
+Fetal brain; hypothalamus
+Fetal brain; mesencephalon
+Fetal brain; microvascular endothelial cells
+Fetal brain; neocortex
+Fetal brain; suprachiasmatic nucleus
+Fetal chest
+Fetal colon
+Fetal colon; fibroblast
+Fetal colon; mucosa
+Fetal cornea
+Fetal diaphragm; skeletal muscle; fibroblast
+Fetal ear
+Fetal esophagus
+Fetal eye
+Fetal eye; conjunctiva; fibroblast
+Fetal eye; cornea
+Fetal eye; retina
+Fetal eye; retinal pigment epithelium
+Fetal eye; retina; retinoblast
+Fetal forebrain
+Fetal gallbladder
+Fetal gut
+Fetal heart
+Fetal heart; cardiac muscle
+Fetal heart; endothelial cells
+Fetal heart; microvascular endothelial cells
+Fetal heart; ventricular epicardium
+Fetal hindbrain
+Fetal intestine
+Fetal intestine; epithelial cells
+Fetal intestine; microvascular endothelial cells
+Fetal intestine; myofibroblast
+Fetal kidney
+Fetal labium
+Fetal liver
+Fetal liver; microvascular endothelial cells
+Fetal lung
+Fetal lung; alveolar macrophage cells
+Fetal lung; artery; endothelial cells
+Fetal lung; epithelial cells
+Fetal lung; fibroblast
+Fetal lung; mesothelium
+Fetal lung; microvascular endothelial cells
+Fetal lymph node
+Fetal mesenteric lymph node; microvascular endothelial cells
+Fetal muscle
+Fetal neocortex
+Fetal nose; turbinate
+Fetal oligodendrocyte
+Fetal oral cavity; tongue
+Fetal ovary; microvascular endothelial cells
+Fetal pancreas
+Fetal peripheral lymph node; microvascular endothelial cells
+Fetal Peyer's patches; microvascular endothelial cells
+Fetal rectum
+Fetal rumen
+Fetal rumen; mucosa
+Fetal skeletal muscle; diaphragm; fibroblast
+Fetal skeletal muscle; myoblast
+Fetal skin
+Fetal small intestine
+Fetal small intestine; duodenum; epithelial cells
+Fetal spinal cord
+Fetal spleen
+Fetal spleen and fetal thymus
+Fetal spleen and fetal thyroid
+Fetal spleen; fibroblast
+Fetal stomach
+Fetal stomach; epithelial mucosa
+Fetal striatal primordia
+Fetal subcutaneous
+Fetal testis
+Fetal testis; fibroblast
+Fetal thymocyte
+Fetal thymus
+Fetal thymus; epithelial cells
+Fetal thyroid
+Fetal tongue
+Fetal tooth germs; incisor
+Fetal trachea
+Fetal trunk; fibroblast
+Fetal urinary bladder
+Fetal uterus
+Fin and scale
+Flank; skin
+Fluke; skin; dermis
+Foot; skin
+Forearm; subcutaneous
+Foreskin; skin. Cell type=Fibroblast
+Foreskin; skin
+Foreskin; skin; dermis
+Foreskin; skin; dermis; endothelial cells
+Foreskin; skin; dermis; microvascular endothelial cells
+Genital area; skin
+Gluteal; subcutaneous; fat; white adipose tissue
+Gonad; fibroblast
+Gonad; skin
+Groin
+Head; soft tissue
+Heart; atrial epicardium
+Heart; endothelial cells
+Hemocyte
+Hind leg; bone
+Hypopharynx; pyriform sinus
+Ileocecal lymph node
+Iliac vein; smooth muscle
+Inguinal subcutaneous fat depot
+Intestine; enterocyte
+Intestine; epithelium
+Jaw; mandible and maxilla
+Kidney; epithelial cells
+Kidney; podocyte
+Kidney; tubules
+Knee joint; synovium
+Knee; subcutaneous
+Labial salivary gland; epithelial cells
+Larynx; supraglottis
+Larynx; vocal cord
+Left clavicle; skin
+Left gluteal muscle
+Left inguinal lymph node
+Limb; cartilage; chondrocyte
+Liver; epithelial cells
+Liver; hepatic stellate cells
+Liver; Kupffer cells
+Liver; sinusoidal endothelium
+Liver; stellate cells
+Long bone; cartilage
+Lung; airway epithelium basal cells
+Lung; alveolar cells
+Lung; bronchial epithelium cells
+Lung; endothelial cells
+Lung; epithelial cells
+Lung; microvascular endothelial cells	CL_2000016	lung microvascular endothelial cell
+Lung; endothelium. Cell type=Lung microvascular endothelial cell	CL_2000016	lung microvascular endothelial cell
+Lung; small airway epithelium basal cells
+Lung; small airway epithelium cells
+Mammary gland; alveolar epithelial cells
+Mammary gland; epithelial cells
+Meibomian gland; epithelial cells
+Meningeal myeloid organ
+Menstrual blood; mesenchymal stem cells
+Mesenchymal stem cells
+Middle ear; epithelial cells
+Milt
+Mnior salivary gland
+Muscle and skin
+Muscle; epithelial cells
+Muscle; paravetrebral
+Muzzle
+Nasal turbinate
+Neuroretina
+Nose; epithelial cells
+Nose; fibroblast
+Nose; nasal airways epthelial cells
+Nose; nasal cavity anterior portion
+Occipital scalp; fibroblast
+Oral cavity; epithelium
+Oral cavity; floor of mouth
+Oral cavity; gingiva; keratinocyte
+Oral cavity; hard and soft palate
+Oral cavity; oral mucosa
+Oral cavity; palatine tonsils epithelium
+Oral cavity; retromolar trigone
+Oral cavity; soft palate and tonsilla
+Ovarian fluid
+Ovary and dorsal vessel
+Ovary and fat body
+Ovary; endometriotic stromal cells
+Ovary; surface epithelium
+Palatal salivary gland
+Pancreas; acinar cells
+Pancreas; ductal cells
+Pancreas; islets of Langerhans
+Pancreas; islets of Langerhans; alpha cells
+Pancreas; islets of Langerhans; beta cells
+Pancreas; islets of Langerhans; delta cells
+Pancreas; stellate cells
+Parotid gland; epithelial cells
+Pericardial effusion
+Peripheral blood
+Peripheral blood; CD36+ erythroid progenitor cells
+Peripheral blood; dendritic cells
+Peripheral blood; endothelial colony forming cells
+Peripheral blood; endothelial progenitor cells
+Peripheral blood; megakaryoblast
+Peripheral blood; mononuclear cells
+Peripheral blood; T-cells
+Peritoneal cavity macrophages
+Peritoneal effusion
+Pharynx; nasopharyinx	UBERON_0001728	nasopharynx
+Pharynx; nasopharynx	UBERON_0001728	nasopharynx
+Pharynx; oropharyinx
+Placenta; arterial endothelium
+Placenta; chorion; mesenchymal cells
+Placenta; cytotrophoblast cells
+Placenta; mesenchymal stem cells
+Placenta; mesenchymal stromal cells
+Popliteal fossa
+Posterior iliac crest; skin
+Prostate; epithelial cells
+Rectal colon
+Retroperitoneum
+Rib; cartilage; chondrocyte
+Right brachial nerve
+Right cervical lymph node
+Right hind limb; bone
+Right hindlimb; synovium
+Right ischium; skin
+Right temporofacial region soft tissue
+Right thigh
+Sacrum; skin
+Schwann cells
+Sciatic nerve; Schwann cells
+Scrotum; skin; dermis
+Sebaceous gland; sebocyte
+Semitendinosus muscle tendon
+Skin; amelanotic melanophore
+Skin and muscle
+Skin; dermis
+Skin; dermis; keratinocyte
+Skin; epidermis; keratinocyte
+Skin; melanotic melanophore
+Skin; microvascular endothelial cells
+Small intestine; epithelial cells
+Small intestine; ileum and jejunum
+Small intestine; ileum; intestinal crypt; epithelial cells
+Smooth muscle; trachealis muscle
+Spinal cord; microvascular endothelial cells
+Spleen and thymus
+Spleen; dendritic cells
+Spleen; T-cell
+Stomach; antrum
+Stomach; epithelial mucosa
+Stomach; forestomach
+Subcutaneous
+Subcutaneous; fat; adipose connective tissue
+Subcutaneous; fat; white adipose tissue
+Subcutaneous; fibroblast
+Subiliac lymph node
+Submandibular salivary gland
+Submandibular salivary gland; acinar cells
+Synovium
+Synovium; fibroblast
+Synovium; fibroblast-like synoviocyte
+Tail; fibroblast
+Tail; muscle
+Testicular sheath
+Testis and fat body
+Testis; endothelial cells
+Testis; Leydig cells
+Testis; Leydig stem cells
+Testis; peritubular myoid cells
+Testis; Sertoli cells
+Testis; skin
+Testis; spermatogonia
+Thigh
+Thigh; quadriceps skeletal muscle
+Thigh; skeletal muscle
+Thigh; subcutaneous
+Thoraco-lumbar junction; skin
+Thorax
+Thorax/abdomen; skin
+Thorax; aorta; smooth muscle
+Thorax; aorta; smooth muscle; myoblast
+Thorax; soft tissue
+Thymus; cortical thymic epithelial cells
+Thymus; epithelial cells
+Thymus; medullary thymic epithelial cells
+Thyroid; epithelial cells
+Thyroid; follicular cells
+Thyroid; parafollicular cells
+Toe; skin
+Tooth; dental papilla; mesenchymal cells
+Tooth germs; molar; ondotoblast
+Tooth; ligament; fibroblast
+Tooth; peridental ligament
+Tooth; root; cementocyte
+Torso; skin
+Trachea and lung
+Trachea; epithelial cells
+Trunk; skin; melanocyte
+Umbilical area; skin
+Umbilical cord blood; endothelial progenitor cells
+Umbilical cord blood; natural killer cells
+Umbilical cord blood; T-cells
+Umbilical cord; endothelial cells
+Umbilical cord; mesenchymal stem cells
+Umbilical cord; stromal cells
+Umbilical cord; Wharton jelly
+Umbilical cord; Wharton jelly; mesenchymal stem cells
+Umbilical vein; endothelial cells
+Urethrea epithelium
+Urinary bladder and renal pelvis
+Urinary bladder; urothelial cells
+Urine; podocyte-like epithelial cells
+Uterus; cervix; endocervical epithelium
+Uterus; cervix; fibroblast
+Uterus; cervix; keratinocyte
+Uterus; endometrium; endothelial cells
+Uterus; endometrium; epithelial cells	UBERON_0004811	endometrium epithelium
+Uterus; endometrium; glandular cells	UBERON_0002451	endometrial gland
+Uterus; endometrium; stromal cells	UBERON_0002337	endometrial stroma
+Uterus; intrapelvic spread
+Vagina; epithelial cells
+Vas deferens; epithelial cells
+Vein; endothelial cells
+Vein; umbilical cord; fibroblast
+Ventral nerve cord and brain
+Visceral connective tissue
+Vulva; fibroblast
+Xiphisternum cartilage; chondrocyte
+Whole embryo
+Skin. Cell type=Fibroblast
+Endometrium. Cell type=Epithelial cell	UBERON_0004811	endometrium epithelium
+Endometrium. Cell type=Endometrial stromal cell	UBEROM_0002337	endometrial stroma
+Whole embryo. Cell type=Fibroblast
+Bronchus; epithelium
+Abdomen; skin. Cell type=Fibroblast
+Acetabulum; connective tissue
+Adipose tissue. Cell type=Adipose mesenchymal stem cell
+Adipose tissue; hypodermis. Cell type=Preadipocyte
+Adrenal gland. Cell type=Chromaffin cell
+Amnion. Cell type=Mesenchymal cell
+Amniotic fluid. Cell type=Amniocyte
+Ascites. Cell type=Macrophage
+Bone; branchial arch
+Bone; calvaria. Cell type=Osteoblast
+Bone; femur; bone marrow
+Bone; jaw; mandible. Cell type=Ameloblast
+Bone; jaw; maxilla
+Bone marrow; blood microvessel. Cell type=Endothelial cell
+Bone marrow. Cell type=Hematopoietic cell
+Bone marrow. Cell type=Macrophage
+Bone marrow. Cell type=Mesenchymal stem cell
+Bone marrow. Cell type=Mononuclear cell
+Bone marrow. Cell type=Osteoblast
+Bone; patella
+Bone; thoracic vertebra
+Brain. Cell type=Astrocyte
+Brain. Cell type=Cerebellar granule cell
+Brain. Cell type=Endothelial cell
+Brain. Cell type=Fibroblast
+Brain. Cell type=Immature astrocyte
+Brain. Cell type=Microglial cell
+Brain. Cell type=Mmicroglial cell
+Brain. Cell type=Oligodendrocyte/type-2 astrocyte progenitor cell
+Brain; cerebellum. Cell type=Astrocyte
+Brain; cerebellum. Cell type=Microglial cell
+Brain; cerebral cortex. Cell type=Astrocyte
+Brain; falx cerebri
+Brain; forebrain; olfactory bulb
+Brain; forebrain; olfactory bulb. Cell type=Astrocyte
+Brain; periventricular region
+Bronchus. Cell type=Fibroblast
+Bronchus; epithelium. Cell type=Epithelial cell
+Bronchus; submucosal gland. Cell type=Epithelial cell
+Brown adipose tissue. Cell type=Preadipocyte
+Bulbus arteriosus. Cell type=Fibroblast
+Carotid artery. Cell type=Pulmonary artery smooth muscle cell
+Caudal fin; muscle
+Cell type=Adipose mesenchymal stem cell
+Cell type=Astrocyte
+Cell type=Cardiomyocyte
+Cell type=Fibroblast
+Chest
+Chest/abdomen; skin
+Colon. Cell type=Fibroblast
+Colon; distal
+Colon; intestinal crypt. Cell type=Epithelial cell
+Colon; proximal
+Coronary artery. Cell type=Coronary artery smooth muscle cell
+Dorsal root ganglion. Cell type=Neuron
+Ear; middle ear. Cell type=Epithelial cell
+Ear; skin. Cell type=Fibroblast
+Endoderm
+Esophagus. Cell type=Epithelial cell
+Eye; choroid. Cell type=Endothelial cell
+Eye; conjunctiva. Cell type=Fibroblast
+Eye; ocular lens. Cell type=Fibroblast
+Eye; retina. Cell type=Muller glia
+Eye; retina. Cell type=Retinal cone cell
+Eye; retina; retinal pigment epithelium
+Fetal brain. Cell type=Astrocyte
+Fetal brain. Cell type=Endothelial cell
+Fetal brain; endothelium. Cell type=Brain microvascular endothelial cell
+Fetal brain; forebrain
+Fetal bronchus and fetal lung
+Fetal colon. Cell type=Fibroblast
+Fetal eye; retina. Cell type=Retinoblast
+Fetal intestine. Cell type=Myofibroblast
+Fetal intestine; microvascular endothelium
+Fetal long bone; cartilage. Cell type=Chondrocyte
+Fetal lung. Cell type=Fibroblast
+Fetal lung. Cell type=Mesothelial cell
+Fetal lung; endothelium. Cell type=Lung microvascular endothelial cell
+Fetal mesenteric lymph node; microvascular endothelium
+Fetal nose; nasal cavity; nasal turbinate
+Fetal ovary; microvascular endothelium
+Fetal small intestine; duodenum. Cell type=Epithelial cell
+Fetal trachea; epithelium
+Fetal trunk. Cell type=Fibroblast
+Foreskin; skin. Cell type=Melanocyte
+Foreskin; skin; epidermis. Cell type=Keratinocyte
+Groin; skin
+Hair root. Cell type=Keratinocyte
+Heart; blood vessel. Cell type=Endothelial cell
+Heart. Cell type=Cardiac endothelial cell
+Heart. Cell type=Cardiomyocyte
+Heart. Cell type=Fibroblast
+Heart; left atrium. Cell type=Cardiomyocyte
+Heart; ventricle. Cell type=Cardiomyocyte
+Hemolymph. Cell type=Hemocyte
+Intestine. Cell type=Enterocyte
+Intestine. Cell type=Myofibroblast
+Kidney. Cell type=Podocyte
+Kidney; glomerular visceral epithelium
+Kidney; glomerulus. Cell type=Mesangial cell
+Kidney; glomerulus. Cell type=Podocyte
+Kidney; proximal tubule. Cell type=Proximal tubule epithelial cell
+Kidney; renal tubule
+Limb; saphenous vein. Cell type=Endothelial cell
+Liver. Cell type=Epithelial cell
+Liver. Cell type=Fibroblast
+Liver. Cell type=Hepatocyte
+Liver. Cell type=Myofibroblast
+Lung; alveolus. Cell type=Alveolar macrophage
+Lung; alveolus. Cell type=Type 2 pneumocyte
+Lung; artery. Cell type=Pulmonary artery smooth muscle cell
+Lung. Cell type=Airway epithelium basal cell
+Lung. Cell type=Clara cell
+Lung. Cell type=Epithelial cell
+Lung. Cell type=Fibroblast
+Mammary gland. Cell type=Epithelial cell
+Milk. Cell type=Lactiferous duct luminal epithelial cell
+Muscle. Cell type=Epithelial cell
+Muscle. Cell type=Fibroblast
+Muscle; paravertebral. Cell type=Myoblast
+Nose; nasal cavity
+Nose; nasal cavity; epithelium
+Nose; nasal cavity; maxillary sinus
+Nose; nasal cavity; nasal turbinate
+Nose; nasal cavity; olfactory mucosa
+Pancreas; ampulla of Vater
+Pancreas. Cell type=Mesenchymal stem cell
+Pancreas. Cell type=Pancreatic acinar cell
+Pancreas; islets of Langerhans. Cell type=Alpha cell
+Pelvis; skin
+Peripheral blood. Cell type=Erythroid progenitor cell
+Peripheral blood. Cell type=Macrophage
+Peripheral nervous system; nerve. Cell type=Schwann cell
+Peritoneum. Cell type=Fibroblast
+Peritoneum. Cell type=Peritoneal macrophage
+Pharynx; hypopharynx
+Placenta; caruncle. Cell type=Epithelial cell
+Placenta; chorion. Cell type=Mesenchymal cell
+Prostate; epithelium
+Retroperitoneal space
+Rib; costal cartilage. Cell type=Chondrocyte
+Salivary gland; parotid gland
+Salivary gland; submandibular gland
+Salivary gland; submandibular gland. Cell type=Salivary gland acinar cell
+Skin. Cell type=Mast cell
+Skin; dermis. Cell type=Fibroblast
+Skin; epidermis. Cell type=Fibroblast
+Small intestine. Cell type=Epithelial cell
+Small intestine; duodenum. Cell type=Epithelial cell
+Small intestine; ileum. Cell type=Epithelial cell
+Small intestine; ileum; intestinal crypt. Cell type=Epithelial cell
+Small intestine; jejunum. Cell type=Epithelial cell
+Smooth muscle; trachealis
+Somite
+Spleen. Cell type=Dendritic cell
+Stomach; pyloric antrum
+Synovium. Cell type=Fibroblast
+Synovium. Cell type=Fibroblast-like synoviocyte
+Tail; skin. Cell type=Fibroblast
+Tail; tip. Cell type=Fibroblast
+Thigh; skin. Cell type=Fibroblast
+Thoracic aorta. Cell type=Thoracic aorta endothelial cell
+Thoracic aorta; smooth muscle
+Thoracic aorta; smooth muscle. Cell type=Myoblast
+Thoracolumbar junction; skin
+Thymus. Cell type=Thymic epithelial cell
+Thymus. Cell type=Thymic macrophage
+Thyroid gland
+Tooth bud; dental papilla; molar. Cell type=Ameloblast
+Trophectoderm
+Trophoblast; cytotrophoblast
+Trunk; muscle
+Umbilical cord blood. Cell type=Regulatory T-cell
+Umbilical cord. Cell type=Endothelial cell
+Upper jaw; hypodermis
+Whole embryo. Cell type=Epithelial cell

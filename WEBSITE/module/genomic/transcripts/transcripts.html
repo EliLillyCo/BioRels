@@ -1,0 +1,207 @@
+$[VALID]
+<h3>Transcripts list</h3>
+<div class="w3-opts-right">
+	<img id="transcript_seq_opt_but" src="/require/img/download.png" style="width: 20px;" onClick="showExportOpts()" />
+	<img id="transcript_seq_tool_but" src="/require/img/tools.png" style="width: 20px;" onClick="showToolOpts()" />
+	<img id="transcript_seq_view_but" src="/require/img/view.png" style="width: 20px;" onClick="showViewOpts()" />
+<!--	<div class="help-tip" style="position:unset;margin-left:5px;" onclick="showDialog('/CONTENT/HELP/TRANSCRIPTS')">-->
+	</div>
+</div>
+
+<form name="opts">
+	<div id="transcripts_export" title="Transcripts list options" style="display: none;">
+		Export options:<br />
+		<input type="radio" name="sel" value="sel_all" checked="checked">Select all transcripts</input><br />
+		<input type="radio" name="sel" value="sel_few">Select checked transcripts</input><br />
+
+		<a class="w3-btn w3-grey w3-round-medium" value="Image" onclick="genTranscriptsImage()">Image</a>
+		<a class="w3-btn w3-grey w3-round-medium" onclick="getTranscriptsFasta()">Get Fasta sequence</a>
+	</div>
+	<div id="transcripts_view" title="Transcripts view" style="display: none;">
+		View option:<br />
+		<a href="/GENEID/${GENE_ID}/TRANSCRIPTS_VIEW" class="w3-btn w3-grey w3-round-medium">Sequence view</a><br />
+
+	</div>
+	<div id="transcripts_tools" title="Apply tool against transcripts" style="display: none;">
+		Option:<br />
+		<input type="radio" name="tool_sel" value="sel_all" checked="checked">Select all transcripts</input><br />
+		<input type="radio" name="tool_sel" value="sel_few">Select checked transcripts</input><br />
+
+		<!--<a class="w3-btn w3-grey w3-round-medium" value="Image" onclick="genBlastn()">Blastn</a>-->
+
+		<hr />
+		<!--
+		Run oligo analysis:<br />
+		<input type="text" id="oligo" />
+		<a class="w3-btn w3-grey w3-round-medium" value="Image" onclick="runOligo()">Compute</a>
+-->
+	</div>
+	<div id="desc_tr" style="display: none">${HELP}</div>
+</form>
+<div class="w3-container">
+	<div class="w3-col s12 m4 l4 ">
+		<h3 style="text-align: center">Gene Information</h3>
+		<table class="trsq_info_tbl">
+			<tr>
+				<th>Organism:</th>
+				<td>${ORGANISM}</td>
+			</tr>
+			<tr>
+				<th>Full Name:</th>
+				<td>${FULL_NAME}</td>
+			</tr>
+			<tr>
+				<th>Symbol:</th>
+				<td>${SYMBOL}</td>
+			</tr>
+			<tr>
+				<th>NCBI Gene ID:</th>
+				<td>${GENE_ID}</td>
+			</tr>
+		</table>
+
+	</div>
+	<div class="w3-col s12 m8 l8">
+		<h3 style="text-align: center">Chromosomal location</h3>
+		<table class="w3-table">
+			<thead>
+				<tr>
+					<th class="ttl_tr ttl_tag" title="View" data-pos="0">View</th>
+					<th class="ttl_tr ttl_tag" title="Assembly Name" data-pos="1">Assembly Name</th>
+					<th class="ttl_tr ttl_tag" title="Assembly Name" data-pos="2">Chromosome</th>
+					<th class="ttl_tr ttl_tag" title="Assembly Name" data-pos="3">Assembly Unit</th>
+					<th class="ttl_tr ttl_tag" title="Assembly Name" data-pos="4">Sequence Role</th>
+					<th class="ttl_tr ttl_tag" title="Assembly Name" data-pos="5">Transcripts</th>
+				</tr>
+			</thead>
+			<tbody>
+				${GENE_SEQ_LOCS}
+			</tbody>
+		</table>
+	</div>
+
+</div>
+<div class="w3-container w3-col s12 l12 m12" id="transcript_list" style="min-height: 500px;overflow: auto;">
+	Please wait while we load the transcripts Information.
+</div>
+
+<script type="text/javascript">
+	function showTranscripts() {
+		$(".chr_seqs").css("background-color", 'white');
+		var val = '';
+		$('.chrseqs:checked').each(function (i) {
+			val += "/" + $(this).val();
+		});
+
+		if (val == '') return true;
+		$("#transcript_list").html("Please wait while we load the transcripts Information.");
+
+		urlv = '/CONTENT/GENEID/${GENE_ID}/TRANSCRIPTS_CHROM/PARAMS/' + val;
+		console.log(urlv);
+		$.ajax({
+			type: 'POST',
+			url: urlv,
+			success: function (data) {
+				try {
+					var v = JSON.parse(data);
+					$('#transcript_list').html(v.code);
+				} catch (error) {
+					$("#transcript_list").html(
+						"<div class=\"alert alert-primary\">We are unable to provide this visualization. We apologize for the inconvenience</div>"
+						);
+				}
+			},
+			error: function (data) {
+				$("#transcript_list").html("");
+			}
+		}); ///END AJAX
+	}
+
+	function getTranscriptsFasta() {
+		var checkboxValues = [];
+		$('#selection_Transcripts input[type="checkbox"]:checked').each(function (index, elem) {
+			checkboxValues.push($(elem).val());
+		});
+		var str = checkboxValues.join(";");
+		if (str.length == 0) {
+			window.open("/FASTA/GENEID/${GENE_ID}/TRANSCRIPTS", '_blank');
+		} else window.open("/FASTA/GENEID/${GENE_ID}/TRANSCRIPTS/PARAMS/" + str, '_blank');
+	}
+
+	function genTranscriptsImage() {
+		exportToImage('transcript_list', '${SYMBOL}_${GENE_ID}_transcripts.png');
+	}
+
+	function showExportOpts() {
+		$("#transcripts_export").dialog({
+			width: "40%",
+			modal: true,
+			buttons: {
+				"Confirm": function () {
+					$(this).dialog("close");
+				},
+
+			}
+		});
+	}
+
+	function showToolOpts() {
+		$("#transcripts_tools").dialog({
+			width: "40%",
+			modal: true,
+			buttons: {
+				"Confirm": function () {
+					$(this).dialog("close");
+				},
+			}
+		});
+	}
+
+	function showViewOpts() {
+		$("#transcripts_view").dialog({
+			width: "40%",
+			modal: true,
+			buttons: {
+				"close": function () {
+
+					$(this).dialog("close");
+				},
+
+			}
+		});
+	}
+
+
+	var list_tooltips = JSON.parse('${TOOLTIPS}');
+
+	$(document).ready(function () {
+		showTranscripts();
+		$('.ttl_tr').uitooltip({
+			open: function (event, ui) {
+				ui.tooltip.css("width", "fit-content");
+			},
+			hide: {
+				effect: "slideDown",
+				delay: 400
+			},
+			track: true,
+			content: function () {
+				console.log($(this).data('pos'));
+				return list_tooltips[$(this).data('pos')];;
+			}
+		});
+	});
+</script>
+$[/VALID]
+$[INVALID]
+<div class="main_core_title">Transcripts list</div>
+<br />
+<div class="alert alert-info">
+	No transcript has been recorded for this gene. Some genes are models, representing a
+	specific phenotype. To learn more about this specific gene, please follow this link: ${INVALID_LINK}
+</div>
+$[/INVALID]
+
+$[INVALID_SEARCH]
+<div class="alert alert-info">${ERR_MSG}</div>
+$[/INVALID_SEARCH]

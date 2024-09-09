@@ -1,0 +1,145 @@
+$[VALID]
+<h3>Variant <a rel="noopener" class="blk_font" target="_blank" href="${DBSNP_LINK}">rs${RSID}</a></h3>
+
+${ALERT}
+
+		<ul class="nav nav-tabs w3-col s_hide l12 m12">
+				${POSITIONS}
+				<li id="mut${RSID}_tab_${PUB_LEVEL}" class=" nav-item nav-link"><a onclick="showMenu('mut${RSID}',${PUB_LEVEL},${TOT_LEV})">Publication</a></li>
+				<li id="mut${RSID}_tab_${REL_LEVEL}" class=" nav-item nav-link"><a  onclick="showMenu('mut${RSID}',${REL_LEVEL},${TOT_LEV})">Related</a></li>
+				$[NO_CLINICAL]
+				<li id="mut${RSID}_tab_${CLINICAL_LEVEL}" class=" nav-item nav-link"><a  onclick="showMenu('mut${RSID}',${CLINICAL_LEVEL},${TOT_LEV})">Clinical Impact</a></li>
+				$[/NO_CLINICAL]
+				
+			  </ul>
+			
+${CHANGE_DATA}
+<div id="mut${RSID}_view_${PUB_LEVEL}" class="container-grey w3-container w3-padding-16 w3-col s-always-show m12 l12" style="display:none">
+	$[NO_PMID]
+	<div class="alert alert-info">No publication reported for this variant</div>
+	$[/NO_PMID]
+	
+	
+</div>
+
+<div id="mut${RSID}_view_${REL_LEVEL}" class="container-grey w3-container w3-padding-16 w3-col s-always-show m12 l12" style="display:none">
+		<h5>Related record are variant entries located on the same chromosome at the same position</h5>
+		${RELATED}
+</div>
+$[NO_CLINICAL]
+<div id="mut${RSID}_view_${CLINICAL_LEVEL}" class="container-grey w3-container w3-padding-16 w3-col s-always-show m12 l12" style="display:none">
+		
+		${CLINICAL}
+		
+</div>
+$[/NO_CLINICAL]
+<div id="mut${RSID}_view_${GWAS}" class="container-grey w3-container w3-padding-16 w3-col s-always-show m12 l12" style="display:none">
+	<h5>GWAS:</h5>
+	${GWAS_DATA}
+	
+</div>
+	
+
+</div>
+<style>
+.ui-corner-tl, .dataTables_info { display: none; }
+.ui-corner-bl { background:unset;border:unset }
+.ui-button { padding:unset;}
+</style>
+<script type="text/javascript">
+
+${JS}
+
+	$('#sel_clin_mut').on('change', function() {
+		$('#clin_View').html('<p>Query running</p>');
+				urlv="/CONTENT/CLINVAR/"+this.value+"/PARAMS/NO_MUTATION";
+			try{
+				$.ajax({
+				   type:"GET",
+				   url: urlv,
+			
+				   error: function() {  $('#status').html('<p>An error has occurred</p>');},
+				   success: function(data) {
+					var result=jQuery.parseJSON(data);	
+					$("#clin_View").html(result.code);
+						
+					},
+				   type: 'GET'
+				});///END AJAX
+			}catch(err) {
+			$('#clin_View').html('<p>An error has occurred</p>');
+			}
+});
+
+	
+		function toggleMutView(id,start,end)
+		{
+			var toggle=$(id).hasClass("plus");
+			if (toggle)
+			{
+				$(id).removeClass("plus");
+				$(id).addClass("minus");
+				for (var i=start;i<=end;++i)
+				{
+					$("#${RSID}_"+i).css("display",'table-row');
+				}
+			}
+			else 
+			{
+				$(id).removeClass("minus");
+				$(id).addClass("plus");
+				for (var i=start;i<=end;++i)
+				{
+					$("#${RSID}_"+i).css("display",'none');
+				}
+			}
+		}
+
+		var list_tooltips=JSON.parse('${LIST}');
+		$(document).ready(function(){
+
+$[HAS_PMID]
+$('#mut${RSID}_view_${PUB_LEVEL}').html('<p>Query running</p>');
+				urlv="/CONTENT/PUBLICATION_LIST";
+			try{
+				$.ajax({
+				   method:"POST",
+				   url: urlv,
+					data: { RID: "${LIST_PUBLI}" },
+				   error: function() {  $('#mut${RSID}_view_${PUB_LEVEL}').html('<p>An error has occurred</p>');},
+				   success: function(data) {
+					var result=jQuery.parseJSON(data);	
+					$("#mut${RSID}_view_${PUB_LEVEL}").html(result.code);
+						
+					},
+				   type: 'GET'
+				});///END AJAX
+			}catch(err) {
+			$('#mut${RSID}_view_${PUB_LEVEL}').html('<p>An error has occurred</p>');
+			}
+
+
+			
+			$[/HAS_PMID]
+			
+			$('.ttl_tr').uitooltip({
+
+				open: function (event, ui) {
+					ui.tooltip.css("width", "fit-content");
+				},
+				hide: {
+					effect: "slideDown",
+					delay: 400
+				},
+				track: true,
+				content: function () {
+					console.log($(this).data('pos'));
+					return list_tooltips[$(this).data('pos')];;
+				}
+			});
+		});
+</script>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">${MSG}</div>
+$[/INVALID]

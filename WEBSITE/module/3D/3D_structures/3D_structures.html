@@ -1,0 +1,263 @@
+<div style="margin-top:25px;padding-left:10px;font-size:2em;">${NAME} <span style="font-variant: small-caps"> ${PROT_NAME} - 3D Structures</span></div>
+	<p><span style="font-weight:bold;padding-left:10px;">Organism:</span> ${ORGANISM}</p>
+
+
+	<div style="position:relative;width:97%">
+		<ul class="nav nav-tabs">
+				<li id="3Dla_1" class="nav-item nav-link active"><a onclick="toggleXrayListView(1,'gene')"><span class="numberCircle">${N_ENTRY}</span> ${NAME}</a></li>
+				<li id="3Dla_2" class="nav-item nav-link "><a  onclick="toggleXrayListView(2,'simdom');"><span class="numberCircle">${N_SIM_DOM}</span> Similar Domains</a></li>
+				<li id="3Dla_3" class="nav-item nav-link "><a  onclick="toggleXrayListView(3,'simseq');"><span class="numberCircle">${N_SIM_SEQ}</span> Similar sequences</a></li>
+				
+			
+			  </ul>
+			
+	
+	<div id="3Dlv_1"  class="nav_box" sy>
+		<div id="xr_list_gene_opts" style="margin:10px auto;">	
+			<span id="xr_list_gene_nco"> ${N_ENTRY}</span> chains
+			<div style="float: right;margin-right: 10px;">  Number per page:
+			<select id="xr_list_gene_npage" name="per_page" onchange="updatePageCount('gene')">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<input type="button" class="button" value='&lt;' onclick="prevPage('gene')"/>
+			<input type="text" class="button" value="1" id="xr_list_gene_page" style="width:50px"/>/<input style="width:50px" readonly  type="text" value="${NPAGE_GENE}"id="xr_list_gene_pagemax"/>
+			<input type="button"  class="button" value='&gt;' onclick="nextPage('gene')"/>
+		</div>
+		</div>
+			
+		<table class="table table-sm" style="width:98%" id="xr_list_gene_tbl">
+			<thead><tr><th>PDB ID</th>
+			<th>Chain</th>
+			<th>Method</th>
+			<th>Resolution</th>
+			<th>Date</th>
+			<th>% Similarity</th>
+			<th>% Identity</th>
+			<th>Mutant</th>
+			
+			</tr></thead><tbody></tbody>
+		</table>
+	
+	
+	</div>
+	
+	<div id="3Dlv_2"  style="display:none"  class="nav_box">
+		
+		<div id="xr_list_simdom_opts" style="margin:10px auto;">	
+			<span id="xr_list_simdom_nco"> ${N_SIM_DOM}</span> chains from domain similarity
+			<div style="float: right;margin-right: 10px;"> Number per page:
+			<select id="xr_list_simdom_npage" name="per_page" onchange="updatePageCount('simdom')">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<input type="button" class="button" value='&lt;' onclick="prevPage('simdom')"/>
+			<input type="text" class="button" value="1" id="xr_list_simdom_page" style="width:50px" />/<input type="text" value="${NPAGE_SIMDOM}" style="width:50px" readonly  id="xr_list_simdom_pagemax"/>
+			<input type="button"  class="button" value='&gt;' onclick="nextPage('simdom')"/>
+		</div>
+		</div>
+		<table class="table table-sm" style="width:98%" id="xr_list_simdom_tbl">
+			<thead><tr><th>Organism</th>
+				<th>Gene ID</th>
+				<th>Gene Symbol</th><th>PDB ID</th>
+			<th>Chain</th>
+			<th>Method</th>
+			<th>Resolution</th>
+			<th>Date</th>
+			<th>% Similarity</th>
+			<th>% Identity</th>
+			<th>Mutant</th>
+			
+			</tr></thead><tbody></tbody>
+		</table>
+		
+	</div>
+	<div id="3Dlv_3"  style="display:none"  class="nav_box">
+		<div id="xr_list_simseq_opts" style="margin:10px auto;">	
+			<span id="xr_list_simseq_nco"> ${N_SIM_SEQ}</span> chains from sequence similarity
+			<div style="float: right;margin-right: 10px;">  Number per page:
+			<select id="xr_list_simseq_npage" name="per_page" onchange="updatePageCount('simseq')">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<input type="button" class="button" value='&lt;' onclick="prevPage('simseq')"/>
+			<input type="text" class="button" value="1" id="xr_list_simseq_page" style="width:50px" />/<input type="text" value="${NPAGE_SIMSEQ}" style="width:50px" readonly  id="xr_list_simseq_pagemax"/>
+			<input type="button"  class="button" value='&gt;' onclick="nextPage('simseq')"/>
+			</div>
+		</div>
+		<table class="table table-sm" style="width:98%" id="xr_list_simseq_tbl">
+				<thead><tr>
+					<th>Organism</th>
+					<th>Gene ID</th>
+					<th>Gene Symbol</th>
+					<th>PDB ID</th>
+				<th>Chain</th>
+				<th>Method</th>
+				<th>Resolution</th>
+				<th>Date</th>
+				<th>% Similarity</th>
+				<th>% Identity</th>
+				<th>Mutant</th>
+				
+				</tr></thead><tbody></tbody>
+			</table>
+		
+	</div>
+	</div>
+
+
+	
+
+
+
+	<script type="text/javascript">
+
+var init_tbls={"gene":false,"simdom":false,"simseq":false};
+
+		$( document ).ready(function() {
+    submit("gene");
+	});
+
+function submit(type)
+	{
+		init_tbls[type]=true;
+		var url_type='';
+		if (type=="gene")url_type="BY_GENE";
+		else if (type=="simdom")url_type="BY_SIMDOM";
+		else if (type=="simseq")url_type="BY_SIMSEQ";
+		var per_page = $('#xr_list_'+type+'_npage').val();
+		var page = $('#xr_list_'+type+'_page').val();
+		console.log(type+" "+per_page+" "+page);
+		urlv="/JSON/${LINK}/3D_STRUCTURES_LIST/PARAMS/PER_PAGE/"+per_page+"/PAGE/"+page+"/TYPE/"+url_type;
+		$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: urlv,
+		//data:{ "PER_PAGE":per_page,'PAGE':page},
+		success: function(data){
+			
+			//var v=jQuery.parseJSON(data);
+			console.log(data);
+			var str='';
+			$.each(data.RESULTS, function(index,record){
+				console.log(record);
+				str+='<tr>';
+				
+				if (type=="simseq"|| type=="simdom")
+				{
+					str+='<td>'+record.SCIENTIFIC_NAME+'</td><td>'+((record.GENE_ID!=null)?'<a href="/GENEID/'+record.GENE_ID+'">'+record.GENE_ID+'</a></td><td><a href="/GENEID/'+record.GENE_ID+'">'+record.SYMBOL+'</a></td>':'N/A</td><td>N/A</td>');
+				}
+				str+='<td><a href="/${LINK}/3D_ENTRY/'+record.FULL_COMMON_NAME+'">'+record.FULL_COMMON_NAME+'</a></td><td>'+
+					
+					record.CHAIN_NAME+"</td><td>"+
+					record.EXPR_TYPE+"</td><td>"+
+					record.RESOLUTION+"</td><td>"+
+					record.DEPOSITION_DATE+"</td><td>"+
+					record.PERC_SIM_COM+"</td><td>"+
+					record.PERC_IDENTITY_COM+"</td><td>"+
+						record.N_MUTANT+"</td></tr>";
+			});
+			console.log(str);
+			console.log('#xr_list_'+type+'_tbl tbody');
+			$('#xr_list_'+type+'_tbl tbody').html(str); 
+
+// {
+// R: "20",
+// UN_IDENTIFIER: "CDK2_HUMAN",
+// XR_ENTRY_ID: "8359",
+// FULL_COMMON_NAME: "1GY3",
+// EXPR_TYPE: "X-RAY DIFFRACTION",
+// RESOLUTION: "2.7",
+// DEPOSITION_DATE: "2002-04-19",
+// TITLE: "pCDK2/cyclin A in complex with MgADP, nitrate and peptide substrate",
+// XR_CHAIN_ID: "150229",
+// CHAIN_NAME: "A",
+// PERC_SIM: "99.66",
+// PERC_IDENTITY: "99.66",
+// PERC_SIM_COM: "99.66",
+// PERC_IDENTITY_COM: "99.66",
+// N_MUTANT: "1",
+// ISO_ID: "P24941-1",
+// IS_PRIMARY: "T",
+// UN_SEQ_ID: "204527"
+// <thead><tr><th>PDB ID</th>
+// 			<th>Chain</th>
+// 			<th>Method</th>
+// 			<th>Resolution</th>
+// 			<th>Date</th>
+// 			<th>% Similarity</th>
+// 			<th>% Identity</th>
+// 			<th>Mutant</th>
+			
+
+		},
+		error:function(data){$("#info").html("An issue occured.");}
+			});///END AJAX
+			return false;		
+	}
+
+function updatePageCount(type,with_refresh=true)
+			{
+				var tot=$("#xr_list_"+type+"_nco").html();
+				var per_page = parseInt($('#xr_list_'+type+'_npage').val());
+				var totmax=Math.floor(tot/per_page);
+				$("#xr_list_"+type+"_pagemax").val(totmax);
+				
+				var val=parseInt($('#xr_list_'+type+"_page").val());
+				if (val>totmax)$('#xr_list_'+type+"_page").val(totmax);
+				if (with_refresh)submit(type);
+			}
+			function prevPage(type)
+			{
+				var val=parseInt($('#xr_list_'+type+"_page").val());
+				if (val==1)return;
+				$('#xr_list_'+type+"_page").val(val-1);
+				submit(type);
+			
+			}
+			
+			function nextPage(type)
+			{
+				var val=parseInt($('#xr_list_'+type+"_page").val());
+				
+				var m=parseInt($('#xr_list_'+type+"_pagemax").val());
+				console.log(val+" "+m);
+				if (val>=m)return;
+				$('#xr_list_'+type+"_page").val(val+1);
+				
+				submit(type);
+			
+			}
+
+	function toggleXrayListView(id,type)
+{
+	if (init_tbls[type]==false)submit(type);
+
+	for (var i=1;i<=3;++i)
+	{
+		if (i==id)
+		{
+			$("#3Dla_"+i).addClass("active");
+			$("#3Dlv_"+i).css("display","block");
+		}
+		else
+		{
+			$("#3Dla_"+i).removeClass("active");
+			$("#3Dlv_"+i).css("display","none");
+		}
+	}
+}
+</script>

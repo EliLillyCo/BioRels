@@ -1,0 +1,17 @@
+<p>Assembly:
+a set of chromosomes, unlocalized and unplaced (random) sequences and alternate loci used to represent an organism's genome. Most current assemblies are a haploid representation of an organism's genome, although some loci may be represented more than once (see Alternate locus, above). This representation may be obtained from a single individual (e.g. chimp or mouse) or multiple individuals (e.g. human reference assembly). Except in the case of organisms which have been bred to homozygosity, the haploid assembly does not typically represent a single haplotype, but rather a mixture of haplotypes. As sequencing technology evolves, it is anticipated that diploid sequences representing an individual's genome will become available.
+
+
+
+What are patches?
+
+Patches are accessioned scaffold sequences that represent assembly updates. They add information to the assembly without disrupting the chromosome coordinates. Patches are given chromosome context via alignment to the current assembly. Together, the scaffold sequence and alignment define the patch.
+
+FIX patches: Fix patches represent changes to existing assembly sequences. These are generally error corrections (addressed by approaches such as base changes, component replacements/updates, switch point updates or tiling path changes) or assembly improvements, such as the extension of sequence into gaps. A fix patch scaffold represents a preview of what the assembly will look like at the next major (coordinate changing) release. When the next major release occurs, the accessions for the fix patch scaffolds will be deprecated and the changes will be found in the chromosomes. 
+Fix patches represent sequence updates; they will replace the current chromosome sequences in the next major assembly release. Thus, when interpreting data, the fix patches should take precedence over the chromosomes. Users interested in a particular locus should consider the fix patch the most accurate representation of the region.
+NOVEL patches: Novel patches represent the addition of new alternate loci to the assembly. These are alternate sequence representations of sequence found on the chromosomes. When the next major release occurs, the accessions for the novel patch scaffolds will persist, and the scaffolds will be known as alternate loci. At that time, the scaffolds will move from the PATCHES assembly unit to the relevant alternate loci assembly unit. An example of a novel patch is shown in Figure 2.
+Novel patches can be treated like alternate loci. They are alternate sequence representations for specified genomic regions. The existence of a novel patch (or alternate locus) does not imply an error in the chromosome. When interpreting data, the novel patches should be treated as sequence variants.
+
+
+Source: https://www.ncbi.nlm.nih.gov/grc/help/patches/
+</p>

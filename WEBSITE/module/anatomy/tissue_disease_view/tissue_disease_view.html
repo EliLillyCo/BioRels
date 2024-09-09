@@ -1,0 +1,155 @@
+<h3>Disease-gene association related to ${TISSUE} tissue</h3>
+
+<ul class="nav nav-tabs">
+		<li id="tissue_dg_menu_tab_1" class="active nav-item nav-link"><a  onclick="showMenu('tissue_dg',1,3)">Trending over the last 12 Months</a></li>
+		<li id="tissue_dg_menu_tab_2" class=" nav-item nav-link"><a onclick="showMenu('tissue_dg',2,3)">Trending over the last 5 years</a></li>
+		<li id="tissue_dg_menu_tab_3" class="nav-item nav-link"><a  onclick="showMenu('tissue_dg',3,3)">All gene-disease</a></li>
+</ul>
+	  
+<div id="tissue_dg_view_1" class="container-grey w3-container w3-padding-16">
+<table class="w3-table w3-bordered w3-border w3-hoverable w3-white w3-centered"><thead><tr><th>Disease Name</th><th>Gene Symbol</th><th>Total N of publications</th>
+	<th>Number of publication this year</th>
+	<th>1 year trend</th>
+	<th>5 year trend</th></tr></thead><tbody >${30}</tbody></table>
+</div>
+
+
+
+<div id="tissue_dg_view_2" class="container-grey w3-container w3-padding-16" style="display:none">
+<table class="w3-table w3-bordered w3-border w3-hoverable w3-white w3-centered"><thead><tr><th>Disease Name</th><th>Gene Symbol</th><th>Total N of publications</th>
+	<th>Number of publication this year</th>
+	<th>1 year trend</th>
+	<th>5 year trend</th></tr></thead><tbody >${60}</tbody></table>
+</div>
+<div id="tissue_dg_view_3" class="container-grey w3-container w3-padding-16" style="display:none">
+<div id="trsq_options" style="margin:10px auto;">	
+		<span id="n_pub1"> ${COUNT}</span> gene-disease association; Number per page:</span>
+		<select id="per_page" name="per_page" onchange="updatePageCount()">
+			<option value="10" selected="selected">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+		</select>
+		<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+		<input type="text" class="button" value="1" id="page"/>/<input type="text" value="${NPAGE}" id="pagemax"/>
+		<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+		<div id="muts_options" style="display: initial">
+			<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="showFilters()">
+		</div>
+	</div>
+<div class="w3-container w3-col s12">
+	<table class="w3-table w3-bordered w3-border w3-hoverable w3-white w3-centered"><thead><tr><th>Disease Name</th><th>Gene Symbol</th><th>Total N of publications</th>
+		<th>Number of publication this year</th>
+		<th>1 year trend</th>
+		<th>5 year trend</th></tr></thead><tbody id="data_tbl"></tbody></table>
+
+
+</div>
+
+	<div id="trsq_options" style="margin:10px auto;">	
+			<span id="n_pub12"> ${COUNT}</span>  gene-disease association; Number per page:</span>
+			<select id="per_page2" name="per_page" onchange="updatePageCount()">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+			<input type="text" class="button" value="1" id="page2"/>/<input type="text" value="${NPAGE}" id="pagemax2"/>
+			<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+			</div>
+		<div id="filters_options"  title="Disease filtering options" style="display: none">
+		No filtering options available yet
+	
+	
+	
+		</div>
+	</div>
+		<script type="text/javascript">
+		
+			function updatePageCount(with_refresh=true)
+			{
+				var tot=$("#n_pub1").html();
+				var per_page = parseInt($('#per_page').val());
+				var totmax=Math.ceil(tot/per_page);
+				$("#pagemax").val(totmax);
+				$("#pagemax2").val(totmax);
+				$("#per_page2").val($('#per_page').val());
+				if (with_refresh)submit();
+			}
+			function prevPage()
+			{
+				var val=parseInt($("#page").val());
+				if (val==1)return;
+				$("#page").val(val-1);
+				$("#page2").val(val-1);
+				submit();
+			
+			}
+			
+			function nextPage()
+			{
+				var val=parseInt($("#page").val());
+				var m=parseInt($("#pagemax").val());
+				if (val>=m)return;
+				$("#page").val(val+1);
+				$("#page2").val(val+1);
+				submit();
+			
+			}
+	
+			
+	function submit()
+	{
+		
+		var per_page = $('#per_page').val();
+		var page = $('#page').val();
+		$("#info").html("Please wait while the query is running");
+		var filters='';
+		
+		urlv="/CONTENT/TISSUE/${TISSUE}/TISSUE_DISEASE_TABLE";
+		$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: urlv,
+		data:{ "PER_PAGE":per_page,'PAGE':page,'FILTERS':filters},
+		success: function(data){
+			
+			var v=jQuery.parseJSON(data);
+			
+			$("#data_tbl").html(v.code);
+			$("#n_pub1").html(v.STAT);
+			$("#n_pub12").html(v.STAT);
+			
+			$("#info").html("");
+			updatePageCount(false);
+		},
+		error:function(data){$("#info").html("An issue occured.");}
+			});///END AJAX
+			return false;		
+	}
+		$(document).ready( function () {
+			//$('#mutation_search_res').DataTable();
+			submit();
+		} );
+	
+		function showFilters()
+		{
+		$( "#filters_options" ).dialog({width: "60%",modal: true,
+		  buttons: {
+			"Confirm": function() {
+				
+			  $( this ).dialog( "close" );
+			  submit();
+			},
+			
+		  }});	
+	
+		}
+		</script>
+

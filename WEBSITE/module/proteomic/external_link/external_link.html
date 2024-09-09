@@ -1,0 +1,45 @@
+
+<h3>External links for ${GENE}</h3>
+
+
+<div class="w3-container w3-col s12"  style="margin:10px auto;">	
+	<table class="w3-table table table-sm">
+<thead>
+	<tr><td>Database type</td><td>Number of databases</td><td>Number of links</td><td>Go to section</td></tr>
+</thead>
+<tbody>
+	${TABLE}
+</tbody>
+</table>
+
+${data}
+
+<script type="text/javascript">
+$('a[href*="#"]')
+  // Remove links that don't actually link to anything
+  .not('[href="#"]')
+  .not('[href="#0"]')
+  .click(function(event) {
+	// On-page links
+	 
+    if (
+     
+      location.hostname == this.hostname
+    ) {
+      // Figure out element to scroll to
+	  var target = $(this.hash);
+	  console.log(target);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+      // Does a scroll target exist?
+      if (target.length) {
+        // Only prevent default if animation is actually gonna happen
+        event.preventDefault();
+        $('html, body').animate({
+          scrollTop: target.offset().top-100
+        }, 1000, function() {
+        
+        });
+      }
+    }
+  });
+</script>

@@ -1,0 +1,969 @@
+
+<h3>Ligand information:</h3>
+<table class="table" style="width:100%">
+<tr><th>Name:</th><td>${LIG_NAME}</td></tr>
+<tr><th>Class:</th><td>${LIG_CLASS}</td></tr>
+<tr><th>Location:</th><td>${LOCATION}</td></tr>
+<tr><th>SMILES:</th><td>${SMILES}</td></tr>
+</table>
+
+<script src="require/js/ngl/ngl-2.0.0-dev.39/dist/ngl.js"></script>
+<div id="viewport" style="width:80%; height:500px;position:relative"></div>
+
+<script type="text/javascript">
+
+// Setup to load data from rawgit
+NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource( window.location.origin+"/" ));
+
+
+// Create NGL Stage object
+var stage = new NGL.Stage( "viewport" );
+
+// Handle window resizing
+window.addEventListener( "resize", function( event ){
+    stage.handleResize();
+}, false );
+
+
+// Code for example: interactive/ligand-viewer
+
+stage.setParameters({
+  backgroundColor: "white"
+})
+
+function addElement (el) {
+  Object.assign(el.style, {
+    position: "absolute",
+    "max-width":"15%",
+    zIndex: 10
+  })
+  //console.log(el);
+  //$(".main_left_box").appendChild(el);
+  stage.viewer.container.appendChild(el)
+}
+
+function createElement (name, properties, style) {
+  var el = document.createElement(name)
+  Object.assign(el, properties)
+  Object.assign(el.style, style)
+  return el
+}
+
+function createSelect (options, properties, style) {
+  var select = createElement("select", properties, style)
+  options.forEach(function (d) {
+    select.add(createElement("option", {
+      value: d[ 0 ], text: d[ 1 ]
+    }))
+  })
+  return select
+}
+
+function createFileButton (label, properties, style) {
+  var input = createElement("input", Object.assign({
+    type: "file"
+  }, properties), { display: "none" })
+  addElement(input)
+  var button = createElement("input", {
+    value: label,
+    type: "button",
+    onclick: function () { input.click() }
+  }, style)
+  return button
+}
+
+var topPosition = 12
+
+function getTopPosition (increment) {
+  if (increment) topPosition += increment
+  return topPosition + "px"
+}
+
+// create tooltip element and add to document body
+var tooltip = document.createElement("div")
+Object.assign(tooltip.style, {
+  display: "none",
+  position: "fixed",
+  zIndex: 10,
+  pointerEvents: "none",
+  backgroundColor: "rgba( 0, 0, 0, 0.6 )",
+  color: "lightgrey",
+  padding: "8px",
+  fontFamily: "sans-serif"
+})
+document.body.appendChild(tooltip)
+
+// remove default hoverPick mouse action
+stage.mouseControls.remove("hoverPick")
+
+// listen to `hovered` signal to move tooltip around and change its text
+stage.signals.hovered.add(function (pickingProxy) {
+  if (pickingProxy) {
+    if (pickingProxy.atom || pickingProxy.bond) {
+	  var atom = pickingProxy.atom || pickingProxy.closestBondAtom;
+	  console.log(atom.qualifiedName());
+      var vm = atom.structure.data["@valenceModel"]
+      if (vm && vm.idealValence) {
+        tooltip.innerHTML = pickingProxy.getLabel()+'<br/>\
+        <hr/>\
+        Atom: '+atom.qualifiedName()+'<br/>\
+        ideal valence: '+vm.idealValence[atom.index]+'<br/>\
+        ideal geometry: '+vm.idealGeometry[atom.index]+'<br/>\
+        implicit charge: '+vm.implicitCharge[atom.index]+'<br/>\
+        formal charge: '+(atom.formalCharge === null ? "?" : atom.formalCharge)+'<br/>\
+        aromatic: '+(atom.aromatic ? "true" : "false")+'<br/>';
+        
+      } else if (vm && vm.charge) {
+        tooltip.innerHTML = pickingProxy.getLabel()+'<br/>\
+        <hr/>\
+        Atom: '+atom.qualifiedName()+'<br/>\
+        vm charge: '+vm.charge[atom.index]+'<br/>\
+        vm implicitH: '+vm.implicitH[atom.index]+'<br/>\
+        vm totalH: '+vm.totalH[atom.index]+'<br/>\
+        vm geom: '+vm.idealGeometry[atom.index]+'</br>\
+        formal charge: '+(atom.formalCharge === null ? "?" : atom.formalCharge)+'<br/>\
+        aromatic: '+(atom.aromatic ? "true" : "false")+'<br/>';
+        
+      } else {
+        tooltip.innerHTML = `${pickingProxy.getLabel()}`
+      }
+    } else {
+      tooltip.innerHTML = `${pickingProxy.getLabel()}`
+    }
+    var mp = pickingProxy.mouse.position
+    tooltip.style.bottom = window.innerHeight - mp.y + 3 + "px"
+    tooltip.style.left = mp.x + 3 + "px"
+    tooltip.style.display = "block"
+  } else {
+    tooltip.style.display = "none"
+  }
+})
+
+stage.signals.clicked.add(function (pickingProxy) {
+  if (pickingProxy && (pickingProxy.atom || pickingProxy.bond)) {
+    console.log(pickingProxy.atom || pickingProxy.closestBondAtom)
+  }
+})
+
+var ligandSele = "( not polymer or not ( protein or nucleic ) ) and not ( water or ACE or NH2 or HOH)"
+
+var pocketRadius = 0
+var pocketRadiusClipFactor = 1
+
+var cartoonRepr, backboneRepr, spacefillRepr, neighborRepr, ligandRepr, contactRepr, pocketRepr, labelRepr
+
+var struc
+var neighborSele
+var sidechainAttached = false
+
+function loadStructure (input) {
+  struc = undefined
+  stage.setFocus(0)
+  stage.removeAllComponents()
+  ligandSelect.innerHTML = ""
+  clipNearRange.value = 0
+  clipRadiusRange.value = 100
+  pocketOpacityRange.value = 0
+  cartoonCheckbox.checked = false
+  backboneCheckbox.checked = false
+  hydrogenCheckbox.checked = true
+  hydrophobicCheckbox.checked = false
+  hydrogenBondCheckbox.checked = true
+  weakHydrogenBondCheckbox.checked = false
+  waterHydrogenBondCheckbox.checked = true
+  backboneHydrogenBondCheckbox.checked = true
+  halogenBondCheckbox.checked = true
+  metalInteractionCheckbox.checked = true
+  saltBridgeCheckbox.checked = true
+  cationPiCheckbox.checked = true
+  piStackingCheckbox.checked = true
+  return stage.loadFile(input, { ext: 'pdb' }).then(function (o) {
+    struc = o
+    setLigandOptions ()
+    setChainOptions()
+    setResidueOptions()
+    o.autoView()
+    cartoonRepr = o.addRepresentation("cartoon", {
+      visible: false
+    })
+    backboneRepr = o.addRepresentation("backbone", {
+      visible: true,
+      colorValue: "lightgrey",
+      radiusScale: 2
+    })
+    spacefillRepr = o.addRepresentation("spacefill", {
+      sele: ligandSele,
+      visible: true
+    })
+    neighborRepr = o.addRepresentation("ball+stick", {
+      sele: "none",
+      aspectRatio: 1.1,
+      colorValue: "lightgrey",
+      multipleBond: "symmetric"
+    })
+    ligandRepr = o.addRepresentation("ball+stick", {
+      multipleBond: "symmetric",
+      colorValue: "grey",
+      sele: "none",
+      aspectRatio: 1.2,
+      radiusScale: 2.5
+    })
+    contactRepr = o.addRepresentation("contact", {
+      sele: "none",
+      radiusSize: 0.07,
+      weakHydrogenBond: false,
+      waterHydrogenBond: false,
+      backboneHydrogenBond: true
+    })
+    pocketRepr = o.addRepresentation("surface", {
+      sele: "none",
+      lazy: true,
+      visibility: true,
+      clipNear: 0,
+      opaqueBack: false,
+      opacity: 0.0,
+      color: "hydrophobicity",
+      roughness: 1.0,
+      surfaceType: "av"
+    })
+    labelRepr = o.addRepresentation("label", {
+      sele: "none",
+      color: "#333333",
+      yOffset: 0.2,
+      zOffset: 2.0,
+      attachment: "bottom-center",
+      showBorder: true,
+      borderColor: "lightgrey",
+      borderWidth: 0.25,
+      disablePicking: true,
+      radiusType: "size",
+      radiusSize: 0.8,
+      labelType: "residue",
+      labelGrouping: "residue"
+    })
+  })
+}
+var resmap=[];
+function setLigandOptions () {
+  ligandSelect.innerHTML = ""
+  var options = [["", "select ligand"]]
+  struc.structure.eachResidue(function (rp) {
+    if (rp.isWater()) return
+    var sele = ""
+    if (rp.resno !== undefined) sele += rp.resno
+    if (rp.inscode) sele += "^" + rp.inscode
+    if (rp.chain) sele += ":" + rp.chainname
+	var name = (rp.resname ? "[" + rp.resname + "]" : "") + sele
+	console.log(rp);
+	resmap[name]=sele;
+	//console.log(sele+" "+name)
+	
+    //if ('description' in rp.entity && rp.entity.description) name += " (" + rp.entity.description + ")"
+    options.push([sele, name])
+  }, new NGL.Selection(ligandSele))
+  options.forEach(function (d) {
+	  
+    ligandSelect.add(createElement("option", {
+      value: d[0], text: d[1]
+    }))
+  })
+}
+
+
+function setChainOptions () {
+  chainSelect.innerHTML = ""
+  var options = [["", "select chain"]]
+  struc.structure.eachChain(function (cp) {
+	var name = cp.chainname
+	
+  //  if (cp.entity.description) name += " (" + cp.entity.description + ")"
+    options.push([cp.chainname, name])
+  }, new NGL.Selection("polymer"))
+  options.forEach(function (d) {
+    chainSelect.add(createElement("option", {
+      value: d[0], text: d[1]
+    }))
+  })
+}
+
+function setResidueOptions (chain) {
+  residueSelect.innerHTML = ""
+  var options = [["", "select residue"]]
+  if (chain) {
+    struc.structure.eachResidue(function (rp) {
+      var sele = ""
+      if (rp.resno !== undefined) sele += rp.resno
+      if (rp.inscode) sele += "^" + rp.inscode
+      if (rp.chain) sele += ":" + rp.chainname
+	  var name = (rp.resname ? "[" + rp.resname + "]" : "") + sele
+	  console.log(sele+" "+name);
+      options.push([sele, name])
+    }, new NGL.Selection("polymer and :" + chain))
+  }
+  options.forEach(function (d) {
+    residueSelect.add(createElement("option", {
+      value: d[0], text: d[1]
+    }))
+  })
+}
+
+
+function showFull () {
+  ligandSelect.value = ""
+
+  backboneRepr.setParameters({ radiusScale: 2 })
+  backboneRepr.setVisibility(true)
+  spacefillRepr.setVisibility(true)
+
+  ligandRepr.setVisibility(false)
+  neighborRepr.setVisibility(false)
+  contactRepr.setVisibility(false)
+  pocketRepr.setVisibility(false)
+  labelRepr.setVisibility(false)
+
+  struc.autoView(2000)
+}
+
+
+function showLigand (sele) {
+	console.log(sele);
+  var s = struc.structure
+
+  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), 5)
+  var withinGroup = s.getAtomSetWithinGroup(withinSele)
+  var expandedSele = withinGroup.toSeleString()
+  // neighborSele = "(" + expandedSele + ") and not (" + sele + ")"
+  neighborSele = expandedSele
+
+  var sview = s.getView(new NGL.Selection(sele))
+  pocketRadius = Math.max(sview.boundingBox.getSize().length() / 2, 2) + 5
+  var withinSele2 = s.getAtomSetWithinSelection(new NGL.Selection(sele), pocketRadius + 2)
+  var neighborSele2 = "(" + withinSele2.toSeleString() + ") and not (" + sele + ") and polymer"
+
+  backboneRepr.setParameters({ radiusScale: 0.2 })
+  backboneRepr.setVisibility(backboneCheckbox.checked)
+  spacefillRepr.setVisibility(false)
+
+  ligandRepr.setVisibility(true)
+  neighborRepr.setVisibility(true)
+  contactRepr.setVisibility(true)
+  pocketRepr.setVisibility(true)
+  labelRepr.setVisibility(labelCheckbox.checked)
+
+  ligandRepr.setSelection(sele)
+  neighborRepr.setSelection(
+    sidechainAttached ? "(" + neighborSele + ") and (sidechainAttached or not polymer)" : neighborSele
+  )
+  contactRepr.setSelection(expandedSele)
+  pocketRepr.setSelection(neighborSele2)
+  pocketRepr.setParameters({
+    clipRadius: pocketRadius * pocketRadiusClipFactor,
+    clipCenter: sview.center
+  })
+  labelRepr.setSelection("(" + neighborSele + ") and not (water or ion)")
+
+  struc.autoView(expandedSele, 2000)
+}
+
+var ligandSelect = createSelect([], {
+  onchange: function (e) {
+    residueSelect.value = ""
+    var sele = e.target.value
+    if (!sele) {
+      showFull()
+    } else {
+      showLigand(sele)
+    }
+  }
+}, { top: getTopPosition(30), left: "12px", width: "130px" })
+addElement(ligandSelect)
+
+var chainSelect = createSelect([], {
+  onchange: function (e) {
+    ligandSelect.value = ""
+    residueSelect.value = ""
+    setResidueOptions(e.target.value)
+  }
+}, { top: getTopPosition(20), left: "12px", width: "130px" })
+addElement(chainSelect)
+
+var residueSelect = createSelect([], {
+  onchange: function (e) {
+    ligandSelect.value = ""
+    var sele = e.target.value
+    if (!sele) {
+      showFull()
+    } else {
+      showLigand(sele)
+    }
+  }
+}, { top: getTopPosition(20), left: "12px", width: "130px" })
+addElement(residueSelect)
+
+addElement(createElement("span", {
+  innerText: "pocket near clipping"
+}, { top: getTopPosition(30), left: "12px", color: "grey" }))
+var clipNearRange = createElement("input", {
+  type: "range", value: 0, min: 0, max: 10000, step: 1
+}, { top: getTopPosition(16), left: "12px" })
+clipNearRange.oninput = function (e) {
+  var sceneRadius = stage.viewer.boundingBox.getSize().length() / 2
+
+  var f = pocketRadius / sceneRadius
+  var v = parseFloat(e.target.value) / 10000 // must be between 0 and 1
+  var c = 0.5 - f / 2 + v * f
+
+  pocketRepr.setParameters({
+    clipNear: c * 100 // must be between 0 and 100
+  })
+}
+addElement(clipNearRange)
+
+addElement(createElement("span", {
+  innerText: "pocket radius clipping"
+}, { top: getTopPosition(20), left: "12px", color: "grey" }))
+var clipRadiusRange = createElement("input", {
+  type: "range", value: 100, min: 1, max: 100, step: 1
+}, { top: getTopPosition(16), left: "12px" })
+clipRadiusRange.oninput = function (e) {
+  pocketRadiusClipFactor = parseFloat(e.target.value) / 100
+  pocketRepr.setParameters({ clipRadius: pocketRadius * pocketRadiusClipFactor })
+}
+addElement(clipRadiusRange)
+
+addElement(createElement("span", {
+  innerText: "pocket opacity"
+}, { top: getTopPosition(20), left: "12px", color: "grey" }))
+var pocketOpacityRange = createElement("input", {
+  type: "range", value: 90, min: 0, max: 100, step: 1
+}, { top: getTopPosition(16), left: "12px" })
+pocketOpacityRange.oninput = function (e) {
+  pocketRepr.setParameters({
+    opacity: parseFloat(e.target.value) / 100
+  })
+}
+addElement(pocketOpacityRange)
+
+var cartoonCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    cartoonRepr.setVisibility(e.target.checked)
+  }
+}, { top: getTopPosition(30), left: "12px" })
+addElement(cartoonCheckbox)
+addElement(createElement("span", {
+  innerText: "cartoon"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var backboneCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    backboneRepr.setVisibility(e.target.checked)
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(backboneCheckbox)
+addElement(createElement("span", {
+  innerText: "backbone"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var hydrogenCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    if (e.target.checked) {
+      struc.setSelection("*")
+    } else {
+      struc.setSelection("not _H")
+    }
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(hydrogenCheckbox)
+addElement(createElement("span", {
+  innerText: "hydrogen"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var sidechainAttachedCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    sidechainAttached = e.target.checked
+    neighborRepr.setSelection(
+      sidechainAttached ? "(" + neighborSele + ") and (sidechainAttached or not polymer)" : neighborSele
+    )
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(sidechainAttachedCheckbox)
+addElement(createElement("span", {
+  innerText: "sidechainAttached"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var labelCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    labelRepr.setVisibility(e.target.checked)
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(labelCheckbox)
+addElement(createElement("span", {
+  innerText: "label"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var hydrophobicCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    contactRepr.setParameters({ hydrophobic: e.target.checked })
+  }
+}, { top: getTopPosition(30), left: "12px" })
+addElement(hydrophobicCheckbox)
+addElement(createElement("span", {
+  innerText: "hydrophobic"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var hydrogenBondCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    contactRepr.setParameters({ hydrogenBond: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(hydrogenBondCheckbox)
+addElement(createElement("span", {
+  innerText: "hbond"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var weakHydrogenBondCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    contactRepr.setParameters({ weakHydrogenBond: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(weakHydrogenBondCheckbox)
+addElement(createElement("span", {
+  innerText: "weak hbond"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var waterHydrogenBondCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    contactRepr.setParameters({ waterHydrogenBond: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(waterHydrogenBondCheckbox)
+addElement(createElement("span", {
+  innerText: "water-water hbond"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var backboneHydrogenBondCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: false,
+  onchange: function (e) {
+    contactRepr.setParameters({ backboneHydrogenBond: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(backboneHydrogenBondCheckbox)
+addElement(createElement("span", {
+  innerText: "backbone-backbone hbond"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var halogenBondCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ halogenBond: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(halogenBondCheckbox)
+addElement(createElement("span", {
+  innerText: "halogen bond"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var metalInteractionCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ metalComplex: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(metalInteractionCheckbox)
+addElement(createElement("span", {
+  innerText: "metal interaction"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var saltBridgeCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ saltBridge: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(saltBridgeCheckbox)
+addElement(createElement("span", {
+  innerText: "salt bridge"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var cationPiCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ cationPi: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(cationPiCheckbox)
+addElement(createElement("span", {
+  innerText: "cation-pi"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+var piStackingCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ piStacking: e.target.checked })
+  }
+}, { top: getTopPosition(20), left: "12px" })
+addElement(piStackingCheckbox)
+addElement(createElement("span", {
+  innerText: "pi-stacking"
+}, { top: getTopPosition(), left: "32px", color: "grey" }))
+
+loadStructure("data://PDB/3D_FILE/${PDB_ID}").then(function () {
+  showLigand(resmap["${LIG_ID}"]);
+})
+
+
+$(function() {
+$("#seq").click(function(e) {
+
+  var offset = $(this).offset();
+  var x = (e.pageX - offset.left);
+  var y = (e.pageY - offset.top);
+  $("#seq").append("<div style='left:"+x+"px;top:"+y+"px;width:5px;height:10px;background-color:red;position:absolute;display:inline'></div>");
+ 
+
+});
+});
+var curr_highlight;
+function highlight(chain,position,toClean=true)
+{
+	console.log(":"+chain+" AND "+position+" AND backbone AND NOT hydrogen - "+toClean);
+	
+  if (toClean)struc.removeRepresentation(curr_highlight);
+  else
+  {
+	curr_highlight=struc.addRepresentation(("ball+stick"), {
+	sele: ":"+chain+" AND "+position,
+	aspectRatio:1.2,
+	radiusScale: 2.5
+    //color: (toClean)?"element":"orange",
+  });
+  }
+  if (!toClean)struc.autoView("(:"+chain+" AND ("+position+" OR ${LIG_RES_ID}) AND NOT hydrogen)")
+  
+  //struc.autoView(":"+chain+" AND "+position);
+}
+
+</script>
+
+
+<div style="position:relative;width:97%">
+		<ul class="nav nav-tabs">
+				<li id="la_1" class="active"><a onclick="toggleLigSiteView(1)">Interaction table</a></li>
+				<li id="la_2"><a  onclick="toggleLigSiteView(2);showLigSiteView();">Sequence view</a></li>
+			
+			  </ul>
+			
+	
+	<div id="lv_1"  class="nav_box" sy>
+	
+			
+			<table class="table table-sm" style="width:98%" id="inters">
+			<thead>
+				<tr><th>Chain</th><th>Residue Name</th>
+					<th>Residue ID</th>
+					<th>Atom(s)</th>
+					<th>Ligand Atom(s)</th>
+					<th>Interaction type</th>
+					<th>Distance</th>
+					<th>Angle</th>
+				<th>Same interaction</th>
+			<th>Similar interaction</th></tr>
+			</thead>
+			<tbody>
+				${INTERS}
+			</tbody>
+			</table>
+	
+	
+	</div>
+	
+	<div id="lv_2"  style="display:none"  class="nav_box">
+		
+		${LIG_SEQ_VIEW}
+		
+	</div>
+	</div>
+	
+
+<script type="text/javascript">
+var data_lig=JSON.parse('${DATA_SEQ_VIEW}');
+var sel_position=JSON.parse('${DATA_PREP_VIEW}');
+var id_mapping=[];
+var ratio=9.601907;
+
+
+function showLigSiteView()
+{//implode("_",$LCH)
+
+
+$.each(data_lig, function(div_name,data)
+{
+	var scroller=[];
+
+	$("#LIG_SEQ_VIEW_"+div_name).css("width","inherit");
+	var dw=$("#LIG_SEQ_VIEW_"+div_name).width();	/// Width of div
+	var fs = 16;					/// fs and fc set for Courier New
+	var fc = 1.61;
+	//var ratio=9.592307;
+	
+	var cpl = Math.floor(Math.floor(fc*dw / fs )); /// Character per line.
+	var full_width=(ratio*cpl);
+	var left_width=full_width*0.8;
+	var right_width=full_width*0.2-5;
+	$("#LIG_SEQ_VIEW_"+div_name).css("width",full_width+"px");
+	var strL='<div id="LIG_SEQ_VIEW_'+div_name+'_L" style="cursor:pointer;white-space:pre;width:'+left_width+'px;max-height:500px;overflow-y:hidden;display:flex; flex-direction:column">';
+	var strR='<div id="LIG_SEQ_VIEW_'+div_name+'_R" style="width:'+right_width+'px;max-height:500px;font-size:15px;padding-left:10px;display:flex;overflow-x:scroll;flex-direction:column"><div style="height:67px">Chain '+div_name+"</div>";
+
+
+	strL+=' <div style="position:relative" id="seq">';
+	var stri='<div style=" position: relative;top: -16px;">';
+	var strl='<div style="position: relative;top: -10px;">';
+		var line=3;
+		var index=0;
+		var mapping=[];
+		
+		var uni_seq=[];
+		var len=0;
+    
+		$.each (data.UNIP, function(ISO_ID,iso_info){uni_seq[ISO_ID]='';});
+		$.each(data.ORDER,function(indx,rid){
+      rinfo=data.RES[rid];
+			++len;
+			if (len==sel_position[div_name]['POSITION'])strL+='<span style="border:1px solid green;">';
+			if (rinfo[0] in AA_3_1) strL+=AA_3_1[rinfo[0]];
+			else strL+='X';
+			if (len==sel_position[div_name]['POSITION'])strL+='</span>';
+			$.each (data.UNIP, function(ISO_ID,iso_info){
+				if (ISO_ID==rinfo[4])
+				{
+					if (rinfo[3]!='I')uni_seq[ISO_ID]+='<span style="color:red">'+rinfo[2]+'</span>';
+					else uni_seq[ISO_ID]+=rinfo[2];
+				}
+				else uni_seq[ISO_ID]+='-';
+			});
+
+			++index;
+			mapping[rid]=indx;
+			id_mapping[index-1]=rid;
+			
+			if (index%10==1||index==1)
+			{
+				strl+='|';
+				//if (index==1)return true;
+				var LT=String(rid).length;
+				if (index!=1)for (var I=LT;I<10;++I)stri+=' ';
+				
+				stri+=rid;
+			}else strl+='.';
+		});
+		strL+= '</div>'+strl+'</div>'+stri+'</div>';
+
+
+		$.each (data.UNIP, function(ISO_ID,iso_info){
+			strR+='<div style="white-space:pre;position:relative;height:16px;margin-bottom:3px;">'+ISO_ID+"</div>";
+			strL+='<div style="white-space:pre;position:relative;height:16px;margin-bottom:3px;" id="seq">'+uni_seq[ISO_ID]+'</div>';
+			line++;
+			var scroll=(iso_info.DOM.length>8);
+			if (scroll)
+			{
+				strL+='<div id="'+div_name+'_DOM_L"  class="list_container" style="style="width:'+(len*ratio)+'px;overflow-x:hidden;height:'+(19*iso_info.DOM.length)+'px;max-height:200px;overflow-y:scroll;-ms-overflow-style: none; scrollbar-width: none;  "">';
+				strR+='<div id="'+div_name+'_DOM_R"  class="list_container" style="width:fit-content;overflow-x:hidden;height:'+(19*iso_info.FTS.length)+'px;max-height:200px;overflow-y:scroll">';
+				scroller.push('#'+div_name+'_DOM_L, #'+div_name+'_DOM_R');
+			}
+			$.each(iso_info.DOM, function(index,value){
+				
+				line++;
+				LEFT=Math.round(mapping[value[0]]*ratio,2);
+					WIDTH=Math.round(Math.max(mapping[value[1]]-mapping[value[0]]+1,1)*ratio,2);
+				//	console.log(Math.max(value[1]-value[0],1));
+					
+				
+				strL+='<div id="item_direction" class="match" style="position:relative;margin-bottom: 8px; top:unset;  margin-top: 4px;left:'+LEFT+'px; width:'+WIDTH+'px; background-color:'+DOM_TYPE_IMG[value[3]][1]+'"></div>';
+				strR+="<div style='width:max-content;height:16px;margin-bottom:3px;'><img src='/require/img/DO_"+DOM_TYPE_IMG[value[3]][0]+".png' title='"+value[3]+"' class='ss_row_name_img'/>"+value[2]+"</div>";
+			});
+			if (scroll)
+			{
+				strL+='</div>';
+				strR+='</div>';
+			}
+
+			var scroll=(iso_info.FTS.length>8);
+			if (scroll)
+			{
+				strL+='<div id="'+div_name+'_FTS_L" class="list_container" style="width:'+(len*ratio)+'px;overflow-x:hidden;height:'+(19*iso_info.FTS.length)+'px;max-height:200px;overflow-y:scroll;-ms-overflow-style: none; scrollbar-width: none;  ">';
+				strR+='<div id="'+div_name+'_FTS_R" class="list_container" style="width:fit-content;overflow-x:hidden;height:'+(19*iso_info.FTS.length)+'px;max-height:200px;overflow-y:scroll">';
+						scroller.push('#'+div_name+'_FTS_L, #'+div_name+'_FTS_R');
+			}
+			
+			$.each(iso_info.FTS, function(index,value){
+				line++;
+				var ft_type=iso_info.FT_TYPE[value[3]]['NAME'];
+				//console.log(ft_type);
+				if ((ft_type=='Helix'||ft_type=='Beta strand'||ft_type=='Turn'))return true;
+				//console.log(value);
+				LEFT=Math.round((mapping[value[0]])*ratio,2);
+				WIDTH=Math.round(Math.max(1,mapping[value[1]]-mapping[value[0]]+1)*ratio,2);
+				//console.log(value[0]+" "+value[1]+" "+LEFT+" "+WIDTH);
+				strL+='<div style="height:20px;position:relative;left:'+LEFT+'px; white-space:pre; "><div class="match"  id="item_direction" style="width:'+WIDTH+'px;height:8px;background-color:green"></div></div>';
+				strR+="<div style='width:max-content;height:20px;vertical-align:middle;'>"+ft_type+" - "+value[2]+" [ "+mapping[value[0]]+"-"+mapping[value[1]]+"</div>";
+			});
+			if (scroll)
+			{
+				strL+='</div>';
+				strR+='</div>';
+			}
+
+			var scroll=(data.INTER.length>8);
+			if (scroll)
+			{
+				strL+='<div id="'+div_name+'_FTS_L" class="list_container" style="width:'+(len*ratio)+'px;overflow-x:hidden;height:'+(19*data.INTER.length)+'px;max-height:200px;overflow-y:scroll;-ms-overflow-style: none; scrollbar-width: none;  ">';
+				strR+='<div id="'+div_name+'_FTS_R" class="list_container" style="width:fit-content;overflow-x:hidden;height:'+(19*data.INTER.length)+'px;max-height:200px;overflow-y:scroll">';
+						scroller.push('#'+div_name+'_FTS_L, #'+div_name+'_FTS_R');
+			}
+			
+			$.each(data.INTER, function(inter_name,list_inter){
+				line++;
+				strL+='<div id="item_direction" style="display:inline-block;margin-bottom: 8px; top:unset;  margin-top: 4px;position:relative;">';
+					$.each(list_inter, function(index,value){
+          
+				LEFT=Math.round((mapping[value.POSITION]-0.8*index)*ratio,2);
+				WIDTH=Math.round(0.8*ratio,2);
+        console.log(value.POSITION+" "+mapping[value.POSITION]+" "+LEFT);
+				//console.log(value[0]+" "+value[1]+" "+LEFT+" "+WIDTH);
+				strL+='<div style="height:7px;display:inline-block;border: 1px solid rgba(0, 0, 0, 0.4);-webkit-box-shadow: 1px 1px 2px rgb(0 0 0 / 30%);    -webkit-border-radius: 4px;position:relative;left:'+LEFT+'px; width:'+WIDTH+'px;white-space:pre; background-color:green"></div>';
+				
+					});
+					strL+='</div>';
+					strR+="<div style='width:max-content;height:16px;margin-bottom:3px;'>"+inter_name+"</div>";
+			});
+			if (scroll)
+			{
+				strL+='</div>';
+				strR+='</div>';
+			}
+
+
+
+		});
+
+//			strL+='</div>';
+
+			
+	str=strL+"</div>"+strR+"</div>";
+	$("#LIG_SEQ_VIEW_"+div_name).html(str);
+	if(sel_position[div_name]['LEFT']!=-1)
+			{
+				$("#LIG_SEQ_VIEW_"+div_name+"_L").scrollLeft(sel_position[div_name]['OFFSET']);
+			}
+
+
+
+
+
+	$.each(scroller,function(left,div_ids)
+	{
+		var $divs = $(div_ids);
+		console.log(div_ids);
+var sync = function(e){
+	
+    var $other = $divs.not(this).off('scroll'), other = $other.get(0);
+    var percentage = this.scrollTop / (this.scrollHeight - this.offsetHeight);
+    other.scrollTop = percentage * (other.scrollHeight - other.offsetHeight);
+    // Firefox workaround. Rebinding without delay isn't enough.
+    setTimeout( function(){ $other.on('scroll', sync ); },10);
+}
+$divs.on( 'scroll', sync);
+  });
+	
+	
+	return true;	
+
+});	
+}
+
+
+${DATA_JS}
+function toggleLigSiteView(id)
+{
+	for (var i=1;i<=2;++i)
+	{
+		if (i==id)
+		{
+			$("#la_"+i).addClass("active");
+			$("#lv_"+i).css("display","block");
+		}
+		else
+		{
+			$("#la_"+i).removeClass("active");
+			$("#lv_"+i).css("display","none");
+		}
+	}
+}
+var table;
+$(document).ready( function () {
+	showLigSiteView();
+	table=$('#inters').DataTable( {
+		select: true,
+    "order": [[ 2, 'asc' ]],
+		"fnDrawCallback": function( oSettings ) {
+			$( "span" ).hover(
+  function() {   
+	$(document).find("div.box").remove(); 
+   var title = $(this).attr("data-title");  // extracts the title using the data-title attr applied to the 'a' tag
+    $('<div/>', { // creates a dynamic div element on the fly
+        text: title,
+        class: 'box'
+    }).appendTo(this);  // append to 'a' element
+  }, function() {
+    $(document).find("div.box").remove(); // on hover out, finds the dynamic element and removes it.
+  });
+    }
+    });
+	table
+        .on( 'select', function ( e, dt, type, indexes ) {
+			var rowData = table.rows( indexes ).data().toArray();
+			console.log(rowData);
+			var prev_p=sel_position[rowData[0][0]]["POSITION"];
+			console.log(prev_p);
+		  if (prev_p!=-1)highlight(rowData[0][0],prev_p,true);
+		  sel_position[rowData[0][0]]['POSITION']=rowData[0][2];
+		  console.log(rowData[0][0]+ " "+rowData[0][2]);
+		  highlight(rowData[0][0],rowData[0][2],false);
+            //events.prepend( '<div><b>'+type+' selection</b> - '+JSON.stringify( rowData )+'</div>' );
+        } )
+        .on( 'deselect', function ( e, dt, type, indexes ) {
+			var rowData = table.rows( indexes ).data().toArray();console.log("DELETECT");
+	
+			highlight(rowData[0][0],rowData[0][2],true);
+            //events.prepend( '<div><b>'+type+' <i>de</i>selection</b> - '+JSON.stringify( rowData )+'</div>' );
+        } );
+	
+} );
+
+</script>
+<style>
+.body{overflow-x: hidden;}</style>

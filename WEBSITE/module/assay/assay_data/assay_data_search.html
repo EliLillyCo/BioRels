@@ -1,0 +1,35 @@
+$[VALID]
+${VALUES}
+
+<!-- <table class="table">
+<thead>
+	<tr>
+		<th>Structure</th>
+		<th>Type</th>
+		<th>Relation</th>
+		<th>Value</th>
+		<th>Units</th>
+	</tr>
+
+</thead>
+<tbody>
+	${VALUES}
+</tbody>
+
+
+</table> -->
+<script>
+	var list = JSON.parse('${result}');
+	$(document).ready(function () {
+		$.each(list, function (index, value) {
+			getCompoundImage(value['Structure'], "list_" + index);
+		});
+	});
+</script>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">No assay found</div>
+$[/INVALID]
+$[NO_RES]
+<div class="alert alert-info">No results found. This can happen when the data isn't standard.</div>
+$[/NO_RES]

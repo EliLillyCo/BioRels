@@ -1,0 +1,170 @@
+<h2>BioRels API</h2>
+
+
+<div class="w3-container">
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col1 "><div class="api_head_title" onclick="api_groups_toggle('Genomics')">			Genomics			 </div><div class="api_group" id="Genomics_group"><select multiple class="api_select" id="Genomics_sel">${Genomics_sel}</select></div></div>
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col3"> <div class="api_head_title" onclick="api_groups_toggle('Proteomics')">			 Proteomics			 </div><div class="api_group" id="Proteomics_group"><select multiple class="api_select" id="Proteomics_sel">${Proteomics_sel}</select></div></div>
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col4"> <div class="api_head_title" onclick="api_groups_toggle('Molecular_entity')">    Molecular entity	 </div><div class="api_group" id="Molecular_entity_group"><select multiple class="api_select" id="Molecular_entity_sel">${Molecular_entity_sel}</select></div></div>
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col2"> <div class="api_head_title" onclick="api_groups_toggle('Disease_anatomy')">  	 Disease/Anatomy	 </div><div class="api_group" id="Disease_anatomy_group"><select multiple class="api_select" id="Disease_anatomy_sel">${Disease_anatomy_sel}</select></div></div>
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col6"> <div class="api_head_title" onclick="api_groups_toggle('Scientific_community')">Scientific Community</div><div class="api_group" id="Scientific_community_group"><select multiple class="api_select" id="Scientific_community_sel">${Scientific_community_sel}</select></div></div>
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col11"><div class="api_head_title" onclick="api_groups_toggle('Drug_clinical_trial')"> Drug/Clinical trial </div><div class="api_group" id="Drug_clinical_trial_group"><select multiple class="api_select" id="Drug_clinical_trial_sel">${Drug_clinical_trial_sel}</select></div></div>
+	<div class="w3-col s6 m3-m l3-m api_portal portal_col7"> <div class="api_head_title" onclick="api_groups_toggle('Assay')">				 Assay				 </div><div class="api_group" id="Assay_group"><select  multiple class="api_select" id="Assay_sel">${Assay_sel}</select></div></div>
+
+</div>
+
+<script>
+	API_BLOCKS={'Genomics':0,'Proteomics':0,'Molecular entity':0,'Disease_anatomy':0,'Scientific_community':0,'Drug_clinical_trial':0,'Assay':0};
+
+	RULES=JSON.parse('${RULES}');
+	
+
+	function api_groups_toggle(group){
+		if(API_BLOCKS[group]==0){
+			$("#"+group+"_group").show();
+			API_BLOCKS[group]=1;
+		}else{
+			$("#"+group+"_group").hide();
+			API_BLOCKS[group]=0;
+		}
+	}
+
+	function toggleValues(id)
+	{
+		$('#api_form_'+id+' *').filter(':input').each(function(){
+			value=$(this).attr('placeholder');
+			$(this).val(value);
+		});
+		submitAPI(id);
+	}
+
+	function submitAPI(id)
+	{
+		$("#api_loading_"+id).html('<p>Query running</p>');	
+
+		GET_URL='/API_RUN'+$("#api_path_"+id).html()+"/PARAMS";
+		data_to_send={};
+		$('#api_form_'+id+' *').filter(':input').each(function(){
+			
+			if ($(this).val()=='' || $(this).val() == undefined) return;
+			GET_URL+="/"+$(this).attr("name")+"/"+$(this).val();
+			data_to_send[$(this).attr("name")]=$(this).val();
+		});
+		$("#api_get_"+id).html(GET_URL);
+
+		GET_URL='/API_RUN'+$("#api_path_"+id).html();
+		$("#api_post_"+id).html('<p><strong>URL: </strong>'+GET_URL+'<br/><strong>Payload:</strong><pre> '+JSON.stringify(data_to_send,null ,4 )+'</pre> </p>');
+
+		$.ajax({
+			type: "POST",
+			url: '/API_RUN'+$("#api_path_"+id).html(),
+			data: $('#api_form_'+id).serialize(),
+			error: function () {
+				$("#api_loading_"+id).html('<p>An error has occurred</p>');
+				$("#api_loading_"+id).removeClass('placeholder-glow');
+				let prettyJSON = JSON.stringify(data, null, 4);
+				$("#api_all_results_"+id).css("display","block");
+				$("#api_results_"+id).append(prettyJSON);
+				return false;
+			},
+			success: function (data) {
+				$("#api_loading_"+id).html('');
+				$("#api_results_"+id).removeClass('placeholder-glow');
+				$("#api_results_"+id).empty();
+				$("#api_all_results_"+id).css("display","block");
+				let prettyJSON = JSON.stringify(data, null, 4);
+
+				$("#api_results_"+id).append('<pre>'+prettyJSON+"</pre>");
+			}
+		});
+	}
+
+	function toggleAPI(id){
+		entry=$("#api_grp_"+id);
+		content=$("#api_content_"+id);
+		arrow=$("#arrow_"+id);
+		if(content.css("display")=="block"){
+			arrow.html('&#x25b6;');
+         content.css("display","none");
+         entry.css("border-radius","13px");
+		}else{
+			
+			entry.css("border-radius","13px 13px 0px 0px");
+			arrow.html('&#x25BC;');
+			content.css("display","block");
+		}
+	}
+
+	$( ".api_group" )
+  .on( "change", function() {
+    RULES_SEL={};
+	N_RULES=0;
+    $( ".api_group option:selected" ).each( function() {
+
+      	tab=$(this).val().split("|");
+		eco=tab[0];
+		term=tab[1];
+		++N_RULES;
+		$.each(RULES[eco][term],function(key,value){
+			if (value in RULES_SEL) RULES_SEL[value]++;
+			else RULES_SEL[value]=1;
+		});
+    } );
+	console.log(RULES_SEL);
+	console.log(N_RULES);
+	$('div.api_grp').each(function(index) 
+	{
+    	// 'this' refers to the current DOM element
+		id=$(this).attr('id').split("_")[2];
+	//	console.log($(this).attr('id')+"->"+id);
+		$(this).hide();
+		if (id in RULES_SEL)
+		{ 
+			console.log("IN "+RULES_SEL[id]+"<>"+N_RULES);
+			if (RULES_SEL[id]==N_RULES) 
+			{
+				console.log("NN");
+				$(this).css("display","block");
+			}
+			
+		}
+	});
+    
+  } )
+
+</script>
+
+${API_BLOCKS}
+<style>
+	.api_select {width:100%; height:100px;}
+	.api_portal {padding:2px;}
+	.api_head_title {font-size:1.2em; font-weight:bold; padding:5px;cursor: pointer;}
+	.api_group {display: none;}
+	.api_all_results {display: none;}
+	.api_block {
+		width:100%;
+		padding:3px;
+		margin-top:10px;
+		margin-bottom:20px;
+		border:1px solid  #49cc90;
+		background-color: rgba(73,204,144,.1);
+	}
+	.api_path {
+		min-width:35%;
+		max-width: 40%;
+		font-weight: bold;
+		display: inline-block;
+		font-size: 1.2em;
+		padding:10px;
+	}
+	.api_title {
+		display: inline-block;
+		font-size:1.2em;
+	}
+	.api_results{margin-top:30px;padding: 30px;
+    background-color: lightgrey;
+    border: 2px solid darkgray;
+    width: 100%;
+    max-height: 300px;
+    overflow-x: scroll;}
+
+</style>

@@ -1,0 +1,18 @@
+<div class="main_core_title" style="width:90%">${MAIN_TITLE}</div>
+<h2>Synonyms</h2>
+${SYNONYMS}
+<div style="width:98%">
+<table id='list_clinvar_${TAG_ID}' class='table table-sm' style="font-size:0.8em">
+	<thead>
+		<tr><th>RSID</th><th>SYMBOL</th><th>GENE_ID</th><th>MUTATION</th><th>
+				TITLE</th><th>CLINVAR IDENTIFIER</th><th>CLINVAR SIGNIFICANCE</th><th>CLINVAR STATUS</th><th>DATE UPDATED</th></tr>
+	</thead>
+	<tbody>${LIST}</tbody>
+</table>
+</div>
+<script type="text/javascript">
+	$(document).ready( function () {
+		$('#list_clinvar_${TAG_ID}').DataTable();
+	} );
+	
+	</script>

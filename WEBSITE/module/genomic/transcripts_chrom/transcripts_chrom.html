@@ -1,0 +1,189 @@
+$[VALID]
+
+
+
+<div class="w3-container w3-col s12">
+	<form id="selection_Transcripts">
+		<table class="table table-sm" id="transcripts_list">
+			<thead class="thead-light">
+				<tr>
+					<th>Select</th>
+					<th>Number</th>
+					<th>Gene Sequence</th>
+					<th>Transcript</th>
+					<th>Length</th>
+					<th>Sequence Type</th>
+					<th>Feature</th>
+					<th>Support level</th>
+					<th><select class="botn botn-mini" id="transcripts_sel_tissue" style="max-width: 175px"
+							aria-placeholder="Select tissue">
+							<option value="">Tissue Expression</option>${TISSUES_OPTS}
+						</select></th>
+					<th>Protein</th>
+					<th>Options</th>
+				</tr>
+			</thead>
+			<tbody>
+				${LIST_TRANSCRIPTS}
+			</tbody>
+		</table>
+	</form>
+</div>
+<div class="w3-container w3-col s12" id="seqview"></div>
+<style>
+	select.botn {
+		-webkit-appearance: button;
+		-moz-appearance: button;
+		appearance: button;
+		width: auto;
+	}
+
+	select.botn-mini {
+		height: auto;
+		line-height: 14px;
+		padding-right: 16px;
+	}
+</style>
+
+<div id="dialog-message" title="Issue" style="display:none">
+	<p>
+		No transcript has been selected
+	</p>
+</div>
+
+
+<script type="text/javascript">
+	var data_rna = JSON.parse('${RNA_EXPR}');
+
+	$("#transcripts_sel_tissue").change(function () {
+		var val = $("#transcripts_sel_tissue option:selected").val();
+
+
+		$.each(data_rna, function (tr_name, list) {
+
+			$("#rna_" + tr_name).html(list[val]);
+		});
+	});
+
+
+
+
+	var list_tooltips_tr_chrom = JSON.parse('${TOOLTIPS}');
+
+	$(document).ready(function () {
+
+		$('.ttl').uitooltip({
+			open: function (event, ui) {
+				ui.tooltip.css("width", "fit-content");
+				ui.tooltip.css("font-size", "1em");
+			},
+			hide: {
+				effect: "slideDown",
+				delay: 400
+			},
+			track: true,
+			content: function () {
+				return list_tooltips_tr_chrom[$(this).data('pos')];;
+			}
+		});
+	});
+
+
+
+
+
+	function runOligo() {
+
+
+
+
+		window.open("/GENEID/${GENE_ID}/OLIGO/" + $('#oligo').val(), '_blank');
+
+
+	}
+
+	function getTranscriptsFasta() {
+
+		var checkboxValues = [];
+		$('#selection_Transcripts input[type="checkbox"]:checked').each(function (index, elem) {
+			checkboxValues.push($(elem).val());
+		});
+		var str = checkboxValues.join("/");
+		if (str.length == 0) {
+
+			window.open("/FASTA/GENEID/${GENE_ID}/TRANSCRIPTS", '_blank');
+		} else window.open("/FASTA/GENEID/${GENE_ID}/TRANSCRIPTS/PARAMS/" + str, '_blank');
+
+	}
+ 
+
+
+
+	$(document).ready(function () {
+
+		var urlv = '/CONTENT/GENEID/${GENE_ID}/TRANSCRIPTS_SEQ_SUMMARY/PARAMS/TRANSCRIPTS/${LIST_TRANSCRIPTS_VIEW}';
+		$.ajax({
+			type: 'POST',
+			// make sure you respect the same origin policy with this url:
+			// http://en.wikipedia.org/wiki/Same_origin_policy
+			url: urlv,
+			//data:{ "PER_PAGE":per_page,'PAGE':page},
+			success: function (data) {
+				try {
+					var v = JSON.parse(data);
+					// console.log(v);
+					$('#seqview').html(v.code);
+				} catch (error) {
+					$("#seqview").html(
+						"<div class=\"alert alert-primary\">We are unable to provide this visualization. We apologize for the inconvenience</div>"
+						);
+				}
+			},
+			error: function (data) {
+				$("#seqview").html("");
+			}
+		}); ///END AJAX
+
+		$('.ads_Checkbox').click(function () {
+			console.log("IN");
+			var str = '';
+			$('.ads_Checkbox:checked').each(function () {
+				str += $(this).val() + ';';
+			});
+			if (str != '') 
+			str = '/PARAMS/TRANSCRIPTS/'+str.slice(0, -1);
+			var urlv = '/CONTENT/GENEID/${GENE_ID}/TRANSCRIPTS_SEQ_SUMMARY' + str;
+			$.ajax({
+				type: 'POST',
+				url: urlv,
+				//data:{ "PER_PAGE":per_page,'PAGE':page},
+				success: function (data) {
+					var v = JSON.parse(data);
+					$('#seqview').html(v.code);
+				},
+				error: function (data) {
+					$("#seqview").html("An issue occured.");
+				}
+			}); ///END AJAX
+		});
+	});
+</script>
+<style>
+	.ui-tooltip {
+		max-width: 550px;
+		width: 550px;
+		font-size: 0.8em;
+	}
+</style>
+$[/VALID]
+$[INVALID]
+<div class="main_core_title">Transcripts list</div>
+<br />
+<div class="alert alert-info">No transcript has been recorded for this gene. Some genes are models, representing a
+	specific phenotype. To learn more about this specific gene, please follow this link: ${INVALID_LINK}</div>
+$[/INVALID]
+$[ERROR]
+
+<br />
+<div class="alert alert-info">An error happened while retrieving the results. We apologize for the inconvenience</div>
+$[/ERROR]

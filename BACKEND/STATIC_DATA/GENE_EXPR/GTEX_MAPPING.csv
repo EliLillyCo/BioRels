@@ -1,0 +1,56 @@
+DB_TISSUE_NAME						DB_ORGAN_NAME	GTEX_TISSUE									ANATOMY_DB	ANATOMY_DBID	MAIN SAMPLING SITE
+Adipose - Subcutaneous				Adipose Tissue	Adipose - Subcutaneous						UBERON	0002190	Subcutaneous tissue beneath the leg's skin sample.
+Visceral (Omentum)					Adipose Tissue	Adipose - Visceral (Omentum)				UBERON	0010414	Adipose tissue on the large fold of parietal peritoneum that hangs down from the greater curvature of the stomach, passing in front of the small intestines.
+Adrenal Gland						Adrenal Gland	Adrenal Gland								UBERON	0002369	Left, followed by the right if necessary for sufficient aliquots.
+Bladder								Bladder			Bladder										UBERON	0001255	Central posterior urinary bladder, trimming from the outer wall if necessary.
+Cells - EBV-transformed lymphocytes	Blood			Cells - EBV-transformed lymphocytes			EFO		0000572	Transformed lymphocytes.
+Artery - Aorta						Blood Vessel	Artery - Aorta								UBERON	0001496	Ascending aorta or other thoracic regions (nonatherosclerotic).
+Artery - Coronary					Blood Vessel	Artery - Coronary							UBERON	0001621	Left and right, noncalcific regions only.
+Artery - Tibial						Blood Vessel	Artery - Tibial								UBERON	0007610	Left Tibial. Peripheral tibial artery from gastrocnemius region
+Whole Blood							Blood			Whole Blood									UBERON	0013756	Femoral vein; subclavian vein and heart are other possible sites.
+Leukemia cell line (CML)			Bone Marrow		Cells - Leukemia cell line (CML)			EFO		0002937	N/A	
+Amygdala							Brain			Brain - Amygdala							UBERON	0001876	Amygdala (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Anterior cingulate cortex (BA24)	Brain			Brain - Anterior cingulate cortex (BA24)	UBERON	0009835	Anterior cingulate cortex (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Caudate (basal ganglia)				Brain			Brain - Caudate (basal ganglia)				UBERON	0001873	Caudate (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Cerebellar Hemisphere				Brain			Brain - Cerebellar Hemisphere				UBERON	0002037	Cerebellar hemisphere (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Cerebellum							Brain			Brain - Cerebellum							UBERON	0002037	Right cerebellum (sampled at donor collection site and preserved in PAXgene fixative).
+Cortex								Brain			Brain - Cortex								UBERON	0001870	Right cerebral frontal pole cortex (sampled at donor collection site and preserved in PAXgene fixative).
+Frontal Cortex (BA9)				Brain			Brain - Frontal Cortex (BA9)				UBERON	0009834	Right cerebral frontal pole cortex (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Hippocampus							Brain			Brain - Hippocampus							UBERON	0001954	Hippocampus (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Hypothalamus						Brain			Brain - Hypothalamus						UBERON	0001898	Hypothalamus (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Nucleus accumbens (basal ganglia)	Brain			Brain - Nucleus accumbens (basal ganglia)	UBERON	0001882	Nucleus accumbens basal ganglia (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Putamen (basal ganglia)				Brain			Brain - Putamen (basal ganglia)				UBERON	0001874	Putamen basal ganglia (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Spinal cord (cervical c-1)			Brain			Brain - Spinal cord (cervical c-1)			UBERON	0006469	Spinal cord (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Substantia nigra					Brain			Brain - Substantia nigra					UBERON	0002038	Substantia nigra (sampled at Miami Brain Bank and preserved as fresh frozen tissue).
+Mammary Tissue						Breast			Breast - Mammary Tissue						UBERON	0008367	Central breast subareolar region of the right breast, 1-2 cm under the skin surface of nipple region.
+Ectocervix							Cervix Uteri	Cervix - Ectocervix							UBERON	0012249	Ectocervix (squamous) from uterus. Bivalve uterus along the endocervical canal to open uterus and cervix from external os to fundus.
+Entocervix							Cervix Uteri	Cervix - Endocervix							UBERON	0000458	Endocervix (glandular) from uterus. Bivalve uterus along the endocervical canal to open uterus and cervix from external os to fundus.
+Sigmoid								Colon			Colon - Sigmoid								UBERON	0001159	Sigmoid colon, Obtain muscularis only; discard mucosa.
+Transverse							Colon			Colon - Transverse							UBERON	0001157	Transverse, Full thickness: mucosa and muscularis
+Gastroesophageal Junction			Esophagus		Esophagus - Gastroesophageal Junction		UBERON	0004550	Muscularis propria in the lowest portion of the esophagus just proximal to the stomach.
+Mucosa								Esophagus		Esophagus - Mucosa							UBERON	0006920	Squamous region (distal/lower third), at least 4 cm above gastroesophageal junction.
+Muscularis							Esophagus		Esophagus - Muscularis						UBERON	0004648	Squamous region (distal/lower third), at least 4 cm above gastroesophageal junction.
+Fallopian Tube						Fallopian Tube	Fallopian Tube								UBERON	0003889	Left (and right if needed for sufficient aliquots) starting at, and to include, fimbriated end.
+Atrial Appendage					Heart			Heart - Atrial Appendage					UBERON	0006631	Right atrial appendage, tip (if fatty or discolored, take more proximally)
+Left Ventricle						Heart			Heart - Left Ventricle						UBERON	0006566	Anterior left ventricle, 1 cm above apex and 1 cm from left anterior descending coronary artery.
+Cortex								Kidney			Kidney - Cortex								UBERON	0001225	Left kidney cortex.
+Medulla								Kidney			Kidney - Medulla							UBERON	0001293	Left kidney medulla adjacent to Cortex.
+Liver								Liver			Liver										UBERON	0001114	Central right lobe, 1 cm below capsule.
+Lung								Lung			Lung										UBERON	0008952	Inferior segment of left upper lobe, 1 cm below the pleural surface.
+Skeletal							Muscle			Muscle - Skeletal							UBERON	0001134	skeletal muscle tissue
+Nerve - Tibial						Nerve			Nerve - Tibial								UBERON	0010323	Left tibial. Peripheral tibial nerve from gastrocnemius region
+Ovary								Ovary			Ovary										UBERON	0000992	Most normal regions of the left ovary (and right if necessary to obt ain sufficient aliquots).
+Pancreas							Pancreas		Pancreas									UBERON	0001150	Mid-portion (not tail).
+Pituitary							Pituitary		Pituitary									UBERON	0000007	Entire pituitary gland.
+Prostate							Prostate		Prostate									UBERON	0002367	Non-nodular region of representative region.
+Minor Salivary Gland				Salivary Gland	Minor Salivary Gland						UBERON	0006330	Inner surface of lower lip.
+fibroblasts							Skin			Cells - Cultured fibroblasts				EFO		0002009	Cultured primary fibroblasts.
+Suprapubic							Skin			Skin - Not Sun Exposed (Suprapubic)			UBERON	0036149	Extension of the abdominal incision to the suprapubic area avoiding pubic hair.
+Sun Exposed (Lower leg)				Skin			Skin - Sun Exposed (Lower leg)				UBERON	0004264	Left or right leg 2 cm below patella on medial side.
+Terminal Ileum						Small Intestine	Small Intestine - Terminal Ileum			UBERON	0001211	Thickened mucosa corresponding to lymphoid nodules (Peyer Patches) just proximal to the ileocecal valve in the most distal part of the small intestine.
+Spleen								Spleen			Spleen										UBERON	0002106	Central region, 5 mm below capsule.
+Stomach								Stomach			Stomach										UBERON	0000945	Body (Gently rinse mucosa with normal saline before aliquot preparation)
+Testis								Testis			Testis										UBERON	0000473	Left testis (and right testis if necessary to obtain sufficient tissue for aliquots).
+Thyroid								Thyroid			Thyroid										UBERON	0002046	Most grossly non-nodular normal regions from either side (whichever side is observed to be more normal).
+Uterus								Uterus			Uterus										UBERON	0000995	Corpus. Bivalve uterus along endocervical canal to fundus.
+Vagina								Vagina			Vagina										UBERON	0000996	Anterior.

@@ -1,0 +1,31 @@
+TEMPLATE = subdirs
+SUBDIRS =  common iwlib2 gc3tk detint cpdToDb pdbsep seq_align protalign
+QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -static-libstdc++
+QMAKE_CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+
+common.subdir=libs/common
+# LIBRARIES DEPENDING ON COMMON:
+iwlib2.subdir=libs/iwlib2
+iwlib2.depends=common
+
+
+# LIBRARIES DEPENDING ON IWLIB
+gc3tk.subdir=libs/gc3tk
+gc3tk.depends=iwlib2
+
+detint.subdir=apps/detint
+detint.depends=gc3tk
+
+
+protalign.subdir=apps/protalign
+protalign.depends=gc3tk
+
+cpdToDb.subdir=apps/cpdToDb
+cpdToDb.depends=gc3tk
+
+pdbsep.subdir=apps/pdbsep
+pdbsep.depends=gc3tk
+
+seq_align.subdir=apps/seq_align
+seq_align.depends=gc3tk

@@ -1,0 +1,8 @@
+<input type="text" id="clinicalval_input_${TAG}" />
+<input id="clinicalval_val_${TAG}" type="button" value="validate" onclick="validateClinical('${TAG}')" />
+<select id="clinicalval_sel_${TAG}" name="clinicalval_sel_${TAG}" style="display: none;">
+    <option value=""></option>
+</select>
+<input id="cancel_clinical_${TAG}" style="display: none; margin-left: 15px;" type="button" class="default_button col-1"
+    onclick="cancelClinicalValidate('${TAG}')" value="Cancel" />
+<span class="alert alert-info" style="display:none;" id="clinical_status_${TAG}"></span>

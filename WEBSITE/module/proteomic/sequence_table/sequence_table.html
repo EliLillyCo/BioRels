@@ -1,0 +1,413 @@
+$[VALID]
+<div class="main_core_title">${TITLE}</div>
+<div id="trsq_options" style="position: relative;top: -25px;display:flex">
+			
+		<a target="_blank" href="/FASTA/SEQUENCE/${SEQ_NAME}" ><img id="transcript_seq_opt_but" src="/require/img/download.png" style="width: 20px;" /></a>
+		<div class="help-tip" style="position:unset;margin-left:5px;" onclick="$( '#prot_expr_info' ).dialog({width: '70%',
+                    });"></div>
+		</div>
+	
+<div id="transcript_seq_info" class="flex_line">
+	<div class="flex50"><h3 style="text-align: center">Gene Information</h3>
+		<table class="trsq_info_tbl">
+				<tr><th>Gene ID:</th><td><a href="/GENEID/${GENE_ID}">${GENE_ID}</a></td></tr>
+				<tr><th>Symbol:</th><td>${SYMBOL}</td></tr>
+				<tr><th>Full Name:</th><td>${FullName}</td></tr>
+		</table>
+		
+	</div>
+	<div class="flex50"><h3 style="text-align: center">Protein Information</h3>
+		<table class="trsq_info_tbl">
+				<tr><th>Uniprot Entry</th><td><a href="${UNIPROT_LINK}" target="_blank">${UNIPROT_NAME}</a></td></tr>
+				<tr><th>Sequence Name:</th><td >${SEQ_NAME}</td></tr>
+				<tr><th>Length:</th><td >${LEN}</td></tr>
+				<tr><th>Weight:</th><td >${WEIGHT} g/mol</td></tr>
+				
+		</table>
+	</div>
+
+</div>
+
+
+
+	
+${NOTE}
+
+
+
+<style>
+		.tooltip-inner {
+			max-width: 600px;
+			/* If max-width does not work, try using width instead */
+			width: 600px; 
+		}
+		.ui-widget-content {
+			max-width: 600px;
+			/* If max-width does not work, try using width instead */
+			width: 600px; 
+		}
+		</style>
+<hr/>
+<div id="protein_options" style="margin:10px auto;">
+	<textarea cols="40" rows="1" id="protein_seq_search" placeholder="Type your sequence" style="resize: none"></textarea>
+	<input type="button" value="Search" onclick="processProteinView('protein_seq_view')" style="position: relative;top: -7px"/>		
+	<img id="protein_seq_opt_but" src="/require/img/opt.jpg" style="width: 20px;position: relative;top: -7px" onClick="showTransSeqOpts()"/>
+	</div>
+	<div class="sequence" id="protein_seq_view">
+
+
+	</div>
+
+	<div id="protein_seq_options" title="Protein visualization options" style="display: none;">
+		<input type="checkbox" id="protein_seq_snp" checked="checked"/><label for="protein_seq_snp">Show Variants</label><br/>
+		<input type="checkbox" id="protein_seq_pos" checked="checked"/><label for="protein_seq_pos">Show Positions</label><br/>
+		${LIST_PROT}
+		<hr/>
+		Export options:<br/>
+		<a    class="btn btn-primary" value="Image" onclick="captureTranscriptSeq('protein_seq_view','${SEQ_NAME}.png')">Image</a>
+		<a href="/FASTA/TRANSCRIPT/${TRANSCRIPT_NAME}" class="btn btn-primary">Get Fasta sequence</a>
+		
+		
+</div>
+
+<div class="legends">Legend:
+		<span style="border-left:5px solid orange;padding-left:5px;margin-left:10px;">Helix</span>
+		<span style="border-left:5px solid green;padding-left:5px;margin-left:10px;">Turn</span>
+		<span style="border-left:5px solid blue;padding-left:5px;margin-left:10px;">Beta strand</span>
+		
+	   </div>
+
+	<div>
+		${PUBLI}
+	</div>
+
+<script type="text/javascript">
+	var data_protein='${PROTEIN_SEQUENCE}';
+	var data_feat=JSON.parse('${FEATS}');
+	var info;
+
+
+function processProteinView(view)
+{
+	var search=$("#protein_seq_search").val().toUpperCase().split("\n");
+	 
+
+	info=JSON.parse(data_protein);
+	$("#"+view).css("width","inherit");
+	var dw=$("#"+view).width();	/// Width of div
+	var fs = 16;					/// fs and fc set for Courier New
+	var fc = 1.61;
+	//var ratio=9.592307;
+	var ratio=9.601907;
+	var cpl = Math.floor(Math.floor(fc*dw / fs )/10+1)*10; /// Character per line.
+	$("#"+view).css("width",(ratio*cpl+5)+"px");
+	$("#protein_options").css("width",(ratio*cpl+5)+"px");
+	var max_width=cpl*fs/fc;
+	var seq='';
+	var str='';
+	
+	$.each(info, function(index,value){seq+=value['AA'];});
+	var indices=[];
+	var indices_alt=[];
+	$.each(search, function(index,value){
+		
+		indices.push(getIndicesOf(value,seq));
+		
+		
+	});
+	
+	console.log(search);
+	
+	var tot_line=Math.ceil(seq.length/cpl);
+	var debug=false;
+	var match_rank=[];
+	var next_line=[];
+				for(pos=0; pos<seq.length;++pos)match_rank[pos]=[-1];
+	if (debug)console.log("LENGTH: "+seq.length+" ; CHAR PER LINE: "+cpl+" ; N LINES: "+tot_line+" MAX WIDTH:"+max_width);
+	var current_start=-1,current_search_len=-1,current_search_strand='+';
+	for(n_line=1;n_line<=tot_line;++n_line)
+	{
+		var start_pos=(n_line-1)*cpl;
+		var end_pos=start_pos+cpl;
+		if (debug)console.log("LINE "+n_line+" ["+start_pos+" - "+end_pos+"] /" +current_start);
+		str+='<div style="margin-bottom:30px"><div class="seq">';
+			if (search[0] !="")
+			{
+			
+			for(pos=start_pos; pos<end_pos;++pos)
+			{
+				if (current_start==-1)
+				{
+					$.each(indices,function(index,list_search)
+					{
+						if ($.inArray(pos,list_search)!=-1 && current_start==-1)
+						{
+							current_start=pos;
+							current_search_strand='+';
+							current_search_len=search[index].length;
+
+							str+='<span style="background-color:grey">';
+						}
+					});
+					$.each(indices_alt,function(index,list_search)
+					{
+						if ($.inArray(pos,list_search)!=-1 && current_start==-1)
+						{
+							current_start=pos;
+							current_search_strand='-';
+							current_search_len=search[index].length;
+							str+='<span style="background-color:#99FFCC">';
+						}
+					});
+					str+=seq.charAt(pos);
+				}
+				else if (current_start!=-1)
+				{
+					if (pos==start_pos)
+					{
+						if (current_search_strand='+')str+='<span style="background-color:grey">';
+							else 					  str+='<span style="background-color:#99FFCC">';
+					}
+					if (pos>=current_start+current_search_len)
+					{
+						current_start=-1;
+						str+="</span>";
+					}
+					 str+=seq.charAt(pos);
+				}
+				
+			}
+			if (current_start!=-1)str+='</span>';
+		}else str+=seq.substr(start_pos,cpl);
+			//console.log(n_line+" "+current_start);
+			str+="</div>";
+			str+="<div class='seq_fold' style='position:relative' >";
+					if (next_line.length>0)
+					{
+						
+						$.each(next_line,function(index,next_linev){
+							str+='<div style="height:6px;position:absolute;margin-bottom:1px;top:0px;left:0px;';
+							str+='background-color:';
+							if (next_linev[1]=='Helix')str+='orange';
+							if (next_linev[1]=='Beta strand')str+='blue';
+							if (next_linev[1]=='Turn')str+='green';
+							str+=';width:'+(ratio*(next_linev[0]-start_pos))+'px"></div>';
+
+						});
+						next_line=[];
+					}
+			for(pos=start_pos; pos<end_pos;++pos)
+		{
+				
+				$.each(data_feat.FEATS,function(index,feat_info)
+				{
+					var ft_type=data_feat.FEAT_TYPE[feat_info.TYPE].NAME;
+					if (!(ft_type=='Helix'||ft_type=='Beta strand'||ft_type=='Turn'))return true;
+					//console.log(feat_info.START+ " "+pos);
+					if (feat_info.START!=pos)return true;
+					console.log(feat_info);
+					str+='<div style="height:6px;position:absolute;margin-bottom:1px;top:0px;left:'+((pos-start_pos)*ratio)+'px;';
+					str+='background-color:';
+					if (ft_type=='Helix')str+='orange';
+					if (ft_type=='Beta strand')str+='blue';
+					if (ft_type=='Turn')str+='green';
+					str+=';width:'+(ratio*Math.min(feat_info.END-pos,end_pos-pos))+'px"></div>';
+					if (feat_info.END>=end_pos)
+							{
+								next_line.push([feat_info.END,ft_type]);
+							}
+				});
+			}
+
+			str+='</div>';
+			if ($('#protein_seq_pos').prop("checked"))
+			{
+			str+="<div class='ids'>";
+			for(var i=1;i<=cpl;++i)
+			{
+				if (i+start_pos>seq.length)break;
+				if (i%10==0)str+="|";
+				else str+="&#183;";
+			}
+			
+			str+="</div>";
+			
+			
+			str+="<div class='tens'>";
+		var min_ten=Math.ceil(start_pos/10);
+		var max_ten=Math.floor(end_pos/10);
+		for (var ten=min_ten;ten<=max_ten;++ten)
+		{
+			if (ten*10<seq.length)
+			str+="<div class='ten_bc' style='left:"+((ten*10-start_pos-((ten==min_ten)?0:1.5))*(ratio))+"px'>"+((ten==min_ten)?ten*10+1:(ten*10))+"</div>";
+		}
+		str+="</div>";
+		}
+
+	
+
+		str+='<div class="matches" style="position:relative;height:$PREVWpx">';
+			
+				
+			if (search[0] !=""){
+				var match_height=0;
+				
+				if (next_line.length>0)
+				{
+					var rank=-1;
+					$.each(next_line,function(index,next_linev){
+						++rank;
+						str+='<div style="position:absolute;margin-bottom:1px;top:'+(1+rank*5)+'px;px;left:0px;height:3px;background-color:grey;width:'+((next_linev[0]-start_pos)*ratio)+'px"></div>';
+						for (kpos=pos;kpos<=next_linev[0];++kpos)
+						match_rank[kpos].push(rank);
+
+					});
+					next_line=[];
+				}
+			}
+				//console.log(data_feat);
+				var match_height=0;
+		for(pos=start_pos; pos<end_pos;++pos)
+		{
+				
+				$.each(data_feat.FEATS,function(index,feat_info)
+				{
+					var ft_type=data_feat.FEAT_TYPE[feat_info.TYPE].NAME;
+					if (ft_type=='Helix'||ft_type=='Beta strand'||ft_type=='Turn')return true;
+					//console.log(feat_info.START+ " "+pos);
+					if (feat_info.START!=pos)return true;
+					
+						
+						current_start=pos;
+						
+						current_search_len=feat_info.END-feat_info.START+1;
+						console.log("START "+pos+" "+current_search_len);
+						var rank=-1;
+						for (kpos=pos;kpos<=pos+current_search_len;++kpos)
+						$.each(match_rank[kpos],function(idkpos,vkpos)
+						{
+							
+							rank=Math.max(rank,vkpos);
+						});
+												
+						var name=ft_type+": "+feat_info.VALUE;
+						rank+=1;
+						console.log("RANK "+rank);
+						var top_height=12;
+						str+='<div style="position:absolute;margin-bottom:1px;top:'+(10+rank*(5+top_height))+'px;left:'+((pos-start_pos)*ratio)+'px;height:3px;background-color:grey;width:'+(ratio*Math.min(current_search_len,end_pos-pos))+'px"></div>';
+						str+='<div style="width:max-content;position:absolute;margin-bottom:1px;top:'+(rank*(5+top_height))+'px;left:'+((pos-start_pos+1)*ratio+(ratio*Math.min(current_search_len,end_pos-pos)))+'px;">'+name+'</div>';
+						
+						
+						var len_all=Math.min(Math.min(pos+current_search_len+name.length,end_pos),seq.length-1);
+						console.log(len_all+" "+seq.length+" "+end_pos);
+						for (kpos=pos;kpos<=len_all;++kpos)
+						if (kpos<end_pos)match_rank[kpos].push(rank);
+						match_height=Math.max(match_height,6+rank*(5+top_height));
+						console.log("MATCH HEIGHT:"+match_height);
+						if (pos+current_search_len>=end_pos)
+						{
+							next_line.push([pos+current_search_len,(1+rank*5)]);
+						}
+
+						//str+='<span style="background-color:grey">';
+					
+				});
+				
+				
+			
+			
+		}
+		console.log("FINAL MATCH HEIGHT"+match_height);
+		str=str.replace("$PREVW",(match_height)+15);
+	
+str+='</div>';
+
+		if ($('#protein_seq_snp').prop("checked"))
+	{
+			str+="<div class='tr_snp' style='position:relative;'>";
+				for(pos=start_pos; pos<end_pos;++pos)
+			{
+				if (pos in info)
+				if ('MUT' in info[pos])
+				{
+					//str+='<div style="display:inline" onmouseover="showSNPInfo(this,'+pos+')">-</div>';
+					str+='<span onmouseover="showSNPInfo(this,'+pos+')" onmouseout="hideSNPInfo(this,'+pos+')">-</span>';
+					
+				}else str+='.';
+			}
+			str+='</div>';
+			
+	}
+		str+="</div>";
+
+
+
+	}
+
+	$("#"+view).html(str);
+}
+
+
+
+//  
+var current_show=null;
+function showSNPInfo(div_entry,pos)
+{
+	if ($(div_entry).children().length>0)return;
+	if (current_show!=null)clean();
+
+	$(div_entry).addClass("tooltipt");
+	var snp_i=info[pos]['MUT'];
+	
+	var str='<div class="tooltiptextv" style="min-width:250px !important">';
+	$.each(snp_i, function(rsid, value)
+	{
+		str+='<span class="bold">Variant ID:</span><a href="${GENE_PORTAL}/MUTATION/'+rsid+'">'+rsid+'</a></span>';
+		
+			str+="<br/>DNA:"+value[0]+" &#x27A1 Transcript:"+value[1];
+		
+		str+='<br/>';
+	});
+	$(div_entry).prepend(str);
+	current_show=div_entry;
+	console.log(current_show);
+}
+
+function clean()
+{
+	if (current_show==null)return;
+	console.log("clean");
+	$(current_show).empty();
+	$(current_show).removeClass("tooltipt");
+	$(current_show).html('-');
+}
+
+function hideSNPInfo(div_entry,pos)
+{
+	if ($(div_entry).children().length==0)return;
+	console.log("clean");
+	setTimeout(clean,4000);
+	
+	
+}
+
+$(document).ready(function(){
+	processProteinView("protein_seq_view");
+	var protein_view = $("protein_seq_view");
+	var lastwidth = protein_view.css('width');
+function checkForProteinViewChanges()
+{
+    if (protein_view.css('width') != lastwidth)
+    {
+        lastwidth = protein_view.css('width'); 
+		processProteinView("transcript_view");
+    }
+
+    setTimeout(checkForProteinViewChanges, 500);
+};
+
+
+});
+
+</script>
+$[/VALID]

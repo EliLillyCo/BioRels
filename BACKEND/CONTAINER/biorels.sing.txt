@@ -1,0 +1,325 @@
+BootStrap:docker
+From: ubuntu:24.04
+
+%environment
+	export TG_DIR=/TG_SCALE 
+	export PATH="${PATH}:/TG_SCALE/BACKEND/APPS/bowtie2/bin:/TG_SCALE/BACKEND/APPS/bowtie/bin"
+
+
+
+%files
+	../SRC/BioRels /TG_SCALE/BACKEND/SRC/BioRels
+
+
+%post
+	export TG_DIR=/TG_SCALE
+	mkdir -p $TG_DIR/BACKEND/SRC 
+	mkdir -p $TG_DIR/BioRels_app/
+	cp /TG_SCALE/BACKEND/SRC/BioRels/transcript_align.py $TG_DIR/BioRels_app/
+
+	apt-get update -y
+	apt-get -y upgrade
+	apt-get -y install software-properties-common
+	add-apt-repository ppa:ondrej/php
+
+	apt install curl ca-certificates
+	install -d /usr/share/postgresql-common/pgdg
+	curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+	sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+	apt update
+	apt -y install postgresql-client-16 postgresql-16
+	locale-gen "en_US.UTF-8"
+
+	
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+
+# PART 1 - Linux packages	
+	
+	apt-get -y install \
+	automake \
+	build-essential \
+	bzip2 \
+	cmake \
+	curl \
+	dos2unix \
+	docx2txt \
+	vsftpd \
+	ftp-proxy \
+	gettext \
+	git \
+	grep \
+	gcc-10 \
+	lbzip2 \
+	libbz2-dev \
+	libcurl4 \
+	libcurl4-openssl-dev \
+	libeigen3-dev \
+	libexif12 \
+ 	libexif-dev \
+	libffi8 \
+	libffi-dev  \
+	libgcc-11-dev \
+	libgd3 \
+	libgdbm6 \
+	libgdbm-dev \
+	libipc-run-perl \
+	libleptonica-dev \
+	liblzma5 \
+	liblzma-dev \
+	libncurses6 \
+	libncurses-dev \
+	libphp-phpmailer \
+	libpqxx-dev \
+	libre2-dev \
+	libre2-10 \
+	libtesseract-dev \
+	libxml2 \
+	libxml2-dev \
+	libxslt1.1 \
+	libxslt1-dev \
+	libzip4 \
+	libzip-dev \
+	m2crypto \
+	mailutils \
+	make \
+	npm \
+	openssl \
+	php8.1-gmp \
+    php8.1-mysql \
+	php8.1-pgsql \
+	php-bcmath \
+	php-cli \
+	php-curl \
+	php-common \
+	php-gd \
+	php-json \
+	php-json \
+	php-mbstring \
+        php-pear \
+	php-pgsql \
+	php-php-gettext \
+	php-xml \
+	php-xml \
+    php-xmlrpc \
+	php-zip \
+	pkg-config \
+	python3 \
+	python3 \
+	python3-dev \
+	python3-pip  \
+	python3-pycurl \
+	python3-tk \
+	protobuf-compiler \
+	qmake6 \
+	qt6-base-dev \
+	qt6-base-dev-tools \
+	readline-common \
+	sendmail \
+	sendmail-cf  \
+	sqlite3 \
+	subversion \
+	tar \
+	tesseract-ocr \
+	tk \
+	tk-dev \
+	unzip \
+	wget \
+	xz-utils \
+	zlib1g \
+	python3-argcomplete \
+	python3-argh \
+	python3-atomicwrites \
+	python3-biopython \
+	python3-colorama \
+	python3-coverage  \
+	python3-dateutil \
+	python3-gffutils \
+	python3-importlib-metadata \
+	python3-more-itertools \
+	python3-numpy \
+	python3-packaging \
+	python3-pandas \
+	python3-pluggy \
+	python3-psycopg2 \
+	python3-py \
+	python3-pyfaidx \
+	python3-pyparsing \
+	python3-pypdf \
+	python3-pytest \
+	python3-pytest-cov \
+	python3-simplejson \
+	python3-scipy \
+	python3-threadpoolctl \
+	python3-six \
+	python3-testfixtures \
+	python3-wcwidth \
+	python3-zipp \
+	python3-pysam \
+	python3-requests \
+	python3-rapidfuzz \
+	python3-pillow \
+	python3-tabulate \
+	python3-boto3 \
+	python3-opencv
+
+
+
+	
+
+# PART 2 - Python packages	
+
+	python3 -m pip install --break-system-packages attrs \
+	pytz \
+	grappa \
+	langchain \
+	yake \
+	flashtext \
+	Office365 \
+	spacy \
+	attrs \
+	python-dateutil \
+	psycopg2-binary \
+	pytz \
+	grappa \
+	yake \
+	flashtext \
+	scikit-learn \
+	python-pptx \
+	rdkit \
+	PyPDF4 \
+	docx2txt \
+	striprtf \
+	pdf2image \
+	pytesseract \
+	Office365-REST-Python-Client
+
+
+# PHP - Package manager:
+	 
+	mkdir -p /composer
+	cd /composer
+	export COMPOSER_HOME="composer"
+	export COMPOSER_ALLOW_SUPERUSER=1
+	wget https://getcomposer.org/installer
+	mv installer composer-setup.php
+	php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+	php composer-setup.php
+	php -r "unlink('composer-setup.php');"
+	mv composer.phar /usr/local/bin/composer
+
+# PART 3 - PHP packages
+
+	composer require aws/aws-sdk-php 
+	composer require thiagoalessio/tesseract_ocr
+	composer require phpoffice/phpspreadsheet --with-all-dependencies
+	composer require phpoffice/phppresentation --with-all-dependencies
+	composer require phpoffice/phpword --with-all-dependencies
+	composer require phpmailer/phpmailer
+	composer require microsoft/microsoft-graph
+
+
+# PART 4 - Compilation:
+
+	cd $TG_DIR/BACKEND/SRC/BioRels/build/release/
+	make
+	mkdir -p $TG_DIR/BioRels_app/
+	cp apps/seq_align/seq_align $TG_DIR/BioRels_app/
+	cd 
+	rm -rf $TG_DIR/BACKEND/SRC/BioRels
+
+
+	cd $TG_DIR/BACKEND/SRC/
+
+ 
+	mkdir -p $TG_DIR/BACKEND/APPS/sequence 
+	wget https://salsa.debian.org/med-team/emboss/-/archive/debian/6.6.0-1/emboss-debian-6.6.0-1.tar.gz
+	tar -zxf emboss-debian-6.6.0-1.tar.gz
+	cd emboss-debian-6.6.0-1
+	./configure --prefix=$TG_DIR/BACKEND/APPS/sequence/ --without-x
+	make
+	sed -i 's|$(bindir)/embossupdate|ls|g' Makefile
+	make install
+	cd ..
+	rm -rf emboss-debian-6.6.0-1
+
+
+
+
+	mkdir -p $TG_DIR/BACKEND/APPS/sequence 
+	cd $TG_DIR/BACKEND/APPS/sequence
+ 	wget https://github.com/samtools/samtools/releases/download/1.20/samtools-1.20.tar.bz2
+	tar -xf samtools-1.20.tar.bz2
+	cd samtools-1.20
+	./configure --prefix=$TG_DIR/BACKEND/APPS/sequence/
+	make
+	make install
+	cd $TG_DIR/BACKEND/APPS/sequence
+	rm -rf samtools-1.20.tar.bz2 samtools-1.20
+	wget https://github.com/samtools/bcftools/releases/download/1.20/bcftools-1.20.tar.bz2
+	tar -xf bcftools-1.20.tar.bz2
+	cd bcftools-1.20
+	./configure --prefix=$TG_DIR/BACKEND/APPS/sequence/
+	make
+	make install
+	cd $TG_DIR/BACKEND/APPS/sequence
+	rm -rf bcftools-1.20.tar.bz2 bcftools-1.20	
+	
+	mkdir -p $TG_DIR/BACKEND/APPS/blast/
+	cd $TG_DIR/BACKEND/APPS/blast/ &&   \
+	wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.16.0/ncbi-blast-2.16.0+-x64-linux.tar.gz
+	tar -zxf ncbi-blast-2.16.0+-x64-linux.tar.gz
+	mv ncbi-blast-2.16.0+ blast
+	rm -f ncbi-blast-2.16.0+-x64-linux.tar.gz
+	
+	mkdir -p $TG_DIR/BACKEND/APPS/NCBI/
+	cd $TG_DIR/BACKEND/APPS/NCBI/
+	wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/dataformat
+	wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets
+	chmod +x datasets
+	chmod +x dataformat
+	
+
+	mkdir -p $TG_DIR/BACKEND/APPS/
+	cd $TG_DIR/BACKEND/APPS/
+	wget https://github.com/BenLangmead/bowtie2/archive/refs/tags/v2.5.4.tar.gz
+	tar -zxf v2.5.4.tar.gz
+	rm -f v2.5.4.tar.gz
+	mv bowtie2-2.5.4 bowtie2
+	cd bowtie2
+	make
+	cp bowtie2* /TG_SCALE/BACKEND/APPS/sequence/bin/
+	cd ..
+	rm -rf bowtie2
+
+
+	cd $TG_DIR/BACKEND/APPS/
+	wget https://github.com/BenLangmead/bowtie/archive/refs/tags/v1.3.1.tar.gz
+	tar -zxf v1.3.1.tar.gz
+	rm -f v1.3.1.tar.gz
+	mv bowtie-1.3.1 bowtie
+	cd bowtie
+	make
+	cp bowtie*  /TG_SCALE/BACKEND/APPS/sequence/bin/
+	cd ..
+	rm -rf bowtie
+
+	cd $TG_DIR/BACKEND/SRC
+	npm install -g @bazel/bazelisk
+	mkdir -p $TG_DIR/BACKEND/APPS/molecule
+	wget https://github.com/EliLillyCo/LillyMol/archive/refs/tags/v7.2.1.tar.gz
+	tar -zxf v7.2.1.tar.gz
+	mv LillyMol-7.2.1 LillyMol-master
+	cd $TG_DIR/BACKEND/SRC/LillyMol-master/src/
+	bash ./build_third_party.sh && sed -i -e '51,59d' WORKSPACE && bash ./update_bazel_configs.sh && bash ./build_from_src.sh
+
+
+
+	
+	mkdir -p $TG_DIR/BACKEND/APPS/molecule/
+	cp -r $TG_DIR/BACKEND/SRC/LillyMol-master/bin/*/*  $TG_DIR/BACKEND/APPS/molecule/
+	rm -rf /TG_SCALE/BACKEND/SRC
+
+
+
+
+

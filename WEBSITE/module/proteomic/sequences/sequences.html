@@ -1,0 +1,66 @@
+$[VALID]
+<h3>Protein sequences for ${ENTRY_NAME}</h3>
+<div  class="w3-opts-right">
+		<img alt='Download' src="/require/img/download.png" style="width: 20px;"  onclick="$( '#sequences_download' ).dialog();"/>
+    <div class="help-tip" style="position:unset;margin-left:5px;" onclick="$( '#sequences_info' ).dialog({width: '70%' });"></div>
+</div>
+
+<div class="w3-col w3-s12">
+	<table id="tbl-protseqs" class="table table-sm sequences">
+		<thead>
+			<tr>
+				<th>Uniprot Identifier</th>
+				<th>Sequence Name</th>
+				<th>Description</th>
+				<th>Transcript</th>
+				<th>Options</th>
+			</tr>
+		</thead>
+		<tbody>
+			${TBL}
+		</tbody>
+	</table>
+</div>
+
+<div class="w3-col s12">
+	<h3>Identity matrix</h3>
+	${MATRIX}
+</div>
+<br />
+<div class="w3-col s12">
+	<h3 style="display:contents">Source:</h3>
+	UniProt Knowledgebase <a rel="noopener" href="http://www.uniprot.org" target="_blank">http://www.uniprot.org</a>
+
+	<div class="plus radius" id="sequences_plus" style="--l:17px;--t:1.2px;--s:4px;margin-left:10px"
+		onclick="togglePlusView('sequences_plus')"></div>
+	<div id="sequences_plus_view" style="display:none">
+		${PUBLI}
+	</div>
+</div>
+<div id="sequences_info" title="Protein Sequence description"
+	style="text-align:justify; font-size:0.9em;line-height:1.5em;display:none">
+
+</div>
+<div id="sequences_download" title="Protein Sequence Download" style="text-align:justify; font-size:0.9em;line-height:1.5em;display:none">
+		<a target="_blank"  href="/CSV/${LINK}/SEQUENCES" ><img alt='Download' src="/require/img/download.png" style="width: 20px;" />Table</a><br/>
+		<a target="_blank"  href="/FASTA/${LINK}/SEQUENCES" ><img alt='Download' src="/require/img/download.png" style="width: 20px;" />Fasta Sequence</a>
+	</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#tbl-protseqs').DataTable({
+			"ordering": false
+		});
+	});
+</script>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info" role="alert">
+	No protein sequences reported for ${SYMBOL}.
+</div>
+$[/INVALID]
+$[NO_INPUT]
+<div class="alert alert-info" role="alert">
+  ${ERROR_MSG}
+</div>
+$[/NO_INPUT]

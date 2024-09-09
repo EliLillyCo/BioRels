@@ -1,0 +1,65 @@
+
+
+<div class="w3-container genomic-portal">
+	<header class="w3-container">
+		<div class="page-title">
+			DNA Variants
+			
+			
+		</div>
+		
+	</header>
+</div>
+${ALERT}
+<div class="alert alert-info " id="fail_job" style="display: none">Unable to retrieve results</div>
+<div class="w3-row-padding w3-margin-bottom container-grey">
+	<h4>Define DNA Range:</h4>
+	
+	<div class="w3-col s6 m6 l6">
+		<form method="post" action="/DNA_VARIANTS" id="form_dsim">
+		<table class="table">
+			<tr><th>*Chromosome:</th><td><select id="chromosome" name="chromosome" >${SELECTED}${CHROMOSOME}</select></td></tr>
+			<tr><th>*Start position:</th><td><input type="text" id="start_pos" name="start_pos" value="${START_POS}"/></td></tr>
+			<tr><th>*End position:</th>  <td><input type="text" id="end_pos"   name="end_pos" value="${END_POS}"/></td></tr>
+			<tr><th>Gene:</th>  <td>${GENE_VALIDATE}</td></tr>
+			<tr><th></th>  <td></td></tr>
+			<tr><th>*Job name:</th><td><input type="text" id="name" name="name"  maxlength="2000" value="${NAME}"/></td></tr>
+			<tr><th>*Job description:</th><td><input type="text" id="description" name="description"  maxlength="2000" value="${DESCRIPTION}"/></td></tr>
+			
+		</table>
+		<br/>* (required)
+		<input type="submit" class= "btn btn-primary" value="Submit"/>
+		<div id="info" class="alert alert-danger" style="display: none;"></div>
+	</form>
+	</div>
+	<div class="w3-col s6 m6 l6">
+		<h5>Description:</h5>
+		<p>This tool was made specifically to retrieve variant frequencies in different studies for a given DNA region.<br/>
+		To start, please choose the Chromosome you wish to process and the range within that chromosome.<br/>
+		We also provide the possibility to tell whether a DNA position will be part of an exon of a protein-coding transcript. If you wish to get this information, please choose a gene.
+	</p>
+	</div>
+</div>
+<script>
+
+
+</script>
+
+${JOB_SUBMIT}
+$[MONITOR]
+
+<script>
+	
+	var myInterval;
+	
+
+$(document).ready(function(){
+	
+
+		window.location.replace("/DNA_VARIANTS_RESULTS/${HASH}");
+	
+	
+});
+</script>
+
+$[/MONITOR]

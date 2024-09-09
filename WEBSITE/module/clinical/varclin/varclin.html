@@ -1,0 +1,29 @@
+<div class="main_core_title" style="width:90%">List of clinical variant</div>
+<div id="trsq_options" style="position: relative;top: -25px;">
+			
+		<a target="_blank" href="/CSV/GENEID/${GENE_ID}/VARCLIN" ><img id="transcript_seq_opt_but" src="/require/img/download.png" style="width: 20px;" /></a>
+		</div>
+<div style="width:95%">
+<table style="width:100%;text-align: center" class="table" id="varclin_list">
+	<thead>
+		<tr>
+			<th>Variant type</th>
+			<th>Clinvar Identifier</th>
+			<th>Title</th>
+			<th>Significance</th>
+			<th>Last Update Date</th>
+			<th>Mutation</th>
+			<th>Variant Identifier</th>
+		</tr>
+	</thead>
+	<tbody>
+		${LIST}
+	</tbody>
+</table>
+</div>
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#varclin_list').DataTable();
+} );
+
+</script>

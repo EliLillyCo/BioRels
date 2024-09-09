@@ -1,0 +1,162 @@
+<header class="w3-container">
+	<div class="page-title">
+		${CPD_NAME}
+	</div>
+
+</header>
+<div class="w3-row-padding w3-margin-bottom">
+	<div class="alert alert-info"><h4>This portal is currently in development</h4></div>
+	$[NO_DATA_MESSAGE]
+	<div class="alert alert-info">
+		No compounds associated with this search term were found.
+	</div>
+	$[/NO_DATA_MESSAGE]
+
+	$[HAS_DATA]
+	<ul class="nav nav-tabs">
+		<li id="cpd_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('cpd_menu',1,5)">Summary</li>
+		$[W_SALT]
+		<li id="cpd_menu_tab_2" class="nav-item nav-link" onclick="showMenu('cpd_menu',2,5)">Salt/Stereoisomers</li>
+		$[/W_SALT]
+		<li id="cpd_menu_tab_3" class="nav-item nav-link" onclick="showMenu('cpd_menu',3,5)">News</li>
+		<li id="cpd_menu_tab_4" class="nav-item nav-link" onclick="showMenu('cpd_menu',4,5)">Assay</li>
+	</ul>
+
+	<div id="cpd_menu_view_1" class="container-grey w3-container">
+		
+		<div class="w3-container w3-col s4" id="P_CPD_IMG">
+			$[W_IMG]
+			<div id="CPD_IMG" style="margin:0 auto;width:fit-content"></div>
+			$[/W_IMG]
+		</div>
+		<div class="w3-container w3-col s8">
+			<ul class="nav nav-tabs">
+				<li id="compound_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('compound_menu',1,5)">
+					Summary</li>
+				<li id="compound_menu_tab_2" class="nav-item nav-link" onclick="showMenu('compound_menu',2,5)">Names
+				</li>
+				$[W_REP]
+				<li id="compound_menu_tab_3" class="nav-item nav-link" onclick="showMenu('compound_menu',3,5)">
+					Representation</li>
+				$[/W_REP]
+				$[W_DESC]
+				<li id="compound_menu_tab_4" class="nav-item nav-link" onclick="showMenu('compound_menu',4,5)">
+					Description</li>
+				$[/W_DESC]
+			</ul>
+
+			<div id="compound_menu_view_1" class="container-grey w3-container w3-padding-16 w3-col s4">
+				<div class="w3-container">
+					<div class="head_top">
+						Clinical Phase
+					</div>
+
+					<div class="clin_phase_blk w3-col s3_1" style="background-color: ${P1}">I</div>
+					<div class="clin_phase_blk w3-col s3_1" style="background-color: ${P2}">II</div>
+					<div class="clin_phase_blk w3-col s3_1" style="background-color: ${P3}">III</div>
+					<div class="clin_phase_blk w3-col s3_1" style="background-color: ${P4}">IV</div>
+				</div>
+				<div class="w3-container">
+					<div class="head_top">
+						Molecular weight
+					</div>
+					<div style="position:relative;">
+						<div class="w3-col"
+							style="height:10px;width:17%; background-image: linear-gradient(to right, red,green);">
+						</div>
+						<div class="w3-col" style="height:10px;width:30%; background-color:green;"></div>
+						<div class="w3-col"
+							style="height:10px;width:53%;background-image: linear-gradient(to right, green,red);"></div>
+						<div style=" position:absolute;height:10px;width:1px;border:1px solid white; left:21%;top:0px;">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="compound_menu_view_2" class="container-grey w3-container w3-padding-16" style="display: none">
+				<table class="table table-sm">${LIST_NAMES}</table>
+				${DRUG}
+			</div>
+			<div id="compound_menu_view_4" class="container-grey w3-container w3-padding-16" style="display: none">
+				${DESC}
+			</div>
+
+			<div id="compound_menu_view_3" class="container-grey w3-container w3-padding-16" style="display: none">
+				<table class="table table-sm" style="text-align:center;width:100%">
+					<tr>
+						<th id="mol_desc_smi" onclick="showMolDesc('smi')"
+							style="cursor:pointer;background-color:rgb(38, 63, 106);color:white;">SMILES</th>
+						<th id="mol_desc_inchi" onclick="showMolDesc('inchi')" style="cursor:pointer;">InCHI</th>
+						<th id="mol_desc_key" onclick="showMolDesc('key')" style="cursor:pointer;">InCHI KEY</th>
+					</tr>
+					<tr>
+						<td colspan="3" id="mol_desc_val">${SMILES}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+	</div>
+	<div id="cpd_menu_view_2" class="container-grey w3-container w3-padding-16" style="display: none;">
+		<h2>Alternative Salt form</h2>
+		<div style="height:270px;overflow-y:scroll;">
+			${LIST_DIVS}
+		</div>
+
+		<!-- $[ALT_STER]
+		<h2>Alternative Stereochemistry</h2>
+		<div style="height:270px;overflow-y:scroll;">
+			${LIST_STRUCTURE}
+		</div>
+		$[/ALT_STER] -->
+
+		$[ALT_SCAFF]
+		<h2>Alternative Scaffold</h2>
+		<div style="height:270px;overflow-y:scroll;">
+			${LIST_SCAFFOLD}
+		</div>
+		$[/ALT_SCAFF]
+	</div>
+
+	<div id="cpd_menu_view_3" class="container-grey w3-container w3-padding-16" style="display: none;">
+		$[NO_NEWS]
+		<div class="alert alert-info">
+			No news items associated with this compound were found.
+		</div>
+		$[/NO_NEWS]
+
+		${NEWS}
+	</div>
+	<!--todo this is closing out an extra div in news portal make sure closing div is set before merging with main -->
+</div>
+
+<div id="cpd_menu_view_4" class="container-grey w3-container w3-padding-16" style="display: none;">
+	$[NO_ASSAYS]
+	<div class="alert alert-info">
+		No assays associated with this compound were found.
+	</div>
+	$[/NO_ASSAYS]
+
+	${ASSAY}
+</div>
+$[/HAS_DATA]
+
+<script type="text/javascript">
+
+
+	function showMolDesc(type) {
+		$("#mol_desc_smi").css("background-color", "white"); $("#mol_desc_smi").css("color", "black");
+		$("#mol_desc_inchi").css("background-color", "white"); $("#mol_desc_inchi").css("color", "black");
+		$("#mol_desc_key").css("background-color", "white"); $("#mol_desc_key").css("color", "black");
+		if (type == 'smi') { $("#mol_desc_val").html("${SMILES}"); $("#mol_desc_smi").css("background-color", "rgb(38, 63, 106)"); $("#mol_desc_smi").css("color", "white"); }
+		if (type == 'inchi') { $("#mol_desc_val").html("${INCHI}"); $("#mol_desc_inchi").css("background-color", "rgb(38, 63, 106)"); $("#mol_desc_inchi").css("color", "white"); }
+		if (type == 'key') { $("#mol_desc_val").html("${INCHI_KEY}"); $("#mol_desc_key").css("background-color", "rgb(38, 63, 106)"); $("#mol_desc_key").css("color", "white"); }
+
+	}
+
+	$(document).ready(function () {
+		getCompoundImage("${SMI}", "CPD_IMG", Math.min(300, parseFloat($("#P_CPD_IMG").css("width"))));
+   			${ LIST_IMGS };
+	});
+
+</script>
+</div>

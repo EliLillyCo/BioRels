@@ -1,0 +1,463 @@
+
+$[ACCESS_ERROR]
+<div class="alert alert-danger">${ERROR_MESSAGE}</div>
+$[/ACCESS_ERROR]
+$[DEFAULT]
+
+<style>
+  #editor-container {
+    height: 350px;
+  }
+
+  #flex-parent {
+    display: flex;
+  }
+
+  #flex-parent>div {
+    flex: 1;
+  }
+
+  .submitNews {
+    display: block;
+  }
+</style>
+
+  <div class="w3-main welcome">
+    <div>${ERR_MSG}</div>
+    <div class="w3-col s12">
+      <h2>Sending News Article:</h2>
+    
+       
+      <div class="news_entry">
+        <h3>Review:</h3>
+        <p>Please review your article below. If you wish to edit it, please click on this <a href="/ADD_NEWS/PARAMS/NEWSID/${NEWS_ID}">link</a></p>
+          <h4 id="articleTitle">${INI_TITLE}</h4>
+          <div>
+            <div id="text">
+              ${DEFAULT_TEXT_VALUE}
+            </div>
+            <div id="annot_res">
+              ${ANNOTS}
+            </div>
+            </div>
+  
+      </div><!-- news_entry -->
+          <!--w3 container col6  -->
+          
+    </div>
+
+    <!-- justify close -->
+    <div class="w3-container w3-col s12 news_entry"  style="    padding: 0.01em 16px;">
+      <!-- file insert table -->
+      <h3>Publish:</h3>
+      
+      <div class="w3-container w3-col s6">
+        <h5>Send to teams channel:</h5>
+       ${TEAMS}
+       <br/>
+       <div class="w3-col s12" id="status_teams"></div>
+      </div>
+      
+      <div class="w3-container w3-col s6">
+       
+        <h5>Send email to:</h5>
+        <form method="POST" id="news_form" action="#">
+        <input type="hidden" name="submit_form_check" value="true" />
+          <input type="hidden" name="news_id" value="${NEWS_ID}" />
+          <textarea id="delta_v" name="delta_v" style="display:none"></textarea>
+      <textarea id="html_v" name="html_v" style="display:none"></textarea>
+        <table class="table table-sm">
+          ${LIST_EMAILS}
+        </table>
+        <br/>
+        <div style="width:94%;margin:10px 3%;text-align: center;">
+        <input id="userSubmit" class="w3-btn w3-blue" type="submit" value="Submit Email request"/>
+        
+      </div>
+      </form>
+
+      </div>
+      <!-- div class row close -->
+    </div>
+    <!-- div welcome close -->
+  
+
+
+</div>
+
+
+<style>
+  #editor-container {
+  height: 100%;
+  /* added these styles */
+  flex: 1;
+  display: flex; 
+  flex-direction: column;
+}
+
+#editor {
+  height: 100%;
+  /* added these styles */
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+}
+</style>
+
+      
+<script>
+
+ 
+var token_teams;
+var has_annots=${HAS_ANNOTS}; 
+
+$(document).ready(function (){
+  token_teams=getToken();
+
+});
+
+
+
+function monitorEmailJob(job_id,time=0)
+{
+  console.log("MONITORING JOB:"+job_id);
+  $.ajax({
+    type: "GET",
+    url: "/JSON/MONITOR_JOB/"+job_id,
+    success: function(data)
+    {
+      console.log(data);
+      
+      if (data['INFO']['JOB_STATUS']['STATUS']=='Success')
+      {
+        $("#form_info").html("<p style='font-weight:bold;color:green'>Email sent successfully</p>");
+      }
+      else if (data['INFO']['JOB_STATUS']['STATUS']=='Submitted')
+      {
+        $("#form_info").html("<p>Job submitted successfully. Waiting to be processed (" + (time)+"s) </p>");
+        setTimeout(function(){ monitorEmailJob(job_id,time+3); }, 3000);
+      }
+      else if (data['INFO']['JOB_STATUS']['STATUS']=='Error')
+      {
+        str="<p style='font-weight:bold;color:red'>Error sending email</p><table class='table'>";
+        $.each (data['INFO']['JOB_STATUS']['LOG'],function(i,info)
+        {
+          str+='<tr><td>'+info[0]+'</td><td>'+info[1]+"</td></tr>";
+        });
+        $("#form_info").html(str+'</table>');
+      }
+      else
+      {
+        setTimeout(function(){ monitorEmailJob(job_id,time+3); }, 3000);
+      }
+    }
+  });
+}
+
+
+$("#news_form").submit(function(e) {
+
+  var form = $(this);
+  e.preventDefault(); // avoid to execute the actual submit of the form.
+  $('<div></div>').appendTo('body')
+    .html('<div><h6>Do you want to send this news by email?</h6></div><div id="form_info"></div>')
+    .dialog({
+      modal: true,
+      title: 'Submit message',
+      zIndex: 10000,
+      autoOpen: true,
+      width: 'auto',
+      resizable: false,
+      buttons: {
+        "Yes": function() {
+          
+            
+
+           
+          $('.ui-dialog-buttonpane button:contains("Yes")').button().hide();
+          $("#form_info").html("<p style='font-weight:bold;color:red'>Please wait while the job is submitted</p>");
+            $.ajax({
+                type: "POST",
+                url: '/JSON/SEND_NEWS/${ADD_PATH}',
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                  console.log(data);
+                  
+                  if ('EMAIL_JOB' in data)
+                  {
+                    $("#form_info").html("<p style='font-weight:bold;color:red'>Job submitted successfully - Please hold for the email to be sent</p>");
+                      monitorEmailJob(data['EMAIL_JOB']);
+                  }
+                  else 
+                  {
+                    $("#form_info").html("<p style='font-weight:bold;color:red'>Unable to create job</p>");
+                  }
+                  
+                }
+            });
+            
+          
+       
+        },
+        Close: function() {
+          
+
+          $(this).dialog("close");
+        }
+      },
+      close: function(event, ui) {
+        $(this).remove();
+      }
+    });
+
+
+});
+
+function hslToRgb(h, s, l) {
+  let r, g, b;
+
+  if (s === 0) {
+    r = g = b = l; // achromatic
+  } else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hueToRgb(p, q, h + 1/3);
+    g = hueToRgb(p, q, h);
+    b = hueToRgb(p, q, h - 1/3);
+  }
+
+  r=parseInt(r*255).toString(16);      //Convert to a base16 string
+  rHex= (r.length==1) ? "0"+r : r;
+
+  g=parseInt(g*255).toString(16);      //Convert to a base16 string
+  gHex= (g.length==1) ? "0"+g : g;
+  b=parseInt(b*255).toString(16);      //Convert to a base16 string
+  bHex= (b.length==1) ? "0"+b : b;
+
+  return rHex+gHex+bHex;
+}
+const { abs, min, max, round } = Math;
+
+function hueToRgb(p, q, t) {
+  if (t < 0) t += 1;
+  if (t > 1) t -= 1;
+  if (t < 1/6) return p + (q - p) * 6 * t;
+  if (t < 1/2) return q;
+  if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+  return p;
+}
+
+
+function changeImageSize(img,type,max_size)
+{
+  var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        var MAX_WIDTH = max_size;
+        var MAX_HEIGHT = max_size;
+        var width = img.width;
+        var height = img.height;
+
+// Add the resizing logic
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+//Specify the resizing result
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        dataurl = canvas.toDataURL(type);
+       return dataurl;
+}
+
+function convertTextToTeams(str,img_size=1000,is_main=true)
+{
+
+// var map_color=[{'ck-heading_heading1_lly_red':'font-weight: bold;font-family: DDIN;color:rgb(213,43,30)'},
+// {'ck-heading_heading2_lly_red':'font-weight: bold;font-family: DDIN;color:rgb(213,43,30)'},
+// {'ck-heading_heading3_lly_red':'font-weight: bold;font-family: DDIN;color:rgb(213,43,30)'},
+// {'ck-heading_heading4_lly_red':'font-weight: bold;font-family: DDIN;color:rgb(213,43,30)'}];
+
+if (is_main)
+{
+  console.log("IS MAIN MESSAGE");
+  var final_message=' <div style="width: 100%;background-color: rgb(213,43,30);color: white;text-align: center;font-family: DDIN;font-weight: bold;font-size: 2em;margin-bottom: 5px;margin-right: 10px;"></div><br/>';
+final_message+=str;
+  str=final_message;
+}else console.log("IS ANNOT");
+  str=str.replaceAll('h2 class="BioRels_red"','h2 style="font-size:2.5rem;color:rgb(213,43,30);"');
+  str=str.replaceAll('h3 class="BioRels_red"','h3 style="font-size:2rem;color:rgb(213,43,30);"');
+  str=str.replaceAll('h4 class="BioRels_red"','h4 style="font-size:1.8rem;color:rgb(213,43,30);"');
+
+  regexp=/img.{1,200}src="(data:([a-zA-Z\/]{1,20});base64,\s{0,10}([a-zA-Z0-9+\/+\=]{3,}))"/g;
+  matches=[];
+      while ((match = regexp.exec(str)) !== null) {
+        
+      imgt=$("img[src$='"+match[3]+"']");
+      console.log("FOUND IMAGE:"+imgt);
+      //match[4]=changeImageSize(imgt[0],match[2],500);
+      matches.push(match);
+      }
+
+
+      regexp=/hsl\(\s*(0|[1-9]\d?|[12]\d\d|3[0-5]\d)\s*,\s*((0|[1-9]\d?|100)%)\s*,\s*((0|[1-9]\d?|100)%)\s*\)/g;
+      while ((match = regexp.exec(str)) !== null) {
+      console.log("FOUND hsl" + match);
+      hex=hslToRgb(match[1],match[3]/100,match[5]/100);
+      str=str.replace(match[0],"#"+hex);
+      }
+      chatMessage = { body: { "contentType":"html", content:""}};
+console.log("NUMER OF IMAGES:"+matches);
+
+      if (matches.length>=1)
+      {
+        rev=matches.reverse();
+        
+        id=0;
+        chatMessage.hostedContents=[];
+        $.each(rev,function(i,info)
+        {
+          ++id;
+          bytes=info[3];
+          if (info[4]!== undefined)
+          {
+            bytes=info[4];
+          }
+        chatMessage.hostedContents.push({
+          '@microsoft.graph.temporaryId': id+'',
+                contentBytes: info[3],
+                  contentType: info[2]});
+          str=str.replace(info[1],'../hostedContents/'+id+'/$value');
+        
+
+
+        });
+      chatMessage.body.content=str;
+      }else
+      {
+        chatMessage.body.content=str;
+      }
+
+      console.log("FINAL MESSAGE "+chatMessage);
+
+
+      return chatMessage;
+}
+
+async function submitDataToTeams(team_id,channel_id,channel_name, img_size)
+{
+  console.log(token_teams);
+          
+          str=$("#text").html();
+          if (img_size==1000)
+          chatMessage=convertTextToTeams(str,1000,true);
+        else 
+        {
+          img_size-=100;
+          chatMessage=convertTextToTeams(str,img_size,true);
+        }
+          chatMessage.subject= $("#articleTitle").html();
+          NchatMessage=JSON.stringify(chatMessage);
+    
+    
+    
+          
+      path='https://graph.microsoft.com/v1.0/teams/'+team_id+'/channels/'+channel_id+'/messages';
+      token_teams=getToken();
+    $.ajax({
+            type: "POST",
+            url: path,  headers: { Authorization: 'Bearer ' + token_teams },
+            contentType: 'application/json',
+            data: NchatMessage,
+            error: (result)=>{
+                    if (img_size==200)
+                    {
+                      $("#dialog_info").append("<p style='font-weight:bold;color:red'>Unable to post the alert to "+channel_name+"</p>");
+                      return;
+                    }
+                    submitDataToTeams(team_id,channel_id,channel_name, img_size);
+                  },
+            success: (result)=> {
+              
+              str_comments="<p>Alert posted successfully to "+channel_name;
+                      if (img_size==1000)str_comments+=' with images at full resolution';
+                      else str_comments+= ' with images at max size '+img_size+'px';
+                    $("#dialog_info").append(str_comments+'</p>');
+              
+    
+              console.log("#@@@##################");
+              console.log("PROCESS ANNOTATIONS");
+              if (has_annots)
+              {
+                $("#dialog_info").append('<p>Please wait 30sec for the annotations to be posted.</p>');
+                setTimeout(function(){
+            chatMessage=convertTextToTeams($("#annot_res").html(),1000,false);
+            NchatMessage=JSON.stringify(chatMessage);
+              path2=path+"/"+result.id+"/replies";
+              $.ajax({
+                  type: "POST",
+                  url: path2,  headers: { Authorization: 'Bearer ' + token_teams },
+                  contentType: 'application/json',
+                  data: NchatMessage,
+                  
+                  success: (result)=> {
+                      
+                    str_comments="<p>Annotation posted successfully to "+channel_name+"</p>";
+                     
+                    $("#dialog_info").append(str_comments);
+                  },
+                  
+                }); 
+              }, 30000);
+              }
+            }
+          }); 
+    
+             
+}
+
+async function submitToTeams(team_id,channel_id,channel_name)
+{
+  $('<div></div>').appendTo('body')
+    .html('<div><h6>Do you want to submit this news to '+channel_name+'?</h6></div><div id="dialog_info"></div>')
+    .dialog({
+      modal: true,
+      title: 'Submit message',
+      zIndex: 10000,
+      autoOpen: true,
+      width: 'auto',
+      resizable: false,
+      buttons: {
+        "Yes": function() {
+          
+          submitDataToTeams(team_id,channel_id,channel_name,1000);
+          $('.ui-dialog-buttonpane button:contains("Yes")').button().hide();
+        },
+        Close: function() {
+          
+
+          $(this).dialog("close");
+        }
+      },
+      close: function(event, ui) {
+        $(this).remove();
+      }
+    });
+}
+
+</script>
+
+$[/DEFAULT]

@@ -1,0 +1,215 @@
+$[VALID]
+<header class="w3-container">
+	<div class="page-title">
+		Assay ${ASSAY_NAME}
+	</div>
+	<p><span style="font-weight:bold;padding-left:10px;">Description:</span> ${ASSAY_DESCRIPTION}</p>
+</header>
+<div class="w3-container w3-col s12" id="filters_options"  title="Publication filtering options">
+		
+		
+		<div class="w3-constainer w3-col s3" >
+			<h5>Relations</h5>
+			<select multiple="multiple" name="Filter_rel">
+				${REL}
+			</select>
+		</div>
+		<div class="w3-constainer w3-col s9" >
+			<h5>Range</h5>
+			${RANGE}
+		</div>
+</div>
+<div class="w3-container w3-col s12"  style="margin:10px auto;">	
+	<div class="w3-col s3"><span id="n_pub1"> ${COUNT} </span> experimental data points</div>
+	
+	<div  class="w3-col s9" style="text-align: right">
+			Number per page:
+			<select id="per_page1" name="per_page1" style=" position:relative; top:2px" onchange="updatePageCount(true,1)">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+		<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+		<input type="text" size="5" class="button" value="1" id="page1"/>/<input size="5"  type="text" value="${NPAGE}" id="pagemax"/>
+		<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+		<input type="button" class="button" value='+' onclick="addCpdSize()"/>
+		<input type="button" class="button" value='-' onclick="lessCpdSize()"/>
+		<div id="muts_options" style="display: initial">
+			<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="showFilters()">
+		</div>
+	</div>
+</div>
+
+<div class="w3-container w3-col s12" id="data"></div>
+<div class="w3-container w3-col s12"  style="margin:10px auto;">
+<div id="trsq_options" style="margin:10px auto;">	
+	<div class="w3-col s3"><span id="n_pub2"> ${COUNT} </span> experimental data points</div>
+	<div  class="w3-col s9" style="text-align: right;padding-right: 27px;"> Number per page:
+			<select id="per_page2" name="per_page2" style=" position:relative; top:2px" onchange="updatePageCount(true,2)">
+					<option value="10" selected="selected">10</option>
+		<option value="20">20</option>
+		<option value="30">30</option>
+		<option value="50">50</option>
+		<option value="100">100</option>
+		<option value="200">200</option>
+	</select>
+	
+	<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+	<input type="text" class="button" size="5"  value="1" id="page2"/>/<input type="text" size="5"  value="${NPAGE}" id="pagemax2"/>
+	<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+</div>
+
+<script type="text/javascript">
+var n_filters=0;
+
+var cpd_size=260;
+
+${RANGE_SLIDER}
+
+
+function lessCpdSize()
+{
+	cpd_size-=50;
+	$(".cpd_size").css("width",cpd_size+"px");
+	$(".cpd_size").css("max-width",cpd_size+"px");
+}
+
+function addCpdSize()
+{
+	cpd_size+=50;
+	$(".cpd_size").css("width",cpd_size+"px");
+	$(".cpd_size").css("max-width",cpd_size+"px");
+}
+
+
+function addFilter()
+{
+
+}
+	function updatePageCount(with_submit=true,pos=1)
+	{
+		var tot=$("#n_pub1").html();
+		var per_page = parseInt($('#per_page'+pos).val());
+		var totmax=Math.ceil(tot/per_page);
+		$("#pagemax").val(totmax);
+		$("#pagemax2").val(totmax);
+		$("#per_page2").val(per_page);
+		$("#per_page1").val(per_page);
+		if (with_submit)submit();
+	}
+	function prevPage()
+	{
+		var val=parseInt($("#page1").val());
+		if (val==1)return;
+		$("#page1").val(val-1);
+		$("#page2").val(val-1);
+		submit();
+	
+	}
+	
+	function nextPage()
+	{
+		var val=parseInt($("#page1").val());
+		var m=parseInt($("#pagemax").val());
+		if (val>=m)return;
+		$("#page1").val(val+1);
+		$("#page2").val(val+1);
+		submit();
+	
+	}
+
+	
+function submit()
+{
+var n_curr_filter=0;
+var filters='';
+$('#filter_list').children('div').each(function () {
+filters+=$(this).data("value")+";"; // "this" is the current element in the loop
+n_curr_filter++;
+});
+if (n_curr_filter!=n_filters)
+{
+	$("#page1").val(1);
+	$("#page2").val(1);
+	n_filters=n_curr_filter;
+}
+
+var per_page = $('#per_page1').val();
+var page = $('#page1').val();
+$("#data").html("Please wait while the query is running");
+var filters='';
+$('#filter_list').children('div').each(function () {
+filters+=$(this).data("value")+";"; // "this" is the current element in the loop
+});
+urlv="/CONTENT/ASSAY/${ASSAY_NAME}/ASSAY_DATA_SEARCH";
+$.ajax({
+type: 'POST',
+// make sure you respect the same origin policy with this url:
+// http://en.wikipedia.org/wiki/Same_origin_policy
+url: urlv,
+data:{ "PER_PAGE":per_page,'PAGE':page,'FILTERS':filters},
+success: function(data){
+	try{
+	var v=jQuery.parseJSON(data);
+	console.log(v);
+	$("#data").html(v.code);
+	$("#n_pub1").html(v.STAT.CO);
+	$("#n_pub2").html(v.STAT.CO);
+	console.log(v.STAT.CO);
+	$("#info").html("");
+	updatePageCount(false,1);
+	}catch(err)
+	{
+		$("#data").html("<p class='alert alert-info'>We are unable to retrieve activity data at the moment. We apologize for the inconvenience</p>");
+	}
+},
+error:function(data){$("#info").html("<p class='alert alert-info'>We are unable to retrieve activity data at the moment. We apologize for the inconvenience</p>");}
+	});///END AJAX
+	return false;		
+}
+$(document).ready( function () {
+	//$('#mutation_search_res').DataTable();
+	submit();
+} );
+
+function showFilters()
+{
+$( "#filters_options" ).dialog({width: "60%",modal: true,
+  buttons: {
+	"Confirm": function() {
+		
+	  $( this ).dialog( "close" );
+	  submit();
+	},
+	
+  }});	
+
+}
+</script>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">No assay found</div>
+$[/INVALID]
+
+<script type="text/javascript">
+	// var list_tooltips = JSON.parse('${TOOLTIPS}');
+	// console.log(list_tooltips);
+	// $(document).ready(function () {
+	// 	$('.ttl_tr').uitooltip({
+	// 		open: function (event, ui) {
+	// 			ui.tooltip.css("width", "fit-content");
+	// 		},
+	// 		hide: {
+	// 			effect: "slideDown",
+	// 			delay: 400
+	// 		},
+	// 		track: true,
+	// 		content: function () {
+	// 			return list_tooltips[$(this).data('pos')];;
+	// 		}
+	// 	});
+	// });
+</script>

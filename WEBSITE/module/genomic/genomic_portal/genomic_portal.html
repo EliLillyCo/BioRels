@@ -1,0 +1,134 @@
+<header class="w3-container">
+		<div class="page-title">
+			${SYMBOL} - <span class="sm-caps">${PROT_NAME}</span>
+			
+		</div>
+		<p><span style="font-weight:bold;padding-left:10px;">Organism:</span> ${ORGANISM}</p>
+	</header>
+	<div class="w3-row-padding w3-margin-bottom  ">
+		
+		
+		<ul class="nav nav-tabs s_hide">
+			<li id="gene_menu_${GENE_ID}_tab_1" class="active nav-item nav-link" onclick="showMenu('gene_menu_${GENE_ID}',1,6)">Summary</li>
+	
+		<!--	<li id="gene_menu_${GENE_ID}_tab_3" class="nav-item nav-link" onclick="showMenu('gene_menu_${GENE_ID}',3,6)">Protein</li>-->
+
+			<li id="gene_menu_${GENE_ID}_tab_6" class="nav-item nav-link" onclick="showMenu('gene_menu_${GENE_ID}',6,6)">News</li>
+		</ul>
+		
+	<div id="gene_menu_${GENE_ID}_view_1" class="container-grey w3-container  w3-col s12 s-always-show">
+		<div class="  w3-container w3-col s12 m12 l12 ">
+		
+			<div class="w3-col s12 m6 l6">
+				
+				<h3>Gene information</h3>
+					<table class="table table-sm">
+						<tr><td class="boldright">Synonyms:</td><td>${ALT_GENE}</td></tr>
+						<tr><td class="boldright">Gene Id:</td><td>${GENE_ID}</td></tr>
+						<tr><td class="boldright">Chromosome:</td><td>${CHROMOSOME}</td></tr>
+						<tr><td class="boldright">Locus:</td><td>${LOCUS}</td></tr>
+						<tr><td class="boldright">Gene Type:</td><td>${GENE_TYPE}</td></tr>
+					</table>
+				
+				
+				<br/>
+					<h3>Genomic Context:</h3>
+					<div id="gene_locs_${GENE_ID}" style="overflow-y: scroll"></div>
+
+					<br/>
+					<!-- <h3>Clinical trials</h3>
+					<a href="GENEID/${GENE_ID}/CLINICAL_TRIALS" class="blk_font">
+						${SM_DRUG}
+					</a> -->
+				$[HAS_GENE_EXPR]
+				<div class="w3-col  s12 m6 l6">
+					<h3>RNA Expression</h3>
+						<table class="table table-sm">
+							<th>Tissue</th><th>TPM</th>
+							${GENE_EXPR}
+						</table>
+				</div>
+		$[/HAS_GENE_EXPR]
+			</div>
+			<div class=" w3-container w3-col s12 m6 l6"  id="gene_description">
+		
+			</div>
+		</div>
+		<div class="  w3-container w3-col s12 m12 l12 ">
+			<div class="w3-col s12 m6 l6">
+
+				<a href="GENEID/${GENE_ID}/PUBLI_GENE" class="blk_font">
+					<div id="pub_distrib">
+
+					</div>
+				
+				</a>
+			</div>
+			
+			<div class="w3-col  s12 m6 l6">
+
+				<h3>Transcript overview:</h3>
+				<div class="w3-col s12">
+		
+				${TR_STAT}
+			</div>
+			
+			
+			
+			<div class="w3-col  s12 m6 l6">
+					<h3>Orthologs</h3>
+					<table class="table table-sm">
+						<thead>
+							<tr><th>Organism</th>
+							<th>Symbol</th>
+						<th>Gene Id</th></tr>
+						</thead>
+				${ORTHOLOGS}
+			</table>
+			
+			</div>
+
+	</div>
+	</div>
+	<div  id="gene_menu_${GENE_ID}_view_3" class="container-grey w3-container w3-padding-16 w3-col s12 s-always-show">
+			<div class="w3-col  s12 m6 l6">
+					<table class="table table-sm">
+						<tr><td class="boldright">Primary Uniprot:</td><td>${PRIM_UNI}</td></tr>
+						<tr><td class="boldright">Alternative Uniprot:</td><td>${UNIPROT}</td></tr>
+						
+					</table>
+					<h4>Surface Genie Prediction:</h4><a href="https://pubmed.ncbi.nlm.nih.gov/32053146"><img src='/require/img/SurfaceGenie.png' style="width:10%"/></a>${GENIE}
+			</div>
+			<div class="w3-col  s12 m6 l6">
+					<h3>Pathways</h3>
+					<div style="display:flex;flex-direction: column;width:fit-content;margin:0 auto">
+				${PATHWAY}
+			</div>
+			</div>
+				
+			
+	</div>
+	<div  id="gene_menu_${GENE_ID}_view_4"  class="container-grey w3-container w3-padding-16 w3-col s12 s-always-show">
+		
+		${siRNA}
+	</div>
+	
+	<div  id="gene_menu_${GENE_ID}_view_6" class="container-grey w3-container w3-padding-16 w3-col s12 s-always-sho">
+		
+		${NEWS}
+
+
+	
+
+</div>
+
+
+	</div>
+	<script>
+		$(document).ready(function(){
+			showMenu('gene_menu_${GENE_ID}',1,6);
+			loadModule('pub_distrib','/CONTENT/GENEID/${GENE_ID}/GENE_PUBLI_GRAPH');
+			loadModule('gene_description','/CONTENT/GENEID/${GENE_ID}/GENE_DESCRIPTION');
+		loadModule("gene_locs_${GENE_ID}","/CONTENT/GENEID/${GENE_ID}/GENES_LOCATION");
+		});
+	</script>

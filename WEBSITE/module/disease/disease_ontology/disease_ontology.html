@@ -1,0 +1,13 @@
+<h4>Disease ontology:</h4>
+<ul class="nav nav-tabs s_hide">
+	<li id="ds_onto_tab_1" class="active nav-item nav-link" onclick="showMenu('ds_onto',1,2)">Parent records</li>
+	<li id="ds_onto_tab_2" class="nav-item nav-link" onclick="showMenu('ds_onto',2,2)">Child records</li>
+</ul>
+
+<div  id="ds_onto_view_1"  class="container-grey w3-container w3-padding-16 s-always-show" style="overflow:scroll;height:500px;max-height:500px">
+${PARENT}
+</div>
+<div  id="ds_onto_view_2"  class="container-grey w3-container w3-padding-16 s-always-show" style="overflow:scroll;display: none;height:500px;max-height:500px">
+${CHILD}
+</div>
+

@@ -1,0 +1,64 @@
+<header class="w3-container">
+	<div class="page-title">
+		${TITLE}
+		
+	</div>
+	
+</header>
+<div class="w3-row-padding w3-margin-bottom">
+	
+	
+	<ul class="nav nav-tabs">
+		<li id="publication_menu_${PMID}_tab_1" class="active nav-item nav-link" onclick="showMenu('publication_menu_${PMID}',1,${NTOT})">Summary</li>
+		<li id="publication_menu_${PMID}_tab_2" class="nav-item nav-link" onclick="showMenu('publication_menu_${PMID}',2,${NTOT})">Authors</li>
+		
+		${BLOCKS}
+		
+	</ul>
+	
+<div id="publication_menu_${PMID}_view_1" class="container-grey w3-container ">
+	<div class="w3-container w3-col s8 long_text w3-padding-16">
+		<h4>Abstract:</h4>
+		${ABSTRACT}
+	</div>
+	${FULL_TEXT}
+	<div class="w3-container w3-col s4 w3-padding-16">
+		<h4>Information:</h4>
+			<table class="table"><tbody>
+				<tr><td class="boldright">Pubmed ID:</td><td><a target="_blank" rel="noreferrer" href="https://pubmed.ncbi.nlm.nih.gov/${PMID}">${PMID}</a></td></tr>
+				<tr><td class="boldright">Publication date:</td><td>${DATE}</td></tr>
+				<tr><td class="boldright">Status:</td><td>${STATUS}</td></tr>
+				<tr><td class="boldright">DOI:</td><td><a  target="_blank" rel="noreferrer" href="https://dx.doi.org/${DOI}">${DOI}</a></td></tr>
+				<tr><td class="boldright">Journal Name:</td><td>${JOURNAL_NAME}</td></tr>
+				
+				<tr><td class="boldright">Journal Abbreviation:</td><td>${JOURNAL_ABBR}</td></tr>
+
+
+			</tbody></table>
+			
+		</div>
+		
+		
+		
+
+
+</div>
+
+<div  id="publication_menu_${PMID}_view_2"  class="container-grey w3-container w3-padding-16" style="display: none;">
+	<div class="w3-container w3-col s12">
+		<h4>Authors:</h4>
+		<table class="table"><thead><tr><th>Full Name</th><th>Institution</th><th>ORCID-ID</th></tr></thead><tbody>${AUTHORS}</tbody></table>
+		</div>
+</div>
+${BLOCKS_T}
+
+<script type="text/javascript">
+
+	$(document).ready( function () {
+		
+		${JS};
+	} );
+
+</script>
+
+</div>

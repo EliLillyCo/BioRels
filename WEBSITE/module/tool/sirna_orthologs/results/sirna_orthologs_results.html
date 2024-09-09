@@ -1,0 +1,59 @@
+<div class="w3-container genomic-portal">
+	<header class="w3-container">
+		<div class="page-title">
+			siRNA Orthologs results
+			
+		</div>
+	</header>
+</div>
+$[MONITOR]
+
+<script>
+	
+	
+
+$(document).ready(function(){
+	setTimeout(function(){
+
+		window.location.replace("/SIRNA_ORTHOLOGS_RESULTS/${HASH}");
+		
+	},3000);
+});
+
+
+
+
+</script>
+<div class="w3-container alert alert-info">
+	${MONITOR_STR}
+</div>
+$[/MONITOR]
+<ul class="nav nav-tabs">
+	<li id="ssr_${HASH}_tab_1" class="active nav-item nav-link" onclick="showMenu('ssr_${HASH}',1,${COUNT})">Input & Log</li>
+	${MENU_LIST}
+</ul>
+
+<div id="ssr_${HASH}_view_1" class="container-grey w3-container">
+	<div class=" w3-col s5 w3-container ">
+		<h5 style="text-align: center;margin-top:10px">Input sequence:</h5>
+		<pre id="input" style="width:100%;font-size:1.2em;text-align:center;font-family: 'Courier New', Courier, monospace; max-height: 500px;overflow-y: scroll;">${INPUT}
+		</pre>
+		
+		<table class="table">
+			<tr><th>Strands requested:</th><td colspan="2">${STRANDS}</td></tr>
+			<tr><th>Max Number of mismatches:</th><td colspan="2">${MISMATCH}</td></tr>
+			<tr><th rowspan="2">Gene:</th><td>Symbol:</td><td>${SYMBOL}</td></tr>
+			<tr><td>Full Name:</td><td>${FULL_NAME}</td></tr>
+			<tr><th>Organism requested:</td><td>
+		<ul>${LIST_ORGS}</ul></td>
+			</table>
+	</div>
+	<div class=" w3-col s7 w3-container " style="max-height: 500px; overflow-y: scroll;">
+		<h5 style="text-align: center;margin-top:10px">Log:</h5>
+		<table class="table table-sm">
+			${LOG}
+		</table>
+	</div>
+	</div>
+	${CONTENT_LIST}
+	

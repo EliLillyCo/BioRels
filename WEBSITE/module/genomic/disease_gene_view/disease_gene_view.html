@@ -1,0 +1,122 @@
+<h3>Publications related to ${DISEASE_NAME} & ${SYMBOL}</h3>
+
+
+<div class="w3-container w3-col s12 l12 m12"  style="margin:10px auto;">	
+	<div class="w3-col s12 m3 l3"><span id="n_pub1"> ${COUNT} </span> publications</div>
+	
+	<div class="w3-col s12 m9 l9  m-al-right l-al-right" >
+		<span class="w3-scol12">Number per page:</span>
+			<select id="per_page1" name="per_page1" style=" position:relative; top:2px" onchange="updatePageCount(true,1)">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+		<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+		<input type="text" size="5" class="button" value="1" id="page1"/>/<input size="5"  type="text" value="${NPAGE}" id="pagemax"/>
+		<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+		<div id="muts_options" style="display: initial">
+			<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="showFilters()">
+		</div>
+	</div>
+</div>
+
+<div class="w3-container w3-col s12 l12 m12" id="data">Please wait while the publications and evidences are loading</div>
+<div class="w3-container w3-col s12 l12 m12"  style="margin:10px auto;">
+<div id="trsq_options" style="margin:10px auto;">	
+	<div class="w3-col s12 m3 l3"><span id="n_pub2"> ${COUNT} </span> publications</div>
+	<div class="w3-col s12 m9 l9  m-al-right l-al-right" >
+		<span class="w3-scol12">Number per page:</span>
+			<select id="per_page2" name="per_page2" style=" position:relative; top:2px" onchange="updatePageCount(true,2)">
+					<option value="10" selected="selected">10</option>
+		<option value="20">20</option>
+		<option value="30">30</option>
+		<option value="50">50</option>
+		<option value="100">100</option>
+		<option value="200">200</option>
+	</select>
+	
+	<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+	<input type="text" class="button" size="5"  value="1" id="page2"/>/<input type="text" size="5"  value="${NPAGE}" id="pagemax2"/>
+	<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+</div>
+		
+		<script type="text/javascript">
+		
+	
+		function updatePageCount(with_submit=true,pos=1)
+		{
+			var tot=$("#n_pub1").html();
+			var per_page = parseInt($('#per_page'+pos).val());
+			var totmax=Math.ceil(tot/per_page);
+			$("#pagemax").val(totmax);
+			$("#pagemax2").val(totmax);
+			$("#per_page2").val(per_page);
+			$("#per_page1").val(per_page);
+			if (with_submit)submit();
+		}
+		function prevPage()
+		{
+			var val=parseInt($("#page1").val());
+			if (val==1)return;
+			$("#page1").val(val-1);
+			$("#page2").val(val-1);
+			submit();
+		
+		}
+		
+		function nextPage()
+		{
+			var val=parseInt($("#page1").val());
+			var m=parseInt($("#pagemax").val());
+			if (val>=m)return;
+			$("#page1").val(val+1);
+			$("#page2").val(val+1);
+			submit();
+		
+		}
+	
+			
+	function submit()
+	{
+		
+	
+		var per_page = $('#per_page1').val();
+		var page = $('#page1').val();
+		$("#data").html("Please wait while the query is running");
+		var filters='';
+		$('#filter_list').children('div').each(function () {
+		filters+=$(this).data("value")+";"; // "this" is the current element in the loop
+		});
+		urlv="/CONTENT/DISEASE_GENE_EVIDENCE_TBL";
+		$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: urlv,
+		data:{ "DISEASE":"${DISEASE}", "GENE":"${GENE}", "PER_PAGE":per_page,'PAGE':page,'FILTERS':filters},
+		success: function(data){
+			
+			var v=jQuery.parseJSON(data);
+			$("#data").html(v.code);
+			$("#n_pub1").html(v.STAT.CO);
+			$("#n_pub12").html(v.STAT.CO);
+			console.log(v.STAT.CO);
+			$("#info").html("");
+			updatePageCount(false);
+		},
+		error:function(data){$("#data").html("An issue occured.");}
+			});///END AJAX
+			return false;		
+	}
+		$(document).ready( function () {
+			//$('#mutation_search_res').DataTable();
+			submit();
+		} );
+	
+	
+		
+		</script>
+

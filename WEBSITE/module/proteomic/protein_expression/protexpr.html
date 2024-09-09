@@ -1,0 +1,80 @@
+$[VALID_PROTEXPR]
+<h3>Protein expression levels for ${SYMBOL}</h3>
+<div  class="w3-opts-right">
+			
+		<a target="_blank" href="/CSV/GENEID/${GENE_ID}/PROTEXPR" ><img alt='Download' src="/require/img/download.png" style="width: 20px;" /></a>
+		<div class="help-tip" style="position:unset;margin-left:5px;" onclick="$( '#prot_expr_info' ).dialog({width: '70%' });"></div>
+		</div>
+	<div class="w3-col s12">
+<table id="tbl-protexpr" class="table" >
+		<thead>
+			<tr>
+			    <th>Tissue</th>
+			    <th>Cell Type</th>
+				<th>Expression</th>
+			    <th>Confidence</th>
+			</tr>
+		</thead>
+		<tbody>
+			${TBL_PROTEXPR}
+		</tbody>
+	</table>
+
+
+</div>
+
+<hr/>
+<h4 style="display:contents">Source:</h4>
+Human Protein Atlas available from <a href="http://www.proteinatlas.org" target="_blank">http://www.proteinatlas.org</a>
+<div class="plus radius" id="protexpr_plus" style="--l:17px;--t:1.2px;--s:4px;margin-left:10px" onclick="togglePlusView('protexpr_plus')"></div>
+<div id="protexpr_plus_view" style="display:none">
+${PUBLI}
+</div>
+
+<div id="prot_expr_info" title="Protein Expression description" style="text-align:justify; font-size:0.9em;line-height:1.5em;display:none">
+Protein expression score is based on immunohistochemical data manually scored with regard to staining intensity (negative, weak, moderate or strong) 
+and fraction of stained cells (<25%, 25-75% or >75%). 
+Each combination of intensity and fractions is automatically converted into an protein expression level score as follows: 
+<ul><li>Not detected:
+	<ul><li>negative</li>
+		 <li>weak &lt;25% </li>
+	</ul></li>
+	<li>Low:
+	<ul><li>weak combined with either 25 - 75% or 75%</li>
+		 <li>moderate  &lt;25%</li>
+	</ul></li>
+	<li>Medium:
+	<ul><li>moderate combined with either 25 - 75% or 75%</li>
+		 <li>strong &lt;25% </li>
+	</ul></li>
+	<li>High:
+	<ul><li>medium, strong combined with either 25 - 75% or 75%</li>
+	</ul></li>
+	
+	</ul>In addition to this, protein expression values are manually adjusted as necessary when evaluated by our expert annotators. 
+<br/>
+<p>A reliability score is set manually for all genes and indicates the level of reliability of the analyzed protein expression pattern based on available protein/RNA/gene characterization data from both HPA and the UniProtKB/Swiss-Prot database.
+The overall score encompass several factors: reproducibility of the antibody staining in different cell lines (and if signal strength correlates with RNA expression levels); assays for enhanced antibody validation by using antibodies binding to different epitopes on the same target protein (independent antibodies), by knockdown/knockout of the target protein (genetic methods) and by matching of the signal with a GFP-tagged protein (recombinant expression); experimental evidence for location described in literature. Considerations are also made on whether the antibody performs in non IF-related methods like Western blot or immunohistochemistry.
+</p>
+The final score leads to the assignment into one of the following four classes:
+<ul>
+<li>Enhanced - One or more antibodies are enhanced validated and there is no contradicting data, for example literature describes experimental evidence for a different location.</li>
+<li>Supported - There is no enhanced validation of the used antibody, but the annotated localization is reported in literature.</li>
+<li>Approved - If the localization of the protein has not been previously described and was detected by only one antibody without additional antibody validation.</li>
+<li>Uncertain - If the antibody-staining pattern contradicts experimental data or no expression is detected on the RNA level.</li>
+<span style="font-style:italic; font-size:0.7em;">Taken from: <a href="https://www.proteinatlas.org/about/help#4">Human Protein Atlas Help</a>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready( function () {
+	
+    $('#tbl-protexpr').DataTable({"ordering":true});
+} );
+</script>
+$[/VALID_PROTEXPR]
+$[INVALID_PROTEXPR]
+<div class="alert alert-info" role="alert">
+  No protein expression reported for ${SYMBOL}.
+</div>
+$[/INVALID_PROTEXPR]

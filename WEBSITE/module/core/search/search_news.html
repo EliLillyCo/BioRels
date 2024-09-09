@@ -1,0 +1,137 @@
+$[MULTI]
+<div class="w3-container" style="padding-top:22px">
+	<table id="search_res_news" class="w3-w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white gene-table"
+		style="font-size:0.9em;">
+		<thead>
+			<tr>
+				${result}
+				</tbody>
+	</table>
+</div>
+</div>
+$[/MULTI]
+$[SINGLE]
+<script type="text/javascript">
+	$(document).ready(function () {
+		document.location.href = "${ADDON}";
+	});
+</script>
+$[/SINGLE]
+$[INVALID]
+<div class="alert alert-info">An error happened during the search, we apologize for the inconvenience</div>
+$[/INVALID]
+$[COMPLEX]
+
+<h3>News search:</h3>
+<div class="w3-container w3-col s12">
+	<p>Search query: ${QUERY}</p>
+	$[CPLX_NO_RESULTS]
+<div class="alert alert-info">No results found</div>
+$[/CPLX_NO_RESULTS]
+</div>
+
+
+
+$[CPLX_RESULTS]
+<div class="w3-container w3-col s12">
+	
+${FILTERS}
+
+<br/>
+<br/>
+<div class="w3-container w3-col s12" style="width: 100%;text-align: center;"><button type="button" style="margin:10px" class="btn btn-primary" onclick="updateSelList()"/>Refresh</div>
+</div>
+<div class="w3-container w3-col s12">
+<div id="results"></div>
+</div>
+
+<script type="text/javascript">
+
+search_data=JSON.parse('${JSON}');
+list_sel={};
+list_order=[];
+
+function updateSelList()
+{
+	list_sel={};
+	
+	var n_rules=0;
+	$('.search_news_sel').each(function() {
+     n_sel=$("#"+$(this).attr("id")+" :selected").length;
+	 if (n_sel>0)n_rules++;
+	});
+
+	 if (n_rules==0)
+	 {
+		$('.search_news_sel').each(function() {
+		$("#"+$(this).attr("id")+" > option").each(function() {
+		console.log(this.text + ' ' + this.value);
+		$.each(search_data[this.value],function(idx,value)
+		{
+			if (value in list_sel) list_sel[value]++;
+			else list_sel[value]=1;
+		});
+		});
+		});
+	 }
+	 else
+	 {
+		$('.search_news_sel').each(function() {
+			n_sel=$("#"+$(this).attr("id")+" :selected").length;
+			if (n_sel==0)return true;
+		$("#"+$(this).attr("id")+" :selected").each(function() {
+		console.log("SEL:" +this.text + ' ' + this.value);
+		$.each(search_data[this.value],function(idx,value)
+		{
+			if (value in list_sel) list_sel[value]++;
+			else list_sel[value]=1;
+		});
+		});
+		});
+	 }
+
+	 console.log(list_sel);
+	 var highest=0;
+	 list_order=[];
+	 $.each (list_sel, function(id,co){ 
+		
+		if (co>highest) highest=co;
+		console.log(id+" "+co+" "+highest);
+	});
+	 console.log(highest);
+	 var str='';
+	 for ( i=highest;i>=0;i--)
+	 {
+		if (n_rules>0 && n_rules!=i)continue;;
+		$.each (list_sel, function(id,co){ if (co!=i) return true;list_order.push(id); str+=id+"_";});
+	
+	 }
+	 console.log(list_order);
+	 if (str.length>0)
+	 {
+	 $("#results").html('please wait while we load the content');
+		urlv = '/CONTENT/NEWS_BATCH';
+		$.ajax({
+			type: 'POST',
+			// make sure you respect the same origin policy with this url:
+			// http://en.wikipedia.org/wiki/Same_origin_policy
+			url: urlv,
+			data: {'RID':str,'IS_HASH':'true','ORDER_DATE':true},
+			success: function (data) {
+
+				var v = jQuery.parseJSON(data);
+				$("#results").html(v.code);
+
+			},
+			error: function (data) { $("#results").html("An issue occured."); }
+		});///END AJAX
+	}
+		return false;
+
+
+}
+
+$(document).ready(function (){ updateSelList();});
+</script>
+$[/CPLX_RESULTS]
+$[/COMPLEX]

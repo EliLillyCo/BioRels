@@ -1,0 +1,641 @@
+/**
+   * @brief Extension of std::exception to handle protein management exception
+   *
+   * 0's, are for static
+01 - link
+02 - dot
+03 -Group
+04 - Grouplist
+05 - Argcv
+06 - ObjectPool
+07 - strutils
+
+10's are for Graph
+10 - Graph
+11 - GraphMatch
+
+20's are for math
+20 - Matrix
+21 - RigidBody
+22 - Grid
+
+25's are for IW
+25 - IWICF
+26 - SubstrSearch
+
+30's are for molecule
+30 - MMBond
+31 - MMAtom
+32 - MMResidue
+33 - MMChain
+34 - MMRing
+35 - MacroMole
+36 - HETManager
+37 - HETInputAbst
+
+40's are for parser
+40 - ReaderBase
+41 - ReadMOL2
+42 - ReadPDB
+43 - ReadSDF
+44 - Readers
+45 - WriterBase
+46 - WriterMOL2
+47 - WriterPDB
+48 - WriterSDF
+
+50's are for sequences
+50 - SeqBase
+51 - Sequence
+52 - SeqChain
+53 - UniprotEntry
+54 - Seqalign
+
+60's is for proc
+60 - AtomPerception
+61 - BondPerception
+62 - MultiMole
+63 - MatchMole
+64 - ProtAlign
+65 - MatchTemplate
+66 - MatchLigand
+
+70's is for database
+70 - Database
+71 - Statement
+72 - DBResMap
+73 - DBMoleMap
+74 - DBAbstQuery
+75 - DBAtomQuery
+76 - dbquery_utils
+77 - DBXrChainQuery
+78 - DBXrResQuery
+79 - DBXrStructQuery
+
+
+80's are for interactions
+81 - Anion PI
+82 - Apolar
+83 - InterAtomBase
+84 - InterCationPI
+
+200's is for cmatch
+201 - dockmatch
+
+210 is for ligalign
+210 - process_input
+
+
+220 is for MMPGen
+
+230 is for cpdToDb
+230 - IntCpdHandler
+231 - CpdToXML
+232 - MMCIFRES
+233 - MMCifReader
+234 - ExtCpdHandler
+
+
+240-250 is for xrport_utils
+240 - HETListGenerator
+241 - KinomeData
+242 - Protocols
+
+
+270 is for protAlign( tool)
+270 - Main
+271 - ToolProtAlign
+272 - PeptSearch
+
+280 is for detint
+280 - Main
+
+
+290 is for PDBParser
+290 - Main
+291 - PDBParser
+292 - PDBEntry
+293 - PDBChainEntry
+
+
+300 is for getXrayData
+300 - Main
+301 - LigAlign
+302 - FragInterSearch
+303 - FragEntry
+304 - FragHandler
+305 - FragInterMerge
+306 - FragInterSearch
+307 - FragResult
+308 - FragSubstrSearch
+310 - DatInt
+320 - AtomRule
+321 - GeomSearch
+322 - GeomQuery
+323 - GeomCalcHandler
+330 - Fetch
+331 - FetchStruct
+332 - LigAlign
+
+400 is for xrayTool
+400 - main
+401 - XrayToolHandler
+402 - QueryDb
+403 - LigandPharmacophore
+
+
+500 - Grim tool
+501 - Grim
+
+
+
+ 010101   link::getOther                      Given parameter is not part of this link
+* 010201   link::getOther                      Given parameter is not part of this link
+* 020101   dot::delLink                        Given link is not part of this dot
+* 020201   dot::updateLink                     Given link not found in this dot
+* 020301   dot::updateDot                      Given dot not found in this dot
+* 020401   dot::getDot                 Position is above the number of linked dots
+* 020501   dot::getLink                Position is above the number of links
+* 020601   dot::dot                    Bad allocation
+* 030101   Group::reserve              Bad allocation
+* 030201   Group::addDot               Bad allocation
+* 030202   Group::createDot            This group don't own dot, so can't create one
+* 030301   Group::createLink           Dot 1 is not part of this Group
+* 030302   Group::createLink           Dot 2 is not part of this Group
+* 030303   Group::createLink           Bad allocation
+* 030304   Group::createLink           This group don't own link, so can't create one
+* 030401   Group::addDot               Given position is above the number of vertices in the Group
+* 030501   Group::addDot               Cannot add a Dot own by another Group
+* 030601   Group::addLink              Cannot add an Link own by another Group
+* 030701   Group::delDot               Given Dot is not part of this molecule
+* 030702   Group::delDot               Wrong Dot MID
+* 030703   Group::delDot               Dot unmatch MID
+* 030704   Group::delDot               Atom not found in molecule
+* 030801   Group::delLink              Given Link is not part of this Group
+* 030802   Group::delLink              Given Link is not part of this Group
+* 030901   Group::getLink              Given position is above the number of links in the group
+* 031001   Group::getPos               Given dot is not part of this group
+* 040101   GroupList::get              Position  above number of entries
+* 040201   GroupList::remove           Position  above number of entries
+* 050001   ARGCV::ARGCV                not enough arguments
+* 050002   ARGCV::ARGCV                Unexpected parameter
+* 050101   Argcv::processOption        Expected value for option. Got nothing.
+* 050102   Argcv::processOption        Expected value for option  Got parameter
+* 050201   Argcv::getArg               Position above number of arguments
+* 060101   ObjectPool::acquireObject   Given object is already in use
+* 060201   ObjectPool::acquireObject   Given object is already in use
+* 060301   ObjectPool::releaseObject   Given position is above the number of objects
+* 060302   ObjectPool::releaseObject   Given object is not in use
+* 060401   ObjectPool::releaseObject   Given object is not part of this pool
+* 060501   ObjectPool::releaseObject   Given position is above the number of objects
+* 060502   ObjectPool::releaseObject   Given object is not in use
+* 070101   tokenReuseStr               Position above the number of values
+* 100101   Graph::addEdge              Given position 1 is above the number of vertices
+* 100102   Graph::addEdge              Given position 2 is above the number of vertices
+* 110101   GraphMatch::addPair         Bad allocation
+* 110201   GraphMatch::getPair         Given number is above the number of pairs
+* 110301   GraphMatch::getClique       Given number is above the number of clique
+* 110401   GraphMatch::calcCliques     No Pairs defined
+* 110402   GraphMatch::calcCliques     No Edges defined
+* 110501   GraphMatch::getClique       Given number is above the number of clique
+* 200101   Matrix::resize              Bad allocation
+* 200201   Matrix::GetVal              Given row above the number of rows"
+* 200202   Matrix::GetVal              Given column above the number of columns
+* 200301   Matrix::setVal              Given row above the number of rows
+* 200302   Matrix::setVal              Given column above the number of columns
+* 200401   Matrix::val                 Given position above the number of element in the matrix
+* 210101   RigidBody::innerProduct     Weights does not fit size
+* 210201   RigidBody::calcRotation     Rigid coordinate list is empty
+* 210202   RigidBody::calcRotation     Mobil coordinate list is empty
+* 210203   RigidBody::calcRotation     Mobile and Rigid coordinate lists have different size
+* 220201   Grid::createGrid            No heavy atom to consider for the grid
+* 220301   Grid::calcUnitVector        Geometric center is the same as the baryCenter
+* 220401   Grid::generateCubes          Bad allocation
+* 220501   Grid::findBox               No box found for this atom
+* 220601   Grid::applyRotation         Unable to find box for atom
+* 220701   Grid::getPrepBox            No box assigned to this atom
+* 220702   Grid::getPrepBox            Parent molecule is not part of this grid
+* 220801   Grid::getBox                Position above the number of boxes
+* 220901   Grid::getBox                Position above the number of boxes
+* 250101   IWtoMacro                   Unsucessfull creation of SMILES
+* 260101   SubstrSearch::SubstrSearch  Unable to construct molecule from SMILES
+* 260102   SubstrSearch::SubstrSearch  Unable to create substructure query
+* 300101   MMBond::MMBond              Both atom are the same
+* 300201   MMBond::getOtherAtom        Given atom is NULL
+* 305001   MMBond_Utils::getBondType   Unrecognized bond type
+* 310101   MMAtom::setAtomicName       Given atomic name must have 1,2 or 3 characters
+* 310102   MMAtom::setAtomicName       Atomic name not found
+* 310201   MMAtom::getBond             position is above the number of bond for this atom
+* 310301   MMAtom::getBond             No bond found between the two atoms
+* 310401   MMAtom::getBondType         No bond found between the two atoms
+* 310501   MMAtom::getAtom             pos is above the number of bonds for this atom
+* 310601   MMAtom::getAtomNotAtom      No alternative aton found
+* 310701   MMAtom::getResidue          No residue defined for this atom
+* 310801   MMAtom::setMOL2Type         No type given
+* 310802   MMAtom::setMOL2Type         Unrecognized MOL2 Type
+* 320101   MMResidue::addAtom          No atom given
+* 320201   MMResidue::delAtom          No atom given
+* 320202   MMResidue::delAtom          Given atom is not part of this Residue
+* 320203   MMResidue::delAtom          Given atom is not part of this Residue
+* 320301   MMResidue::delAtom          Given atom is not part of this Residue
+* 320302   MMResidue::delAtom          Given atom is not part of this Residue
+* 320401   MMResidue::getAtom          Given position is above the number of atom in this Residue
+* 320501   Residue::getAtom            Atom Not found
+* 320502   Residue::getAtom            Atom Not found
+* 325001   MMResidue_Utils::residue1Lto3L Name not found
+* 325002   MMResidue_Utils::residue1Lto3L input should be 1 letter
+* 325101   MMResidue_Utils::getResidueType  Unrecognized residue type
+* 330101   MMChain::addResidue         No Residue given
+* 330102   MMChain::addResidue         Given residue not part of this chain
+* 330201   MMChain::addResidue         Given residue not part of this chain
+* 330301   MMChain::delResidue         No Residue given
+* 330302   MMChain::delResidue         Given Residue is not part of this chain
+* 330303   MMChain::delResidue         Given Residue is not part of this chain
+* 330401   MMChain::delResidue         Given Residue is not part of this chain
+* 330402   MMChain::delResidue         Given Residue is not part of this chain
+* 330501   MMChain::getResidue         Given position is above the number of Residues
+* 330601   MMChain::getResidue         Given position is above the number of Residues
+* 330701   MMChain::getResidueByFID        Given position  has not been found
+* 330801   MMChain::getResidue         No Residue found with the given parameters
+* 330901   MMChain::getResidue         No Residue found with the given parameters
+* 350101   MacroMole::addAtom          This molecule is an alias. Cannot create atom on an alias
+* 350102   MacroMole::addAtom              Bad Allocation
+* 350201   MacroMole::addAtom(RES)         Given residue is not in this molecule
+* 350301   MacroMole::addAtom(RES,COORDS)  Given residue is not in this molecule
+* 350302   MacroMole::addAtom(RES,COO)     Associated element to MOL2 is different than given element
+* 350401   MacroMole::getAtomByFID         Given ID not found
+* 350501   MacroMole::getBond              Given position is above the number of bonds
+* 350601   MacroMole::addBond              This molecule is an alias. Cannot create residue on an alias
+* 350602   MacroMole::addBond              Atom not part of this molecule
+* 350603   MacroMole::addBond              Atom not part of this molecule
+* 350604   MacroMole::addBond              Both atoms are the same
+* 350701   MacroMole::delBond              Given Bond is not part of this molecule
+* 350702   MacroMole::delBond              Given Bond is not part of this molecule
+* 350801   MacroMole::delAtom              Atom not found in molecule
+* 350901   MacroMole::GetChain             Position above the number of chain
+* 351001   MacroMole::getChain             Position above the number of chain
+* 351101   MacroMole::getChain             Chain with name not found
+* 351201   MacroMole::removeChainFromList  Given chain not found in molecule
+* 351301   MacroMole::delChain             Given chain is not part of this molecule
+* 351302   MacroMole::delChain             Given chain not found in molecule
+* 351401   MacroMole::addChain             Bad Allocation
+* 351501   MacroMole::addResidue           This molecule is an alias. Cannot create residue on an alias
+* 351502   MacroMole::addResidue           Bad allocation (for chain)
+* 351503   MacroMole::addResidue           Wrong given chain length.
+* 351504   MacroMole::addResidue           Residue name empty
+* 351601   MacroMole::getResidueByFID      No residue found with this ID
+* 351701   MacroMole::delChain             Given chain not found in molecule
+* 351702   MacroMole::getResidue                        No residue found with FID
+* 351801   MacroMole::getResidue                        Given position is above the number of Residues
+* 351901   MacroMole::getResidue                        Given position is above the number of Residues
+* 352001   MacroMole::moveResidueToChain                Residue not part of this molecule
+* 352002   MacroMole::moveResidueToChain                Chain not part of this molecule
+* 352101   MacroMole::deleteNotOwnedResidues            Molecule owns residues
+* 352102   MacroMole::deleteNotOwnedResidues            residue not found in molecule
+* 352201   MacroMole::deleteResidues                    Given residue is not part of this molecule
+* 352301   MacroMole::addRingSystem                     No atom in the ring
+* 352302   MacroMole::addRingSystem                     Bad allocation
+* 352401   MacroMole::getRingFromAtom                   No ring found
+* 352501    MacroMole::getRing                            Given value above the number of rings
+* 352601   MacroMole::delRing                           Given ring is not part of the molecule
+* 370101   HETInputAbst::setPosition                    File is not opened
+* 370201   HETInputAbst::setPosition                    No Molecule by this name found
+* 370301   HETInputFile::loadPositions                  NO GC3TK_HOME parameter defined
+* 370401   HETInputFile::loadMole                       Unrecognized residue type
+* 370402   HETInputFile::loadMole                       Unable to perceive molecule
+* 370403   HETInputFile::loadMole                       Bad allocation
+* 370501   HETInputFile::perceiveMolecule               Wrongly form atom block
+* 370502   HETInputFile::perceiveMolecule               Atom block incomplete
+* 370503   HETInputFile::perceiveMolecule               Wrongly form bond block
+* 370601   HETInputBin::loadPosition                    NO GC3TK_HOME parameter defined
+* 370701   HETInputBin::openBinary                      NO GC3TK_HOME parameter defined
+* 370801   HETInputbind::loadMole                       Error while reading file
+* 370901   HETManager::open                             Unable to open files
+* 371001   HETManager::exportFile                       Unable to open binary file
+* 371002   HETManager::exportFile                       Unable to open position file
+* 371101   HETManager::toHETList                        Unable to open file
+* 400101   ReaderBase::open                             No file given
+* 400102   ReaderBase::open                             Unable to open file
+* 410101   ReadMOL2::load                               @<TRIPOS>MOLECULE block not found
+* 410102   ReadMOL2::load                               Number of atoms not given in MOLECULE block
+* 410103   ReadMOL2::load                               No ATOM block found while expecting atoms
+* 410104   ReadMOL2::load                               No BOND block found while expecting bonds
+* 410105   ReadMOL2::load                               No Residue block found while expecting Residues
+* 410106   ReadMOL2::load                               Molecule is not owner
+* 410107   ReadMOL2::load                               Error while loading file - Memory allocation issue
+* 410201   ReadMOL2::readMOL2Substructure               No file opened
+* 410202   ReadMOL2::readMOL2Substructure               Number of Residue found differs from expected Residues
+* 410301   ReadMOL2::prepline                           Wrong number of columns
+* 410401   ReadMOL2::readMOL2Atom                       No file opened
+* 410402   ReadMOL2::readMOL2Atom                       Number of atoms found differs from expected atoms
+* 410501   ReadMOL2::readMOL2Bond                       No file opened
+* 410502   ReadMOL2::readMOL2Bond                       Unrecognized bond type
+* 410503   ReadMOL2::readMOL2Bond                       Origin atom id is above the number of atoms
+* 410504   ReadMOL2::readMOL2Bond                       Target atom id is above the number of atoms
+* 410505   ReadMOL2::readMOL2Bond                       Number of bonds found differs from expected bond
+* 420101   ReadPDB::findAtom                            Atom serial number not found
+* 420201   ReadPDB::loadAtom                            Atom Element not specified
+* 420301   ReadPDB::load                                Unable to read file - Memory allocation issue
+* 430101   ReadSDF::load                                No file opened
+* 430201   ReadSDF::loadHeader                          Only read V2000 SD format
+* 420301   ReadSDF::loadBond                            Unexpectected end of line
+* 420401   ReadSDF::loadAtom                            Unexpectected end of line
+* 420501   ReadSDF::assignProp                          Unexpectected end of line
+* 420601   ReadSDF::load                                Unable to read file - Memory allocation issue"
+* 440101   Readers::load                                Unable to find extension
+* 440201   Readers::createReader                        Unrecognized extension
+* 440401   Readers::isInternal                          Unable to find extension
+* 440501   Readers::createWriter                        Unrecognized extension
+* 450101   WriterBase::open                             No Path given
+* 450102   WriterBase::open                             Unable to open file
+* 460101   WriterMOL2::outputAtom                       Unable to find residue
+* 460201   WriteMOL2::outputBond                        Unable to find atom 1
+* 460202   WriteMOL2::outputBond                        Unable to find atom 2
+* 460203   WriteMOL2::outputBond                        Unrecognized bond type
+* 470101   WritePDB::outputAtom                         Unrecognized formal charge
+* 480101   WriterSDF::outputHeader                      No file opened
+* 480102   WriterSDF::outputHeader                      SDF file limited to 999 atoms
+* 480103   WriterSDF::outputHeader                      SDF file limited to 999 bonds
+* 480201   WriterSDF::outputBond                        Unrecognized bond type
+* 500101   SeqBase::getPos                              Unrecognized character
+* 500201   SeqBase::getPos                              Unrecognized character
+* 500301   SeqBase::loadFastaSequence                   Unrecognized AA
+* 500401   SeqBase::insertGap                           Position above length
+* 510101   Sequence::loadFastaSequence                  Header line should start with > for line
+* 510102   Sequence::loadFastaSequence                  Unrecognized AA
+* 510201   Sequence::loadFastaSequence                  Unrecognized AA
+* 510301   Sequence::loadPIRSequence                    Header line should start with > for line
+* 510302   Sequence::loadPIRSequence                    Unrecognized AA
+* 510401   Sequence::getResidue                         Standard sequence is not associated to a residue
+* 510501   Sequence::push_value                         Unrecognized AA
+* 520101   SequenceChain::update                        Unrecognized AA
+* 520201   SequenceChain::posToName                     Position is above the number of characters
+* 520301   SequenceChain::posToId                       Position is above the number of entries
+* 520401   SequenceChain::getResidue                    Position is above the number of entries
+* 520501   SequenceChain::getResidue                    Position is above the number of entries
+* 520601   SequenceChain::updateResName                 Unrecognized AA
+* 520602   SequenceChain::updateResName                 Given position above sequence length
+* 530101   UniprotEntry::UniprotEntry                   Given AC must not be empty
+* 530201   UniprotEntry::loadData                       Unable to open file
+* 540101   SeqAlign::SeqAlign                           Sequence cannot have gaps
+* 540102   SeqAlign::SeqAlign                           Bad allocation
+* 540201   SeqAlign::loadMatrix                         Unable to load blossum file
+* 540103   SeqAlign::SeqAlign                           Reference sequence is empty
+* 540104   SeqAlign::SeqAlign                           Compared sequence is empty
+* 550101   SeqPairAlign::merge                          Reference sequence in results must be reference sequence in left Pair
+* 550102   SeqPairAlign::merge                          Compared sequence in left side is different than ref sequence in right side
+* 550103   SeqPairAlign::merge                          Compared sequence in results must be Compared sequence in right Pair
+* 600101   AtomPerception::perceive                     Unable to process atom
+* 600201   AtomPerception::setMOL2                      Atom out of range of processing list
+* 600301   AtomPerception::followRule                   Atom does not have any bonds - Please contact administrator
+* 600401   AtomPerception::assignSingleMOL2             Atom element not recognized
+* 610101    BondPerception::setDistThreshold             First atomic number is above the number of element allowed
+* 610102    BondPerception::setDistThreshold             Second atomic number is above the number of element allowed
+* 610201    BondPerception::processMolecule              Molecule cannot be an alias
+* 630101    MatchMole::linkPairs                         No pairs found
+* 630201    MatchMole::checkBondDistance                 Position out of range
+* 640101    ProtAlign::addChainPair                      Given reference chain is not part of the reference molecule
+* 640102    ProtAlign::addChainPair                      Given comparison chain is not part of the comparison molecule
+* 640103    ProtAlign::addChainPair                      Bad allocation
+* 640201    ProtAlign::addChainPair                      Given reference chain is not part of the reference molecule
+* 640202    ProtAlign::addChainPair                      Given comparison chain is not part of the comparison molecule
+* 640203    ProtAlign::addChainPair                      Bad allocation
+* 640301    ProtAlign::addChainPair                      Bad allocation
+* 640401    ProtAlign::align                             No chain assigned
+* 640402    ProtAlign::align                             List of reference residue not given
+* 640403    ProtAlign::align                             List of comparison residue not given
+* 640404    ProtAlign::align                             Different size list
+* 640501    Protalign::scanThreshold                     No alignment found
+* 650101    MatchTemplate::processWater                  No oxygen found in water
+* 650201    MatchTemplate::processInternalLigand         Unable to find template
+* 650301    MatchTemplate::checkBonds                    Unable to correct issue
+* 650401    MatchTemplate::processMolecule               Molecule must be owner
+* 660101    MatchLigand::MatchLigand                     Bad allocation
+* 660201    MatchLigand::generatePairs                   No atom found
+* 660301    MatchAA::generatePairs                       No atom found
+
+* 700101    DataBase::open                               Could not establish connection
+* 700201    Database::createTransaction                  Could not establish connection
+* 700301    Database::execute                            Unable to execute query
+* 700401    Database::execute                            Unable to execute query
+* 720101    DBResMap::fetchData                          Unable to execute query
+* 720102    DBResMap::fetchData                          Query has not be run
+* 720103    DBResMap::fetchData                          Issue while executing query
+* 720202    DBResMap::loadSingleAtom                     Issue while executing query
+* 720301    DBResMap::getResEntry                        Entry not found
+* 720401    DBResMap::getResEntry                        Residue name empty
+* 720402    DBResMap::getResEntry                        Entry not found
+* 720501    DBResMAp::GetAtomName                        No atom name found for residue with given Id
+* 720601    DBResMap::getInterName                       Interaction name not found
+* 720602    DBResMap::getInterName                       Unable to load interaction types
+* 720701    DBResMap::getInterType                       Unable to find interaction
+* 720801    DBResMap::getAtomName                        Given Id not part of this residue
+* 720901    DBResMap::createIntraBond                    Residue not found
+* 720902    DBResMap::createIntraBond                    Error during query execution
+* 721001    DBResMap::loadAll                            Unable to perform query
+* 721201    DBResMap::getInterDBID                       Interaction name not found
+* 730101    DBMoleMap::getAtomFromId                     No atom exists under this database id
+* 730201    DBMoleMAp::getChainId                        No database Id find for given chain
+* 730301    DBMoleMAp::getResidueFromId                  No residue exists under this database id
+* 730401    DBMoleMap::getChainById                      No chain exists under this database id
+* 730501    DBMoleMap::delChain                          Given chain is not part of this molecule
+
+* 740101    DBAbstQuery::addQuery                       Query is not of good type
+* 740201    DBAbstQuery::runQueries                     Unrecognized query type
+* 770101    DBXrChainQuery::fetchBond                   No Chain ID found
+* 770201    DBXrChainQuery::fetchResidue                No Chain ID found
+* 770301    DBXrChainQuery::fetchChain                  Unable to find id in list of chains
+* 770401    DBXrChainQuery::fetchAtom                   No Chain ID found
+* 780101    DBXrResQuery::fetchResidue                  No Xray Residue  ID found
+* 780301    DBXrResQuery::fetchInteraction              Unable to find map
+* 780401    DBXrResQuery::FetchAtom                     No Map associated with given xray_Residue_id
+* 790101    DBXrStructQuery::fetchResidue               Unable to find database map
+
+* 740901    DBAtomQuery::createList                     Strings cannot be used for Id search
+* 740902    DBAtomQuery::createList                     Search by position and xray_chain is not yet implemented
+* 750101    DBAtomQuery::fetchAtom                      Unable to fetch atom
+* 750201    DBAtomQuery::processAtomResults             Unable to find atom in the map
+* 750301    DBXrChainQuery::convertChainListToStr       Too much information in DB_REQUEST. Cannot have id and string list
+* 750401    DBXrChainQuery::fetchResidue                MoleMap cannot be found for chain id
+* 750402    DBXrChainQuery::fetchResidue                Chain name cannot be empty
+* 750501    DBXrChainQuery::fetchBond                   MoleMap cannot be found for chain id
+* 750502    DBXrChainQuery::fetchBond                   Issue while getting data
+* 750601    DBXresQuery::fetchResidue                   Unable to find residue in the map
+* 750602    DBXrResQuery::fetchResidue                  Issue while executing query
+* 750701    DBXrResQuery::fetchInteraction              Unable to find residue in the map
+* 750702    DBXrResQuery::fetchInteraction              Issue while executing query
+* 750801    DBXresQuery::fetchAtom                      Unable to find residue in the map
+* 750802    DBXrResQuery::fetchAtom                     Issue while executing query
+* 750901    DBXrStructQuery::fetchChain                 Too much information in DB_REQUEST. Cannot have id and string list
+* 750902    DBXrStructQuery::fetchChain                 Their cannot be positions for molecule search
+* 751001    DBXrSTructQuery::fetchChain                 Unable to find structure named
+* 760101    dbquery_utils::getUniprotSequence           SQL Exception
+* 760102    dbquery_utils::getUniprotSequence           No sequence found with param
+
+* 820101    InterApolar::setRefResidue                  Given Residue is not part of the molecule
+* 820201    InterApolar::setCompResidue                 Given Residue is not part of the molecule
+* 820301    InterApolar::setRefResidue                  Given position is above the number of residue
+* 820401    InterApolar::setCompResidue                 Given position is above the number of residues
+* 830101    InterAtomBase::setAtomRef                   Given Atom is not part of the molecule
+* 830201    InterAtomBase::setAtomComp                  Given Atom is not part of the molecule
+* 830301    InterAtomBase::setAtomRef                   Given Position is above the number of atom for this molecule
+* 830401    InterAtomBase::setAtomComp                  Given Position is above the number of atom for this molecule
+* 840101    InterCationPI::isInteracting                No cation set
+* 850101    InterCHPI::isInteracting                    No carbon set
+* 860101    InterHalogenPI::isInteracting               No Halogen set
+
+* 2010101   DockMatch::performMatch                     Number of atoms in reference too small
+* 2010102   DockMatch::performMatch                     Number of atoms in comparison too small
+*
+* 2200101   MMPSearch::loadInput                        No RGroup start position defined
+* 2200102   MMPSearch::loadInput                        No RGroup end position defined
+* 2200103   MMPSearch::loadInput                        Unable to open file
+* 2200104   MMPSearch::loadInput                        No Property position defined
+*
+* 2300101   IntCpdHandler::loadIntExtMap                Unable to open internal/external name map*
+* 2300201   IntCpdHandler::loadInternalFromDb           Failed to run query*
+* 2300202   IntCpdHandler::loadInternalFromDb           Issue while executing query*
+* 2300301   IntCpdHandler::loadFile                     Unable to open file**
+* 2300302   IntCpdHandler::loadFile                     Line should only have 2 fields**
+* 2300401   IntCpdHandler::loadInternalReadyFromDb      Failed to run query  **
+* 2300402   IntCpdHandler::loadInternalReadyFromDb      Issue while executing query**
+* 2300501   IntCpdHandler::proceed                      Unable to assign atom type
+* 2300601   IntCpdHandler::loadStream                   Line should only have 2 fields**
+* 2310101   CpdToXML::exportFile                        Unable to open file*
+* 2310201   CpdToXML::sendToDB                          Unable to execute curlpp query
+* 2310202   CpdToXML::sendToDB                          Runtime error curlpp
+* 2320101   MMCIFRes::loadRules                         No C3TK_HOME Path set*
+* 2320201   MMCifRes::loadFile                          Unable to open rule file*
+* 2320301   MMCifRes::GetName                           No name found
+* 2320401   MMCifRes::GetSMILES                         No SMILES FOUND*
+* 2330101   MMCifReader::getFilePos                     Unable to open file
+* 2330201   MMCifReader::loadNext                       Unable to find HET
+* 2340101   ExtCpdHandler::proceed                      No public cif file given*
+* 2340102   ExtCpdHandler::proceed                      Given residue name is empty*
+* 2340103   ExtCpdHandler::proceed                      Unable to assign atom type*
+* 2340201   ExtCpdHandler::loadFile                     Unable to open file*
+* 2340301   ExtCpdHandler::loadFromDB                   Reader must be ready*
+* 2340302   ExtCpdHandler::loadFromDb                   Failed to run query*
+* 2340303   ExtCpdHandler::loadFromDb                   Issue while executing query*
+* 2350101   CpdToDB::processExternal                    -c Option required**
+* 2350201   CpdToDB::processStructures                  List of 3D structures missing
+* 2350202   CpdToDB::processStructures                  Unexpected number of columns
+* 2310201   CpdToXML::sendToDB                          Unable to init curl
+* 2310202   CpdToXML::sendToDB                          Unable to execute request
+* 2310203   CpdToXML::sendToDB                          Cannot find SUCCESS in webservice answer
+* 2410101   KinomeData::loadInputFile                   Unable to open file
+* 2410201   KinomeData::cleanData                       Unable to perform query
+* 2410301   KinomeData::loadUniprotSequences            Unable to fetch uniprot sequences
+* 2410401   KinomeData::insertMasterSequence            Unable to insert Master Sequence
+* 2410501   KinomeData::insertKinomeTree                Unable to perform query
+* 2410601   KinomeData::insertSequenceAlignment         Unable to insert kinome entry
+* 2410602   KinomeData::insertSequenceAlignment         Unable to insert kinome uniprot sequence
+* 2420101   xrport_utils::generateViewSequences         Unable to select chains
+* 2420102   xrport_utils::generateViewSequences         Unable to delete view
+* 2700101   protalign::proceedMultiple                  Unable to open file
+* 2700201   protalign                                   Wrong number of argument
+* 2710101   ToolProtAlign::prepChains                   Unsupported feature. Please specify chain pair through -p option
+* 2710201   ToolProtAlign::perceiveResidueList          Wrong number of columns in Residue List File for line
+* 2710301   ToolProtAlign::processPair                  Wrong set of options
+* 2710401   ToolProtAlign::analyze                      Unable to open file
+* 2710501   ToolProtAlign::defineResidueList            Unable to open file
+* 2710601   ToolProtAlign::defineChainPairs             Unrecognized chain  pair
+
+
+* 2720101   PeptSearch::loadInputPept                   Given input molecule must be single chain
+* 2720102   PeptSearch::loadInputPept                   Given chain name not in molecule
+* 2720201   PeptSearch::prepSequence                    No peptide given
+* 2720301   PeptSearch::processResidueRule              Rule length not the same as peptide length
+* 2720302   PeptSearch::processResidueRule              Unrecognized rule option
+* 2720401   PeptSearch::processAlignmentRule            Rule length not the same as peptide length
+* 2720402   PeptSearch::processAlignmentRule            Unrecognized rule option
+* 2720501   PeptSearch::processModificationRule         Rule length not the same as peptide length
+* 2720601   PeptSearch::processScoringRule              Rule length not the same as peptide length
+* 2720602   PeptSearch::processScoringRule              Unrecognized rule option
+* 2720701   PeptSearch::exportResults                   Unable to open file
+* 2730101   REGEXP_PEPT::assignPosition                 Unrecognized rule
+* 2730201   REGEXP_PEPT::assignToAlignment              An ignored or removed residue cannot be used for alignment
+* 2730202   REGEXP_PEPT::assignToAlignment              A replaced or similar residue cannot use for alignment option W or S
+* 2730301   REGEXP_PEPT::assignChange                   Residue must be set to REPLACE
+* 2730401   REGEXP_PEPT::getPeptDef                     Given position above length of peptide
+* 2730501   REGEXP_PEPT::assignToScore                  An ignored or removed residue cannot be used for alignment
+* 2720701   REGEXP_PEPT::genRegExp                      Expecting a replacement residue but nothing set
+* 2720801   REGEXP_PEPT::findMatches                    Unable to execute query
+* 2720901   REGEXP_PEPT::align                          Peptide sequence is empty
+
+* 2910101   PDBParser::loadRawData                      No file open
+* 2910201   PDBParser::loadMolecule                     No molecule defined
+* 2910202   PDBParser::loadMolecule                     No file open
+* 2910203   PDBParser::loadMolecule                     No atom found
+* 2910301   PDBParser::getMatrixData                    Unrecognized matrix type
+* 2910302   PDBParser::getMatrixData                    Only one line of this type should be in PDB
+* 2910401   PDBParser::getSeqRes                        SEQRES length does not fit expected size
+* 2910402   PDBParser::getSeqRes                        SEQRES has bad format
+* 2910501   PDBParser::addChainIssue                    Cannot add issue for a chain that is not part of this molecule
+* 2910601   PDBParser::addResidueIssue                  Cannot add issue for a residue that is not part of this molecule
+* 2920101   PDBEntry::open                              File path no given
+* 2920201   PDBEntry::getChainEntry                     Chain not found
+* 2920301   PDBEntry::addUniprotToChain                 Unable to find chain
+* 2930101   PDBChainEntry::getUNI_PDB                   Sequences are invalid
+
+
+* 3010101   LigAlign::run                               No Residue found
+* 3010201   LigAlign::listAllStructures                 Error while querying database
+* 3010301   LigAlign::download                          Unrecognized option
+* 3010401   LigAlign::exportStructures                  Wrong extension
+* 3010501   LigAlign::downloadLigOnly                   Error while querying database
+* 3010601   LigAlign::downloadSingleChain               Error while querying database
+* 3010701   LigAlign::exportClusteredStructures         Wrong extension
+* 3010801   LigAlign::getRMSD                           Unable to find match between two molecules
+* 3020101   FragInterSearch::genListResName             No Matches found
+* 3020201   FragInterSearch::loadResidueMap             Unable to load all residues
+* 3020301   FragInterSearch::download                   Unable to download entries
+* 3020401   FragInterSearch::getIniCoords               No match found
+* 3020501   FragInterSearch::align                      No match found
+* 3020601   FragInterSearch::setOnlyFragAtoms           No match found
+* 3020701   FragInterSearch::createInteractPoint        No match found
+* 3020801   FragInterSearch::hideResidues               No match found
+* 3020901   FragInterSearch::setWWeb                    Unable to open process.log file
+* 3021001   FragInterSearch::genPymolFile               Unable to open pymol file
+* 3021001   FragInterSearch::exportInteraction          Unable to open interaction file
+* 3021101   FragInterSearch::exportInteraction          Unable to open R-Group file
+* 3030101   FragResult::getInteractResId                Unable to find xray_Residue_id
+* 3100101   DatInt::getXrayInteraction                  Unable to find ring system
+* 3100102   DatInt::getXrayInteraction                  Unable to find ring system
+* 3100103   DatInt::getXrayInteraction                  Unable to find atoms
+* 3210101   GeomSearch::runSearch                       Unable to execute query
+* 3210201   GeomSearch::exportToFile                    Unable to open file
+* 3210202   GeomSearch::exportResults                   Unrecognized query type
+* 3210301   GeomSearch::print                           Unrecognized query type
+* 3220101   GeomQuery::processRules                     Rule cannot have only one atom definition
+* 3220102   GeomQuery::processRules                     Too many atom definition
+* 3220103   GeomQuery::processRules                     Wrong number of rules
+* 3220201   GeomQuery::assignDef                        Unable to perform query
+* 3220202   GeomQuery::assignDef                        Unable to find requested name
+* 3230101   geomCalc                                    Must use either -g -u -e option
+
+* 3310101   FetchStruct::addQuery                       No Full Common Name given
+
+* 4020101   QueryDB::update                             Fail update query
+* 4020201   QueryDB::retrieveGeneSequence               Fail retrieve gene sequence query
+* 4020301   QueryDB::retrieveGeneStructure              Fail retrieve gene structure query
+* 4020401   QueryDB::addResiduesAndAtoms                Fail residues and atoms query - occi::SQLException
+* 4020402   QueryDB::addResiduesAndAtoms                Fail residues and atoms query - DatabaseConnectionException
+* 4020501   QueryDB::addResidue                         Fail residue query
+* 4020601   QueryDB::addAtoms                           Fail atoms query
+* 4020701   QueryDB::addInternalBonds                   Fail internal bonds query
+* 4020801   QueryDB::addExternalBonds                   Fail intra residue bonds query
+* 4020901   QueryDB::CATH                               Fail retrieve CATH domains query
+* 4020902   QueryDB::CATH                               Fail retrieve ligands interacting with CATH domain query
+* 4021001   QueryDB::retrieveMonomer                    Fail retrieve monomer query
+* 4030101   LigandPharmacophore::findLigands            Must use at least on of -u -g option with -c ligand_pharmacophore
+* 4030102   LigandPharmacophore::findLigands            Fail getting ligands query
+* 4030103   LigandPharmacophore::findLigands            Fail getting entries associated with ligands query
+* 4030201   LigandPharmacophore::downloadLigands        Fail to download atom/coordinates for all ligands
+* 4030401   LigandPharmacophore::findNewLigands         Fail getting lignads associated with new UniProt/Gene name
+
+
+* 5010101   XraySeqSearch::getUniprotFromPDB            No Sequence found
+* 5010201   XraySeqSearch::getPDBSeq                    Unable to find corresponding uniprot sequence
+* 5010301   XraySeqSearch::getUniprotSequence           Unable to get sequence for uniprot entry
+* 5010302   XraySeqSearch::getUniprotSequence           No Entry found

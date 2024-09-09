@@ -1,0 +1,16 @@
+#SCRIPT
+#Column 1: 	SC - Tag for script
+#Column 2:	ID - Id of the process
+#Column 3:	script name. (dl_ -> download ; db -> process/push to db ; ck_*_rel -> check new release ; prd_ -> push to prod; wh -> whole process at once)
+#column 4:	List of required IDs.If multiple, separate by |. Please use -1 if not dependency (0 is considered empty for php)
+#Column 5:	List of required IDS that would trigger the script if all dependencies have been successfully run once.Please use -1  for no values
+#Column 6:  List of IDs that must have been successfully run at least once. Please use -1 for no values
+#Column 7:	Process DIRECTORY
+#Column 8:	Requirements: C: All parents IDs must be updated (Complete) - A: Any parent ID must be updated to trigger the updated ; D: All parents that are NOT disabled must be updated
+#Column 9: 	Is it a processing job (D) or a "moving to prd" job (P)
+#Column 10:	Update frequency in second, P for parents, or time format (00:10) for 10 after midnight; W1 means every week.
+#Column 11:	Is a script (S) or a runtime function (R)
+#Column 12:	Concurrent jobs that cannot be run at the same time
+#Column 13:	Requesting memory on qsub
+#Column 14:	Description
+#SC	1	wh_taxonomy					-1							-1		-1	TAXONOMY		C	D	00:10	S	11|13|14|126|154|159|160|532|412								-1	Download/Process taxonomy file

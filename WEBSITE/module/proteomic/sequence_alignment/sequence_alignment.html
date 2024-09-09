@@ -1,0 +1,25 @@
+
+
+<div style="position:relative">
+		<ul class="nav  nav-tabs">
+				<li id="seq_al_${MD5}_tab_1" class="nav-item nav-link active" onclick="showMenu('seq_al_${MD5}',1,${N_TOT})">Full sequence</li>
+				${LI_BLOCKS}
+				
+		
+			  </ul>
+			  </div>
+
+			  
+<div id="seq_al_${MD5}_view_1" class="sequence_bold sequence w3-container w3-col s12 pre"  >${SEQUENCE}</div>
+${LIST_BLOCKS}
+<script>
+var list_tooltips=JSON.parse('${LIST}');
+
+$(document).ready(function(){
+  $('.ttl').uitooltip({track: true,
+	content: function () {
+        return list_tooltips[$(this).data('pos')];
+    }});
+});
+
+</script>

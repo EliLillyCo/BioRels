@@ -1,0 +1,542 @@
+<br />
+</nav>
+<div class="w3-main " style="margin-left:0px">
+	$[GENOMIC_SEARCH]
+	<h3><span>Gene search: </span><span id="gene_count"> Searching ...</span></h3>
+	<div style="height:auto" id="gene_result">
+		Please wait while we perform the search. This may take a few seconds
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			try {
+				var urlv = '/SEARCH_GENE/${SEARCH_TARGET}';
+				$.ajax({
+					type: "GET",
+					url: urlv,
+
+					error: function () { $('#status').html('<p>An error has occurred</p>'); },
+					success: function (data) {
+						try {
+							try { var result = jQuery.parseJSON(data); } catch (err) { $('#gene_result').html('<p>An error has occurred</p>'); return false; }
+						} catch (err) {
+							$('#gene_result').html('<p>An error has occurred</p>');
+							return false;
+						}
+						$("#gene_result").html(result.code);
+
+						if (result.count == 1) {
+						$("#gene_count").html(result.count + " result");
+						
+					} else if(result.count==0)
+					{
+						$("#gene_count").html("no results found");
+					}
+					else {
+						
+						$("#gene_count").html(result.count + " results");
+					}
+						table = $('#search_res_gene').dataTable(
+							{
+								"responsive":true,
+								"ordering": false,
+								"columnDefs": [
+									{ "width": "8%", "targets": 0 },
+									{ "width": "20%", "targets": 1 },
+									{ "width": "8%", "targets": 2 },
+									{ "width": "32%", "targets": 3 },
+									{ "width": "32%", "targets": 4 }
+								]
+							});
+
+
+					},
+					type: 'GET'
+				});///END AJAX
+			} catch (err) {
+				$('#gene_count').html('<p>An error has occurred</p>');
+			}
+		});
+	</script>
+</div>
+$[/GENOMIC_SEARCH]
+
+
+$[CLINICAL_SEARCH]
+<h3><span>Clinical search: </span><span id="clinical_count"> Searching ...</span></h3>
+<div style="width:98%;margin:0 auto; height:auto" id="clinical_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_CLINICAL/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#clinical_result').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = jQuery.parseJSON(data); ; } catch (err) { $('#clinical_result').html('<p>An error has occurred</p>'); return false; }
+					$("#clinical_result").html(result.code);
+
+					if (result.count == 1) {
+						$("#clinical_count").html(result.count + " result");
+						
+					} else if(result.count==0)
+					{
+						$("#clinical_count").html("no results found");
+					}
+					else {
+						
+						$("#clinical_count").html(result.count + " results");
+					}
+
+					table = $('#search_clinical').dataTable(
+						{
+							"responsive":true,
+							"aaSorting": [],
+							buttons: [
+								{
+
+									extend: 'searchPanes',
+									config: {
+										cascadePanes: true
+									}
+								}
+							],
+
+
+							dom: 'Blfrtip',
+							language: {
+								searchPanes: {
+									clearMessage: 'Clear Selections',
+									collapse: { 0: 'Search Options', _: 'Search Options (%d)' },
+									count: '{total} found',
+									countFiltered: '{shown} / {total}'
+								}
+							}
+
+						});
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#clinical_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/CLINICAL_SEARCH]
+
+$[PROTEIN_SEARCH]
+<h3><span>Protein search:</span><span id="protein_count"> Searching ...</span></h3>
+<div style="width:98%;margin:0 auto; height:auto" id="protein_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_PROTEIN/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#status').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = data; } catch (err) { $('#protein_result').html('<p>An error has occurred</p>'); return false; }
+					$("#protein_result").html(result.code);
+					$("#protein_count").html(result.count + " results");
+
+					if (result.count == 1) {
+						$("#protein_count").html(result.count + " result");
+						
+					} else if(result.count==0)
+					{
+						$("#protein_count").html("no results found");
+					}
+					else {
+						
+						$("#protein_count").html(result.count + " results");
+					}
+					table = $('#search_res_protein').dataTable(
+						{
+							"responsive":true,
+							"aaSorting": [],
+							buttons: [
+								{
+
+									extend: 'searchPanes',
+									config: {
+										cascadePanes: true
+									}
+								}
+							],
+
+
+							dom: 'Blfrtip',
+							language: {
+								searchPanes: {
+									clearMessage: 'Clear Selections',
+									collapse: { 0: 'Search Options', _: 'Search Options (%d)' },
+									count: '{total} found',
+									countFiltered: '{shown} / {total}'
+								}
+							}
+
+						});
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#protein_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/PROTEIN_SEARCH]
+
+$[PATHWAY_SEARCH]
+<h3><span>Pathway search:</span><span id="pathway_count">Searching ...</span></h3>
+<div style="width:98%;margin:0 auto; height:auto" id="pathway_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_PATHWAY/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#status').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = jQuery.parseJSON(data); } catch (err) { $('#pathway_result').html('<p>An error has occurred</p>'); return false; }
+					$("#pathway_result").html(result.code);
+					$("#pathway_count").html(result.count + " results");
+					table = $('#search_res_pathway').dataTable(
+						{
+							"responsive":true,
+							"aaSorting": []
+
+						});
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#pathway_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/PATHWAY_SEARCH]
+$[PUBLICATION_SEARCH]
+<h3><span>Publication search: </span><span id="publi_count">Searching ...</span></h3>
+<div style="width:99%;margin:0 auto; height:auto" id="publi_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_PUBLI/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#status').html('<p>An error has occurred</p>'); },
+				success: function (result) {
+					//try { var result = jQuery.parseJSON(data); } catch (err) { $('#publi_result').html('<p>An error has occurred</p>'); return false; }
+					$("#publi_result").html(result.code);
+					$("#publi_count").html(result.count + " results");
+					table = $('#search_res_publi').dataTable(
+						{
+							"responsive":true,
+							"aaSorting": [],
+							"columnDefs": [
+								{ "width": "8%", "targets": 0 },
+								{ "width": "42%", "targets": 1 },
+								{ "width": "42%", "targets": 2 },
+								{ "width": "8%", "targets": 3 }
+							]
+
+						});
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			console.log(err);
+			$('#publi_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/PUBLICATION_SEARCH]
+$[COMPOUND_SEARCH]
+<h3><span>Compound search:</span><span id="compound_count">Searching ...</span></h3>
+<div style="width:98%;margin:0 auto; height:auto" id="compound_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_COMPOUND/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#compound_result').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = data; } catch (err) { $('#compound_result').html('<p>An error has occurred</p>'); return false; }
+					$("#compound_result").html(result.code);
+					if (result.count == 1) {
+						$("#compound_count").html(result.count + " result");
+						$("#compound_count").html("Please wait while the compound portal loads results....");
+						
+					} else if(result.count==0)
+					{
+						$("#compound_count").html("no results found");
+					}
+					else {
+						
+						$("#compound_count").html(result.count + " results");
+					}
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#compound_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/COMPOUND_SEARCH]
+$[DRUG_SEARCH]
+
+
+<h3><span>Drug search:</span><span id="drug_count">Searching ...</span></h3>
+<div style="width:98%;margin:0 auto; height:auto" id="drug_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<div id='single_drug_result'></div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_DRUG/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#drug_result').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = data; } catch (err) { $('#drug_result').html('<p>An error has occurred</p>'); return false; }
+
+					if (result.count == 1) {
+						$("#drug_count").html(result.count + " result");
+						$("#drug_result").html("Please wait while the drug portal loads results....");
+						$("#single_drug_result").html(result.code);
+					} else if(result.count==0)
+					{
+						$("#drug_count").html("no results found");
+					}
+					else {
+						
+						$("#drug_result").html(result.code);
+						$("#drug_count").html(result.count + " results");
+					}
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#drug_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/DRUG_SEARCH]
+
+$[DISEASE_SEARCH]
+<h3><span>Disease search:</span><span id="disease_count">Searching ...</span></h3>
+<div style="width:98%;margin:0 auto; height:auto" id="disease_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_DISEASE/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#status').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = jQuery.parseJSON(data); } catch (err) { $('#disease_result').html('<p>An error has occurred</p>'); return false; }
+					
+					$("#disease_count").html(result.count + " results");
+					if (result.count==1)$("#disease_count").html(result.count + " result");
+					else if (result.count>1)$("#disease_count").html(result.count + " results");
+					else if (result.count==0)$("#disease_count").html("no results");
+					$("#disease_result").html(result.code);
+					table = $('#search_res_disease').dataTable(
+						{
+							"responsive":true,
+							"ordering": false,
+							"columnDefs": [
+								{ "width": "15%", "targets": 0 },
+								{ "width": "15%", "targets": 1 },
+								{ "width": "55%", "targets": 2 },
+								{ "width": "5%", "targets": 3 }
+							]
+						});
+
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#disease_count').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/DISEASE_SEARCH]
+
+
+$[TISSUE_SEARCH]
+<h3><span>Tissue search:</span><span id="tissue_count">Searching ...</span></h3>
+<div style="height:auto" id="tissue_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_TISSUE/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#tissue_result').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = data; } catch (err) { $('#tissue_result').html('<p>An error has occurred</p>'); return false; }
+					$("#tissue_result").html(result.code);
+					if (result.count==1)$("#tissue_count").html(result.count + " result");
+					else if (result.count>1)$("#tissue_count").html(result.count + " results");
+					else if (result.count==0)$("#tissue_count").html("no results");
+					table = $('#search_res_tissue').dataTable(
+						{
+							"responsive":true,
+							"aaSorting": [],
+							"columnDefs": [
+								{ "width": "8%", "targets": 0 },
+								{ "width": "20%", "targets": 1 },
+								{ "width": "50%", "targets": 2 },
+								{ "width": "22%", "targets": 3 },
+
+							]
+						});
+
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#tissue_result').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/TISSUE_SEARCH]
+
+
+$[ASSAY_SEARCH]
+<div style="height:auto" id="assay_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_ASSAY/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#assay_result').html('<p>An error has occurred</p>'); },
+				success: function (data) {
+					try { var result = jQuery.parseJSON(data); } catch (err) { $('#assay_result').html('<p>An error has occurred</p>'); return false; }
+					$("#assay_result").html(result.code);
+					$("#assay_count").html(result.count + " results");
+					table = $('#search_res_assay').dataTable(
+						{
+							"responsive":true,
+							"aaSorting": [],
+							"columnDefs": [
+								{ "width": "8%", "targets": 0 },
+								{ "width": "20%", "targets": 1 },
+								{ "width": "8%", "targets": 2 },
+								{ "width": "32%", "targets": 3 },
+								{ "width": "32%", "targets": 4 }
+							]
+						});
+
+
+				},
+				type: 'GET'
+			});///END AJAX
+		} catch (err) {
+			$('#assay_result').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/ASSAY_SEARCH]
+
+
+$[NEWS_SEARCH]
+<div style="height:auto" id="news_result">
+	Please wait while we perform the search. This may take a few seconds
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		try {
+			var urlv = '/SEARCH_NEWS/${SEARCH_TARGET}';
+			$.ajax({
+				type: "GET",
+				url: urlv,
+
+				error: function () { $('#news_result').html('<p>An error has occurred</p>'); },
+				success: function (result) {
+					
+					$("#news_result").html(result.code);
+					$("#news_count").html(result.count + " results");
+					table = $('#search_res_news').dataTable(
+						{
+							"responsive":true
+						});
+
+
+				},
+				
+			});///END AJAX
+		} catch (err) {
+			console.log(err);
+			$('#news_result').html('<p>An error has occurred</p>');
+		}
+	});
+</script>
+</div>
+$[/NEWS_SEARCH]

@@ -1,0 +1,256 @@
+<div class="sequence w3-col s12" id="transcript_seq_view${OPT_GROUP}">
+</div>
+$[W_MATCH]
+<div class="w3-col s12" style="min-height:300px;">
+${INFO}
+<table class="table" id="summary_Table${OPT_GROUP}">
+	<thead>
+		<tr>
+			${HEAD}
+		</tr>
+	</thead>
+	<tbody>
+		${MATCHES}
+	</tbody>
+
+</table>
+</div>
+<script type="text/javascript">
+	$(document).ready( function () {
+		$('#summary_Table${OPT_GROUP}').DataTable();
+	} );
+	
+	</script>
+$[/W_MATCH]
+
+
+<script type="text/javascript">
+	var data_transcript = '${TRANSCRIPT_SEQUENCE}';
+
+
+	$(document).ready(function () {
+		processTranscriptSummaryAll("transcript_seq_view${OPT_GROUP}");
+		var transcript_view = $("transcript_seq_view${OPT_GROUP}");
+		var lastwidth = transcript_view.css('width');
+		function checkForTranscriptSummaryChanges() {
+			if (transcript_view.css('width') != lastwidth) {
+				lastwidth = transcript_view.css('width');
+				processTranscriptSummaryAll("transcript_view${OPT_GROUP}");
+			}
+
+			setTimeout(checkForTranscriptSummaryChanges, 500);
+		};
+
+
+	});
+
+	function processTranscriptSummaryAll(view) {
+
+		var ref_seq = '${REFSEQ}';
+		info = JSON.parse(data_transcript);
+		parent_div = $("${PARENT_DIV}").width();
+		if (parent_div == undefined) parent_div = $("#${PARENT_DIV}").width();
+
+		$("#" + view).css("width", parent_div * 0.95);
+		var ini_width = parent_div * 0.95;
+
+		var dw = $("#" + view).width();	/// Width of div
+		var fs = 16;					/// fs and fc set for Courier New
+		var fc = 1.61;
+		//var ratio=9.592307;
+		var ratio = 9.601907;
+
+
+console.log("PARENT DIV:"+parent_div);
+
+		var headlen = 14;
+		$.each(info.ASSEMBLY, function (key_a, value_a) {
+			$.each(value_a.TRANSCRIPTS, function (key, value) {
+
+				var str_seq = '';
+				var str_exon = '';
+				var str_type = '';
+
+
+				var name = value.TRANSCRIPT_NAME;
+				if (value.TRANSCRIPT_VERSION != null) name += '.' + value.TRANSCRIPT_VERSION;
+				if (name.length + 2 > headlen) headlen = name.length + 2;
+			});
+		});
+
+		var seq = '';
+		var str = '';
+		var headwidth = 0;
+		var seqwidth = ini_width -  10;
+		if (parent_div>600)
+		{
+		var headwidth = headlen * ratio;
+		var seqwidth = ini_width - headwidth - 10;
+		}
+
+		$.each(info.ASSEMBLY, function (key_a, value_a) {
+			str += '<div class="utrs" style="width:100%;margin-bottom:1px;height:20px;text-align:center;background-color:lightgrey;font-weight:bold;top:unset;display:flex">' + key_a + '</div>';
+			$.each(value_a.TRANSCRIPTS, function (key, value) {
+
+				var str_seq = '';
+				var str_exon = '';
+				var str_type = '';
+
+
+				var name = value.TRANSCRIPT_NAME;
+				if (value.TRANSCRIPT_VERSION != null) name += '.' + value.TRANSCRIPT_VERSION;
+				if (parent_div>600)
+				{
+					str += "<div class='utrs' style='width:100%;margin-bottom:1px;height:16px;top:unset;display:flex;flex-direction:row; align-items:center'>";
+				
+				str += '<div style="font-style:italic;min-width:' + headwidth + 'px;width:' + headwidth + 'px';
+				if(info['MATCHING_TRANSCRIPT'] !=null && info['MATCHING_TRANSCRIPT']==name)str+=';font-weight:bold';
+				
+				str+='"">' + name + "</div>";
+				str+="<div style='flex-grow:1;position:relative;width:100%;top:-8px'>";
+				}
+				else
+				{
+					str += "<div class='utrs' style='width:100%;margin-bottom:1px;height:36px;top:unset;'>";
+				
+					str += '<div style="font-style:italic;min-width:' + headwidth + 'px;width:' + headwidth + 'px';
+				if(info['MATCHING_TRANSCRIPT'] !=null && info['MATCHING_TRANSCRIPT']==name)str+=';font-weight:bold';
+				
+				str+='"">' + name + "</div>";
+				str+="<div style='flex-grow:1;position:relative;width:100%;top:-8px'>";
+				}
+				
+
+				//for (var i=14;i<headlen;++i)str+=' ';
+				$.each(value.BOUNDARIES, function (index2, value2) {
+					//if (index=='')return true;
+
+
+
+					str += "<div id='pos_Type_" + "_" + value.TRANSCRIPT_ID + "_EXON_" + value2.EXON_ID + "'   class=' ";
+					if (value2.TRANSCRIPT_POS_TYPE == "5'UTR" || value2.TRANSCRIPT_POS_TYPE == "3'UTR" || value2.TRANSCRIPT_POS_TYPE == "3'UTR-INFERRED" || value2.TRANSCRIPT_POS_TYPE == "5'UTR-INFERRED") str += "trsq_UTR_view";
+					else if (value2.TRANSCRIPT_POS_TYPE == 'CDS' || value2.TRANSCRIPT_POS_TYPE == "CDS-INFERRED") str += 'trsq_CDS_view';
+					else if (value2.TRANSCRIPT_POS_TYPE == 'non-coded' || value2.TRANSCRIPT_POS_TYPE == "non-coded-INFERRED") str += 'trsq_nc_view';
+					else if (value2.TRANSCRIPT_POS_TYPE == 'poly-A' || value2.TRANSCRIPT_POS_TYPE == "unknown") str += 'trsq_unk';
+					str += "' style='position:absolute;left:" + value2.LEFT + "%;width:" + value2.WIDTH  + "%;height:16px";
+					//str+="' style='position:absolute;left:"+value2.LEFT+"%;width:"+value2.WIDTH+"%;height:16px";
+
+					str += "'>";
+
+					str += "</div>";
+
+
+				});
+				str += "</div></div>";
+				//return false;
+
+			});///EACH TRANSCRIPT
+		});
+		match_height=0;
+		console.log("MATCHING SEQ");
+		console.log(info['MATCHING_SEQ']);
+		if (info['MATCHING_SEQ']!==undefined)
+		{
+
+			if (info.MATCHING_TYPE<=2 && info.MATCHING_SEQ.length>0)
+			{
+				match_height=20;
+			str+="<div class='utrs' style='width:100%;margin-bottom:1px;height:16px;top:unset;display:flex'>";
+				str+='<div style="font-style:italic;width:' + headwidth + 'px">match'+"</div><div style='position:relative;width:" + seqwidth + "px'>";
+			$.each(info.MATCHING_SEQ,function(index,match_rec){
+				if (match_rec.RES.length==0)return true;
+				$.each(match_rec.RES,function(pos,match_info)
+				{
+					$.each(info.MATCHING_QUERY_INFO,function(exon,exon_info)
+					{
+						if (match_info[0]<exon_info.MIN_TR_POS)return true;
+						if (match_info[0]>=exon_info.MAX_TR_POS)return true;
+						
+						step=exon_info.WIDTH/(exon_info.MAX_TR_POS-exon_info.MIN_TR_POS+1);
+						left=exon_info.LEFT+step*(match_info[0]-exon_info.MIN_TR_POS);
+						color='green';
+						str+="<div   class='exon_odd' style='cursor:pointer;position:absolute;background-color:"+color+";float:left;left:"+left+"%;width:1px; '></div>";
+						
+					});
+				});
+			});
+			str+='</div></div>';
+			}
+			else
+			{
+				var hash={};var size=0;
+				console.log("HASH START");
+				order_list=[];
+				$.each(info.MATCHING_SEQ,function(index,match_rec){
+				if (match_rec.RES.length==0)return true;++size;
+				$.each(match_rec.RES,function(pos,match_info){
+					
+					
+					var val=parseFloat(match_rec.INPUT.POTENCY);
+						if (!(val in hash)){hash[val]=[[index,pos]];order_list.push(val);}
+						else hash[val].push([index,pos]);
+				});
+				});
+
+				console.log("hash");
+				console.log(hash);
+			
+				var order=Object.keys(hash).sort(function(a, b) {
+  return a - b;
+}).reverse();
+				
+				var top10=Math.ceil(size/10);
+				var top20=Math.ceil(size/5);
+				console.log("TOPS:"+top10+" "+top20);
+				match_height=60;
+				var n=0,nblock=0;;
+				console.log("ORDER:");
+				console.log(order);
+				str_10="<div class='utrs' style='width:100%;margin-bottom:1px;height:16px;top:unset;display:flex;flex-direction:row; align-items:center'>\
+					<div style='font-style:italic;min-width:" + headwidth + "px;width:" + headwidth + "px'>Top 10%:</div><div style='position:relative;width:100%;top:-8px'>";
+				str_20="<div class='utrs' style='width:100%;margin-bottom:1px;height:16px;top:unset;display:flex;flex-direction:row; align-items:center'><div style='font-style:italic;min-width:" + headwidth + "px;width:" + headwidth + "px'>Top 10-20%:</div><div style='flex-grow:1;position:relative;width:100%;top:-8px'>";
+				str_others="<div class='utrs' style='width:100%;margin-bottom:1px;height:16px;top:unset;display:flex;flex-direction:row; align-items:center'><div style='font-style:italic;min-width:" + headwidth + "px;width:" + headwidth + "px'>Others:</div><div style='flex-grow:1;position:relative;width:100%;top:-8px'>";
+				
+					
+						$.each(order,function(index_order,potency_value){
+							console.log("POTENCY : "+potency_value)
+							$.each(hash[potency_value],function(index_hash,search_index){
+								
+								console.log(info.MATCHING_SEQ[search_index[0]]);
+									match_info=info.MATCHING_SEQ[search_index[0]]['RES'][search_index[1]];
+									console.log(match_info);
+
+										left=match_info['LEFT_T'];
+										console.log(n+" "+top10+" "+top20+" "+potency_value+" "+Math.floor(potency_value/10));
+										color=hexgroups[Math.floor(potency_value/10)-1];
+										str_i="<div   class='exon_odd' style='cursor:pointer;position:absolute;background-color:"+color+";float:left;left:"+left+"%;width:1px; '></div>";
+										if (n<top10)	str_10+=str_i;
+										else if (n>=top10 && n<=top20)str_20+=str_i;
+										else  str_others+=str_i;
+									++n;
+								
+								
+								
+							});
+							
+						});
+						
+
+console.log("STR OTHERS:"+str_others);
+						str+=str_10+"</div></div>"+str_20+"</div></div>"+str_others+"</div></div>";
+					}
+		}
+
+
+		str += '<br/><span style="bold">Legend:</span><div style="display:flex"><div  style="padding:0px 5px;position:unset;margin-right:10px" class="transcript_seq_info trsq_UTR_view">5\' UTR ; 3\'UTR</div>\
+	<div class="transcript_seq_info trsq_CDS_view" style="padding:0px 5px;position:unset;margin-right:10px">CDS</div>\
+	<div class="transcript_seq_info trsq_nc_view" style="padding:0px 5px;position:unset;margin-right:10px">non coded</div>\
+	<div class="transcript_seq_info trsq_unk" style="padding:0px 5px;position:unset;margin-right:10px">poly-A / unknown</div></div><br/>';;
+		$("#" + view).html(str);
+	//	$("#" + view).css("max-width", ini_width);
+		$("#"+view).css("width","95%");
+		$("#" + view).css("height", ((info.COUNT + 2) * 20 + 100+match_height) + "px");
+
+	}
+
+</script>

@@ -1,0 +1,8 @@
+<input type="text" id="dgval_input_${TAG}" />
+<input id="dgval_val_${TAG}" type="button" value="validate" onclick="validateDrug('${TAG}')" />
+<select id="dgval_sel_${TAG}" name="dgval_sel_${TAG}" style="display: none;">
+    <option value=""></option>
+</select>
+<input id="cancel_dg_${TAG}" style="display: none; margin-left: 15px;" type="button" class="default_button"
+    onclick="cancelDrugValidate('${TAG}')" value="Cancel" />
+<span class="alert alert-info" style="display:none;" id="dg_status_${TAG}"></span> 

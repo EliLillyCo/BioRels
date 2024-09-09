@@ -1,0 +1,38 @@
+<div style="margin-top:25px;padding-left:10px;font-size:2em;">${PDB_ID} -<span style="font-variant: small-caps"> ${TITLE}</span></div>
+	<p><span style="font-weight:bold;padding-left:10px;">Experimental type:</span> ${TYPE} ${RESOLUTION}</p>
+	<p><span style="font-weight:bold;padding-left:10px;">Deposition date:</span> ${DATE}</p>
+	<p><span style="font-weight:bold;padding-left:10px;">Binding site:</span> ${SITE_NAME}</p>
+
+
+<script src="require/js/ngl/ngl-2.0.0-dev.39/dist/ngl.js"></script>
+<script>
+  // Datasources
+  NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource("../data/"))
+
+  var stage;
+  document.addEventListener("DOMContentLoaded", function () {
+  
+    NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource( window.location.origin+"/" ));
+    stage = new NGL.Stage("viewport");
+  
+	var pdbData='';
+	var stringBlob = new Blob( [ pdbData ], { type: 'text/plain'} );
+stage.loadFile( stringBlob, { ext: "pdb" } );
+
+    stage.loadFile('data://MOL2/3D_FILE/${PDB_ID}${PARAMS}', { ext: 'mol2' })
+    .then( function( o ){
+      o.addRepresentation("licorice");
+      o.addRepresentation( "cartoon" );
+      o.autoView();
+      return o;;
+   });
+
+
+
+});
+
+window.addEventListener( "resize", function( event ){
+    stage.handleResize();
+}, false );
+</script>
+<div id="viewport" style="width:100%; height:500px;"></div>

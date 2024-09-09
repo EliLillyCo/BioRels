@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Access denied</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="reply-to" content="" />
+  <meta name="publisher" content="DESAPHY Jeremy" />
+  <meta name="Robots" content="all" />
+  <meta name="robots" content="index, follow" />
+  <meta name="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta name="Cache-Control" content="post-check=0, pre-check=0" />
+  <meta name="Pragma" content="no-cache" />
+  <meta name="Accept-Encoding" content="gzip, deflate" />
+  <meta name="Content-Encoding" content="gzip" />
+  <meta name="distribution" content="global" />
+  <meta name="keywords" lang="en" content="global" />
+  <meta name="description" lang="en" content="${WEBSITE_NAME}" />
+  <meta name="author" lang="en" content="DESAPHY Jeremy" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+
+  ${F:link}
+</head>
+
+<body>
+  <mgt-msal2-provider client-id="${CLIENT_ID}" login-type="redirect/popup"
+    scopes="user.read, profile, email, offline_access" redirect-uri="${REDIRECT_URL}" authority="${AUTHORITY}">
+  </mgt-msal2-provider>
+  <mgt-login></mgt-login>
+  <div class="overlay"></div>
+	<div class="spinner">
+		<div class="loader"></div>
+		<p>Content loading, Please wait...</p>
+	</div>
+	<div id="msg_div" style="display:none">
+		Please wait while we update the visualization
+	</div>
+	<div id="help_dialog" title="Help" style="display: none;z-index:100000"></div>
+  <div class="w3-bar w3-top w3-lly w3-large ${PORTAL_COLOR}" id="body_top">
+    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();">
+      <div class="menu_block"></div>
+      <div class="menu_block"></div>
+      <div class="menu_block"></div> &nbsp;Menu
+    </button>
+    <div class="w3-col s6 m2 logo" id="BIORELS_NAME">
+      <a href="/" class="home-icon">BioRels</a>
+      <br />
+
+    </div>
+    <div class="w3-col m8 l7">
+      
+    </div>
+  </div>
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer"
+    title="close side menu" id="myOverlay">
+  </div>
+ 

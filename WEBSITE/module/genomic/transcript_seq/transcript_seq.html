@@ -1,0 +1,106 @@
+$[VALID_TRANSCRIPT]
+
+
+<div class="w3-container w3-col s12" id="search_view" style="float:unset;margin:0 auto;padding:unset;"></div>
+<div class="w3-container w3-col s12" id="text_info" style="float:unset;margin:0 auto;padding:unset;"></div>
+<br />
+<br />
+<br />
+<br />
+
+<div class="sequence w3-container w3-col s12" style="float:unset;padding:unset;margin:0 auto" id="transcript_seq_view"></div>
+
+<script type="text/javascript">
+	
+
+	var modal_transcript;
+
+	function showTransSeqOpts() {
+		$("#transcript_seq_options").dialog({
+			width: "70%",
+			"font-size": "1em",
+			modal: true,
+			buttons: {
+				"Search/Confirm": function () {
+					processTranscriptView("transcript_seq_view", "search_view", data_transcript, ${GENE_ID});
+					$(this).dialog("close");
+				},
+			}
+		});
+	}
+
+	var data_transcript = JSON.parse('${TRANSCRIPT_SEQUENCE}');
+	var list_align = [${LIST_ALIGN}];
+
+	var search;
+	var indices = [];
+	var def_level = 1;
+	var seq = '';
+	var is_cat = false;
+	var list_cat = [];
+
+	function isNumeric(value) {
+		return !isNaN(value - parseFloat(value));
+	}
+
+	var current_show = null;
+
+	function showSNPInfo(div_entry, pos) {
+		if ($(div_entry).children().length > 0) return;
+		if (current_show != null) clean();
+
+		$(div_entry).addClass("tooltipt");
+		var snp_i = info.SNP.LIST[pos];
+
+		var str = '<div class="tooltiptextv" style="min-width:250px !important">';
+		$.each(snp_i, function (rsid, value) {
+			str += '<span class="bold">Variant ID:</span><a href="/GENE_ID/${GENE_ID}/MUTATION/' + rsid + '">' +
+				rsid + '</a></span>';
+			$.each(value, function (index, infos) {
+				str += "<br/>DNA:" + index + " (" + info.SNP.TYPES[infos[0]] + ") &#x27A1 Transcript:" +
+					infos[2] + " (" + info.SNP.IMPACT[infos[1]] + ")";
+			});
+			str += '<br/>';
+		});
+		$(div_entry).prepend(str);
+		current_show = div_entry;
+		console.log(current_show);
+	}
+
+	function clean() {
+		if (current_show == null) return;
+		console.log("clean");
+		$(current_show).empty();
+		$(current_show).removeClass("tooltipt");
+		$(current_show).html('-');
+	}
+
+	function hideSNPInfo(div_entry, pos) {
+		if ($(div_entry).children().length == 0) return;
+		console.log("clean");
+		setTimeout(clean, 4000);
+	}
+
+	var transcript_view;
+	var lastwidth;
+
+	$(document).ready(function () {
+		processTranscriptView("transcript_seq_view", "search_view", data_transcript, ${GENE_ID});
+
+		transcript_view = $("#transcript_seq_view");
+		lastwidth = +$(window).width();
+
+		checkForTranscriptViewChanges();
+	});
+
+	function checkForTranscriptViewChanges() {
+		console.log("CHECK " + lastwidth + "->" + $(window).width() + " " + $(document).width());
+		if (Math.abs($(window).width() - lastwidth) > 50) {
+			console.log("IN");
+			lastwidth = $(window).width();
+			processTranscriptView("transcript_seq_view", "search_view", data_transcript, ${GENE_ID});
+		}
+		setTimeout(checkForTranscriptViewChanges, 500);
+	};
+</script>
+$[/VALID_TRANSCRIPT]

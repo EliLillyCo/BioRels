@@ -1,0 +1,8 @@
+<input type="text" id="companyval_input_${TAG}" />
+<input id="companyval_val_${TAG}" type="button" value="validate" onclick="validateCompany('${TAG}')" />
+<select id="companyval_sel_${TAG}" name="companyval_sel_${TAG}" style="display: none;">
+    <option value=""></option>
+</select>
+<input id="cancel_company_${TAG}" style="display: none; margin-left: 15px;" type="button" class="default_button"
+    onclick="cancelCompanyValidate('${TAG}')" value="Cancel" />
+<span class="alert alert-info" style="display:none;" id="company_status_${TAG}"></span>

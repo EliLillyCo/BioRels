@@ -1,0 +1,92 @@
+
+
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<div class="chart-wrapper" id="chart-distro1_${TAG}"></div>
+
+<!--Sorry about all the inline JS. It is a quick way to show  what options are available-->
+
+<div id="data_${TAG}" style="display: none">${CONTENT}</div>
+<script type="text/javascript">
+
+    var currentColor = 'dark';
+    var currentViolinColor = 'dark';
+	var chart1_${TAG};
+	var logScale='normal';
+	data_${TAG}=d3.csv.parse($("#data_${TAG}").text());
+        data_${TAG}.forEach(function (d) {
+            d.TPM = +d.TPM;
+        });
+
+        chart1_${TAG} = makeDistroChart(data_${TAG}, 'TISSUE_ID', 'TPM');
+        chart1_${TAG}.bind("#chart-distro1_${TAG}",{chartSize:{height:800, width:'inherit'}, constrainExtremes:false,scale:logScale, axisLabels: {xAxis: 'Tissue', yAxis: "${YAXIS}",}});
+        chart1_${TAG}.renderViolinPlot({violinWidth:90, colors:["#555"]});
+        chart1_${TAG}.renderBoxPlot({boxWidth:20, showOutliers:false});
+    
+        function toggleBox()
+    {
+        if(chart1_${TAG}.boxPlots.chartOptions.showBox){chart1_${TAG}.boxPlots.change({showBox:false})}else{chart1_${TAG}.boxPlots.change({showBox:true})}
+    }
+
+
+function toggleBoxWidth()
+{
+    if(chart1_${TAG}.boxPlots.chartOptions.boxWidth===30){chart1_${TAG}.boxPlots.change({boxWidth:10})}else{chart1_${TAG}.boxPlots.change({boxWidth:30})}
+}
+
+function toggleBoxColor()
+{
+    if(currentColor=='dark'){chart1_${TAG}.boxPlots.change({colors:d3.scale.category10()});currentColor='color';}else{chart1_${TAG}.boxPlots.change({colors:['#555']});currentColor='dark';}
+}
+ 
+function toggleMean()
+{
+    if(chart1_${TAG}.boxPlots.chartOptions.showMean){chart1_${TAG}.boxPlots.change({showMean:false})}else{chart1_${TAG}.boxPlots.change({showMean:true})}
+}
+function toggleMedian()
+{
+    if(chart1_${TAG}.boxPlots.chartOptions.showMedian){chart1_${TAG}.boxPlots.change({showMedian:false})}else{chart1_${TAG}.boxPlots.change({showMedian:true})}
+}
+function toggleWhiskers()
+{
+    if(chart1_${TAG}.boxPlots.chartOptions.showWhiskers){chart1_${TAG}.boxPlots.change({showWhiskers:false})}else{chart1_${TAG}.boxPlots.change({showWhiskers:true})}
+}
+function toggleOutliers()
+{
+    if(chart1_${TAG}.boxPlots.chartOptions.showOutliers){chart1_${TAG}.boxPlots.change({showOutliers:false})}else{chart1_${TAG}.boxPlots.change({showOutliers:true})}
+    }
+
+function toggleViolin() 
+{
+    if(chart1_${TAG}.violinPlots.violinOptions.showArea){chart1_${TAG}.violinPlots.change({showArea:false, showLine:false});}else{chart1_${TAG}.violinPlots.change({showArea:true, showLine:true})}
+}
+function toggleViolinWidth()
+{
+    if(chart1_${TAG}.violinPlots.violinOptions.violinWidth===100){chart1_${TAG}.violinPlots.change({violinWidth:50})}else{chart1_${TAG}.violinPlots.change({violinWidth:100})}
+}
+function toggleViolinColor()
+{
+    if(currentViolinColor=='dark'){chart1_${TAG}.violinPlots.change({colors:d3.scale.category10()});currentViolinColor='color';}else{chart1_${TAG}.violinPlots.change({colors:['#555']});currentViolinColor='dark';}
+}
+function toggleViolinResolution()
+{
+if(chart1_${TAG}.violinPlots.violinOptions.resolution===75){chart1_${TAG}.violinPlots.change({resolution:null})}else{chart1_${TAG}.violinPlots.change({resolution:75})}
+           }
+
+</script>
+
+$[VALID]
+
+<br/>
+${INFORMATION}
+
+<hr/>
+<h4 style="display: contents">Source:</h3> GTEx<div class="plus radius" style="--l:17px;--t:1.2px;--s:4px;margin-left:10px" onclick="togglePubView('rnaexpr_pub',this)"></div>
+<div id="rnaexpr_pub" style="display:none">
+The Genotype-Tissue Expression (GTEx) Project was supported by the Common Fund of the Office of the Director of the National Institutes of Health, and by NCI, NHGRI, NHLBI, NIDA, NIMH, and NINDS.
+${PUBLI}
+</div>
+$[/VALID]
+$[INVALID]
+<br/>
+<div class="alert alert-info">No RNA Expression data reported for this gene.</div>
+$[/INVALID]

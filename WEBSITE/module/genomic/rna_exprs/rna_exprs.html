@@ -1,0 +1,181 @@
+<h3>RNA Expression data</h3>
+<div class="w3-opts-right">
+    <img id="rna_expr_opts" src="/require/img/opt.jpg" style="width: 20px;position: relative;top: -2px"
+        onClick="showOpts()" />
+</div>
+
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<div id="rna_expr_options" title="RNA Expression visualization options" style="display: none;">
+   
+    <div class="chart-options">
+        <p>Box Options</p>
+        <button onclick="changeLogScale()">Toggle Log</button>
+        <button onclick="toggleBox()">Toggle Box</button>
+        <button onclick="toggleBoxWidth()">Change Box Width</button>
+        <button onclick="toggleBoxColor()">Change Box Colors</button>
+        <button onclick="toggleMean()">Toggle Mean</button>
+        <button onclick="toggleMedian()">Toggle Median</button>
+        <button onclick="toggleWhiskers()">Toggle Whiskers</button>
+        <button onclick="toggleOutliers()">Toggle Outliers</button>
+    </div>
+
+    <div class="chart-options">
+        <p>Violin Options</p>
+        <button onclick="toggleViolin()">Toggle Violin</button>
+        <button onclick="toggleViolinWidth()">Change Violin Width</button>
+        <button onclick="toggleViolinColor()">Change Violin Colors</button>
+        <button onclick="toggleViolinResolution()">Change Violin Resolution</button>
+    </div>
+</div>
+
+Select the view: <select id="select_Block">
+    <option value="gene">Overall gene expression</option>
+    ${OPTIONS}
+</select>
+<div class="w3-container w3-col s12" id="distrib_gene" style="height: unset"></div>
+
+<script>
+    var logscale = "normal";
+
+    function changeLogScale() {
+        if (logscale == "normal") logscale = "log";
+        else logscale = "normal";
+        refreshRNAExprView()
+    }
+
+    $("#select_Block").change(function () {
+        refreshRNAExprView();
+    });
+
+    function refreshRNAExprView() {
+        var val = $("#select_Block option:selected").val();
+        console.log(val);
+        console.log(val.substring(0, 3));
+        if (val == "gene") {
+            urlv = "/CONTENT/GENEID/${GENE_ID}/RNA_GENE_EXPR_BP/PARAMS/" + logscale;
+            $.ajax({
+                type: 'POST',
+                // make sure you respect the same origin policy with this url:
+                // http://en.wikipedia.org/wiki/Same_origin_policy
+                url: urlv,
+                //data:{ "PER_PAGE":per_page,'PAGE':page},
+                success: function (data) {
+                    try {
+                        var v = JSON.parse(data);
+                        $('#distrib_gene').html(v.code);
+                    } catch (err) {
+                        $('#distrib_gene').html(
+                            '<p class="alert alert-info">We are unable to retrieve this view at the moment. We apologize for the inconvenience</p>'
+                        );
+                    }
+                },
+                error: function (data) {
+                    $("#info").html("An issue occured.");
+                }
+            }); ///END AJAX
+
+        } else if (val.substring(0, 3) == 'TS:') {
+            console.log("IN");
+            urlv = "/CONTENT/GENEID/${GENE_ID}/GENE_TISSUE_EXPR/PARAMS/" + val.substring(3) + "/" + logscale;
+            console.log(urlv);
+            $.ajax({
+                type: 'POST',
+                // make sure you respect the same origin policy with this url:
+                // http://en.wikipedia.org/wiki/Same_origin_policy
+                url: urlv,
+                //data:{ "PER_PAGE":per_page,'PAGE':page},
+                success: function (data) {
+                    try {
+                        var v = JSON.parse(data);
+                        $('#distrib_gene').html(v.code);
+                    } catch (err) {
+                        $('#distrib_gene').html(
+                            '<p class="alert alert-info">We are unable to retrieve this view at the moment. We apologize for the inconvenience</p>'
+                        );
+                    }
+                },
+                error: function (data) {
+                    $("#info").html("An issue occured.");
+                }
+            }); ///END AJAX
+        } else {
+            urlv = "/CONTENT/GENEID/${GENE_ID}/RNA_TR_EXPR_BP/" + val + "/PARAMS/" + logscale;
+
+            $.ajax({
+                type: 'POST',
+                // make sure you respect the same origin policy with this url:
+                // http://en.wikipedia.org/wiki/Same_origin_policy
+                url: urlv,
+                //data:{ "PER_PAGE":per_page,'PAGE':page},
+                success: function (data) {
+                    try {
+                        var v = JSON.parse(data);
+                        $('#distrib_gene').html(v.code);
+                    } catch (err) {
+                        $('#distrib_gene').html(
+                            '<p class="alert alert-info">We are unable to retrieve this view at the moment. We apologize for the inconvenience</p>'
+                        );
+                    }
+                },
+                error: function (data) {
+                    $("#info").html("An issue occured.");
+                }
+            }); ///END AJAX
+        }
+    }
+
+    function showOpts() {
+        $("#rna_expr_options").dialog({
+            width: "60%",
+            modal: true,
+            buttons: {
+                "Confirm": function () {
+                    //processTranscriptView("transcript_seq_view");
+                    $(this).dialog("close");
+                },
+            }
+        });
+    }
+
+    $(document).on('click', 'input[type="checkbox"][data-igroup]', function (event) {
+        // The checkbox that was clicked
+        var actor = $(this);
+        // The status of that checkbox
+        var checked = actor.prop('checked');
+        // The group that checkbox is in
+        var group = actor.data('igroup');
+        // All checkboxes of that group
+        var checkboxes = $('input[type="checkbox"][data-group="' + group + '"]');
+        // All checkboxes excluding the one that was clicked
+        var otherCheckboxes = checkboxes.not(actor);
+        // Check those checkboxes
+        otherCheckboxes.prop('checked', checked);
+    });
+
+    $(document).ready(function () {
+        urlv = "/CONTENT/GENEID/${GENE_ID}/RNA_GENE_EXPR_BP";
+        $.ajax({
+            type: 'POST',
+            // make sure you respect the same origin policy with this url:
+            // http://en.wikipedia.org/wiki/Same_origin_policy
+            url: urlv,
+            //data:{ "PER_PAGE":per_page,'PAGE':page},
+            success: function (data) {
+                try {
+                    var v = JSON.parse(data);
+                    $('#distrib_gene').html(v.code);
+                } catch (err) {
+                    $('#distrib_gene').html(
+                        '<p class="alert alert-info">We are unable to retrieve this view at the moment. We apologize for the inconvenience</p>'
+                    );
+                }
+            },
+            error: function (data) {
+                $("#info").html("An issue occured.");
+            }
+        }); ///END AJAX
+    });
+</script>
+<br />
+${INFORMATION}
+</div>

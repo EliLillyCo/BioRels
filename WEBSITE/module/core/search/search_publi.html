@@ -1,0 +1,151 @@
+$[MULTI]
+<div class="w3-container">Publications related to ${QUERY_NAME}</div>
+
+<div class="w3-container w3-col s12"  style="margin:10px auto;">	
+	<div class="w3-col s3"><span id="n_pub1"> ${COUNT} </span> publications</div>
+	
+	<div  class="w3-col s9" style="text-align: right">
+			Number per page:
+			<select id="per_page1" name="per_page1" style="height:30px; position:relative; top:2px" onchange="updatePageCount(true,1)">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+		<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+		<input type="text" size="5" class="button" value="1" id="page1"/>/<input size="5"  type="text" value="${NPAGE}" id="pagemax"/>
+		<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+		
+	</div>
+</div>
+
+<div class="w3-container w3-col s12" id="data"></div>
+<div class="w3-container w3-col s12"  style="margin:10px auto;">
+<div id="trsq_options" style="margin:10px auto;">	
+	<div class="w3-col s3"><span id="n_pub2"> ${COUNT} </span> publications</div>
+	<div  class="w3-col s9" style="text-align: right"> Number per page:
+			<select id="per_page2" name="per_page2" style="height:30px; position:relative; top:2px" onchange="updatePageCount(true,2)">
+					<option value="10" selected="selected">10</option>
+		<option value="20">20</option>
+		<option value="30">30</option>
+		<option value="50">50</option>
+		<option value="100">100</option>
+		<option value="200">200</option>
+	</select>
+	
+	<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+	<input type="text" class="button" size="5"  value="1" id="page2"/>/<input type="text" size="5"  value="${NPAGE}" id="pagemax2"/>
+	<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+</div>
+		
+		<script type="text/javascript">
+		var list=JSON.parse('${result}');
+		var prev=[];
+		var curr_shift=0;
+		var curr_date='';
+		function updatePageCount(with_submit=true,pos=1)
+		{
+			var tot=$("#n_pub1").html();
+			var per_page = parseInt($('#per_page'+pos).val());
+			var totmax=Math.ceil(tot/per_page);
+			$("#pagemax").val(totmax);
+			$("#pagemax2").val(totmax);
+			$("#per_page2").val(per_page);
+			$("#per_page1").val(per_page);
+			if (with_submit)submit();
+		}
+		function prevPage()
+		{
+			var val=parseInt($("#page1").val());
+			if (val==1)return;
+			$("#page1").val(val-1);
+			$("#page2").val(val-1);
+			submit();
+		
+		}
+		
+		function nextPage()
+		{
+			var val=parseInt($("#page1").val());
+			var m=parseInt($("#pagemax").val());
+			if (val>=m)return;
+			$("#page1").val(val+1);
+			$("#page2").val(val+1);
+			submit();
+		
+		}
+
+			
+	function submit()
+	{
+				
+		var per_page = $('#per_page1').val();
+		if (!(per_page in prev))prev[per_page]=[];
+		if (!($("#page1").val() in prev[per_page]))prev[per_page][$("#page1").val()]=[];
+		prev[per_page][$("#page1").val()]=[curr_date,curr_shift];
+		$("#info").html("Please wait while the query is running");
+		
+		var page=parseInt($("#page1").val());
+		var list_v='';
+		for (i=(page-1)*per_page;i<(page*per_page);++i)
+		{
+			if (i in list)
+			list_v+=list[i]+"_";
+		}		
+	list_v=	list_v.slice(0,-1);
+
+
+		urlv="/CONTENT/PUBLICATION_BATCH/"+list_v;
+		$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: urlv,
+		data:{ },
+		success: function(data){
+			
+			var v=jQuery.parseJSON(data);
+			$("#data").html(v.code);
+			$("#info").html("");
+			
+			
+			curr_date=v.DATE;
+			curr_shift=v.SHIFT;
+			updatePageCount(false);
+		},
+		error:function(data){$("#info").html("An issue occured.");}
+			});///END AJAX
+			return false;		
+	}
+		$(document).ready( function () {
+			//$('#mutation_search_res').DataTable();
+			submit();
+		} );
+	
+		function showFilters()
+		{
+		$( "#filters_options" ).dialog({width: "60%",modal: true,
+		  buttons: {
+			"Confirm": function() {
+				
+			  $( this ).dialog( "close" );
+			  submit();
+			},
+			
+		  }});	
+	
+		}
+		</script>
+$[/MULTI]
+$[SINGLE]
+<script type="text/javascript">
+$( document ).ready(function() {
+	document.location.href="/PUBMED/${PUBMED_ID}";
+});
+</script>
+$[/SINGLE]
+$[INVALID]
+<div class="alert alert-info">An error happened during the search, we apologize for the inconvenience</div>
+$[/INVALID]

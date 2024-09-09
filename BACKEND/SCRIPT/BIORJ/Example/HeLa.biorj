@@ -1,0 +1,276 @@
+{
+    "cell_entry-cell_acc-CVCL_0030": {
+        "RECORD": {
+            "cell_entry_id": 78433,
+            "cell_acc": "CVCL_0030",
+            "cell_name": "HeLa",
+            "cell_type": "Cancer cell line",
+            "cell_donor_sex": "F",
+            "cell_donor_age": "30Y6M",
+            "cell_version": 47,
+            "date_updated": "2024-05-02 00:00:00",
+            "cell_tissue_id": null,
+            "TABLE": "cell_entry"
+        },
+        "PARENT": [
+            {
+                "cell_tissue": []
+            },
+            {
+                "anatomy_entry": []
+            }
+        ],
+        "CHILD": [
+            {
+                "cell_syn": [
+                    {
+                        "cell_syn_id": 140621,
+                        "cell_syn_name": "CVCL_0030",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140623,
+                        "cell_syn_name": "Hela",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140624,
+                        "cell_syn_name": "He La",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140625,
+                        "cell_syn_name": "He-La",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140622,
+                        "cell_syn_name": "HELA",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140626,
+                        "cell_syn_name": "HeLa-CCL2",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140628,
+                        "cell_syn_name": "Helacyton gartleri",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    },
+                    {
+                        "cell_syn_id": 140627,
+                        "cell_syn_name": "Henrietta Lacks cells",
+                        "cell_entry_id": 78433,
+                        "source_id": 259
+                    }
+                ],
+                "cell_disease": [],
+                "cell_patent_map": [],
+                "cell_pmid_map": [],
+                "cell_taxon_map": [
+                    {
+                        "cell_taxon_id": 79141,
+                        "cell_entry_id": 78433,
+                        "taxon_id": 7716,
+                        "source_id": 259
+                    }
+                ]
+            },
+            {
+                "source": [
+                    {
+                        "source_id": 259,
+                        "source_name": "Cellausorus",
+                        "version": null,
+                        "user_name": null,
+                        "subgroup": null,
+                        "source_type": null,
+                        "source_metadata": null
+                    }
+                ],
+                "disease_entry": [],
+                "patent_entry": [],
+                "pmid_entry": [],
+                "taxon": [
+                    {
+                        "taxon_id": 7716,
+                        "scientific_name": "Homo sapiens",
+                        "tax_id": "9606",
+                        "rank": "species"
+                    }
+                ]
+            }
+        ]
+    },
+    "BIORJ_HIERARCHY": [
+        [
+            "taxon",
+            "prot_name",
+            "prot_extdb",
+            "go_entry",
+            "prot_feat_type",
+            "eco_entry",
+            "gn_entry",
+            "gn_syn",
+            "pw_entry",
+            "source",
+            "pmid_journal",
+            "pmid_instit",
+            "pmc_entry",
+            "company_entry",
+            "drug_entry",
+            "clinical_entry",
+            "ip_entry",
+            "patent_entry",
+            "drug_type",
+            "atc_entry",
+            "clinical_variant_review_status",
+            "variant_entry",
+            "clinical_significance",
+            "seq_btype",
+            "transcript_pos_type",
+            "variant_allele",
+            "so_entry",
+            "variant_prot_allele",
+            "sm_scaffold",
+            "sm_counterion",
+            "assay_confidence",
+            "assay_type",
+            "assay_target_type",
+            "bioassay_onto_entry",
+            "molecular_entity",
+            "molecular_component"
+        ],
+        [
+            "prot_entry",
+            "pmid_entry",
+            "chromosome",
+            "gn_syn_map",
+            "pw_gn_map",
+            "anatomy_entry",
+            "go_dbref",
+            "go_syn",
+            "pmid_author",
+            "pmc_fulltext_company_map",
+            "disease_entry",
+            "pmc_fulltext_drug_map",
+            "pmc_fulltext_gn_map",
+            "pmc_fulltext_go_map",
+            "pmc_fulltext_clinical_map",
+            "ip_signature",
+            "clinical_trial",
+            "drug_description",
+            "drug_extdb",
+            "drug_name",
+            "drug_type_map",
+            "drug_atc_map",
+            "clinical_variant",
+            "genome_assembly",
+            "variant_type",
+            "variant_freq_study",
+            "sm_molecule",
+            "assay_target",
+            "molecular_entity_component_map"
+        ],
+        [
+            "prot_ac",
+            "prot_name_map",
+            "prot_seq",
+            "prot_dom",
+            "prot_go_map",
+            "prot_desc",
+            "prot_pmid_map",
+            "gn_prot_map",
+            "chr_map",
+            "anatomy_extdb",
+            "anatomy_syn",
+            "pmid_author_map",
+            "pmid_abstract",
+            "pmc_pmid_map",
+            "pmc_fulltext_disease_map",
+            "pmc_fulltext_anatomy_map",
+            "sm_entry",
+            "pmc_fulltext_pub_map",
+            "cell_tissue",
+            "disease_syn",
+            "disease_pmid",
+            "disease_anatomy_map",
+            "disease_extdb",
+            "disease_info",
+            "clinical_trial_pmid_map",
+            "clinical_trial_alias",
+            "clinical_trial_arm",
+            "clinical_trial_condition",
+            "clinical_trial_date",
+            "clinical_trial_intervention",
+            "clinical_trial_arm_intervention_map",
+            "drug_disease",
+            "clinical_variant_disease_map",
+            "clinical_variant_gn_map",
+            "clinical_variant_map",
+            "clinical_variant_pmid_map",
+            "clinical_variant_submission",
+            "chr_seq",
+            "variant_pmid_map",
+            "assay_tissue"
+        ],
+        [
+            "prot_seq_pos",
+            "prot_extdb_map",
+            "prot_feat",
+            "prot_desc_pmid",
+            "chr_gn_map",
+            "cell_entry",
+            "pmc_fulltext_sm_map",
+            "ip_sign_prot_seq",
+            "clinical_trial_intervention_drug_map",
+            "gene_seq",
+            "chr_seq_pos",
+            "sm_description",
+            "sm_source",
+            "sm_patent_map",
+            "assay_protein",
+            "assay_variant",
+            "molecular_component_sm_map"
+        ],
+        [
+            "prot_dom_seq",
+            "prot_feat_pmid",
+            "pmc_fulltext_cell_map",
+            "cell_syn",
+            "cell_disease",
+            "cell_patent_map",
+            "cell_pmid_map",
+            "cell_taxon_map",
+            "transcript",
+            "variant_position",
+            "assay_cell",
+            "assay_target_protein_map"
+        ],
+        [
+            "assay_entry",
+            "transcript_pos",
+            "variant_change",
+            "assay_genetic"
+        ],
+        [
+            "pmc_fulltext_assay_map",
+            "variant_frequency",
+            "variant_transcript_map",
+            "assay_target_genetic_map",
+            "assay_pmid",
+            "activity_entry"
+        ],
+        [
+            "variant_protein_map"
+        ]
+    ]
+}

@@ -1,0 +1,20 @@
+<h3>Drugs</h3>
+<div class="w3-opts-right">
+		<a href="CSV${PATH}/DRUGS"><img alt="Download" src="/require/img/download.png" style="width: 20px;"></a>
+    <div class="help-tip" style="position:unset;margin-left:5px;" onclick="showDialog('/CONTENT/HELP/clinical_trial')"></div>
+</div>
+<div class="w3-container w3-col s12 l12 m12" id="drug_pipeline">${SUMMARY}</div>
+
+${TABLE}
+<script type="text/javascript">
+var data=JSON.parse('${LIST}');
+
+
+$( document ).ready(function() {
+   $.each(data, function(div,smi){
+	getCompoundImage(smi,div,Math.min(250,parseFloat($("#P_"+div).css("width"))));
+   });
+});
+
+</script>
+<div id="test"></div>

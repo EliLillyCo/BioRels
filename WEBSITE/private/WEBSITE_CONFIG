@@ -1,0 +1,24 @@
+START	GLOBAL
+
+#PATH		PATH VALUE
+
+END		GLOBAL
+
+
+
+#REGEX	AAA		[A-Za-z]{1,100}
+
+
+
+# START	PAGE	TRANSCRIPTS_CHROM
+# LOC				/genomic/transcripts_chrom
+# LEVEL			0100000000
+# TAG				TRANSCRIPTS_CHROM
+# FNAME			transcripts_chrom
+# HTML_TAG		transcripts_chrom
+# WITH_EXPORT		true
+# WITH_DATA		true
+# END		PAGE	TRANSCRIPTS_CHROM
+
+
+

@@ -1,0 +1,763 @@
+<div class="w3-main" style="margin-left:0px;">
+	${ISSUE_MESSAGE}
+
+
+
+		<div class=" w3-col s0 m12 l4" style="text-align:center;">
+			<h3>Welcome to BioRels </h3>
+
+			<div class="w3-container w3-col m6">
+				<h3 style="font-weight: bold">30 data sources</h3>
+				<a onclick="showWelcome('genomic');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col1 w3-round-xlarge">Genomic</div>
+				</a>
+				<a onclick="showWelcome('proteomic');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col3 w3-round-xlarge">Proteomic</div>
+				</a>
+				<a onclick="showWelcome('publication');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col6 w3-round-xlarge">Publication</div>
+				</a>
+				<a onclick="showWelcome('disease');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col2 w3-round-xlarge">Disease</div>
+				</a>
+				<a onclick="showWelcome('tissue');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col5 w3-round-xlarge">Tissue</div>
+				</a>
+				<a onclick="showWelcome('assay');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col7 w3-round-xlarge">Assay</div>
+				</a>
+				<a onclick="showWelcome('molecule');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col4 w3-round-xlarge">Molecule</div>
+				</a>
+				<a onclick="showWelcome('tools');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m  w3-round-xlarge" style="background-color:grey">Tools & Tasks</div>
+				</a>
+				<a onclick="showWelcome('drug');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col11 w3-round-xlarge">Drug</div>
+				</a>
+				<a onclick="showWelcome('CI');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m portal_col12 w3-round-xlarge">Competitive Intelligence</div>
+				</a>
+				<a onclick="showWelcome('news_block');" style="cursor:pointer">
+					<div class="welcome_portal w3-col s6-m m6-m l6-m  w3-round-xlarge" style="background-color:white;border:1px solid black;color:black">News</div>
+				</a>
+			</div>
+			<div class="w3-container w3-col m6">
+				
+			
+			<div id="team" class="w3-container">
+
+			</div>
+			<a href="mailto:desaphy_jeremy@lilly.com;">Contact us</a>
+		</div>
+		</div>
+		<script>
+			function showWelcome(val) {
+				list = ['genomic', 'proteomic', 'publication', 'disease', 'tissue', 'assay', 'molecule', 'news_block', 'tools', 'drug','CI'];
+				$.each(list, function (id, t) {
+					$("#" + t).css('display', 'none');
+				});
+				$("#" + val).css('display', 'block');
+			}
+		</script>
+
+		<div class="w3-col s12 m12 l8">
+			<div id="news_block"  class="w3-container" >
+				<h3 style="font-weight: bold">In the news:</h3>
+				
+				${NEWS}
+				
+
+
+			<div id="genomic" class="w3-container" style="display: none;">
+				<h3 class="portal_col1">Genome</h3>
+				<div>
+					<table id="genomic_tbl" class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:50px;">
+										<div class="sprite_img src_ncbi"></div>
+									</div>
+								</td>
+								<td>
+									<a href="https://www.ncbi.nlm.nih.gov/taxonomy" target="_blank" rel="noopener">NCBI
+										Taxonomy</a>
+								</td>
+								<td>Classification and nomenclature of all living organisms</td>
+								<td>${TAXONOMY_0}</td>
+								<td>${TAXONOMY_1}</td>
+								<td>Daily</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ncbi.nlm.nih.gov/home/about/policies/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:50px;">
+										<div class="sprite_img src_ncbi"></div>
+									</div>
+								</td>
+								<td><a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/gene">NCBI
+										Gene</a></td>
+								<td>Nomenclature and definition of genes in all living organisms</td>
+								<td>${GENE_0}</td>
+								<td>${GENE_1}</td>
+								<td>Daily</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ncbi.nlm.nih.gov/home/about/policies/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:50px;">
+										<div class="sprite_img src_ncbi"></div>
+									</div>
+								</td>
+								<td><a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/gene">NCBI
+										dbSNP</a></td>
+								<td>Human nucleotide variation and their molecular consequences</td>
+								<td>${DBSNP_0}</td>
+								<td>${DBSNP_1}</td>
+								<td>No Schedule</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ncbi.nlm.nih.gov/home/about/policies/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item" style="width:95px;margin:0 auto">
+										<div class="sprite_img src_so"></div>
+									</div>
+								</td>
+								<td>
+									<a target="_blank" rel="noopener" href="http://www.sequenceontology.org/">Sequence
+										Ontology</a>
+								</td>
+								<td>Ontology providing sequence features used in biological sequence annotation</td>
+								<td>${SEQ_ONTO_0}</td>
+								<td>${SEQ_ONTO_1}</td>
+								<td>No schedule</td>
+								<td><a target="_blank" rel="noopener"
+										href="http://creativecommons.org/licenses/by-sa/4.0/"><img
+											src="/require/img/CC/CC-BY-SA.png" alt="CC-BY-SA" style="height:30px" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:50px;">
+										<div class="sprite_img src_ensembl"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ensembl.org/">Ensembl</a></td>
+								<td>Reference of DNA and RNA sequences and their annotation</td>
+								<td colspan="2">See below</td>
+								<td>No schedule</td>
+								<td><a href="https://www.ncbi.nlm.nih.gov/home/about/policies/" target="_blank"
+										rel="noopener">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:50px;">
+										<div class="sprite_img src_ncbi"></div>
+									</div>
+								</td>
+								<td>
+									<a target="_blank" rel="noopener"
+										href="https://www.ncbi.nlm.nih.gov/refseq/">RefSeq</a><br />
+								</td>
+								<td>Reference of DNA and RNA sequences and their annotation</td>
+								<td colspan="2">See below</td>
+								<td>No schedule</td>
+								<td><a href="https://www.ncbi.nlm.nih.gov/home/about/policies/" target="_blank"
+										rel="noopener">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:50px;">
+										<div class="sprite_img src_ncbi"></div>
+									</div>
+								</td>
+								<td>
+									<a target="_blank" rel="noopener"
+										href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>
+								</td>
+								<td>Aggregation of information between genomic variation and diseases</td>
+								<td>${CLINVAR_0}</td>
+								<td>${CLINVAR_1}</td>
+								<td>Monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ncbi.nlm.nih.gov/home/about/policies/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item home-grid" style="width:150px;">
+										<div class="sprite_img src_gtex"></div>
+									</div>
+								</td>
+								<td>
+									<a href="https://gtexportal.org/" target="_blank" rel="noopener">GTEX</a>
+								</td>
+								<td>RNA Expression<br />The Genotype-Tissue Expression (GTEx) Project was supported by
+									the Common Fund of the Office of the Director of the National Institutes of Health,
+									and by NCI, NHGRI, NHLBI, NIDA, NIMH, and NINDS<br />
+									<span style="font-weight:bold">This application does not necessarily reflext the
+										most current/accurate data available from the GTEx Portal</span>
+								</td>
+								<td>${GTEX_0}</td>
+								<td>${GTEX_1}</td>
+								<td>No schedule</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.gtexportal.org/home/license">Terms of use</a></td>
+							</tr>
+						</tbody>
+					</table>
+					${GENOMES}
+				</div>
+			</div>
+			<div id="publication"  class="w3-container" style="display: none;">
+				<h3 class="portal_col6">Publication</h3>
+				<div>
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_pubmed"></div>
+									</div>
+								</td>
+								<td><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed</a>
+								</td>
+								<td>Scientific publications</td>
+								<td>${PUBMED_0}</td>
+								<td>${PUBMED_1}</td>
+								<td>Twice a week</td>
+								<td><a href="https://www.nlm.nih.gov/web_policies.html" target="_blank"
+										rel="noopener">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><a href="https://www.ncbi.nlm.nih.gov/books/NBK1116/" target="_blank"
+										rel="noopener">Gene Reviews</a></td>
+								<td>Clinically relevant and medically actional information for inherited
+									conditions<br />GeneReviews® chapters are owned by the University of Washington,
+									Seattle, © 1993-2023.</td>
+								<td>${GENE REVIEWS_0}</td>
+								<td>${GENE REVIEWS_1}</td>
+								<td>Weekly</td>
+								<td><a href="https://www.ncbi.nlm.nih.gov/books/NBK138602/ target=" _blank"
+										rel="noopener">Term of Use</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="disease"  class="w3-container" style="display: none;">
+				<h3 class="portal_col2">Disease</h3>
+				<div>
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="grid-item" style="width:100%;max-width: 250px;     margin: 0 auto;">
+										<div class="sprite_img src_opentg"></div>
+									</div>
+								</td>
+								<td><a target="_blank" rel="noopener" href="https://platform.opentargets.org/">Open
+										Targets</a></td>
+								<td>Clinical trials & Gene to disease association</td>
+								<td>${OT_0}</td>
+								<td>${OT_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://platform-docs.opentargets.org/licence">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="grid-item" style="width:100%; max-width:80px;    margin: 0 auto;">
+										<div class="sprite_img src_mondo"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ebi.ac.uk/ols/ontologies/mondo" target="_blank"
+										rel="noopener">Mondo Disease Ontology</a></td>
+								<td>Disease ontology</td>
+								<td>${MONDO_0}</td>
+								<td>${MONDO_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of Use</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="proteomic" class="w3-container"  style="display: none;">
+				<h3 class="portal_col3">Protein</h3>
+				<div>
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div style="width:100%;max-width:80px;margin: 0 auto">
+										<div class="sprite_img src_go"></div>
+									</div>
+								</td>
+								<td><a href="http://geneontology.org/" target="_blank" rel="noopener">Gene Ontology</a>
+								</td>
+								<td>Biological processes, cellular location and molecular function ontology<br />
+									(<a href="https://doi.org/10.5281/zenodo.7504797">DOI:10.5281/zenodo.7504797</a>)
+								</td>
+								<td>${GO_0}</td>
+								<td>${GO_1}</td>
+								<td>Monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="http://creativecommons.org/licenses/by/4.0/">
+										<img src="/require/img/CC/CC-BY.png" alt="CC-BY" style="height:30px" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 200px;margin: 0 auto">
+										<div class="sprite_img src_reactome"></div>
+									</div>
+								</td>
+								<td><a href="https://reactome.org/" target="_blank" rel="noopener">Reactome</a></td>
+								<td>Protein pathway database</td>
+								<td>${REACTOME_0}</td>
+								<td>${REACTOME_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://creativecommons.org/share-your-work/public-domain/"><img
+											src="/require/img/CC/CC-PUBLIC.png" alt="CC-PUBLIC"
+											style="height:30px" /></a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 200px;margin: 0 auto">
+										<div class="sprite_img src_uniprot"></div>
+									</div>
+								</td>
+								<td><a href="https://www.uniprot.org/" target="_blank" rel="noopener">UniProt</a></td>
+								<td>Protein knowledgebase</td>
+								<td>${UNIPROT_0}</td>
+								<td>${UNIPROT_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="http://creativecommons.org/licenses/by/4.0/">
+										<img src="/require/img/CC/CC-BY.png" alt="CC-BY" style="height:30px" /></a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width:80px;margin: 0 auto">
+										<div class="sprite_img src_eco"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ebi.ac.uk/ols/ontologies/eco" target="_blank"
+										rel="noopener">ECO</a></td>
+								<td>Evidence & Conclusion ontology</td>
+								<td>${ECO_0}</td>
+								<td>${ECO_1}</td>
+								<td>Monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://creativecommons.org/share-your-work/public-domain/">
+										<img src="/require/img/CC/CC-PUBLIC.png" alt="CC-PUBLIC"
+											style="height:30px" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><a href="https://www.ebi.ac.uk/efo/" target="_blank" rel="noopener">EFO</a></td>
+								<td>Experimental Factor Ontology</td>
+								<td>${EFO_0}</td>
+								<td>${EFO_1}</td>
+								<td>Monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width:80px;margin: 0 auto">
+										<div class="sprite_img src_interpro"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ebi.ac.uk/interpro" target="_blank" rel="noopener">InterPro</a>
+								</td>
+								<td>Protein domain information</td>
+								<td>${INTERPRO_0}</td>
+								<td>${INTERPRO_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of Use</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="tissue" class="w3-container"  style="display: none;">
+				<h3 class="portal_col5">Tissue</h3>
+				<div>
+
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div style="width:100%;max-width:40px;;margin: 0 auto">
+										<div class="sprite_img src_uberon"></div>
+									</div>
+								</td>
+								<td><a href="http://obophenotype.github.io/uberon/about/" rel="noopener"
+										target="_blank">Uberon</a></td>
+								<td>anatomy ontology representing a variety of structures found in animals, such as
+									lungs, muscles, bones, feathers and fins</td>
+								<td>${UBERON_0}</td>
+								<td>${UBERON_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="http://creativecommons.org/licenses/by/4.0/">
+										<img src="/require/img/CC/CC-BY.png" alt="CC-BY" style="height:30px" /></a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_cellausorus"></div>
+									</div>
+								</td>
+								<td><a href="https://www.cellosaurus.org/" target="_blank" rel="noopener">
+										Cellausorus</a></td>
+								<td>The Cellosaurus is a knowledge resource on cell lines. It attempts to describe all
+									cell lines used in biomedical research.</td>
+								<td>${CELLAUSORUS_0}</td>
+								<td>${CELLAUSORUS_1}</td>
+								<td>No schedule</td>
+								<td><a href="https://www.expasy.org/terms-of-use">Terms of use</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="assay"  class="w3-container" style="display: none;">
+				<h3 class="portal_col7">Assay</h3>
+				<div>
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_chembl"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ebi.ac.uk/chembl/" target="_blank" rel="noopener">ChEMBL</a>
+								</td>
+								<td>Manually curated bioactive molecules with drug-like properties</td>
+								<td>${CHEMBL_0}</td>
+								<td>${CHEMBL_1}</td>
+								<td>Yearly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of Use</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="molecule" class="w3-container"  style="display: none;">
+				<h3 class="portal_col4">Molecule</h3>
+				<div>
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_chembl"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ebi.ac.uk/chembl/" target="_blank" rel="noopener">ChEMBL</a>
+								</td>
+								<td>Manually curated bioactive molecules with drug-like properties</td>
+								<td>${CHEMBL_0}</td>
+								<td>${CHEMBL_1}</td>
+								<td>Yearly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_surechembl"></div>
+									</div>
+								</td>
+								<td><a href="https://www.surechembl.org/search/" target="_blank"
+										rel="noopener">SureCHEMBL</a></td>
+								<td>Small molecule in patents</td>
+								<td>${SURECHEMBL_0}</td>
+								<td>${SURECHEMBL_1}</td>
+								<td>No schedule</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_swisslipids"></div>
+									</div>
+								</td>
+								<td><a href="http://www.swisslipids.org/" target="_blank" rel="noopener">SwissLipids</a>
+								</td>
+								<td>Lipid ontology and molecule</td>
+								<td>${SWISSLIPIDS_0}</td>
+								<td>${SWISSLIPIDS_1}</td>
+								<td>Weekly</td>
+								<td><a target="_blank" rel="noopener"
+										href="http://creativecommons.org/licenses/by/4.0/"><img
+											src="/require/img/CC/CC-BY.png" alt="CC-BY" style="height:30px" /></a></td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+			<div id="tools"  class="w3-container" style="display: none;">
+				<h3 style="background-color: grey;">Tools</h3>
+				<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+					<thead>
+						<tr>
+							<th>Tool Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						${LIST_TOOL}
+					</tbody>
+				</table>
+
+				<br/>
+				${TASKS}
+			</div>
+			<div id="drug" class="w3-container"  style="display: none;">
+				<h3 class="portal_col11">Drug</h3>
+				<div>
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Logo</th>
+								<th>Data source</th>
+								<th style="max-width:30%;width:30%">Description</th>
+								<th>Version</th>
+								<th>Released Date</th>
+								<th>Update frequency</th>
+								<th>License</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_chembl"></div>
+									</div>
+								</td>
+								<td><a href="https://www.ebi.ac.uk/chembl/" target="_blank" rel="noopener">ChEMBL</a>
+								</td>
+								<td>Manually curated bioactive molecules with drug-like properties</td>
+								<td>${CHEMBL_0}</td>
+								<td>${CHEMBL_1}</td>
+								<td>Yearly</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of
+										Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_surechembl"></div>
+									</div>
+								</td>
+								<td><a href="https://www.surechembl.org/search/" target="_blank"
+										rel="noopener">SureCHEMBL</a></td>
+								<td>Small molecule in patents</td>
+								<td>${SURECHEMBL_0}</td>
+								<td>${SURECHEMBL_1}</td>
+								<td>No schedule</td>
+								<td><a target="_blank" rel="noopener"
+										href="https://www.ebi.ac.uk/about/terms-of-use/">Term of
+										Use</a></td>
+							</tr>
+							<tr>
+								<td>
+									<div style="width:100%;max-width: 250px;margin: 0 auto">
+										<div class="sprite_img src_swisslipids"></div>
+									</div>
+								</td>
+								<td><a href="http://www.swisslipids.org/" target="_blank" rel="noopener">SwissLipids</a>
+								</td>
+								<td>Lipid ontology and molecule</td>
+								<td>${SWISSLIPIDS_0}</td>
+								<td>${SWISSLIPIDS_1}</td>
+								<td>Bi-monthly</td>
+								<td><a target="_blank" rel="noopener"
+										href="http://creativecommons.org/licenses/by/4.0/"><img
+											src="/require/img/CC/CC-BY.png" alt="CC-BY" style="height:30px" /></a></td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="CI"  class="w3-container" style="display: none;">
+				<h3 class="portal_col12">Competitive Intelligence</h3>
+				<div>
+					
+					<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+						<thead>
+							<tr>
+								<th>Data source</th>
+								
+								<th>Records</th>
+							</tr>
+						</thead>
+						<tbody>
+							${NEWS_SOURCE}
+						</tbody>
+					</table>
+					$[CI_BLOCK]
+					<div style="width:94%;text-align:center;margin:3%;">
+					<a target="_blank"  class="search_button btn btn-primary" href="/ADD_NEWS">Add News</a>
+				</div>
+					$[/CI_BLOCK]
+				</div>
+			</div>
+		</div>
+	
+</div>
+
+
+
+
+
+
+
+<script>
+	let prev_right_class = '';
+	
+
+
+	function showRightBlock(name) {
+		$("#right_block").css("display", "block");
+		$("#left_block").css("display", "none");
+		if (name == 'Genome') {
+			$("#right_title").html("Genome");
+			$("#right_header").removeClass(prev_right_class);
+			$("#right_header").addClass("portal_col1");
+			prev_right_class = 'portal_col1';
+			$("#genome_content").css("display", "block");
+			$("#disease_content").css("display", "none");
+		}
+		if (name == 'Disease') {
+			$("#right_title").html("Disease");
+			$("#right_header").removeClass(prev_right_class);
+			$("#right_header").addClass("portal_col2");
+			prev_right_class = 'portal_col2';
+			$("#genome_content").css("display", "none");
+			$("#disease_content").css("display", "block");
+		}
+	}
+
+	function showLeftBlock(name) {
+		$("left_block").css("display", "block");
+		$("right_block").css("display", "none");
+		if (name == 'Genome') {
+			$("left_title").html("Genome");
+			$("#genome_content").css("display", "block");
+		}
+	}
+</script>
+
+<script>
+	$(window).on('resize', function () {
+		if ($(window).height() > 1500) {
+			$('#menu_source').addClass('s1');
+			$('#menu_source').removeClass('s2');
+			$('welcome_source_view_1').addClass('s11');
+			$('welcome_source_view_1').removeClass('s10');
+		} else {
+			$('#menu_source').addClass('s2');
+			$('#menu_source').removeClass('s1');
+			$('welcome_source_view_1').addClass('s10');
+			$('welcome_source_view_1').removeClass('s11');
+		}
+	});
+</script>

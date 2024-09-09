@@ -1,0 +1,8 @@
+<input type="text" id="newsval_input_${TAG}" />
+<input id="newsval_val_${TAG}" type="button" value="validate" onclick="validateNews('${TAG}')" />
+<select id="newsval_sel_${TAG}" name="newsval_sel_${TAG}" style="display: none;max-width:300px">
+    <option value=""></option>
+</select>
+<input id="cancel_news_${TAG}" style="display: none; margin-left: 15px;" type="button" class="default_button"
+    onclick="cancelNewsValidate('${TAG}')" value="Cancel" />
+<span class="alert alert-info" style="display:none;" id="news_status_${TAG}"></span>

@@ -1,0 +1,21 @@
+<h4>Description:</h4>
+
+<select style="width:100%" id="gn_desc_sel" onchange="showDesc(this)">
+	${OPTS}
+</select>
+<div class="container-grey w3-container w3-padding-16 s-always-show long_text" style="margin-top:${MARGIN}px;height:700px;max-height: 700px;overflow-y: auto;" >
+${DESC}
+</div>
+<script>
+	$(document).ready(function() {
+		showDesc();
+	});
+	function showDesc()
+	{
+		$("#gn_desc_sel > option").each(function() {
+			$("#"+this.value).css("display","none");
+    });
+		$("#"+$('#gn_desc_sel').find(":selected").val()).css("display","block");
+		
+	}
+</script>

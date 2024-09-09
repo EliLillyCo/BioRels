@@ -1,0 +1,134 @@
+<html lang="en">
+
+<head>
+<title></title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width" />
+<meta name="reply-to"               content=""/>
+<meta name="publisher"              content="DESAPHY Jeremy"/>
+<meta name="Robots"                 content="all"/>
+<meta name="robots"                 content="index, follow"/>
+<meta name="Cache-Control"          content="no-store, no-cache, must-revalidate" />
+<meta name="Cache-Control"          content="post-check=0, pre-check=0" />
+<meta name="Pragma"                 content="no-cache" />
+<meta name="Accept-Encoding"        content="gzip, deflate"/>
+<meta name="Content-Encoding"       content="gzip"/>
+<meta name="distribution"           content="global"/>
+<meta name="keywords"     lang="en"  content="global"/>
+<meta name="description" lang="en"  content="BioRels"/>
+<meta name="author" lang="en"       content="DESAPHY Jeremy"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<base href="/" />
+<link rel="stylesheet" href='/require/css/all.min.css' type="text/css" />
+<link rel="stylesheet" href="/require/css/style.css" type="text/css" />
+<link rel="stylesheet" href="/require/css/table.min.css" type="text/css" />
+</head>
+
+<body>
+	  
+	  <div id="help_dialog" title="Help" style="display: none;z-index:100000"></div>
+	<div class="w3-bar w3-top w3-lly w3-large ${PORTAL_COLOR}" id="body_top">
+	  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();">
+		<div class="menu_block"></div>
+		<div class="menu_block"></div>
+		<div class="menu_block"></div> &nbsp;Menu
+	  </button>
+	  <div class="w3-col s6 m2 logo" id="BIORELS_NAME">
+		<a href="/" class="home-icon">Biorels</a>
+		<br />
+  
+	  </div>
+	  <div class="w3-col m8 l7">
+		<form id="start_form" onsubmit="return submitWelcomeSearch()">
+		  <div class="w3-col m3 s12" id="BIORELS_search_opts">
+			<select id="search_options" onchange="changeHeadSearchPlace(this)" class="search-options">
+			  <optgroup label="Genomic">
+				<option value="GENOMIC_SEARCH/GENE_ANY">Any Genomic field</option>
+				<option value="GENOMIC_SEARCH/GENE_SYMBOL">Gene Symbol</option>
+				<option value="GENOMIC_SEARCH/GENE_NAME">Gene Name</option>
+				<option value="GENOMIC_SEARCH/GENE_NCBI">NCBI Gene ID</option>
+				<option value="GENOMIC_SEARCH/GENE_ENS">Ensembl Gene ID</option>
+				<option value="GENOMIC_SEARCH/GENE_TR">Transcript Name</option>
+				<option value="GENOMIC_SEARCH/SNP">Mutation</option>
+			  </optgroup>
+			  <optgroup label="Protein">
+				<option value="PROTEIN_SEARCH/PROT_ANY">Any field</option>
+				<option value="PROTEIN_SEARCH/PROT_NAME">Protein name</option>
+				<option value="PROTEIN_SEARCH/PROT_ID">UniProt Identifier</option>
+				<option value="PROTEIN_SEARCH/PROT_AC">UniProt Accession</option>
+				<option value="PROTEIN_SEARCH/PROT_SEQ">Protein Sequence Name</option>
+				<option value="PROTEIN_SEARCH/PROT_DOM">Protein Domain</option>
+			  </optgroup>
+			  <optgroup label="Publication">
+				<option value="PUBLICATION_SEARCH/PUBLI_ANY">Any field</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_TITLE">Title</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_AUTHOR">Author</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_INSTIT">Institution</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_PMID">Pubmed ID</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_DOI">DOI</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_ORCID">ORCID ID</option>
+				<option value="PUBLICATION_SEARCH/PUBLI_PUBMED">Pubmed Search</option>
+			  </optgroup>
+			  <!--
+						  <optgroup label="Pathway">
+							  <option value="PATHWAY_SEARCH/PW_REAC">Pathway Name</option>
+							  <option value="PATHWAY_SEARCH/PW_REAC_ID">Reactome Identifier</option>
+						  </optgroup>
+						  -->
+			  <optgroup label="Disease">
+				<option value="DISEASE_SEARCH/DISEASE_ANY">Any field</option>
+				<option value="DISEASE_SEARCH/DISEASE_NAME">Disease Name</option>
+				<option value="DISEASE_SEARCH/DISEASE_ID">Disease identifier</option>
+			  </optgroup>
+			  <optgroup label="Compound">
+				<option value="COMPOUND_SEARCH/COMPOUND_ANY">Any field</option>
+				<option value="COMPOUND_SEARCH/COMPOUND_NAME">Compound/Drug Name</option>
+				<!--	<option value="COMPOUND_SEARCH/COMPOUND_SMILES">SMILES</option>-->
+				<option value="COMPOUND_SEARCH/COMPOUND_INCHI">InChI/InChI-KEY</option>
+			  </optgroup>
+			  <optgroup label="Drug">
+				<option value="DRUG_SEARCH/DRUG_ANY">Any field</option>
+				<option value="DRUG_SEARCH/DRUG_NAME">Drug Name</option>
+			  </optgroup>
+			  <optgroup label="Clinical">
+				<option value="CLINICAL_SEARCH/CLINICAL_ANY">Any field</option>
+				<option value="CLINICAL_SEARCH/CLINICAL_ID">Clinical trial Id</option>
+				<option value="CLINICAL_SEARCH/CLINICAL_TITLE">Clinical trial Title</option>
+			  </optgroup>
+			  <!--
+						  <optgroup label="Tissue">
+							  <option value="TISSUE_SEARCH/TISSUE_ANY">Any field</option>
+							  <option value="TISSUE_SEARCH/TISSUE_NAME">Tissue Name</option>
+							  
+							  <option value="TISSUE_SEARCH/TISSUE_ID">Tissue Identifier</option>
+						  </optgroup>
+					  -->
+			  <optgroup label="Assay">
+				<option value="ASSAY_SEARCH/ASSAY_ANY">Any field</option>
+				<option value="ASSAY_SEARCH/ASSAY_NAME">Assay Name</option>
+			  </optgroup>
+			  <optgroup label="News">
+				<option value="NEWS_SEARCH/NEWS_COMPLEX">News</option>
+			  </optgroup>
+			</select>
+			<div class="human-check">
+			  <input type="checkbox" id="search_human" checked="checked" />
+			  <label class="search_human_label" for="search_human" id="search_human_label">Human</label>
+			</div>
+		  </div>
+		  <div class="w3-col m8 s12" id="search_input_div">
+			<input class="search_input" type="text" name="search_input" id="search_input" disabled="disabled"
+			  placeholder="Gene ID: 1017 ; Ensembl ID: ENSG00000123374.11 / ENST00000266970.9 ; RefSeq: NM_001798.5; Symbol: CDK2 ; Name: Cyclin Dependent kinase 2 (slower)" />
+		  </div>
+		  <div class="w3-col m1 s12 text-center">
+			<button class="search_button btn btn-primary" id="search_run" type="button" disabled="disabled" onclick="submitWelcomeSearch()"
+			  value="Search">Search</button>
+		  </div>
+		</form>
+	  </div>
+	</div>
+	<div class="w3-main alert alert-info" >We encountered an issue - Please accept our apologies<br/>
+		<span style="font-weight:bold">Reason:</span> ${TXT}</div>
+</body>
+</html>  

@@ -1,0 +1,13 @@
+Name	Population Code	Description	BioSample ID
+African Others	AFO	Individuals with African ancestry	SAMN10492696
+African American	AFA	African American	SAMN10492698
+African	AFR	All Africans, AFO and AFA Individuals	SAMN10492703
+European	EUR	European	SAMN10492695
+Latin American 1	LAC	Latin American individiuals with Afro-Caribbean ancestry	SAMN10492699
+Latin American 2	LEN	Latin American individiuals with mostly European and Native American Ancestry	SAMN10492700
+South Asian	SAS	South Asian	SAMN10492702
+East Asian	EAS	East Asian (95%)	SAMN10492697
+Asian	ASN	All Asian individuals (EAS and OAS) excluding South Asian (SAS)	SAMN10492704
+Other Asian	OAS	Asian individiuals excluding South or East Asian	SAMN10492701
+Other	OTR	The self-reported population is inconsistent with the GRAF-assigned population	SAMN11605645
+Total	TOT	Total (~global) across all populations	SAMN10492705

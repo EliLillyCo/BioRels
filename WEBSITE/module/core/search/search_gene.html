@@ -1,0 +1,22 @@
+$[MULTI]
+<div class="w3-container" style="padding-top:22px">
+	<table id="search_res_gene" class="w3-w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white gene-table"
+		style="font-size:0.9em;">
+		<thead>
+			<tr>
+				${result}
+				</tbody>
+	</table>
+</div>
+</div>
+$[/MULTI]
+$[SINGLE]
+<script type="text/javascript">
+	$(document).ready(function () {
+		document.location.href = "${ADDON}";
+	});
+</script>
+$[/SINGLE]
+$[INVALID]
+<div class="alert alert-info">An error happened during the search, we apologize for the inconvenience</div>
+$[/INVALID]

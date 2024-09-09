@@ -1,0 +1,16 @@
+$[MULTI]
+<div class="w3-container" style="padding-top:22px">
+<table id="search_res_protein" class="table table-striped table-bordered" style="font-size:0.8em;width:100% ;margin:0 auto"><thead><tr>
+	${result}
+</tbody></table></div>
+$[/MULTI]
+$[SINGLE]
+<script type="text/javascript">
+$( document ).ready(function() {
+	document.location.href="/UNIPROT_ID/${UNIPROT_ID}";
+});
+</script>
+$[/SINGLE]
+$[INVALID]
+<div class="alert alert-info">An error happened during the search, we apologize for the inconvenience</div>
+$[/INVALID]

@@ -1,0 +1,123 @@
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>	
+<div id="d_${ID}" style="min-width:100%"></div>
+<div id="data_${TAG}" style="display:none">${DATA}</div>
+<script>
+
+    var st_barchart_obj_${TAG};
+    $(document).ready(function ()
+    {
+        st_barchart_obj_${TAG}=st_barChart_${TAG}();
+    });
+
+function st_barChart_${TAG}()
+{
+    
+
+  // Declare the chart dimensions and margins.
+  var margin = {top: 10, right: 30, bottom: 70, left: 50},
+    width = ${WIDTH} - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#d_${ID}")
+  .append("svg")
+  .attr("viewBox", `0 0 `+(width + margin.left + margin.right)+` `+(height + margin.top + margin.bottom))
+			//.attr("width", width + margin.left + margin.right)
+			//.attr("height", height + margin.top + margin.bottom)
+		  .append("g")
+			.attr("transform",
+				  "translate(" + margin.left + "," + margin.top + ")");
+          data= d3.csvParse(d3.select("#data_${TAG}").text());
+
+// List of subgroups = header of the csv files = soil condition here
+const subgroups = data.columns.slice(1)
+
+// List of groups = species here = value of the first column called group -> I show them on the X axis
+const groups = data.map(d => (d.group))
+
+// Add X axis
+const x = d3.scaleBand()
+    .domain(groups)
+    .range([0, width])
+    .padding([0.2])
+svg.append("g")
+  .attr("transform", "translate(0, "+height+")")
+  .call(d3.axisBottom(x).tickSizeOuter(0)).selectAll('text')
+  .style("text-anchor", "end")
+     .attr("dx", "-.8em")
+     .attr("dy", ".15em").attr("transform", "rotate(-45)");
+
+
+// Add Y axis
+const y = d3.scaleLinear()
+  .domain([0, ${MAX_VALUE}])
+  .range([ height, 0 ]);
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+// color palette = one color per subgroup
+const color = d3.scaleOrdinal()
+  .domain(subgroups)
+  .range(
+  [
+'#263f6a',
+'#a30015',
+'#65afd7',
+'#EE5622',
+'#196F91',
+'#345f6f',
+'#549670',
+'#bd2d87',
+'#9A4945',
+'#c58882',
+'#E06C00'
+]);
+
+
+
+//stack the data? --> stack per subgroup
+const stackedData = d3.stack()
+  .keys(subgroups)
+  (data)
+
+// Show the bars
+svg.append("g")
+  .selectAll("g")
+  // Enter in the stack data = loop key per key = group per group
+  .data(stackedData)
+  .join("g")
+    .attr("fill", d => color(d.key))
+    .selectAll("rect")
+    // enter a second time = loop subgroup per subgroup to add all rectangles
+    .data(d => d)
+    .join("rect")
+      .attr("x", d => x(d.data.group))
+      .attr("y", d => y(d[1]))
+      .attr("height", d => y(d[0]) - y(d[1]))
+      .attr("width",x.bandwidth())
+
+      svg.selectAll("mydots")
+  .data(subgroups)
+  .enter()
+  .append("circle")
+    .attr("cx", function(d,i){ return Math.floor(i/4)*170+40})
+    .attr("cy", function(d,i){ return  (i%4)*17}) // 100 is where the first dot appears. 25 is the distance between dots
+    .attr("r", 7)
+    .style("fill", function(d){ return color(d)})
+
+// Add one dot in the legend for each name.
+svg.selectAll("mylabels")
+  .data(subgroups)
+  .enter()
+  .append("text")
+    .attr("x", function(d,i){ return Math.floor(i/4)*170+50})
+    .attr("y", function(d,i){ return (i%4)*17}) // 100 is where the first dot appears. 25 is the distance between dots
+    .style("fill", function(d){ return color(d)})
+    .style("font-size","0.8em")
+    .text(function(d){ return d})
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle")
+
+}
+
+</script>

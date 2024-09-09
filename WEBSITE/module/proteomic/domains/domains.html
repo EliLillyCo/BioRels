@@ -1,0 +1,175 @@
+$[DOMAIN]
+<div>Domain view<label class="switch" style="margin-left:10px; margin-right:10px;">
+		<input id="switch" type="checkbox" onchange="genDomainView()">
+		<span class="switch-slider round"></span>
+	</label> Sequence view
+</div>
+<br/>
+<div id="dominfo"></div>
+${ABSTRACT}
+<script type="text/javascript">
+var raw_data=JSON.parse('${RAW_DATA}');
+var mapping={'Homologous_superfamily':'H','Superfamily':'S','Domain':'D','Active_site':'S','Binding_site':'S','Conserved_site':'C'};
+var DOM_TYPE_IMG={"CHAIN":["C","orange"],"REPEAT":["R","#ed7d31"],"DOMAIN":["D","#4000ff"],"REGION":["G","#843c0c"]};
+var test;
+function genDomainSeqView()
+{
+	var str='';
+	$.each(raw_data.PROT_ENTRY, function(prot_id,prot_info){
+		str+='<div style="margin-top:30px"><h4>'+prot_id;
+		var sel_un=0;
+		$.each(prot_info.SEQS,function(prot_seq_id,prot_seq)
+		{
+			if (prot_seq.IS_PRIMARY!='T')return true;
+			sel_un=prot_seq_id;
+			str+=" "+prot_seq.ISO_ID+" "+prot_seq.DESCRIPTION+"</h4>";
+		});
+		if (sel_un==0){str+='</h4>: No additional information</div>';return true;}
+		var len=prot_info.SEQS[sel_un].LEN;
+		str+="<div class='mseq_view'>\
+			<div class='mseq_title'>"+prot_info.SEQS[sel_un].ISO_ID+"</div>\
+			<div class='mseq_line'><a class='mseq_range' style='left:0%; width:100%; background-color:green' href='/SEQUENCE/"+prot_info.SEQS[sel_un].ISO_ID+"''></a></div>";
+			
+		$.each(prot_info.DOMAIN,function(prot_dom_id,dom_info){
+			str+='<div class="mseq_title">'+dom_info.DOMAIN_NAME+'</div></div>'+
+				'<div class="mseq_line"><a href="/${PORTAL_PATH}/DOMAIN/'+dom_info.DOMAIN_NAME+"/PARAMS/"+dom_info.POS_START+"/"+dom_info.POS_END+"/"+prot_info.SEQS[sel_un].ISO_ID+'" class="mseq_range" style="left:'+
+					(((dom_info.POS_START-1)/len*100))+'%; width:'+(((dom_info.POS_END-dom_info.POS_START)/len*100))+'%; background-color:'+DOM_TYPE_IMG[dom_info.DOMAIN_TYPE][1]+'"></a></div></div>';
+		});
+		$.each(raw_data.DOM_INFO,function(dom_id,dom_info){
+			str2='';
+			
+			$.each(dom_info.SEQ, function(seq_id,signs){
+				if (seq_id!=sel_un)return true;
+				$.each(signs.SIGN,function(id_sign,sign){
+					str2+='<div class="mseq_title">'+sign.IP_SIGN_DBNAME+":"+sign.IP_SIGN_NAME+'</div>'+
+				'<div class="mseq_line"><a class="mseq_range" style="left:'+
+					(((sign.START_POS-1)/len*100))+'%; width:'+(((sign.END_POS-sign.START_POS)/len*100))+'%; background-color:grey"></a></div>';
+				});
+			});
+			if (str2=='')return true;
+			str+='<div class="mseq_head">'+dom_info.INFO.IPR_ID+' '+dom_info.INFO.NAME+'</div></div>'+str2;
+		});
+		str+='</div></div>';
+		
+// +"</p><div class='mseq_sum'><ol class='mseq_schema'>";
+	// 			$.each (info_ipr.SEQ, function(id_seq,list_evidence)
+	// 			{
+	// 					str+='<li class="seq_schema"><div class="ss_row_name">'+list_evidence.SEQ_INFO.ISO_ID+'</div><div class="ss_row_line"><div class="matches"><a class="match" style="left:0%; width:100%; background-color:green"></a></div></div></li>';
+	// 					$.each (list_evidence.SIGN, function(id_sign,sign)
+	// 					{
+	// 						str+='<li class="seq_schema"><div class="ss_row_name">'+sign.IP_SIGN_DBNAME+':'+sign.IP_SIGN_NAME+'</div><div class="ss_row_line"><div class="matches"><a class="match" style="left:'+((sign.START_POS/list_evidence.SEQ_INFO.LEN*100))+'%; width:'+(((sign.END_POS-sign.START_POS+1)/list_evidence.SEQ_INFO.LEN*100))+'%; background-color:green"></a></div></div></li>';
+	// 					});
+	// 			});
+	// 			str+='</ol></div>';
+	});
+	$("#dominfo").html(str);
+	
+}
+Object.size = function(obj) {
+  var size = 0,
+    key;
+  for (key in obj) {
+    if (obj.hasOwnProperty(key)) size++;
+  }
+  return size;
+};
+var nseqs;
+function genDomainView()
+{
+	if ($("#switch").prop("checked")==true){genDomainSeqView();return;}
+	console.log("Dom view");
+	var str_o='<select id="dom_sel" style="width: fit-content;   max-width: unset;    font-weight: bold;">';
+		var str='';
+		 nseqs=0;
+	$.each(raw_data.PROT_ENTRY, function(prot_id,prot_info){
+		++nseqs;
+		str_o+='<option value="'+nseqs+'">'+prot_id;
+		str+='<div id="dom_'+nseqs+'" style="display:'+((nseqs==1)?'block':'none')+'">';
+		var sel_un=0;
+		$.each(prot_info.SEQS,function(prot_seq_id,prot_seq)
+		{
+			if (prot_seq.IS_PRIMARY!='T')return true;
+			sel_un=prot_seq_id;
+			str_o+=" "+prot_seq.ISO_ID+" "+prot_seq.DESCRIPTION+"</option>";
+			
+		});
+		if (sel_un==0){str+='</h3>: No additional information</div>';return true;}
+		var len=prot_info.SEQS[sel_un].LEN;
+		str+="<div class='mseq_sum'><ol class='mseq_schema'>"+'<li class="seq_schema"><div class="ss_row_name">'+prot_info.SEQS[sel_un].ISO_ID+'</div><div class="ss_row_line"><div class="matches"><a class="match" style="left:0%; width:100%; background-color:green" href="/SEQUENCE/'+prot_info.SEQS[sel_un].ISO_ID+'"></a></div></div></li>';
+		$.each(prot_info.DOMAIN,function(prot_dom_id,dom_info){
+			str+='<li class="seq_schema"><div class="ss_row_name">'+dom_info.DOMAIN_NAME+'</div>'+
+				'<div class="ss_row_line"><div class="matches"><a href="/${PORTAL_PATH}/DOMAIN/'+dom_info.DOMAIN_NAME+"/PARAMS/"+dom_info.POS_START+"/"+dom_info.POS_END+"/"+prot_info.SEQS[sel_un].ISO_ID+'" class="match" style="left:'+
+					(((dom_info.POS_START-1)/len*100))+'%; width:'+(((dom_info.POS_END-dom_info.POS_START)/len*100))+'%; background-color:'+DOM_TYPE_IMG[dom_info.DOMAIN_TYPE][1]+'"></a></div></div></li>';
+		});
+		str+='</ol></div></div>';
+	});
+	str=str_o+"</select>"+str;
+	
+	$.each (mapping, function(class_name,letter){
+		$.each (raw_data.DOM_INFO, function(id_ipr,info_ipr){
+			if (info_ipr.INFO.ENTRY_TYPE!=class_name)return true;
+			str+='<div class="w3-col s12 w3-container" style="border:1px solid grey; margin-bottom:40px">\
+				<div style="width:100%;max-width:50px;display:inline-block"><div class="sprite_img src_dom_'+mapping[info_ipr.INFO.ENTRY_TYPE]+'"></div></div>\
+					<h3 style="display:inline">'+info_ipr.INFO.NAME+"</h3>";
+str+="<p>"+$("#"+info_ipr.INFO.IPR_ID+"_abst").html();
+	var signs={};
+		$.each (info_ipr.SEQ, function(id_seq,list_evidence)
+		{
+				//str+='<li class="seq_schema"><div class="ss_row_name">'+list_evidence.SEQ_INFO.ISO_ID+'</div><div class="ss_row_line"><div class="matches"><a class="match" style="left:0%; width:100%; background-color:green"></a></div></div></li>';
+				$.each (list_evidence.SIGN, function(id_sign,sign)
+				{
+					if (!(sign.IP_SIGN_DBKEY in signs))signs[sign.IP_SIGN_DBKEY]={};
+					 if (!(list_evidence.SEQ_INFO.ISO_ID in signs[sign.IP_SIGN_DBKEY]))signs[sign.IP_SIGN_DBKEY][list_evidence.SEQ_INFO.ISO_ID]={};
+					 signs[sign.IP_SIGN_DBKEY][list_evidence.SEQ_INFO.ISO_ID]=sign;
+				});
+			});
+			console.log(signs);
+			str+='<table class="table" style="width:98%; margin:0 auto"><thead><tr><th>Database Name</th><th>Entry</th><th>Name</th><th>Sequence</th><th>Evidence</th><th>Score</th><th>Range</th></tr></thead><tbody>';
+		$.each(signs,function(id_sign,sign_list)
+		{
+			var first=true;
+			$.each(sign_list,function(seq_name,rec_info){
+			str+='<tr><td';
+				if (first){str+=' rowspan="'+Object.size(sign_list)+'">'+((rec_info.IP_SIGN_DBNAME!=null)?rec_info.IP_SIGN_DBNAME:'N/A')+'</td><td rowspan="'+Object.size(sign_list)+'">'+rec_info.IP_SIGN_DBKEY+'</td><td rowspan="'+Object.size(sign_list)+'">'+((rec_info.IP_SIGN_NAME!=null)?rec_info.IP_SIGN_NAME:'N/A')+"</td><td ";first=false;}
+				str+=">"+seq_name+"</td><td>"+rec_info.EVIDENCE+"</td><td>"+rec_info.SCORE+"</td><td>"+rec_info.START_POS+"-"+rec_info.END_POS+"</td></tr>";
+			});
+
+		});
+		console.log("out");
+		str+='</tbody></table>';
+	
+	
+					str+="</div>";
+
+		});
+	});
+	
+	$("#dominfo").html(str);
+	$( "#dom_sel" )
+  .change(function () {
+    var str = "";
+    $( "#dom_sel option:selected" ).each(function() {
+	console.log($( this ).val());
+	new_val=$(this).val();
+	for (var i=1;i<nseqs;++i)
+	{
+		if(i==new_val)$("#dom_"+i).css("display","block");
+		else $("#dom_"+i).css("display","none");
+	}
+    });
+    
+  });
+}
+
+$(document).ready(function()
+{
+	genDomainView();
+
+});
+</script>
+$[/DOMAIN]
+$[N_DOMAIN]
+<div class="alert alert-info w3-col s12" role="alert">
+	No domains reported for this entry.
+  </div>
+$[/N_DOMAIN]

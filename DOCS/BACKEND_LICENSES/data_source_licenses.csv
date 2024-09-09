@@ -1,0 +1,32 @@
+Source name	License	Source of license term	Publication
+NCBI Taxonomy	NCBI Policy	https://www.ncbi.nlm.nih.gov/home/about/policies/	Sayers, Eric W., et al., Database resources of the National Center for Biotechnology Information. Nucleic Acids Research, 2023. 52(D1): p. D33-D43.
+NCBI Gene	NCBI Policy	https://www.ncbi.nlm.nih.gov/home/about/policies/	Sayers, Eric W., et al., Database resources of the National Center for Biotechnology Information. Nucleic Acids Research, 2023. 52(D1): p. D33-D43.
+Ensembl	No restrictions	http://useast.ensembl.org/info/about/legal/disclaimer.html	Martin, F.J., et al., Ensembl 2023. Nucleic Acids Research, 2022. 51(D1): p. D933-D941.
+NCBI Orthologs	NCBI Policy	https://www.ncbi.nlm.nih.gov/home/about/policies/	Sayers, Eric W., et al., Database resources of the National Center for Biotechnology Information. Nucleic Acids Research, 2023. 52(D1): p. D33-D43.
+HCOP	CC0	https://www.genenames.org/about/license/	Updates to HCOP: the HGNC comparison of orthology predictions tool. Brief Bioinform, 2021. 22(6).
+dbSNP	NCBI Policy	https://www.ncbi.nlm.nih.gov/home/about/policies/	Sayers, Eric W., et al., Database resources of the National Center for Biotechnology Information. Nucleic Acids Research, 2023. 52(D1): p. D33-D43.
+ChEMBL	CC-BY-SA 3.0	http://chembl.github.io/chembl-licensing/	Zdrazil, B., et al., The ChEMBL Database in 2023: a drug discovery platform spanning multiple bioactivity data types and time periods. Nucleic Acids Research, 2023. 52(D1): p. D1180-D1192.
+Clinvar	NCBI Policy	https://www.ncbi.nlm.nih.gov/home/about/policies/	ClinVar: improvements to accessing data. Nucleic Acids Research, 2019. 48(D1): p. D835-D844.
+GTEX	GTEX Terms of use	https://www.gtexportal.org/home/license	The Genotype-Tissue Expression (GTEx) project. Nature Genetics, 2013. 45(6): p. 580-585.
+InterPro	CC0	https://interpro-documentation.readthedocs.io/en/latest/license.html?highlight=license	Paysan-Lafosse, T., et al., InterPro in 2022. Nucleic Acids Research, 2022. 51(D1): p. D418-D427.
+DrugBank[31]	DrugBank license		Knox, C., et al., DrugBank 6.0: the DrugBank Knowledgebase for 2024. Nucleic Acids Research, 2023. 52(D1): p. D1265-D1275.
+MONDO[32]	CC-BY 4.0	https://mondo.monarchinitiative.org/#license	Vasilevsky, N.A., et al., Mondo: Unifying diseases for the world, by the world. medRxiv, 2022: p. 2022.04.13.22273750.
+UBERON[33]	CC-BY 3.0	https://github.com/obophenotype/uberon/blob/master/LICENSE	Mungall, C.J., et al., Uberon, an integrative multi-species anatomy ontology. Genome Biology, 2012. 13(1): p. R5.
+SwissLipids[34]	CC BY 4.0	https://www.swisslipids.org/#/downloads	Aimo, L., et al., The SwissLipids knowledgebase for lipid biology. Bioinformatics, 2015. 31(17): p. 2860-2866.
+SureChEMBL[35]	CC BY-SA 3.0	https://ftp.ebi.ac.uk/pub/databases/chembl/SureChEMBL/data/LICENSE	Papadatos, G., et al., SureChEMBL: a large-scale, chemically annotated patent document database. Nucleic Acids Res, 2016. 44(D1): p. D1220-8.
+Cellosaurus [37]	CC BY 4.0	https://ftp.expasy.org/databases/cellosaurus/cellosaurus_faq.txt	Bairoch, A., The Cellosaurus, a Cell-Line Knowledge Resource. J Biomol Tech, 2018. 29(2): p. 25-38.
+Open Target[38]	CC0	https://platform-docs.opentargets.org/licence	Ochoa, D., et al., The next-generation Open Targets Platform: reimagined, redesigned, rebuilt. Nucleic Acids Research, 2022. 51(D1): p. D1353-D1359.
+EFO[39]	Apache License v2	https://raw.githubusercontent.com/EBISPOT/efo/master/efo-base.owl	Malone, J., et al., Modeling sample variables with an Experimental Factor Ontology. Bioinformatics, 2010. 26(8): p. 1112-1118.
+SO[40]	CC BY-SA 4.0	http://www.sequenceontology.org/?page_id=345	Eilbeck, K., et al., The Sequence Ontology: a tool for the unification of genome annotations. Genome Biology, 2005. 6(5): p. R44.
+ECO[41]	CC0	https://www.evidenceontology.org/about_eco/#license	Nadendla, S., et al., ECO: the Evidence and Conclusion Ontology, an update for 2022. Nucleic Acids Research, 2021. 50(D1): p. D1515-D1521.
+BAO [42]	CC BY 4.0	http://bioassayontology.org/bioassayontology/	Abeyruwan, S., et al., Evolving BioAssay Ontology (BAO): modularization, integration and applications. J Biomed Semantics, 2014. 5(Suppl 1 Proceedings of the Bio-Ontologies Spec Interest G): p. S5.
+UniProt[1]	CC BY 4.0	https://www.uniprot.org/help/license	Consortium, T.U., UniProt: the Universal Protein Knowledgebase in 2023. Nucleic Acids Research, 2022. 51(D1): p. D523-D531.
+PubMed[18]	NCBI Policy	https://pubmed.ncbi.nlm.nih.gov/disclaimer/	Sayers, Eric W., et al., Database resources of the National Center for Biotechnology Information. Nucleic Acids Research, 2023. 52(D1): p. D33-D43.
+Reactome[43]	CC0	https://reactome.org/license	Milacic, M., et al., The Reactome Pathway Knowledgebase 2024. Nucleic Acids Research, 2023. 52(D1): p. D672-D678.
+GO[44]	CC BY 4.0	https://geneontology.org/docs/go-citation-policy/	Consortium, T.G.O., et al., The Gene Ontology knowledgebase in 2023. Genetics, 2023. 224(1).
+NCBI RefSeq	NCBI Policy	https://www.ncbi.nlm.nih.gov/home/about/policies/	O'Leary, N.A., et al., Reference sequence (RefSeq) database at NCBI: current status, taxonomic expansion, and functional annotation. Nucleic Acids Res, 2016. 44(D1): p. D733-45
+US Clinical trials	Terms of use	https://www.clinicaltrials.gov/about-site/terms-conditions	
+OMIM[46]	Private license		Amberger, J.S., et al., OMIM.org: leveraging knowledge across phenotype–gene relationships. Nucleic Acids Research, 2018. 47(D1): p. D1038-D1043.
+Gene Reviews®[47]		https://www.ncbi.nlm.nih.gov/books/NBK138602/	Adam MP, F.J., Mirzaa GM, et al., editors. , GeneReviews®  Seattle (WA): University of Washington, Seattle;. 1993-2024.
+LiverTox[49]	Public domain	https://www.ncbi.nlm.nih.gov/books/NBK547852/	Diseases, B.M.N.I.o.D.a.D.a.K. LiverTox Clinical and Research Information on Drug-Induced Liver Injury 2012-; Available from: ncbi.nlm.nih.gov/books/NBK547852/.
+PMC	NCBI Policy	https://pubmed.ncbi.nlm.nih.gov/disclaimer/	

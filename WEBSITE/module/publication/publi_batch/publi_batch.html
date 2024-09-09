@@ -1,0 +1,30 @@
+$[HAS_DATA]
+
+${PUBLIS}
+<script>
+	function showInfo(PMID, TYPE) {
+
+		$("#info_" + PMID).html('please wait while we load the content');
+		urlv = '/CONTENT/PUBLI_INFO/' + PMID + '/PARAMS/' + TYPE;
+		$.ajax({
+			type: 'POST',
+			// make sure you respect the same origin policy with this url:
+			// http://en.wikipedia.org/wiki/Same_origin_policy
+			url: urlv,
+			data: {},
+			success: function (data) {
+
+				var v = jQuery.parseJSON(data);
+				$("#info_" + PMID).html(v.code);
+
+			},
+			error: function (data) { $("#info_" + PMID).html("An issue occured."); }
+		});///END AJAX
+		return false;
+	}
+
+</script>
+$[/HAS_DATA]
+$[NO_DATA]
+<div class="alert alert-info">No publication found</div>
+$[/NO_DATA]

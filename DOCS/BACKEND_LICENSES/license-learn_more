@@ -1,0 +1,8 @@
+EMBOSS	GPLv2	https://salsa.debian.org/med-team/emboss	https://salsa.debian.org/med-team/emboss/-/raw/master/LICENSE?ref_type=heads
+SAMTOOLS	MIT	https://github.com/samtools/samtools	https://raw.githubusercontent.com/samtools/samtools/develop/LICENSE	https://raw.githubusercontent.com/samtools/samtools/develop/AUTHORS
+BCFTOOLS		MIT/GPL	https://github.com/samtools/bcftools/	https://raw.githubusercontent.com/samtools/bcftools/develop/LICENSE
+NCBI Tools: blast/dataformats/datasets	Public domain
+Bowtie2	GPLv3	https://github.com/BenLangmead/bowtie2	https://raw.githubusercontent.com/BenLangmead/bowtie2/master/LICENSE
+Bowtie	Artistic License 2.0	https://github.com/BenLangmead/bowtie/	https://raw.githubusercontent.com/BenLangmead/bowtie/master/LICENSE
+LillyMol	Apache-2.0	https://github.com/EliLillyCo/LillyMol	https://raw.githubusercontent.com/EliLillyCo/LillyMol/master/LICENSE
+tesseract_ocr	Apache-2.0	https://github.com/tesseract-ocr/tesseract	https://raw.githubusercontent.com/tesseract-ocr/tesseract/main/LICENSE

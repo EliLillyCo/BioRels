@@ -1,0 +1,146 @@
+$[VALID]
+<h3>Variants lookup for ${SYMBOL}</h3>
+
+<div id="mutations_options" title="Mutation list options" class="w3-container w3-col s12">
+				
+
+<div id="mutations_filters">
+
+	<div class="w3-col s12 l12 m12">
+			<label for="FREQ_ALL">Range for Overall frequency:</label><br/>
+	<div style="display:flex">
+		<input type="text" id="FREQ_ALL" readonly style="border:0; color:#f6931f; font-weight:bold;margin: 0px 5% 0px 5%; width:20%">
+		<div id="slider-FREQ_ALL" style="width:65%"></div>
+	</div>
+</div>
+
+<div class="w3-col s12 l12 m12">
+<label for="FREQ_STUDY">Range for any study frequency:</label><br/>
+	<div style="display:flex">
+		<input type="text" id="FREQ_STUDY" readonly style="border:0; color:#f6931f; font-weight:bold;margin: 0px 5% 0px 5%; width:20%">
+		<div id="slider-FREQ_STUDY" style="width:65%"></div>
+	</div>
+</div>
+
+
+	<div style="margin:1%; display:none">
+<label for="MUT_TYPE">Mutation:</label><br/>
+	<div style="display:flex">
+		<select id="MUT_TYPE" multiple style="overflow-x:scroll;max-width:100%;height:120px">
+			${LIST_MUT_TYPE}
+		</select>
+	</div>
+</div>
+<div style="margin:1%;display:none">
+<label for="CLIN_SIGN">Clinical significance:</label><br/>
+	<div style="display:flex">
+		<select id="CLIN_SIGN" multiple style="overflow-x: scroll;height:120px">
+			${LIST_CLIN_SIGN}
+		</select>
+	</div>
+</div>
+
+<div class="w3-col s12 l4 m4 w3-center">
+<label for="TRANSCRIPT">Transcript list:</label><br/>
+	
+		<select id="TRANSCRIPT" multiple>
+			${LIST_TRANSCRIPT}
+		</select>
+	
+</div>
+<div class="w3-col s12 l4 m4 w3-center">
+<label for="TRANSCRIPT_IMPACT">Transcript Impact:</label><br/>
+	
+		<select id="TRANSCRIPT_IMPACT" multiple>
+			${LIST_TRANSCRIPT_IMPACT}
+		</select>
+	
+</div>
+<div class="w3-col s12 l4 m4 w3-center">
+<label for="TRANSCRIPT_LOC">Location:</label><br/>
+	
+		<select id="TRANSCRIPT_LOC" multiple>
+			${LIST_TRANSCRIPT_LOC}
+		</select>
+	
+</div>
+<div class="w3-col w3-s12  w3-center"><button  onclick="submit()">Update filters </button></div>
+</div>
+</div>
+</div>
+<span id='info'></span>
+<div id="data" class="w3-container w3-col s12 l12 m12"></div>
+</div>
+<script type="text/javascript">
+
+
+function submit()
+{
+	var transcripts = $('#TRANSCRIPT').val().join("|");
+	var impacts=$('#TRANSCRIPT_IMPACT').val().join("|");
+	var loc=$('#TRANSCRIPT_LOC').val().join("|");
+	var clin=$('#CLIN_SIGN').val().join("|");
+	var mut_Type=$('#MUT_TYPE').val().join("|");
+	min_ov = parseFloat( $( "#slider-FREQ_ALL" ).slider( "values", 0 ) );
+	max_ov = parseFloat( $( "#slider-FREQ_ALL" ).slider( "values", 1 ) );
+	min_st = parseFloat( $( "#slider-FREQ_STUDY" ).slider( "values", 0 ) );
+	max_st = parseFloat( $( "#slider-FREQ_STUDY" ).slider( "values", 1 ) );
+	$("#info").html("Please wait while the query is running");
+	$("#data").html("");
+	urlv="/CONTENT/GENEID/${GENE_ID}/VARIANT_SEARCH";
+	$.ajax({
+    type: 'POST',
+    // make sure you respect the same origin policy with this url:
+    // http://en.wikipedia.org/wiki/Same_origin_policy
+    url: urlv,
+    data:{ "TRANSCRIPTS":transcripts,"IMPACT":impacts,"LOCATION":loc,"CLINICAL":clin,"MUT_TYPE":mut_Type,"FREQ_OV":min_ov+"_"+max_ov,"FREQ_ST":min_st+"_"+max_st},
+    success: function(data){
+		
+		var v=jQuery.parseJSON(data);
+		if ('ERROR' in v)
+		{
+			$("#info").html("Unable to query for variants<br/>"+v['ERROR']);
+		}
+		else 
+		{
+		$("#data").html(v.code);
+		$("#info").html("");
+		}
+	},
+	error:function(data){$("#info").html("An issue occured.");}
+		});///END AJAX
+		return false;		
+}
+
+var list_sliders=['FREQ_ALL','FREQ_STUDY'];
+
+$( function() {
+	$.each (list_sliders, function(index,value)
+	{
+		$( "#slider-"+value ).slider({
+      range: true,
+      min: 0,
+      max: 100,
+	  step: 0.1,
+      values: [ 0.1, 100 ],
+      slide: function( event, ui ) {
+        $( "#"+value ).val(  ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+	
+      }
+    });
+    $( "#"+value ).val(+ $( "#slider-"+value ).slider( "values", 0 ) + " - " + $( "#slider-"+value ).slider( "values", 1 ) );
+	});
+    
+	
+  } );
+  $(document).ready( function () {
+    submit();
+} );
+   
+   </script>
+   $[/VALID]
+   $[INVALID]
+   <div class="main_core_title">Mutation lookup for ${SYMBOL}</div>
+   <br/>
+   <div class="alert alert-info">No mutation reported for this gene</div>
+   $[/INVALID]

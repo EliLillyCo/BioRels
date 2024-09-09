@@ -1,0 +1,393 @@
+$[VALID_TRANSCRIPT]
+<div class="w3-opts-right">
+	<img id="transcript_seq_tool_but" src="/require/img/tools.png" style="width: 20px;" onClick="modal_tr_opts()" />
+	<div class="help-tip" style="position:unset;margin-left:5px;" onclick="showDialog('/CONTENT/HELP/clinical_trial')">
+	</div>
+</div>
+
+<div class="w3-container w3-col s12 l12 m12">
+	<div class="w3-col s12 l6 m6">
+		<h3 style="text-align: center">Gene Information</h3>
+		<table class="trsq_info_tbl">
+			<tr>
+				<th>Gene Sequence Name:</th>
+				<td><a class="blk_font" href="${GENESEQ_LINK}" target="_blank">${GENESEQ_NAME}</a></td>
+			</tr>
+			<tr>
+				<th>Range:</th>
+				<td>${GENESEQ_RANGE}</td>
+			</tr>
+			<tr>
+				<th>Strand:</th>
+				<td>${STRAND}</td>
+			</tr>
+			<tr>
+				<th>Gene ID:</th>
+				<td>${GENE_ID}</td>
+			</tr>
+			<tr>
+				<th>Symbol:</th>
+				<td>${SYMBOL}</td>
+			</tr>
+		</table>
+
+	</div>
+	<div class="w3-col s12 l6 m6">
+		<h3 style="text-align: center">Transcript Information</h3>
+		<table class="trsq_info_tbl">
+			<tr>
+				<th>Transcript Name:</th>
+				<td><a class="blk_font" href="${TRANSCRIPT_LINK}" target="_blank">${TRANSCRIPT_NAME}</a></td>
+			</tr>
+			<tr>
+				<th>Range:</th>
+				<td>${RANGE}</td>
+			</tr>
+			<tr>
+				<th>Support Level:</th>
+				<td style="display: inline-flex;position: relative;top: 5px;">${SUPPORT_LEVEL}</td>
+			</tr>
+			<tr>
+				<th>Biotype:</th>
+				<td>${BIOTYPE}</td>
+			</tr>
+			<tr>
+				<th>Feature:</th>
+				<td>${FEATURE}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<span class="verticalTrackerLine" id="verticalTrackerLine_all"></span>
+<div id="transcript_module" class="w3-container"></div>
+
+<div id="transcript_seq_options" title="Transcript visualization options" style="display: none;font-size:0.8em">
+	<div class="w3-container">
+		<div class="w3-container w3-col s12 l12 m12">
+
+			
+			<h3>Visualization options:</h3>
+			<input type="checkbox" id="extended" onchange="updateOptions()"  /><label for="extended">Extended view</label><br />
+			<input type="checkbox" id="trans_seq_cds" checked="checked" /><label for="trans_seq_cds">Show
+				CDS/3'UTR/5'UTR annotation</label><br />
+			<input type="checkbox" id="trans_seq_exon" checked="checked" /><label for="trans_seq_exon">Show Exons
+				annotation</label><br />
+			<input type="checkbox" id="trans_seq_snp" disabled="disabled"/><label for="trans_seq_snp">Show Variants</label><br />
+			<input type="checkbox" id="trans_seq_prot"  disabled="disabled"/><label for="trans_seq_prot">Show Protein translation (when applicable)</label><br />
+			<input type="checkbox" id="trans_seq_protannot" disabled="disabled" /><label for="trans_seq_protannot">Show Protein annotation (when applicable)</label><br />
+			<input type="checkbox" id="trans_seq_protortho" disabled="disabled" /><label for="trans_seq_protortho">Show Orthologs (when applicable)</label><br />
+			<input type="checkbox" id="trans_seq_protsim" disabled="disabled" /><label for="trans_seq_protsim">Show Similar transcripts (when applicable)</label><br />
+			<input type="checkbox" id="trans_seq_clinvar" disabled="disabled" /><label for="trans_seq_clinvar">Show Clinical Variant</label><br />
+
+			<input type="checkbox" id="trans_seq_pos" checked="checked" /><label for="trans_seq_pos">Show
+				Positions</label><br />
+			${LIST_PROT}
+			<hr />
+			<h3>Image Export options:</h3>
+			<a class="w3-btn w3-grey w3-round" value="Image"
+				onclick="exportToImage('transcript_seq_view','${TRANSCRIPT_NAME}.png')">Image</a>
+			<a class="w3-btn w3-grey w3-round" value="Simple Image"
+				onclick="exportToImage('search_view','${TRANSCRIPT_NAME}_summarized.png')">Simplified Image</a>
+		</div>
+		<div class="w3-container w3-col s6 w3-col-600">
+			<h3>Fasta export options:</h3>
+			<form>
+				<input type="checkbox" id="5UTR" name="5UTR" checked /><label for="5UTR">5' UTR</label><br />
+				<input type="checkbox" id="CDS" name="CDS" checked /><label for="CDS">CDS</label><br />
+				<input type="checkbox" id="3UTR" name="3UTR" checked /><label for="3UTR">3' UTR</label><br />
+				<input type="checkbox" id="POLYA" name="POLYA" checked /><label for="POLYA">Poly A (if
+					applicable)</label><br />
+				<input type="button" onclick="getFastaSequence()" class="w3-btn w3-grey w3-round"
+					value="Get Fasta Sequence" />
+			</form>
+		</div>
+	</div>
+	<div class="w3-container">
+		<div class="w3-container w3-col s6 w3-col-600">
+			<h3>Search:</h3>
+
+			Sequences with either T or U will work.<br />
+			Please select a format:
+			<select id="search_format">
+				<option value="1">Sequence only</option>
+				<option value="2">Sequence, Name</option>
+				<option value="3">Sequence, Name, Potency</option>
+			
+			</select>
+			<select id="search_delimited">
+				<option value="tab">Tabulation</option>
+				<option value="comma">Comma (,)</option>
+				<option value="semicolon">Semicolon (;)</option>
+				<option value="space">Space ( )</option>
+				
+			</select><br/>
+			Please select the maximal number of mismatches allowed:
+			<select id="search_mismatch"  disabled="disabled">
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2" selected>2</option>
+				<option value="3">3</option>
+				<option value="4">4 (extremely slow)</option>
+				
+			</select>
+		</div>
+		<div class="w3-container w3-col s6 w3-col-600">
+			<textarea cols="60" rows="15" id="trans_seq_search" placeholder="Type your sequence(s)"
+				style="overflow-y:scroll;"></textarea><br /><br />
+		</div>
+	</div>
+</div>
+</div>
+<script>
+
+function updateOptions()
+{
+	if ($('#extended').prop("checked"))
+	{
+		$("#search_mismatch").prop("disabled",false);
+		$("#trans_seq_snp").prop("disabled",false);
+		$("#trans_seq_prot").prop("disabled",false);
+		$("#trans_seq_protannot").prop("disabled",false);
+		$("#trans_seq_protortho").prop("disabled",false);
+		$("#trans_seq_protsim").prop("disabled",false);
+		$("#trans_seq_clinvar").prop("disabled",false);
+		$("#trans_seq_rnaedit").prop("disabled",false);
+	}
+	else
+	{
+		$("#search_mismatch").prop("disabled","disabled");
+		$("#trans_seq_snp").prop("disabled","disabled");
+		$("#trans_seq_prot").prop("disabled","disabled");
+		$("#trans_seq_protannot").prop("disabled","disabled");
+		$("#trans_seq_protortho").prop("disabled","disabled");
+		$("#trans_seq_protsim").prop("disabled","disabled");
+		$("#trans_seq_clinvar").prop("disabled","disabled");
+		$("#trans_seq_rnaedit").prop("disabled","disabled");
+	}
+}
+
+// $(function() {
+//     var topBarHeight = 0;
+//     var bottomHeight = 0;
+//     var $line = $('#verticalTrackerLine_all');
+//     var $charts = $("#transcript_module");
+    
+
+//     function showVerticalLine(e) {
+//       var posX = $(this).offset().left;
+//       var x = e.pageX;
+//       var y = $(window).innerHeight();
+
+//       //Change line so that it appears at the position of the cursor
+//       $line.css({
+//         'opacity': 1,
+//         'left': x,
+//         'top': $charts.offset().top+topBarHeight,
+//         'height':$charts.css("height") 
+//       });
+
+//       //Update string to show when the charts are being hovered over
+      
+//     };
+
+//     function hideVerticalLine() {
+//       //Hide the line
+//       $line.css('opacity', 0);
+
+//       //Update string to show when the charts are being hovered over
+      
+//     }
+
+//     $charts
+//       .mousemove(showVerticalLine)
+//       .mouseout(hideVerticalLine);
+// });
+
+</script>
+<script type="text/javascript">
+	var seq_len=${SEQ_LEN};
+	var list_tooltips = [];
+	
+	function changeView()
+	{
+		console.log("Change view");
+		if ($('#extended').prop("checked"))
+		{
+			var ratio=9.601907;
+			var range=Math.floor($(".w3-main").width()*0.95/ratio);
+			block_id=0;
+			str='';
+			str+='<div id="transcript_module_0" style="margin-top:30px;overflow:auto"></div>';
+			for (var i=1;i<seq_len;i+=range)
+			{
+				block_id++;
+				str+='<div id="transcript_module_'+block_id+'" style="margin-top:30px"></div>';
+			
+			}
+			$("#transcript_module").html(str);
+			block_id=0;
+
+
+
+			
+			option='';
+			if ($("#trans_seq_cds").prop("checked") == true)option+='/WITH_ANNOT';
+			if ($("#trans_seq_exon").prop("checked") == true)option+='/WITH_EXON';
+			if ($("#trans_seq_snp").prop("checked") == true)option+='/WITH_VARIANT';
+			if ($("#trans_seq_prot").prop("checked") == true)option+='/WITH_PROTEIN';
+			if ($("#trans_seq_protannot").prop("checked") == true)option+='/WITH_PROTEIN_ANNOT';
+			
+			if ($("#trans_seq_pos").prop("checked") == true)option+='/WITH_POSITION';
+			if ($("#trans_seq_protortho").prop("checked")==true)option+='/WITH_PROTEIN_ORTHOLOG';
+			if ($("#trans_seq_protsim").prop("checked")==true)option+='/WITH_PROTEIN_SIM';
+			if ($("#trans_seq_clinvar").prop("checked")==true)option+='/WITH_CLINVAR';
+			
+			module_loaded=[];
+			for (var i=1;i<seq_len;i+=range)
+			{
+				
+				block_id++;
+				module_loaded[block_id]=false;
+				urlv='/CONTENT/TRANSCRIPT_SEL/${TRANSCRIPT_NAME}/PARAMS/RNA/'+i+'/'+(i+range-1)+option;
+				loadTrModule(block_id,urlv);
+
+
+				
+			}
+			loadOverview();
+			
+			//loadModule("transcript_module",'/CONTENT/TRANSCRIPT_SEL/${TRANSCRIPT_NAME}/PARAMS/RNA/1/'+range+'/WITH_MUTATION/WITH_PROTEIN/WITH_HEADER');
+		}else loadModule("transcript_module",'/CONTENT/TRANSCRIPT_SEQ/${TRANSCRIPT_NAME}');
+
+	}
+
+var match_res=[];
+var module_loaded=[];
+
+
+
+function loadOverview()
+{
+	$("#transcript_module_0").html('<p>Query running</p>');
+				
+				try{
+				$.ajax({
+				type:"POST",
+				url: '/CONTENT/GENEID/${GENE_ID}/TRANSCRIPTS_SEQ_SUMMARY/PARAMS/CODING_ONLY',
+				data : {
+					'TRANSCRIPT_MATCH':'${TRANSCRIPT_NAME}',
+    				'SEQ_DELIM' : $("#search_delimited").children("option:selected").val(), // will be accessible in $_POST['data1'],
+					'SEQ_TYPE':$("#search_format").children("option:selected").val(),
+					'MAX_MISMATCH':$("#search_mismatch").children("option:selected").val(),
+					'SEQ_MATCH':$("#trans_seq_search").val()
+  				},
+
+				error: function(e) {          
+					$("#transcript_module_0").html('<p>An error has occurred</p>');
+					},
+				success: function(data) {        
+					var result=jQuery.parseJSON(data);	        
+					$("#transcript_module_0").html(result.code);
+					
+					
+					},
+				
+				});///END AJAX
+			}catch(err) {
+			$("#transcript_module_0").html('<p>An error has occurred</p>');
+			
+			}
+}
+
+	function loadTrModule(block_id,urlv)
+	{
+		$("#transcript_module_"+block_id).html('<p>Query running</p>');
+				
+				try{
+				$.ajax({
+				type:"POST",
+				url: urlv,
+				data : {
+    				'SEQ_DELIM' : $("#search_delimited").children("option:selected").val(), // will be accessible in $_POST['data1'],
+					'SEQ_TYPE':$("#search_format").children("option:selected").val(),
+					'MAX_MISMATCH':$("#search_mismatch").children("option:selected").val(),
+					'SEQ_MATCH':$("#trans_seq_search").val()
+  				},
+
+				error: function(e) {          
+					$("#transcript_module_"+block_id).html('<p>An error has occurred</p>');
+					},
+				success: function(data) {        
+					var result=jQuery.parseJSON(data);	        
+					$("#transcript_module_"+block_id).html(result.code);
+					
+					
+					},
+				
+				});///END AJAX
+			}catch(err) {
+			$("#transcript_module_"+block_id).html('<p>An error has occurred</p>');
+			
+			}
+	}
+
+	function getFastaSequence() {
+		var url = "/FASTA/TRANSCRIPT/${TRANSCRIPT_NAME}";
+		var url2 = ($("#5UTR").is(":checked")) ? "/5UTR" : "";
+		url2 += ($("#CDS").is(":checked")) ? "/CDS" : "";
+		url2 += ($("#3UTR").is(":checked")) ? "/3UTR" : "";
+		if (url2 != '') url += "/PARAMS/" + url2;
+		window.location.href = url;
+
+	}
+
+	function scrollToAnchor(aid) {
+		var aTag = $("#" + aid);
+		$('html,body').animate({
+			scrollTop: aTag.offset().top - 100
+		}, 'slow');
+	}
+
+	function switchSearchView() {
+		if ($("#switch").prop("checked") == true) {
+			$("#trans_seq_search_single").css("display", 'none');
+			$("#trans_seq_search").css("display", 'block');
+
+		} else {
+			$("#trans_seq_search_single").css("display", 'block');
+			$("#trans_seq_search").css("display", 'none');
+		}
+
+	}
+
+	var modal_transcript;
+
+	function modal_tr_opts() {
+		$("#transcript_seq_options").dialog({
+			width: "70%",
+			"font-size": "1em",
+			modal: true,
+			buttons: {
+        "Search/Confirm": changeView,
+      },
+      
+			// buttons: {
+			// 	"Search/Confirm": function () {
+			// 		console.log("Search/Confirm");
+			// 		changeView();
+			// 		console.log("Search/Confirm -end");
+			// 		//processTranscriptView("transcript_seq_view", "search_view", data_transcript, ${GENE_ID});
+			// 		$(this).dialog("close");
+			// 	},
+			// }
+		});
+	}
+
+	$(document).ready(function () {
+		loadModule("transcript_module",'/CONTENT/TRANSCRIPT_SEQ/${TRANSCRIPT_NAME}');
+		
+	});
+
+</script>
+$[/VALID_TRANSCRIPT]

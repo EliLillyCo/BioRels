@@ -1,0 +1,29 @@
+<h3>${TITLE}</h3>
+<div class="w3-opts-right">
+		<a href="/CSV/GENEID/${GENE_ID}/ORTHOLOGS"><img alt="Download" src="/require/img/download.png" style="width: 20px;"></a>
+    <div class="help-tip" style="position:unset;margin-left:5px;" onclick="showDialog('/CONTENT/HELP/orthologs')"></div>
+</div>
+	<div class="w3-container w3-col s12">
+<table id="tbl-ortho" class="table" >
+		<thead>
+			<tr>
+			    <th>Gene Symbol</th>
+			    <th>Gene ID</th>
+				<th>Gene Name</th>
+			    <th>Species </th>
+			</tr>
+		</thead>
+		<tbody>
+			${TBL_ORTHO}
+		</tbody>
+	</table>
+<br/>
+
+</div>
+
+
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#tbl-ortho').DataTable({"ordering":false});
+} );
+</script>

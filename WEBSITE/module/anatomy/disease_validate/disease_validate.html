@@ -1,0 +1,10 @@
+<input type="text" id="dsval_input_${TAG}" />
+<input id="dsval_val_${TAG}" type="button" value="validate"
+    onclick="validateDisease('${TAG}')" />
+<select id="dsval_sel_${TAG}" name="dsval_sel_${TAG}"
+    style="max-width: 100%;display: none;margin:0 auto;">
+    <option value=""></option>
+</select>
+<input id="cancel_ds_${TAG}" style="display: none; margin-left: 15px;" type="button" class="default_button "
+    onclick="cancelDiseaseValidate('${TAG}')" value="Cancel" />
+<span id="ds_status_${TAG}" class="alert alert-info" style="display: none;"></span>

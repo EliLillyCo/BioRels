@@ -1,0 +1,90 @@
+bidirectional_promoter_lncRNA	SO:0002185
+IG_J_gene	SO:0002125
+IG_V_gene	SO:0002126
+unconfirmed_transcript	SO:0002139
+scaRNA	SO:0002095
+IG_C_pseudogene	SO:0002100
+IG_J_pseudogene	SO:0002101
+IG_V_pseudogene	SO:0002102
+TR_V_pseudogene	SO:0002103
+TR_J_pseudogene	SO:0002104
+translated_processed_pseudogene	SO:0002105
+translated_unprocessed_pseudogene	SO:0002106
+transcribed_unprocessed_pseudogene	SO:0002107
+transcribed_unitary_pseudogene	SO:0002108
+transcribed_processed_pseudogene	SO:0002109
+IG_C_gene	SO:0002123
+IG_D_gene	SO:0002124
+lnc_RNA	SO:0001877
+polymorphic_pseudogene	SO:0001841
+C_region	SO:0001834
+unitary_pseudogene	SO:0001759
+processed_transcript	SO:0001503
+lincRNA	SO:0001463
+transcript	SO:0000673
+antisense_RNA	SO:0000644
+ncRNA	SO:0000655
+guide_RNA	SO:0000602
+pseudogenic_transcript	SO:0000516
+RNase_P_RNA	SO:0000386
+telomerase_RNA	SO:0000390
+vault_RNA	SO:0000404
+Y_RNA	SO:0000405
+ribozyme	SO:0000374
+RNase_MRP_RNA	SO:0000385
+pseudogene	SO:0000336
+mRNA	SO:0000234
+rRNA	SO:0000252
+tRNA	SO:0000253
+snRNA	SO:0000274
+snoRNA	SO:0000275
+miRNA	SO:0000276
+primary_transcript	SO:0000185
+protein_coding	SO:0000010
+scRNA	SO:0000013
+processed_pseudogene	SO:0000043
+antisense	SO:0000077
+SRP_RNA	SO:0000590
+protein_coding_LoF	
+TEC	
+IG_LV_gene	
+TR_V_gene	
+TR_J_gene	
+TR_C_gene	
+TR_D_gene	
+3prime_overlapping_ncRNA	
+lncRNA	
+misc_RNA	
+other	
+Mt_rRNA	SO:0002128
+gene_segment	SO:3000000
+V_segment	SO:0000466
+ncRNA_gene	SO:0001263
+D_gene_segment	SO:0000458
+D_segment	SO:0000458
+V_gene_segment	SO:0000466
+J_segment	SO:0000470
+J_gene_segment	SO:0000470
+sense_intronic	
+match	SO:0000343
+C_gene_segment	SO:0000478
+sense_overlapping	
+macro_lncRNA	
+sRNA	
+unprocessed_pseudogene	
+IG_D_pseudogene	
+IG_pseudogene	
+transcribed_pseudogene	
+V_segment_pseudogene	
+J_segment_pseudogene	
+ncRNA_pseudogene	
+D_segment_pseudogene	
+C_region_pseudogene	
+nonsense_mediated_decay	
+retained_intron	
+non_stop_decay	
+NULL	
+vaultRNA	
+rRNA_pseudogene	
+precursor_RNA	SO:0000185
+Mt_tRNA	SO:0002129

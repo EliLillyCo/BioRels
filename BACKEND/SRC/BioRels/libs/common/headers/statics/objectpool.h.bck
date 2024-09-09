@@ -1,0 +1,218 @@
+#ifndef OBJECTPOOL_H
+#define OBJECTPOOL_H
+
+#include <algorithm>
+#include <stdexcept>
+#include <memory>
+#include "protExcept.h"
+#include "grouplist.h"
+#include <assert.h>
+
+#include <iostream>
+
+namespace protspace
+{
+template<typename T>
+class ObjectPool
+{
+public:
+    ObjectPool(const std::string name="",size_t chunkSize= kDefaultChunkSize)
+    throw(std::invalid_argument,std::bad_alloc);
+
+    T& acquireObject();
+    T& acquireObject(size_t& pos);
+    void acquireList(GroupList<T>& list,std::vector<size_t>& pos, const size_t& count);
+    void releaseObject(const size_t& pos);
+    void releaseObject(T& obj);
+    void releaseObject(const std::vector<size_t>&list);
+    bool isAnyUsed()const;
+    size_t countUsed()const;
+    inline const size_t& getNumRequest()const {return mRequests;}
+    const size_t& getMaxUsed()const{return mMaxUsed;}
+protected:
+    std::vector<T> mList;
+    std::vector<bool> mFree;
+    size_t mNextAccess;
+    size_t mChunkSize;
+    size_t mMaxUsed;
+    size_t mCurrUsed;
+    size_t mRequests;
+    static const size_t kDefaultChunkSize = 50;
+    void allocateChunk();
+    bool getNextAccess();
+
+
+private:
+    ObjectPool(const ObjectPool<T>& src);
+    ObjectPool<T>& operator=(const ObjectPool<T>& rha);
+}   ;
+
+template<typename T> const size_t protspace::ObjectPool<T>:: kDefaultChunkSize;
+
+
+template<typename T> ObjectPool<T>::ObjectPool(const std::string name, size_t chunkSize)
+throw(std::invalid_argument,std::bad_alloc)
+{
+    std::cout <<"NAME:"<<name<<std::endl;
+    if (chunkSize == 0)
+        throw std::invalid_argument("chunk size must be positive");
+    mChunkSize= chunkSize;
+    mRequests=0;mMaxUsed=0;mCurrUsed=0;mNextAccess=0;
+    allocateChunk();
+    mNextAccess=0;
+}
+
+
+
+template<typename T>void  ObjectPool<T>::allocateChunk()
+{
+    const size_t size=mList.size();
+    const size_t size_plus(size+mChunkSize);
+std::cout <<"AL:"<<mList.size()<<" " <<mFree.size()<<" " <<mNextAccess<<" " <<std::endl;
+ T obj;
+for(size_t i=size;i<size_plus;++i)
+{
+    mList.push_back(obj);
+    mFree.push_back(true);
+}
+//    mList.resize(size_plus);
+//    mFree.resize(size_plus);
+//    for(size_t i=size;i<size_plus;++i)mFree.at(i)=true;
+    getNextAccess();
+    std::cout <<"R:"<<mList.size()<<" " <<mFree.size()<<" " <<mNextAccess<<" " <<std::endl;
+
+}
+
+template<typename T> T& ObjectPool<T>::acquireObject(size_t& pos)
+{
+
+    if (!mFree.at(mNextAccess))
+        throw_line_t("060101",
+                     "ObjectPool::acquireObject",
+                     "Given object "+std::to_string(mNextAccess)+" is already in use",2);
+    std::cout << mNextAccess<<" " << mFree.at(mNextAccess)<<std::endl;
+    T& obj = mList.at(mNextAccess);
+    mFree.at(mNextAccess)=false;
+    mCurrUsed++;if (mCurrUsed>mMaxUsed)mMaxUsed=mCurrUsed;mRequests++;
+    pos=mNextAccess;
+    if (getNextAccess())
+    {
+        std::cout <<"IN "<<mNextAccess<<std::endl;
+
+        T& obj2= mList.at(mNextAccess);
+        std::cout << "OBJ2:"<<obj2<<std::endl;
+        mFree.at(mNextAccess)=false;
+        pos = mNextAccess;
+        mCurrUsed++;if (mCurrUsed>mMaxUsed)mMaxUsed=mCurrUsed;mRequests++;
+        getNextAccess();
+        return obj2;
+    }
+    std::cout << obj<<std::endl;
+    return obj;
+}
+
+template<typename T> T& ObjectPool<T>::acquireObject()
+{
+    if (!mFree.at(mNextAccess))
+        throw_line_t("060201",
+                     "ObjectPool::acquireObject",
+                     "Given object "+std::to_string(mNextAccess)+" is already in use",2);
+    mFree.at(mNextAccess)=false;
+    T& obj = mList.at(mNextAccess);
+    mCurrUsed++;if (mCurrUsed>mMaxUsed)mMaxUsed=mCurrUsed;mRequests++;
+    getNextAccess();
+
+    return obj;
+}
+
+
+
+template<typename T> bool ObjectPool<T>::getNextAccess()
+{
+
+    for(size_t k=mNextAccess+1;k< mList.size();++k)
+    {
+        if (!mFree.at(k))continue;
+        mNextAccess=k;return false;
+    }
+    for(size_t k=0;k< mNextAccess;++k)
+    {
+        if (!mFree.at(k))continue;
+        mNextAccess=k;return false;
+    }
+
+    allocateChunk();
+    return true;
+
+}
+template<typename T>
+bool ObjectPool<T>::isAnyUsed()const
+{
+    for(const bool& isFree:mFree) if (!isFree)return true;
+    return false;
+}
+template<typename T>
+size_t ObjectPool<T>::countUsed()const
+{
+    size_t count=0;
+    for(const bool& isFree:mFree) if (!isFree)++count;
+    return count;
+}
+template<typename T> void ObjectPool<T>::releaseObject(const size_t& pos)
+{
+    if (pos >= mList.size())
+        throw_line_t("060301",
+                     "ObjectPool::releaseObject",
+                     "Given position "+std::to_string(pos)+" is above the "
+                     +"number of objects ("+std::to_string(mList.size()),2);
+    if(mFree.at(pos))
+        throw_line_t("060302",
+                     "ObjectPool::releaseObject",
+                     "Given object "+std::to_string(pos)+" is not in use ",2);
+    mFree.at(pos)=true;mCurrUsed--;
+}
+
+
+template<typename T> void ObjectPool<T>::releaseObject(T& obj)
+{
+    const auto it = std::find(mList.begin(),mList.end(),obj);
+    if(it == mList.end() )
+        throw_line_t("060401",
+                     "ObjectPool::releaseObject",
+                     "Given object is not part of this pool ",2);
+    mFree.at(std::distance(mList.begin(),it))=true;
+    mCurrUsed--;
+}
+
+template<typename T>
+void ObjectPool<T>::releaseObject(const std::vector<size_t>&list)
+{
+    for (const auto& pos:list)
+    {
+        if (pos >= mList.size())
+            throw_line_t("060501",
+                         "ObjectPool::releaseObject",
+                         "Given position "+std::to_string(pos)+" is above the "
+                         +"number of objects ("+std::to_string(mList.size()),2);
+        if(mFree.at(pos))
+            throw_line_t("060502",
+                         "ObjectPool::releaseObject",
+                         "Given object "+std::to_string(pos)+" is not in use ",2);
+        mFree.at(pos)=true;mCurrUsed--;
+    }
+}
+template<typename T> void
+ObjectPool<T>::acquireList(GroupList<T>& list,std::vector<size_t>& pos, const size_t& count)
+{
+    size_t posit=0;
+    for(size_t i=0;i<count;++i)
+    {
+        std::string& obj=acquireObject(posit);
+
+        list.add(&obj);
+        pos.push_back(posit);
+    }
+}
+}
+#endif // OBJECTPOOL_H
+

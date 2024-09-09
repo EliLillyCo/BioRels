@@ -1,0 +1,166 @@
+$[VALID]
+<header class="w3-container">
+	<div class="w3-col s12 alert alert-info">This portal is currently in development</div><br/>
+	<div class="page-title">
+		Assay ${ASSAY_NAME}
+	</div>
+	<p><span style="font-weight:bold;padding-left:10px;">Description:</span> ${ASSAY_DESCRIPTION}</p>
+</header>
+<div class="w3-row-padding w3-margin-bottom">
+	<ul class="nav nav-tabs">
+		<li id="assay_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('assay_menu',1,4)">Description</li>
+		<li id="assay_menu_tab_2" class="nav-item nav-link" onclick="showMenu('assay_menu',2,4)">Target</li>
+		<li id="assay_menu_tab_3" class="nav-item nav-link" onclick="showMenu('assay_menu',3,4)">Publication</li>
+		<li id="assay_menu_tab_4" class="nav-item nav-link" onclick="showMenu('assay_menu',4,4)">Related Assays</li>
+	</ul>
+
+	<div id="assay_menu_view_1" class="container-grey w3-container ">
+		
+		<div class=" w3-half w3-container ">
+			<h3>General information:</h3>
+			<table class="table table-sm">
+				<tr>
+					<th class="boldright">Organism:</th>
+					<td>${SCIENTIFIC_NAME} (TaxId:${TAX_ID})</td>
+				</tr>
+				<tr>
+					<th class="boldright">Source:</th>
+					<td><a href="${CHEMBL_LINK}" target="_blank" rel="noopener">${SOURCE_NAME}</a> </td>
+				</tr>
+				<tr>
+					<th class="boldright">Category:</th>
+					<td>${ASSAY_CATEGORY} </td>
+				</tr>
+				<tr>
+					<th class="boldright">Confidence score:</th>
+					<td class="ttl_tr ttl_tag" title="Confidence score" data-toggle="tooltip" data-placement="left"
+						data-pos="2">
+						${SCORE_CONFIDENCE} </td>
+				</tr>
+				<tr>
+					<th class="boldright">Class:</th>
+					<td>${ASSAY_TYPE}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Bioassay type:</th>
+					<td class="ttl_tr ttl_tag" title="Bioassay label" data-toggle="tooltip" data-pos="0">
+						${BIOASSAY_LABEL}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Target Type:</th>
+					<td class="ttl_tr ttl_tag" title="Target type" data-toggle="tooltip" data-pos="1">
+						${ASSAY_TARGET_TYPE_NAME}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Target name:</th>
+					<td>${ASSAY_TARGET_LONGNAME}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Tissue:</th>
+					<td class="ttl_tr ttl_tag" title="Tissue" data-toggle="tooltip" data-pos="3">${ASSAY_TISSUE_NAME}
+						${ALT_TISSUE_NAME}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Mutation List:</th>
+					<td>${MUTATION_LIST} </td>
+				</tr>
+			</table>
+		</div>
+		$[HAS_CELL_LINE]
+		<div class=" w3-half w3-container ">
+			<h3>Cell line:</h3>
+			<table class="table table-sm">
+				<tr>
+					<th class="boldright" style="min-width:150px">Name:</th>
+					<td>${ASSAY_CELL_NAME} ${ALT_CELL_NAME}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Description:</th>
+					<td>${ASSAY_CELL_DESCRIPTION}</td>
+				</tr>
+				<tr>
+					<th class="boldright">Source Tissue:</th>
+					<td>${ASSAY_CELL_SOURCE_TISSUE} </td>
+				</tr>
+				$[HAS_CELL_DATA]
+				<tr>
+					<th class="boldright">Accession:</th>
+					<td><a href="https://web.expasy.org/cellosaurus/${CELL_ACC}" target="_blank"
+							rel="noopener">${CELL_ACC}</a> </td>
+				</tr>
+				<tr>
+					<th class="boldright">Cell Type:</th>
+					<td>${CELL_TYPE} </td>
+				</tr>
+				<tr>
+					<th class="boldright">Sex of Donor:</th>
+					<td>${CELL_DONOR_SEX} </td>
+				</tr>
+				<tr>
+					<th class="boldright">Age of Donor:</th>
+					<td>${CELL_VERSION} </td>
+				</tr>
+				$[/HAS_CELL_DATA]
+			</table>
+			$[NO_CELL_LINE]
+			<div class="alert alert-info">No cell line information provided</div>
+			$[/NO_CELL_LINE]
+		</div>
+		$[/HAS_CELL_LINE]
+		<div class=" w3-half w3-container ">
+			<h3>Reported experimental data:</h3>
+			$[HAS_UNITS]
+			<table class="table table-sm" style="text-align: center">
+				<tr>
+					<th>Type</th>
+					<th>Unit</th>
+					<th>Min value</th>
+					<th>Max value</th>
+					<th>Number of entries:</th>
+				</tr>
+				${UNITS}
+			</table>
+			$[/HAS_UNITS]
+			$[NO_UNITS]
+			<div class="alert alert-info">No units information provided</div>
+			$[/NO_UNITS]
+		</div>
+	</div>
+</div>
+<div id="assay_menu_view_2" class="container-grey w3-container w3-padding-16" style="display: none;">
+	${TARGETS}
+</div>
+<div id="assay_menu_view_3" class="container-grey w3-container w3-padding-16" style="display: none;">
+	${PUBLI}
+</div>
+<div id="assay_menu_view_4" class="container-grey w3-container w3-padding-16" style="display: none;">
+	${LIST_RELATED}
+	$[NO_RELATED_ASSAYS]
+	<div class="alert alert-info">No related assays found</div>
+	$[/NO_RELATED_ASSAYS]
+</div>
+</div>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">No assay found</div>
+$[/INVALID]
+
+<script type="text/javascript">
+	var list_tooltips = JSON.parse('${TOOLTIPS}');
+	console.log(list_tooltips);
+	$(document).ready(function () {
+		$('.ttl_tr').uitooltip({
+			open: function (event, ui) {
+				ui.tooltip.css("width", "fit-content");
+			},
+			hide: {
+				effect: "slideDown",
+				delay: 400
+			},
+			track: true,
+			content: function () {
+				return list_tooltips[$(this).data('pos')];;
+			}
+		});
+	});
+</script>

@@ -1,0 +1,11 @@
+$[VALID]
+<span class="bold">${COUNT} Reference${MULTI}:</span>
+<span style="cursor:pointer" onclick="$('#ecopub_${ID}').toggle();if ($(this).html()=='Hide'){$(this).html('Show');}else {$(this).html('Hide');}">Show</span><br/>
+<div id="ecopub_${ID}" style="display: none">
+		${CONTENT} 
+		
+	</div>
+$[/VALID]
+$[INVALID]
+<div class="alert alert-info">Unable to find the corresponding publication(s)</div>
+$[/INVALID]

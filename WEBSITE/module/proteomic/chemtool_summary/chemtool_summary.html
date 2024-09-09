@@ -1,0 +1,80 @@
+<h2>Small molecule assessment:</h2>
+<div class="help-tipR" style="top:16px;right:16px;cursor:pointer;" onClick="loadHelp()">			</div>
+<div id="sim_tbl_div" style="width:100%;display:inline-table;">
+	<input type="button" value="Human data" id="human_b" onclick="showHuman()" class="selchoice"/>
+	<input type="button" value="Orthologous data" id="ortho_b" onclick="showOrtho()" class="unselchoice"/>
+
+	<table style="font-size:0.8em ;width:100%; display:table"  id="human" class="table"><thead  class="thead-light"><tr>
+		<th rowspan="2" class="boldright">Descriptor</th>
+		<th rowspan="2">This entry</th>
+		<th colspan="3"  style="border-bottom: 2px solid #333333;">Similar</th></tr>
+		<tr style="background-color:#FFF">
+		<th style="border-left: 2px solid #333333;">Sequences </th>
+		<th>Domains</th>
+		<th>Compound profile</th>
+		</tr>
+		</thead>
+		<tbody>
+		${TBL_DATA}
+		</tbody>
+	</table>
+
+	<table style="font-size:0.8em ;width:100%; display:none" id="ortho" class="table"><thead class="thead-light"><tr>
+		<th rowspan="2"class="boldright">Descriptor</th>
+		<th rowspan="2" class="text-align:center">This entry</th>
+		<th colspan="3" style="border-bottom: 2px solid #333333;">Similar</th></tr>
+		<tr style="background-color:#FFF">
+		<th style="border-left: 2px solid #333333;">Sequences </th>
+		<th>Domains</th>
+		<th>Compound profile</th>
+		</tr>
+		</thead>
+		<tbody>
+			${TBL_DATA_2}
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+function showOrtho()
+			{
+				$("#human_b").removeClass("selchoice").addClass("unselchoice");
+				$("#ortho_b").removeClass("unselchoice").addClass("selchoice");
+				
+				$("#human").css("display",'none');
+				$("#ortho").css("display",'table');
+			
+			}
+			function showHuman()
+			{
+			
+				$("#human_b").removeClass("unselchoice");
+				$("#human_b").addClass("selchoice");
+				$("#ortho_b").removeClass("selchoice");
+				$("#ortho_b").addClass("unselchoice");
+				$("#human").css("display",'table');
+				$("#ortho").css("display",'none');
+			}
+function loadHelp()
+{
+var url='HELP/ENTRY_ASSESS';
+$.ajax({
+	url: url,
+	error: function() {  $('#help_dialog').html('<p>Unable to get help</p>');},
+	success: function(data) {
+		$('#help_dialog').html(data.data);
+	},
+	type: 'GET'
+});///END AJAX
+$('#sum_long_desc_back').show();
+$( "#help_dialog" ).dialog({
+dialogClass: 'modaltop',
+close : function(){
+			$('#sum_long_desc_back').hide();
+			}  
+});
+
+}
+</script>
+<div id="help_dialog" title="Description of Target assessment" style="min-width:400px">
+			
+	</div>

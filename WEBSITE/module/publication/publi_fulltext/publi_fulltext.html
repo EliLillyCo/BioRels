@@ -1,0 +1,353 @@
+
+
+<div style="position:fixed;bottom:0px;background-color:white;width:100%;z-index:1000">
+<div id="filters" style="min-height:100px;height:100px;">${FILTERS}</div>
+
+<div id="filter_opts" style="width:100%">
+<input type="button" class="btn btn-primary" value="RESET" onclick="resetFilters()"/>
+<div id="filter_view" style="display:none">
+	<input type="button" class="btn btn-primary" value="PREV" onclick="showPrev()"/>
+	<span id="cursor">0</span> / <span id="total"></span>
+	<input type="button" class="btn btn-primary" value="NEXT" onclick="showNext()"/>
+	
+</div>
+</div>
+</div>
+
+<div id="fulltext" class="fulltext_pub" style="margin-bottom:500px;">
+
+${TEXT}
+
+</div>
+<style>
+	.highlight_opaque {opacity: 0.8;}
+	.highlight_v{font-size: 1.1em;
+		opacity: 1;
+    font-style: italic;
+    font-weight: 700;}
+	.line_ft {cursor: default;}
+</style>
+<script type="text/javascript">
+
+	var main_filter_sel={1:'',2:'',3:''};
+	list_view=[];
+	cursor=0;
+	curr_offset=0;
+	$(document).ready(function()
+	{
+$( ".fulltext_filters" )
+  .on( "change", function() { 
+	id=$(this).attr('id').split("_")[1];
+	console.log("id",id);
+    var str = ""; 
+	main_filter_sel[id]=$(this).val();
+	$(".filters_"+id).css('display','none');
+    $( "option:selected" ,this).each( function() {
+		
+      $("#filter_"+id+"_"+$(this).val()).css('display','block');
+    } );
+    
+  } )
+
+  $( ".sub_filters" )
+  .on( "change", function() { 
+	test();
+  } )
+});
+
+function test()
+{
+	tmp_list_view=[];
+	n_rule=0;
+	for (i=1;i<=3;++i)
+	{
+		type=$("#filter_"+i+" option:selected").val();
+		if (type=='NO')continue;
+		++n_rule;
+		$( "#filter_"+i+"_"+type+" option:selected").each( function() {
+			
+			list=$(this).val().split(",");
+			$.each (list,function(index,value)
+			{
+				if (value in list_view) list_view[value]++;
+				else tmp_list_view[value]=1;
+			});
+		});
+		
+	}
+	list_view=[];
+	$.each(tmp_list_view,function(index,value)
+	{
+		if (value==n_rule) list_view.push(index);
+	});
+	if (list_view.length==0){$("#filter_view").css("display","none");return;}
+	$("#filter_view").css("display","inline-block"); 
+	cursor=0;
+	list_view.sort(function(a, b) {return a - b;});
+	
+	$("#total").html(list_view.length);
+	showNext();
+	
+
+
+}
+function goToByScroll(id) {
+    // Remove "link" from the ID
+    id = id.replace("link", "");
+    // Scroll
+	el=$("#" + id);
+	var elOffset = el.offset().top;
+
+  var elHeight = el.height();
+  var windowHeight = $(window).height();
+  var offset;
+  
+  if (elHeight < windowHeight) {
+    offset = elOffset - ((windowHeight / 2) - (elHeight / 2));
+  }
+  else {
+    offset = elOffset;
+  }
+if (Math.abs(curr_offset-offset)>200)
+{
+  console.log("OFFSET:"+offset);
+    $('html,body').animate({
+        scrollTop: offset
+    }, 'slow');
+
+	curr_offset=offset;
+}
+}
+function showNext()
+{
+	if (list_view.length==0)return;
+	++cursor;
+	console.log("CURSOR",cursor);
+	if (cursor>list_view.length)cursor=1;
+	
+	$(".line_ft").removeClass("highlight_v");
+	$(".line_ft").addClass("highlight_opaque");
+	$("#line_"+list_view[cursor-1]).addClass("highlight_v");
+	goToByScroll("line_"+list_view[cursor-1]);
+	$("#cursor").html(cursor);
+}
+
+function showPrev()
+{
+	if (list_view.length==0)return;
+	--cursor;
+	if (cursor<1)cursor=list_view.length-1;
+	$(".line_ft").removeClass("highlight_v");
+	$(".line_ft").addClass("highlight_opaque");
+	$("#line_"+list_view[cursor-1]).addClass("highlight_v");
+	goToByScroll("line_"+list_view[cursor-1]);
+	$("#cursor").html(cursor);
+
+}
+
+function resetFilters()
+{
+	$(".line_ft").removeClass("highlight_opaque");
+	$(".line_ft").removeClass("highlight_v");
+	$(".fulltext_filters").prop('selectedIndex',0);
+	$(".filters_1").css('display','none');
+	$(".filters_2").css('display','none');
+	$(".filters_3").css('display','none');
+	
+}
+
+</script>
+
+<style>
+	.fulltext_pub span {cursor:pointer;}
+	.fulltext_pub h1 {    font-size: 17.979pt;
+    margin: 50pt 0 10pt;
+    font-weight: 400;
+    line-height: 22.5pt;
+    font-family: Cambria, "Cambria Math", stixgeneral, "Times New Roman", Times, serif;
+    letter-spacing: -0.01em;
+    clear: initial;
+    text-transform: initial;}
+	.fulltext_pub h2 {    border-bottom: 1px solid #97B0C8;
+    color: #995733;}
+	.fulltext_pub h3 {    margin: 20pt 0 10pt;
+    font-weight: 400;
+    line-height: 22.5pt;
+    font-family: Cambria, "Cambria Math", stixgeneral, "Times New Roman", Times, serif;
+    letter-spacing: -0.01em;
+    clear: initial;
+    text-transform: initial;
+    font-size: 15.795pt;
+    color: #734126;}
+	.fulltext_pub h4 {
+		margin: 20pt 0 10pt;
+    font-weight: 400;
+    line-height: 22.5pt;
+    font-family: Cambria, "Cambria Math", stixgeneral, "Times New Roman", Times, serif;
+    letter-spacing: -0.01em;
+    clear: initial;
+    text-transform: initial;
+    font-size: 13.795pt;
+    color: #734126;
+	}
+	.fulltext_pub h5 {
+		margin: 20pt 0 10pt;
+    font-weight: bold;
+    line-height: 22.5pt;
+    font-family: Cambria, "Cambria Math", stixgeneral, "Times New Roman", Times, serif;
+    letter-spacing: -0.01em;
+    clear: initial;
+    text-transform: initial;
+    font-size: 15.795pt;
+    color: #734126;
+	}
+	.fulltext_pub p {margin: 20pt 0;
+    text-align: justify;
+    font-size: 12pt;
+    letter-spacing: initial;}
+	
+	.fulltext_pub .infos{box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+	content:"";clear:both;border-radius: 10px;border:1px solid black;
+padding-bottom:20px;}
+	
+</style>
+
+<div id="ini_text" style="display:none">${TEXT}</div>
+${SMILES}
+
+<script>
+	RAW_DATA=JSON.parse('${JSON}');
+	function showPubliData(rule_set,id)
+	{
+		str='<span style="float:right;cursor:pointer;font-weight:bold" onclick="$(\'#block_info_'+id+'\').css(\'display\',\'none\');">X</span>';
+		rules=rule_set.split("/");
+		cpds=[];
+		$.each(rules, function(id,info)
+		{
+			
+			tab=info.split(":");
+			
+			switch(tab[0])
+			{
+				case 'DRUG':
+					ENTRY=RAW_DATA['DRUG'][tab[1]];
+					str+='<div class="w3-col s12 l12 m12"><h5>Drug - '+RAW_DATA['DRUG'][tab[1]]['DRUG_PRIMARY_NAME']+'</h5>';
+						
+					if ("SM" in ENTRY)
+					{
+						str+='<div class="w3-col s12 m12 l4">'+$("#SM_IMG_"+ENTRY['SM']).html()+'</div>';
+						
+						
+					
+					str+='<div class="w3-col s12 m12 l8" id="sm_info_'+tab[1]+'">';
+					}	else str+='<div class="w3-col s12 m12 l12" id="sm_info_'+tab[1]+'">';
+					if ("DESC" in ENTRY)
+					$.each (ENTRY['DESC'], function (id_desc,info_desc)
+					{
+						if (info_desc['TEXT_DESCRIPTION']!='')
+						str+='<p style="max-height:300px;overflow-y:scroll"><span style="font-weight: bold">'+info_desc['SOURCE_NAME']+' - '+info_desc['TEXT_TYPE']+': </span>'+info_desc['TEXT_DESCRIPTION']+'</p>';
+					});	
+					str+='</div>';
+					
+					
+					break;
+				case 'ANATOMY':
+					ENTRY=RAW_DATA['ANATOMY'][tab[1]];
+					str+='<div class="w3-col s12 l12 m12"><h5>Anatomy/Tissue - '+ENTRY['ANATOMY_NAME']+'</h5><p>'+ENTRY['ANATOMY_DEFINITION']+'</p></div>';
+				break;
+				case 'CELL':
+					ENTRY=RAW_DATA['CELL'][tab[1]];
+					str+='<div class="w3-col s12 l12 m12"><h5>Cell - '+ENTRY['CELL_NAME']+'</h5><br/>';
+					str+='<table class="table">\
+						<tr><th>Accession:</th><td>'+ENTRY['CELL_ACC']+'</td></tr>\
+						<tr><th>Cell line type:</th><td>'+ENTRY['CELL_TYPE']+'</td></tr>\
+						<tr><th>Gender of Donor :</th><td>'+ENTRY['CELL_DONOR_SEX']+'</td></tr>\
+						<tr><th>Age of Donor:</th><td>'+ENTRY['CELL_DONOR_AGE']+'</td></tr>';
+						if ("DISEASE" in ENTRY)
+						{
+							$.each(ENTRY['DISEASE'], function (id_disease,info_disease)
+							{
+								str+='<tr><th>Disease:</th><td>'+info_disease['DISEASE_NAME']+'</td></tr>';
+								str+='<tr><td colspan="2">'+info_disease['DISEASE_DEFINITION']+'</td></tr>';
+							});
+						}
+
+						str+='</table>';
+						
+						
+						str+='</div>';
+				break;
+				case 'DISEASE':
+					ENTRY=RAW_DATA['DISEASE'][tab[1]];
+					str+='<div class="w3-col s12 l12 m12"><h5>Disease - '+ENTRY['DISEASE_NAME']+'</h5>'+ENTRY['DISEASE_DEFINITION'];
+						if ("DESC" in ENTRY)
+						{
+							str+"</br><p>"+ENTRY['DESC']+"</p>";
+						}
+						str+='</div>';
+				break;
+				case 'GENE':
+					ENTRY=RAW_DATA['GENE'][tab[1]];
+					str+='<div class="w3-col s12 l12 m12"><h5>Gene - '+ENTRY['SYMBOL']+'</h5>'+ENTRY['FULL_NAME']+'</div>';
+				break;
+				case 'SM':
+					
+						
+
+					ENTRY=RAW_DATA['SM'][tab[1]];
+					console.log(ENTRY);
+					str+='<div class="w3-col s12 l12 m12"><h5>Compound</h5>';
+					
+						
+					if ("FULL_SMILES" in ENTRY)
+					{
+						str+='<div class="w3-col s12 m12 l4" >'+$("#SM_IMG_"+ENTRY['FULL_SMILES']).html()+'</div>';
+						
+						str+='<div class="w3-col s12 m12 l8" id="sm_info_'+tab[1]+'">';
+					}	else str+='<div class="w3-col s12 m12 l12" id="sm_info_'+tab[1]+'">';
+					str+='<h5>Names:</h5>';
+						$.each (ENTRY['NAME'], function (id_n,name)
+					{
+						str+=name['SM_NAME']+" ";
+					});
+					str+='<br/>';
+					if ("DESC" in ENTRY)
+					$.each (ENTRY['DESC'], function (id_desc,info_desc)
+					{
+						if (info_desc['DESCRIPTION_TEXT']!='')
+						str+='<p style="max-height:300px;overflow-y:scroll"><span style="font-weight: bold">'+info_desc['SOURCE_NAME']+' - '+info_desc['DESCRIPTION_TYPE']+': </span>'+info_desc['DESCRIPTION_TEXT']+'</p>';
+					});	
+						
+						str+='</div>';
+				break;
+				case 'GO':
+					ENTRY=RAW_DATA['GO'][tab[1]];
+					str+='<div class="w3-col s12 l12 m12"><h5>Gene Ontology - '+ENTRY['AC']+' '+ENTRY['NAME']+'</h5>'+ENTRY['DEFINITION']+'</div>';
+					break;
+				case 'CIT':
+					str+='<div class="w3-col s12 l12 m12"><h5>Citation </h5>'+$("#cit_"+tab[1]).html()+'</div>';
+					break;
+				break;
+				
+			}
+
+		});
+		$(".infos").each(function(i,obj){
+			if ($(this).attr("id")!="info_"+id)
+			{
+				$(this).css("display","none");
+			}
+		});
+	
+		$('#block_info_'+id).html(str);
+		$('#block_info_'+id).css("display","block");
+		
+		
+		
+	}
+
+	$(document).ready(function(){
+		${JS}
+	});
+
+</script>

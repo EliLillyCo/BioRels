@@ -1,0 +1,60 @@
+
+<div class="w3-container w3-col s12">
+    
+  <div id="my_dataviz3"  class="w3-col s12 m12 l12">
+    <h4>List of employees accessing the news:</h4>
+  <table id="tbl_${DT}"><thead>
+    <tr><th>Last Name</th><th>First Name</th><th>Job Level</th><th>Job family Group</th><th>Job family </th><th>Country</th><th>Business Title</th></tr></thead><tbody>${USERS}</tbody>
+  </table>
+</div>
+  <br/>
+<div class="w3-container">
+<div  class="w3-col s12 m6 l6">
+  
+  <h4>Breadown by Organization:</h4>
+  <table id="tbl_org_2"><thead>
+    <tr><th>Last Name</th><th>First Name</th><th>Job family </th><th>Count</th></tr></thead><tbody>${ORG2}</tbody>
+  </table>
+<br/>
+  <h4>Breadown by (S)VP level:</h4>
+  <table id="tbl_org_3"><thead>
+    <tr><th>Last Name</th><th>First Name</th><th>Job family </th><th>Count</th></tr></thead><tbody>${ORG3}</tbody>
+  </table>
+
+</div><br/>
+<div   class="w3-col s12 m6 l6" ><div style="max-width:600px;max-height:600px;margin:0 auto">${SUNBURST}</div> </div>
+</div>
+<br/>
+<div class="w3-container">
+<div id="job_fam" class="w3-col s12 m6 l6">
+  <h4>By Job family</h4>
+  <table id="tbl_fam">
+    <thead>
+      <tr><th>Job family Group</th><th>Job family</th><th>Count</th></tr>
+    </thead>
+    <tbody>
+      ${JOB_FAMILY}
+    </tbody>
+  </table>
+  </div>
+  <div id="job_level" class="w3-col s12 m6 l6">
+    <h4>By Job Level</h4>
+    <table id="tbl_job">
+      <thead>
+        <tr><th>Job Level Group</th><th>Level</th><th>Count</th></tr>
+      </thead>
+      <tbody>
+        ${JOB_LEVEL}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <script>
+
+$(document).ready(function (){table=$('#tbl_org_2').DataTable( {order:[[2,'desc']]});});
+$(document).ready(function (){table=$('#tbl_org_3').DataTable( {order:[[2,'desc']]});});
+    $(document).ready(function (){table=$('#tbl_${DT}').DataTable( {order:[[0,'desc']]});});
+    $(document).ready(function (){table=$('#tbl_job').DataTable( {order:[[2,'desc']]});});
+    $(document).ready(function (){table=$('#tbl_fam').DataTable( {order:[[2,'desc']]});});
+</script>   
+

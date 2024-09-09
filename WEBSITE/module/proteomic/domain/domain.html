@@ -1,0 +1,209 @@
+<h3>${PROT_IDENTIFIER} -<span style="font-variant: small-caps"> ${DOMAIN_NAME}</span></h3>
+	<p><span style="font-weight:bold;padding-left:10px;">Description:</span> ${DESCRIPTION}</p>
+	<p><span style="font-weight:bold;padding-left:10px;">Range:</span> ${RANGE}</p>
+
+<style>
+.active{background-color:rgb(38, 63, 106);}</style>
+<div style="position:relative">
+	<ul class="nav  nav-tabs">
+			<li id="domain_menu_tab_1" class="nav-item nav-link active"><a onclick="showMenu('domain_menu',1,4)">Domain description</a></li>
+			<li id="domain_menu_tab_2" class="nav-item nav-link "><a  onclick="showMenu('domain_menu',2,4);">Similar domain</a></li>
+			<!--<li id="domain_menu_tab_3" class="nav-item nav-link "><a  onclick="showMenu('domain_menu',3,4)">3-D Structure</a></li>
+			<li id="domain_menu_tab_4" class="nav-item nav-link "><a  onclick="showMenu('domain_menu',4,4)">3-D Ligand</a></li>
+			-->
+	
+		  </ul>
+		  </div>
+
+
+		
+
+<div id="domain_menu_view_1"  class="container-grey w3-container w3-padding-16 w3-col s12">
+
+		${DOM_DESC}
+		
+		
+		</div>
+		
+		<div id="domain_menu_view_2"  style="display:none"  class="container-grey w3-container w3-padding-16 w3-col s12">
+			<h2>Similar domains:</h2>
+			<div id="dom_simdom_opts" style="margin:10px auto;">	
+					<span id="dom_simdom_nco"> ${N_SIM_DOM}</span> domain from sequence similarity
+					<div style="float: right;margin-right: 10px;">  Number per page:
+					<select id="dom_simdom_npage" name="per_page" onchange="updateDomPageCount('simdom')">
+						<option value="10" selected="selected">10</option>
+						<option value="20">20</option>
+						<option value="30">30</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
+						<option value="200">200</option>
+					</select>
+					<input type="button" class="button" value='&lt;' onclick="prevDomPage('simdom')"/>
+					<input type="text" class="button" value="1" id="dom_simdom_page" style="width:50px" />/<input type="text" value="${NPAGE_SIMDOM}" style="width:50px" readonly  id="dom_simdom_pagemax"/>
+					<input type="button"  class="button" value='&gt;' onclick="nextDomPage('simdom')"/>
+					</div>
+				</div>
+				<table class="table table-sm" style="width:98%" id="dom_simdom_tbl">
+						<thead><th>View</th></th><th>Gene ID</th><th>Symbol</th><th>Organism</th><th>Uniprot Sequence</th><th>Domain Name</th><th>% Identity</th><th>% Similarity</th></thead>
+			<tbody>
+					
+			</tbody></table>
+			
+		</div>
+		
+		<div id="domain_menu_view_3" style="display:none" class="container-grey w3-container w3-padding-16 w3-col s12">
+				<h2>3-D structure:</h2>
+				<div id="dom_3Dstruct_opts" style="margin:10px auto;">	
+						<span id="dom_3Dstruct_nco"> ${N_3DSTRUCT}</span> 3-D chains
+						<div style="float: right;margin-right: 10px;">  Number per page:
+						<select id="dom_3Dstruct_npage" name="per_page" onchange="updateDomPageCount('3Dstruct')">
+							<option value="10" selected="selected">10</option>
+							<option value="20">20</option>
+							<option value="30">30</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+							<option value="200">200</option>
+						</select>
+						<input type="button" class="button" value='&lt;' onclick="prevDomPage('3Dstruct')"/>
+						<input type="text" class="button" value="1" id="dom_3Dstruct_page" style="width:50px" />/<input type="text" value="${NPAGE_3Dstruct}" style="width:50px" readonly  id="dom_3Dstruct_pagemax"/>
+						<input type="button"  class="button" value='&gt;' onclick="nextDomPage('3Dstruct')"/>
+						</div>
+					</div>
+					<table class="table table-sm" style="width:98%" id="dom_3Dstruct_tbl">
+							<thead><th>PDB ID</th><th>Chain Name</th><th>Experimental Type</th><th>Resolution</th><th>Title</th><th>Deposition Date</th><th>Coverage</th></thead>
+				<tbody>
+						
+				</tbody></table>
+			</div>
+			<div id="domain_menu_view_4" style="display:none" class="container-grey w3-container w3-padding-16 w3-col s12">
+					<h2>3-D Ligand:</h2>
+					${3DLIG}
+				</div>
+
+				<script type="text/javascript">
+	
+var init_tbls={"simdom":false,'3Dstruct':false};
+
+		$( document ).ready(function() {
+	submitDom("simdom");
+	submitDom("3Dstruct");
+	});
+
+function submitDom(type)
+	{
+		init_tbls[type]=true;
+		var url_type='';
+		if (type=="simdom")url_type="BY_SIMDOM";
+		else if (type=='3Dstruct')url_type='3D_STRUCT';
+		var per_page = $('#dom_'+type+'_npage').val();
+		var page = $('#dom_'+type+'_page').val();
+		console.log(type+" "+per_page+" "+page+" "+'#dom_'+type+'_page');
+		urlv="/JSON/GENEID/${GENE_ID}/DOMAIN_REL_SEARCH/${DOMAIN_NAME}/PARAMS/${START}/${END}/${SEQID}/PER_PAGE/"+per_page+"/PAGE/"+page+"/TYPE/"+url_type;
+		
+		$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: urlv,
+		//data:{ "PER_PAGE":per_page,'PAGE':page},
+		success: function(data){
+			
+			//var v=jQuery.parseJSON(data);
+			console.log(data);
+			var str='';
+			$.each(data.RESULTS, function(index,record){
+				console.log(record);
+				str+='<tr>';
+				//<thead><th>Gene ID</th><th>Symbol</th><th>Organism</th><th>Domain Name</th><th>% Identity</th><th>% Similarity</th></thead>
+				if (type=="simdom")
+				{
+					// if ((record.GENE_ID!=null))
+					// {
+					// str+='<td  style="cursor:pointer" onclick="loadAlign($(this).closest(\'tr\'),\'/CONTENT/GENEID/${GENE_ID}/DOMAIN_ALIGNMENT/PARAMS/${DOMAIN_NAME}/${START}/${END}/${SEQID}/'+record.GENE_ID+"/"+record.DOMAIN_NAME+'/'+record.POS_START+'/'+record.POS_END+'/'+record.ISO_ID+'\')">View</td>';
+					// }
+					// else 
+					str+='<td  style="cursor:pointer" onclick="loadAlign($(this).closest(\'tr\'),\'/CONTENT/DOMAIN_ALIGNMENT/PARAMS/${DOMAIN_NAME}/${START}/${END}/${SEQID}/'+record.GENE_ID+"/"+record.DOMAIN_NAME+'/'+record.POS_START+'/'+record.POS_END+'/'+record.ISO_ID+'\')">View</td>';
+					str+='<td>'+((record.GENE_ID!=null)?'<a href="/GENEID/'+record.GENE_ID+'">'+record.GENE_ID+'</a></td><td><a href="/GENEID/'+record.GENE_ID+'">'+record.SYMBOL+'</a></td>':'N/A</td><td>N/A</td>')+
+					'<td>'+record.SCIENTIFIC_NAME+"</td><td>"+record.ISO_ID+"</td><td>";
+						if (record.GENE_ID!=null)str+='<a href="/GENEID/'+record.GENE_ID+'/DOMAIN/'+record.DOMAIN_NAME+'/PARAMS/'+record.POS_START+'/'+record.POS_END+'/'+record.ISO_ID+'">'+record.DOMAIN_NAME+"</a>";
+						else str+=record.DOMAIN_NAME;
+						str+="</td><td>"+Math.round(record.PERC_IDENTITY_COM*100,2)+"</td><td>"+Math.round(record.PERC_SIM_COM*100,2)+"</td></tr>";
+				}
+				else if (type=="3Dstruct")
+				{
+					//	<thead><th>PDB ID</th><th>Experimental Type</th><th>Resolution</th><th>Title</th><th>Deposition Date</th><th>Coverage</th></thead>
+					str+='<td><a href="/GENEID/${GENE_ID}/3D_ENTRY/'+record.FULL_COMMON_NAME+'">'+record.FULL_COMMON_NAME+'</a></td><td>'+record.CHAIN_NAME+"</td><td>"
+						+record.EXPR_TYPE+"</td><td>"+record.RESOLUTION+"</td><td>"+record.TITLE+"</td><td>"+record.DEPOSITION_DATE+"</td><td>"+record.COVERAGE+"</td></tr>";
+				}
+				
+			});
+			console.log(str);
+			console.log('#dom_'+type+'_tbl tbody');
+			$('#dom_'+type+'_tbl tbody').html(str); 
+
+
+
+		},
+		error:function(data){$("#info").html("An issue occured.");}
+			});///END AJAX
+			return false;		
+	}
+
+function updateDomPageCount(type,with_refresh=true)
+			{
+				var tot=$("#dom_"+type+"_nco").html();
+				var per_page = parseInt($('#dom_'+type+'_npage').val());
+				var totmax=Math.floor(tot/per_page);
+				$("#dom_"+type+"_pagemax").val(totmax);
+				
+				var val=parseInt($('#dom_'+type+"_page").val());
+				if (val>totmax)$('#dom_'+type+"_page").val(totmax);
+				if (with_refresh)submitDom(type);
+			}
+			function prevDomPage(type)
+			{
+				var val=parseInt($('#dom_'+type+"_page").val());
+				if (val==1)return;
+				$('#dom_'+type+"_page").val(val-1);
+				submitDom(type);
+			
+			}
+			
+			function nextDomPage(type)
+			{
+				var val=parseInt($('#dom_'+type+"_page").val());
+				
+				var m=parseInt($('#dom_'+type+"_pagemax").val());
+				console.log(val+" "+m);
+				if (val>=m)return;
+				$('#dom_'+type+"_page").val(val+1);
+				
+				submitDom(type);
+			
+			}
+			function loadAlign(line,path)
+			{
+				path+="/WIDTH/"+($('#domain_menu_view_4').css("width"));
+				$.ajax({
+		type: 'POST',
+		// make sure you respect the same origin policy with this url:
+		// http://en.wikipedia.org/wiki/Same_origin_policy
+		url: path,
+		//data:{ "PER_PAGE":per_page,'PAGE':page},
+		success: function(data){
+			
+			var v=jQuery.parseJSON(data);
+			console.log(v);
+			$("#alignment").remove();
+			$('<tr id="alignment"><td colspan="8">'+v.code+'</td></tr>').insertAfter(line);
+			
+				
+			
+
+
+
+		},
+		error:function(data){$("#info").html("An issue occured.");}
+			});///END AJAX
+			}
+</script>

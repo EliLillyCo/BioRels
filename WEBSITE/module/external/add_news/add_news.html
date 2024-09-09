@@ -1,0 +1,832 @@
+
+$[ACCESS_ERROR]
+<div class="alert alert-danger">${ERROR_MESSAGE}</div>
+$[/ACCESS_ERROR]
+$[DEFAULT]
+
+
+<style>
+  #editor-container {
+    height: 350px;
+  }
+
+  #flex-parent {
+    display: flex;
+  }
+
+  #flex-parent>div {
+    flex: 1;
+  }
+
+  .submitNews {
+    display: block;
+  }
+</style>
+
+<div id="tpl_1" style="display: none;">
+  <p>
+    &nbsp;
+</p>
+<hr>
+<h2 class="BioRels_red">
+    Key Highlights:
+</h2>
+<p>
+    &nbsp;
+</p>
+<h2 class="BioRels_red">
+    Details:
+</h2>
+<p>
+    &nbsp;
+</p>
+<h3 class="BioRels_red">
+    Observations / Comments:
+</h3>
+<br/>
+<h4>
+    <strong>Source:</strong>
+</h4>
+
+</div>
+
+<form method="POST" id="news_form" action="ADD_NEWS${ADD_PATH}" enctype="multipart/form-data">
+  <div class="w3-main welcome">
+    <div>${ERR_MSG}</div>
+    <div class="w3-container w3-col s12">
+      <h4>Create News Article:</h4>
+      <p>Please write or copy/paste your news article and its title. Once done, click on Run Annotation to annotate your text by gene, disease, drug, clinical trial or company. 
+        A set of possibilities will be shown, from which you can select the ones that are primary to your article. In case the annotation tool couldn't detect the annotation you seek, you can run a manual search.
+        Additionally, you have the possibility to add documents if you wish (optional). At least, please select the channel to post your article into.
+      </p>
+          <input type="hidden" name="submit_form_check" value="true" />
+          <input type="hidden" name="news_id" value="${NEWS_ID}" />
+      <p>
+        Select your template:
+        <select id="tpl_sel">
+          <option value=""></option>
+          <option value="tpl_1">Alert template</option>
+        </select>
+      </p>
+      <div class="news_entry">
+        <h3>Create:</h3>
+         
+          <table class="w3-table w3-striped">
+            
+            <tr>
+              <th><input name="articleTitle" id="articleTitle" class="w3-input" type="text"
+                  placeholder="Please include a title" ${INI_TITLE} /></th>
+            </tr>
+          </table>
+          <script  type="text/javascript"  src="/require/js/ckeditor.js"></script>
+          <textarea name="content" id="editor">
+            ${DEFAULT_TEXT_VALUE}
+          
+          </textarea>
+
+          <div id="word-count"></div>
+          <div id="standalone-container">
+            <div id="editor-container">
+              <!-- user inputs text here -->
+              <!-- editor container close -->
+            </div>
+            <br>
+            <!-- standalone container -->
+          </div>
+      </div><!-- news_entry -->
+          <!--w3 container col6  -->
+          <textarea id="delta_v" name="delta_v" style="display:none"></textarea>
+      <textarea id="html_v" name="html_v" style="display:none"></textarea>
+    </div>
+    <div class="w3-container w3-col s12 news_entry" id="output" style="    padding: 0.01em 16px;">
+      <h3>Annotation:</h3>
+      <div id="info">${ERR_MSG}</div>
+      <div style="width:94%;text-align: center;margin:10px 3%;">
+      <input class="w3-btn w3-blue" type="button" value="Run Annotation" onclick="processText()" /><br/>
+    </div>
+      <div id="annotations" style="    margin-bottom: 22px;">
+        <ul class="nav nav-tabs">
+          <li id="annotation_menu_tab_1" onclick="showMenu('annotation_menu',1, 20)" class="active nav-item nav-link">COMPANY <span id="COMPANY_CO"></span></li>
+          <li id="annotation_menu_tab_2" onclick="showMenu('annotation_menu',2, 20)" class="active nav-item nav-link">CLINICAL <span id="CLINICAL_CO"></span></li>
+          <li id="annotation_menu_tab_3" onclick="showMenu('annotation_menu',3, 20)" class="active nav-item nav-link">GENE <span id="GENE_CO"></span></li>
+          <li id="annotation_menu_tab_4" onclick="showMenu('annotation_menu',4, 20)" class="active nav-item nav-link">DRUG <span id="DRUG_CO"></span></li>
+          <li id="annotation_menu_tab_5" onclick="showMenu('annotation_menu',5, 20)" class="active nav-item nav-link">DISEASE <span id="DISEASE_CO"></span></li>
+          <li id="annotation_menu_tab_6" onclick="showMenu('annotation_menu',6, 20)" class="active nav-item nav-link">NEWS <span id="NEWS_CO"></span></li>
+        </ul>	
+        <div id="annotation_menu_view_1" class="w3-container  container-grey annotation_container" name="COMPANY" style="display:block">
+              <table id="company_list"  class="table" style="max-height: 300px;overflow-y:scroll">
+                <thead>
+                  <tr><th></th><th>Company name</th><th>Match</th><th>Is primary</th></tr>
+                </thead>
+                <tbody>
+                  ${COMPANY_MATCH}
+  
+                </tbody>
+              </table>
+              
+              <br>${COMPANY_VALIDATE}
+              <br/><p><span style="font-weight: bold;">Is primary:</span> Check the checkbox if the annotation directly relates to the news.<br/>
+              </p>
+        </div>	<!--End annotation menu 1-->
+  
+      
+      
+  
+        <div id="annotation_menu_view_2" class="w3-container  container-grey annotation_container" name="CLINICAL" style="display:none">
+          <table id="clinical_list" class="table" style="max-height: 300px;overflow-y:scroll">
+            <thead>
+              <tr><th></th><th>Trial ID</th><th>Match</th><th>Is primary</th></tr>
+            </thead>
+            <tbody>
+              ${CLINICAL_MATCH}
+            </tbody>
+          </table>
+          
+          <br>${CLINICAL_VALIDATE}
+        </div>		<!--End annotation menu 2-->
+      <div id="annotation_menu_view_3" class="w3-container  container-grey annotation_container" name="GENE" style="display:none">
+        <table id="gene_list" class="table" style="max-height: 300px;overflow-y:scroll">
+          <thead>
+            <tr><th></th><th>Gene ID</th><th>Symbol</th><th>Match</th><th>Is primary</th></tr>
+          </thead>
+          <tbody>
+            ${GENE_MATCH}
+          </tbody>
+        </table>
+    
+        
+        <br>${GENE_VALIDATE}
+      </div>		<!--End annotation menu 3-->
+          
+        
+        
+      <div id="annotation_menu_view_4" class="w3-container  container-grey annotation_container" name="DRUG" style="display:none">
+        <table id="drug_list" class="table" style="max-height: 300px;overflow-y:scroll">
+          <thead>
+            <tr><th></th><th>Drug</th><th>Match</th><th>Is primary</th></tr>
+          </thead>
+          <tbody>
+            ${DRUG_MATCH}
+          </tbody>
+        </table>
+        
+        <br>${DRUG_VALIDATE}
+      </div>		<!--End annotation menu 4-->
+      
+      
+      
+        <div id="annotation_menu_view_5" class="w3-container  container-grey annotation_container" name="DISEASE" style="display:none">
+          
+          <table id="disease_list" class="table" style="max-height: 300px;overflow-y:scroll">
+            <thead>
+              <tr><th></th><th>Disease name</th><th>Match</th><th>Is primary</th></tr>
+            </thead>
+            <tbody>
+              ${DISEASE_MATCH}
+            </tbody>
+          </table>
+          <br>${DISEASE_VALIDATE}     
+        
+        </div>	<!--End annotation menu 5-->
+
+
+        <div id="annotation_menu_view_6" class="w3-container  container-grey annotation_container" name="NEWS" style="display:none">
+          
+          <table id="news_list" class="table" style="max-height: 300px;overflow-y:scroll">
+            <thead>
+              <tr><th></th><th>News name</th><th>Source</th></tr>
+            </thead>
+            <tbody>
+              ${NEWS_MATCH}
+            </tbody>
+          </table>
+          <br>${NEWS_VALIDATE}     
+        
+        </div>	<!--End annotation menu 5-->
+
+         
+          <!--w3 container col6  -->
+        </div>	<!--End annotation -->
+        
+      </div>
+      <!-- row close -->
+    
+    <!-- justify close -->
+    <div class="w3-container w3-col s12 news_entry"  style="    padding: 0.01em 16px;">
+      <!-- file insert table -->
+      <h3>Publish:</h3>
+      $[DISABLE_FILE]
+      <div class="w3-container w3-col s6">
+        <h5>Add file: (optional) </h5>
+        <table class="w3-table w3-striped w3-border ">
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Input file path</th>
+          </tr>
+          <tr>
+            <th><input class="w3-input" type="text" name="fname[]" placeholder="Document name" /></th>
+            <th><input class="w3-input" type="text" name="fdesc[]" placeholder="Description" /></th>
+            <th><input class="w3-input" type="file" name="fpath[]" placeholder="File path" /></th>
+          </tr>
+          <tr>
+            <th><input class="w3-input" type="text" name="fname[]" placeholder="Document name" /></th>
+            <th><input class="w3-input" type="text" name="fdesc[]" placeholder="Description" /></th>
+            <th><input class="w3-input" type="file" name="fpath[]" placeholder="File path" /></th>
+          </tr>
+          <tr>
+            <th><input class="w3-input" type="text" name="fname[]" placeholder="Document name" /></th>
+            <th><input class="w3-input" type="text" name="fdesc[]" placeholder="Description" /></th>
+            <th><input class="w3-input" type="file" name="fpath[]" placeholder="File path" /></th>
+          </tr>
+        </table>
+        <br />
+      </div>
+      $[/DISABLE_FILE]
+      <div class="w3-container w3-col s6">
+        
+        <!-- w3 col6 close -->
+        <h5 style="display: inline-block;">To be posted as:</h5>
+        <select  style="display: inline-block;" name="source_name">
+          <option value="">N/A</option>${LIST_SOURCE}
+        </select>
+
+        <br /><br/>
+
+ 
+     
+$[HAS_RED_ACCESS]
+        <!-- w3 col6 close -->
+        <h5>Where to publish: (required)</h5>
+        <label for="is_red">Publish to private news feed</label><label class="switch" style="position:relative;top:0px;margin-left:10px; margin-right:10px;">
+          <input id="is_red" name ="is_red" type="checkbox">
+          <span class="switch-slider round"></span>
+        </label> 
+        <label for="is_green" style="padding-left:30px">Publish to green news feed</label><label class="switch" style="position:relative;top:0px;margin-left:10px; margin-right:10px;">
+          <input id="is_green" name="is_green" type="checkbox">
+          <span class="switch-slider round"></span>
+        </label>
+        <br/>
+        <p>Notes:
+          If you publish to the green news feed, all  personel will be able to see this news. This imply that this news feed is of public knowledge.<br/>
+          If you publish to the private news, You will need to follow the privacy protocols of your institution
+          
+        </p>
+        
+$[/HAS_RED_ACCESS]
+
+
+
+$[HAS_GREEN_ACCESS]
+        <br />
+        <p>Notes:
+          All  personel will be able to see this news.
+
+        </p>
+        $[/HAS_GREEN_ACCESS]
+
+      
+        <br>
+        
+        <input id="userSubmit" class="w3-btn w3-blue" type="submit" value="Submit News Item"/>
+      </div>
+      </div>
+      <!-- div class row close -->
+    </div>
+    <!-- div welcome close -->
+  
+<br/><br/>
+
+</div>
+
+</div>
+
+</form>
+<style>
+  #editor-container {
+  height: 100%;
+  /* added these styles */
+  flex: 1;
+  display: flex; 
+  flex-direction: column;
+}
+
+#editor {
+  height: 100%;
+  /* added these styles */
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+}
+</style>
+
+<script>
+
+$('#tpl_sel').on('change', function() {
+  console.log(this.value);
+ editor.setData($("#"+this.value).html());
+});
+
+ClassicEditor
+		.create( document.querySelector( '#editor' ), {
+      heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                {
+                    model: 'headingBioRels1',
+                    view: {
+                        name: 'h1',
+                        classes: 'BioRels_red'
+                    },
+                    title: 'BioRels Heading1',
+                    class: 'ck-heading_heading1_lly_red',
+
+                    // It needs to be converted before the standard 'heading2'.
+                    converterPriority: 'high'
+                },
+                {
+                    model: 'headingBioRels2',
+                    view: {
+                        name: 'h2',
+                        classes: 'BioRels_red'
+                    },
+                    title: 'BioRels Heading2',
+                    class: 'ck-heading_heading2_lly_red',
+
+                    // It needs to be converted before the standard 'heading2'.
+                    converterPriority: 'high'
+                },
+                {
+                    model: 'headingBioRels3',
+                    view: {
+                        name: 'h3',
+                        classes: 'BioRels_red'
+                    },
+                    title: 'BioRels Heading3',
+                    class: 'ck-heading_heading3_lly_red',
+
+                    // It needs to be converted before the standard 'heading2'.
+                    converterPriority: 'high'
+                },
+                {
+                    model: 'headingBioRels4',
+                    view: {
+                        name: 'h4',
+                        classes: 'BioRels_red'
+                    },
+                    title: 'BioRels Heading4',
+                    class: 'ck-heading_heading4_lly_red',
+
+                    // It needs to be converted before the standard 'heading2'.
+                    converterPriority: 'high'
+                },
+
+            ]
+        },
+      fontFamily: {
+            options: [
+              'Times New Roman',
+                'Ubuntu, Arial, sans-serif',
+                'DDIN',
+                'Helvetica',
+                'Poynter',
+                'Franklin Gothic',
+                'Playfair Display',
+                'Courier New',
+                'Century Old Style',
+                'Utopia',
+                'Nimrod',
+                'Spectral'
+            ]
+        },
+        fontColor: {
+            colors: [
+                {
+                    color: 'rgb(0,0,0)',
+                    label: 'Black'
+                },
+                
+                {
+                    color: 'rgb(255,255,255)',
+                    label: 'White',
+                    hasBorder: true
+                },
+                {
+                    color: 'rgb(213,43,30)',
+                    label: 'BioRels red'
+                },
+                {
+                    color: 'rgb(165,157,149)',
+                    label: 'BioRels medium grey'
+                },
+                {
+                    color: 'rgb(130,120,111)',
+                    label: 'BioRels dark grey'
+                },
+                {
+                    color: 'rgb(213,210,202)',
+                    label: 'BioRels light grey'
+                },
+                {
+                    color: 'rgb(211,191,150)',
+                    label: 'BioRels Khaki'
+                },
+                {
+                    color: 'rgb(78,46,45)',
+                    label: 'BioRels Brown'
+                },
+                {
+                    color: 'rgb(39,94,55)',
+                    label: 'BioRels Dark green'
+                },
+                {
+                    color: 'rgb(38,63,106)',
+                    label: 'BioRels dark blue'
+                },
+                {
+                    color: 'rgb(255,109,34)',
+                    label: 'BioRels orange'
+                },
+                {
+                    color: 'rgb(254,209,0)',
+                    label: 'BioRels yellow'
+                },
+                {
+                    color: 'rgb(0,161,222)',
+                    label: 'BioRels Blue'
+                },
+                {
+                    color: 'rgb(177,5,157)',
+                    label: 'BioRels Purple'
+                },
+                
+            ]
+              },
+              fontBackgroundColor: {
+            colors: [
+                {
+                    color: 'rgb(0,0,0)',
+                    label: 'Black'
+                },
+                
+                {
+                    color: 'rgb(255,255,255)',
+                    label: 'White',
+                    hasBorder: true
+                },
+                {
+                    color: 'rgb(213,43,30)',
+                    label: 'BioRels red'
+                },
+                {
+                    color: 'rgb(165,157,149)',
+                    label: 'BioRels medium grey'
+                },
+                {
+                    color: 'rgb(130,120,111)',
+                    label: 'BioRels dark grey'
+                },
+                {
+                    color: 'rgb(213,210,202)',
+                    label: 'BioRels light grey'
+                },
+                {
+                    color: 'rgb(211,191,150)',
+                    label: 'BioRels Khaki'
+                },
+                {
+                    color: 'rgb(78,46,45)',
+                    label: 'BioRels Brown'
+                },
+                {
+                    color: 'rgb(39,94,55)',
+                    label: 'BioRels Dark green'
+                },
+                {
+                    color: 'rgb(38,63,106)',
+                    label: 'BioRels dark blue'
+                },
+                {
+                    color: 'rgb(255,109,34)',
+                    label: 'BioRels orange'
+                },
+                {
+                    color: 'rgb(254,209,0)',
+                    label: 'BioRels yellow'
+                },
+                {
+                    color: 'rgb(0,161,222)',
+                    label: 'BioRels Blue'
+                },
+                {
+                    color: 'rgb(177,5,157)',
+                    label: 'BioRels Purple'
+                },
+                
+            ]
+              }
+		} )
+    .then( editor => {
+      window.editor = editor;
+        const wordCountPlugin = editor.plugins.get( 'WordCount' );
+        const wordCountWrapper = document.getElementById( 'word-count' );
+
+        wordCountWrapper.appendChild( wordCountPlugin.wordCountContainer );
+    } )
+		
+		.catch( err => {
+			console.error( err.stack );
+		} );
+
+
+var myInterval;
+var monitor_query='';
+
+  function processText() {
+
+    title = $("#articleTitle").val();
+    
+    $('#info').html('<p>Query running - This can take up to one minute</p>');
+    try {
+      $.ajax({
+        type: "POST",
+        url: '/JSON/ADD_NEWS',
+        data: { 'text':  editor.getData(),
+              'title':title,
+                'delta':$(editor.getData()).text()},
+        error: function () { $('#info').html('<p>An error has occurred</p>'); return false; },
+        success: function (data) {
+          
+          monitor_query='/JSON/ADD_NEWS/PARAMS/JOBS/CLINICAL/'+data.CLINICAL+"/DRUG/"+data.DRUG+"/GENE/"+data.GENE+"/COMPANY/"+data.COMPANY+"/DISEASE/"+data.DISEASE;
+          list_block['CLINICAL']=false;
+          list_block['DRUG']=false;
+          list_block['GENE']=false;
+          list_block['COMPANY']=false;
+          list_block['DISEASE']=false;
+
+          myInterval = setInterval(monitorNews, 5000);
+          
+        },
+      });///END AJAX
+    } catch (err) {
+      $('#info').html('<p>An error has occurred</p>');
+      return false;
+    }
+  }
+var list_block={'CLINICAL':false,
+'DRUG':false,
+'GENE':false,
+'COMPANY':false,
+'DISEASE':false
+}
+var res_match;
+  function monitorNews()
+  {
+    if (monitor_query==''){clearInterval(myInterval);return true;}
+    $.ajax({
+	   type:"GET",
+	   url: monitor_query,
+
+	   error: function() { 
+		
+		//clearInterval(myInterval);
+    $('#info').html('<p>An error has occurred</p>');
+			},
+	   success: function(data) {
+      console.log(data);
+      console.log(list_block);
+      res_match=data;
+          $.each(data,function(type,value)
+          {
+            if (list_block[type])return true;
+            if (value.STATUS=='Success')
+            {
+              list_block[type]=true;
+              n_c=0;
+              if (type=='DRUG')
+              {
+                var str='';
+                
+                
+                console.log(value);
+                var str_t='';
+                  $.each(value.RESULTS, function (id,info){
+                    ++n_c;
+                    if (info.SOURCE!='Title')return true;
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_drug" name="drug[]"  checked="checked" value="'+info.TEXT+'" id="drug-'+info.TEXT+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_drug" name="drug_primary[]" checked="checked"  value="'+info.TEXT+'" id="drug_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="4" style="text-align:center;font-weight:bold">From Title:</td></tr>'+str_t;
+                  }
+                  str_t='';
+                  $.each(value.RESULTS, function (id,info){
+                    ++n_c;
+                    if (info.SOURCE!='Text')return true;
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_drug" name="drug[]" value="'+info.TEXT+'" id="drug-'+info.TEXT+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_drug" name="drug_primary[]"  value="'+info.TEXT+'" id="drug_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="4" style="text-align:center;font-weight:bold">From Text:</td></tr>'+str_t;
+                  }
+                  console.log("FINAL:" +str);
+                  $("#drug_list tbody").html(str);
+              }
+              if (type=='COMPANY')
+              {
+                
+                var str='';
+                var str_t='';
+                $.each(value.RESULTS, function (id,info){
+                  if (info.SOURCE!='Title')return true;
+                    ++n_c;
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_company" checked="checked"  name="company[]" value="'+id+'" id="company-'+id+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_company" name="company_primary[]" checked="checked"  value="'+id+'" id="company_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="4" style="text-align:center;font-weight:bold">From Title:</td></tr>'+str_t;
+                  }
+                  str_t='';
+                  $.each(value.RESULTS, function (id,info){
+                    if (info.SOURCE!='Text')return true;
+                    ++n_c;
+
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_company" name="company[]" value="'+id+'" id="company-'+id+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_company" name="company_primary[]"  value="'+id+'" id="company_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="4" style="text-align:center;font-weight:bold">From Text:</td></tr>'+str_t;
+                  }
+                  console.log("FINAL COMP:" +str);
+                  $("#company_list tbody").html(str);
+              }
+              if (type=='CLINICAL')
+              {
+                var str='';
+                for (I=1;I<=3;++I)
+                {
+                  if (I in value.RESULTS)
+                  $.each(value.RESULTS[I], function (id,info){
+                    ++n_c;
+                    str+='<tr><td><input type="checkbox" class="userCheck validate_tags_clinical" '+((I==1)?' checked="checked" ':'')+' name="clinical[]" value="'+id+'" id="clinical-'+id+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str+=m+"<br/>";});
+                      str+='</td><td><input type="checkbox" class="userCheck validate_tags_clinical" '+((I==1)?' checked="checked" ':'')+' name="clinical_primary[]" value="'+id+'" id="clinical_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                }
+                  console.log("FINAL CLIN:" +str);
+                  $("#clinical_list tbody").html(str);
+              }
+              if (type=='GENE')
+              {
+                var str='';
+                var str_t='';
+                $.each(value.RESULTS, function (id,info){
+                    if (info.SOURCE!='Title')return true;
+                    ++n_c;
+                    
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_gene" name="gene[]" checked="checked"  value="'+id+'" id="gene-'+id+'"></td><td>'+id+'</td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_gene" name="gene_primary[]"  value="'+id+'" checked="checked"  id="gene_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="5" style="text-align:center;font-weight:bold">From Title:</td></tr>'+str_t;
+                  }
+                  str_t='';
+                  $.each(value.RESULTS, function (id,info){
+                    if (info.SOURCE!='Text')return true;
+                    ++n_c;
+
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_gene" name="gene[]" value="'+id+'" id="gene-'+id+'"></td><td>'+id+'</td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_gene" name="gene_primary[]"  value="'+id+'"  id="gene_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="5" style="text-align:center;font-weight:bold">From Text:</td></tr>'+str_t;
+                  }
+                  console.log("FINAL CLIN:" +str);
+                  $("#gene_list tbody").html(str);
+              }
+              if (type=='DISEASE')
+              {
+                var str='';
+                var str_t='';
+                  $.each(value.RESULTS, function (tag,info){
+                    
+                    if (info.SOURCE!='Title')return true;
+                    ++n_c;
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_disease" name="disease[]"  checked="checked" value="'+tag+'" id="disease-'+tag+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_disease" name="disease_primary[]" checked="checked" value="'+tag+'"  id="disease_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="4" style="text-align:center;font-weight:bold">From Title:</td></tr>'+str_t;
+                  }
+                  str_t='';
+                  $.each(value.RESULTS, function (tag,info){
+                    
+                    if (info.SOURCE!='Text')return true;
+                    ++n_c;
+                    str_t+='<tr><td><input type="checkbox" class="userCheck validate_tags_disease" name="disease[]" value="'+tag+'" id="disease-'+tag+'"></td><td>'+info.TEXT+"</td><td>";
+                      $.each (info.MATCH, function (id2,m){str_t+=m+"<br/>";});
+                      str_t+='</td><td><input type="checkbox" class="userCheck validate_tags_disease" name="disease_primary[]" value="'+tag+'"  id="disease_primary-'+info.TEXT+'"></td></tr>';
+                  });
+                  if (str_t.length!=0)
+                  {
+                    str+='<tr><td colspan="4" style="text-align:center;font-weight:bold">From Text:</td></tr>'+str_t;
+                  }
+                  console.log("FINAL DISEASE:" +str);
+                  $("#disease_list tbody").html(str);
+              }
+              $("#"+type+"_CO").html("("+n_c+")");
+            }
+          });
+          all_done=true;
+          $.each(list_block,function(type,value)
+          {
+            if (value==false)
+            {
+              $("#"+type.toLowerCase()+"_list tbody").html('<tr><td colspan=3">'+data[type].STATUS+'</td></tr>');
+              all_done=false;
+            }
+          });
+          console.log("ALL DONE:"+all_done);
+          if (all_done==true)
+          {
+            clearInterval(myInterval);
+            $('#info').html('<p>Search complete</p>');
+          }
+return true;
+
+
+
+		},
+	   
+	});///END AJAX
+  }
+
+
+  
+
+
+
+function addTag(parentDiv, tag) {
+
+  var selectedValueId = $("#" + tag + "val_sel_1").find(":selected").val();
+  var selectedValueText = $("#" + tag + "val_sel_1").find(":selected").text();
+  console.log("ID:" + selectedValueId);
+  console.log("text:" + selectedValueText);
+  if (canAppendItem( selectedValueId, parentDiv)) {
+    
+    var str='<tr><td><input type="checkbox" checked="checked" class="userCheck validate_tags_'+parentDiv.toLowerCase()+'" name="'+parentDiv.toLowerCase()+'[]" value="'+selectedValueId+'" id="'+selectedValueId+'"></td>';
+      if (tag=='ds' || tag=="news")str+='<td>'+selectedValueText+'</td>';
+      else str+='<td>'+selectedValueId+'</td>';
+      if (tag=='gn')str+='<td>'+selectedValueText+'</td><td></td>';
+      else str+='<td>N/A</td>';
+      str+='<td><input type="checkbox" checked="checked" class="userCheck validate_tags_'+parentDiv.toLowerCase()+'" name="'+parentDiv.toLowerCase()+'_primary[]" value="'+selectedValueId+'" ></td></tr>';
+
+    $("#" + parentDiv.toLowerCase()+"_list tbody").append(str);
+    
+    if (tag == 'gn') loadModule('gn_search', '/CONTENT/GENE_VALIDATE/PARAMS/1');
+    else if (tag == 'ds') loadModule('ds_search', '/CONTENT/DISEASE_VALIDATE/PARAMS/1');
+    // else if (trimmedSelectPrefix == 'cpdval') loadModule('cpd_search', '/CONTENT/COMPOUND_VALIDATE/PARAMS/1');
+    else if (tag == 'dg') loadModule('dg_search', '/CONTENT/DRUG_VALIDATE/PARAMS/1');
+   // else if (tag == 'news') loadModule('news_search', '/CONTENT/NEWS_VALIDATE/PARAMS/1');
+
+
+  } else {            
+    $('#' + tag + '_status_1').css('display', '');     
+    $('#' + tag + '_status_1').css('display', 'inline-block');            
+    $('#' + tag + '_status_1').text("The current item: " + selectedValueText + " is already present ");            
+  }
+
+}
+
+
+function canAppendItem(value, parentDiv) {
+  var arr = [];
+  $("#"+parentDiv.toLowerCase()+"_list tr").each(function(){
+      if ($(this).find("td:nth-child(2)").text()==value)return false;
+  });
+  return true;
+}
+
+
+
+
+
+</script>

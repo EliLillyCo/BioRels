@@ -1,0 +1,426 @@
+<div class="w3-opts-right">
+	<img id="transcript_seq_tool_but" src="/require/img/tools.png" style="width: 20px;" onClick="modal_tr_opts()" />
+	
+</div>
+
+	${SEQ_VIEW}
+
+
+
+
+<div id="transcript_seq_options" title="Transcript visualization options" style="display: none;font-size:0.8em">
+	<div class="w3-container">
+		<div class="w3-container w3-col s6 w3-col-600">
+			<h3>Search:</h3>
+
+			Sequences with either T or U will work.<br />
+			Please select a format:
+			<select id="search_format">
+				<option value="1">Sequence only</option>
+				<option value="2">Sequence, Name</option>
+				<option value="3">Sequence, Name, Potency</option>		
+			</select>
+			<select id="search_delimited">
+				<option value="tab">Tabulation</option>
+				<option value="comma">Comma (,)</option>
+				<option value="semicolon">Semicolon (;)</option>
+				<option value="space">Space ( )</option>
+				
+			</select><br/>
+			
+		</div>
+		<div class="w3-container w3-col s6 w3-col-600">
+			<textarea cols="60" rows="15" id="trans_seq_search" placeholder="Type your sequence(s)"
+				style="overflow-y:scroll;"></textarea><br /><br />
+		</div>
+	</div>
+</div>
+
+$[W_MATCH]
+<div class="w3-col s12" style="min-height:300px;">
+${INFO}
+
+</div>
+<script type="text/javascript">
+	RAW_DATA=JSON.parse('${FULL_SEQ}');
+	
+	var hexgroups=["#ff0000",
+"#fe4400",
+"#f86600",
+"#ee8200",
+"#df9b00",
+"#cdb200",
+"#b6c700",
+"#98db00",
+"#6fed00",
+"#00ff00"];
+
+	var map_div={${MAP_DIV}};
+	var modal_transcript;
+	var graphs;
+
+	function modal_tr_opts() {
+		$("#transcript_seq_options").dialog({
+			width: "70%",
+			"font-size": "1em",
+			modal: true,
+			buttons: {
+        "Search/Confirm": changeView,
+      },
+      
+		});
+	}
+
+	function getRev(seq)
+	{
+		tmp =seq.split("").reverse().join("");
+		map={"A":"T","T":"A","C":"G","G":"C"};
+		str_rev='';
+		for (i=0;i<tmp.length;++i)
+		{
+			str_rev+=map[tmp[i]];
+		}
+
+		return str_rev;
+	}
+
+	function changeView()
+	{
+		graphs={};
+		var str_cov=[];
+		var coverage=[];
+		for (i=0;i<100;++i)
+		{
+			str_cov[i]='';
+			 coverage[i]=Array(100).fill(false)	;
+			 
+		}
+
+		$.each (RAW_DATA, function(index_genome,gene_seq_info)
+		{
+			transcript_stat=gene_seq_info[2];
+			$.each(transcript_stat['EXON'], function(tr_name,list_exons){
+				console.log(tr_name);
+				$.each(list_exons, function(index,exon){
+						exon[4]=0;
+						exon[5]=0;
+				});
+			});
+
+
+
+			n_found=0;n_test=0;
+			gene_seq=gene_seq_info[0]
+			var left_shift=gene_seq_info[1];
+			var len_seq=gene_seq.length;
+			var step=Math.floor(Math.floor(len_seq/10)/10)*10;
+			str_tbl='<thead><tr>';
+			map_format={"tab":"\t", "comma":",", "semicolon":";", "space":" "};
+			format=$("#search_format").val();
+			delimited=$("#search_delimited").val();
+			raw_txt=$("#trans_seq_search").val().split("\n");
+			if (format==1)
+			{
+				str_tbl+='<th>Sequence</th>';
+			}
+			else if (format==2)
+			{
+				str_tbl+='<th>Sequence</th><th>Name</th>';
+			}
+			else if (format==3)
+			{
+				str_tbl+='<th>Sequence</th><th>Name</th><th>Potency</th>';
+			}
+			str_tbl+='<th>Position</th><th>Is Antisense</th><th>N Transcripts</th>';
+			no_match='';
+			$.each(transcript_stat['EXON'], function(tr_name,list_exons){str_tbl+='<th>'+tr_name+'</th>';no_match+='<td>N/A</td>';});
+			str_tbl+='</tr></thead><tbody>';
+			error_msg='';
+			$.each(raw_txt, function(index,raw_record)
+			{
+				if (raw_record.length==0)return true;
+				raw_columns=raw_record.split(map_format[delimited]);
+				if ((raw_columns.length!=1 && format==1)
+				|| (raw_columns.length!=2 && format==2)
+				|| (raw_columns.length!=3 && format==3))
+				{
+					error_msg+='<span style="color:red">Error in line '+index+':</span> '+raw_record+'. Wrong number of columns<br />';
+					return true;
+				}
+				sequence=raw_columns[0];
+				if (sequence.length==0)
+				{
+					error_msg+='<span style="color:red">Error in line '+index+':</span> '+raw_record+'. Empty sequence<br />';
+					return true;
+				}
+				
+				sequence=sequence.toUpperCase();
+				sequence=sequence.replace('U','T');
+				if (!(/^[ATCG]{1,100}$/.test(sequence)))
+				{
+					error_msg+='<span style="color:red">Error in line '+index+':</span> '+raw_record+'. Sequence composed of A T C G or U only.<br />';
+					return true;
+				}
+				n_test++;
+				is_rev=false;
+				pos=gene_seq.indexOf(sequence);
+				if (pos==-1)
+				{
+					pos=gene_seq.indexOf(getRev(sequence));
+					is_rev=true;
+					if (pos==-1)
+					{
+						
+						str_tbl+='<tr>';
+						$.each(raw_columns, function(index,raw_column){str_tbl+='<td>'+raw_column+'</td>';});
+						str_tbl+='<td>'+sequence+'</td><td>Not found</td><td>N/A</td>'+no_match+'</tr>';
+					return true;
+					}
+				}
+				
+
+				
+			
+				len_record=raw_record.length;
+			n_tr=0;
+			str_tr='';
+				$.each(transcript_stat['EXON'], function(tr_name,list_exons){
+					in_transcript=false;
+					str_t='';
+					$.each(list_exons, function(index,exon){
+						if (pos<exon[0] || pos>exon[1])return true;
+						
+							
+							pos=exon[0]+pos-exon[0];
+							exon[4]++;
+							if (pos+len_record>exon[1])exon[5]++;
+							//console.log(exon[2]);
+							$.each(exon[2],function(index_d,region_info){
+								//console.log(pos+" "+"R"+region_info);
+								if (pos<region_info[0] || pos>region_info[1])return true;
+								str_t+=exon[3]+":"+region_info[2];
+								if (region_info[2]!='OUTSIDE' && region_info[2]!='INTRON')in_transcript=true;
+								//console.log(tr_name+" "+region_info[2]+" "+pos+" "+region_info[0]+" "+region_info[1]);
+								transcript_stat['REGION'][tr_name][region_info[2]][0]++;
+								if (pos+len_record>region_info[1])transcript_stat['REGION'][tr_name][region_info[2]][1]++;
+								return false;
+							});
+							return false;
+					});
+					if (in_transcript){str_tr+='<td>'+str_t+'</td>';n_tr++;}
+					else str_tr+='<td>N/A</td>';
+
+				});
+				
+				
+
+
+				++n_found;
+				str_tbl+='<tr>';
+				$.each(raw_columns, function(index,raw_column){str_tbl+='<td >'+raw_column+'</td>';});
+				str_tbl+='<td>'+pos+'</td><td>'+is_rev+'</td><td>'+n_tr+'</td>'+str_tr+'</tr>';
+				
+				LEFT=pos/len_seq*100;
+				LEFT_R=Math.floor(LEFT);
+				color='green';
+				if (format==3)
+				{
+					raw_columns[2]=parseFloat(raw_columns[2]);
+					rounded=Math.floor(raw_columns[2]/10);
+					if (rounded in hexgroups) color=hexgroups[rounded];
+					else color='black';
+					console.log(raw_columns[2]+" "+rounded+" "+color);
+				}
+
+				for (i=0;i<100;++i)
+				{
+					if (coverage[i][LEFT_R]==false)
+					{
+						coverage[i][LEFT_R]=true;
+						str_cov[i]+='<div class="trsq_UTR_view" style="border:1px solid '+color+';background-color:'+color+';position:absolute;left:'+LEFT+'%;width:2px;height:16px"></div>';
+						break;
+					}
+				}
+
+			});
+			//console.log(error_msg)
+			
+			$("#premrna_tbl_"+index_genome).html(str_tbl+'</tbody>');
+			$("#premrna_tbl_"+index_genome).css("display","table");
+			$("#premrna_tbl_"+index_genome).DataTable();
+			final_str='';
+			
+			for (i=0;i<50;++i)
+			{
+				
+				if (str_cov[i].length>0)
+				{
+					final_str+='<div class="utrs" style="width:100%;margin-bottom:1px;height:16px;top:unset;display:flex;flex-direction:row; align-items:center">\
+						<div style="font-style:italic;min-width:'+left_shift+'px;width:'+left_shift+'px"></div>\
+						<div style="flex-grow:1;position:relative;width:100%;top:-8px">'+str_cov[i]+'</div></div>';
+				}
+			}
+			$("#premrna_match_"+index_genome).html(final_str);
+			$("#premrna_info_"+index_genome).html('<span style="color:red">'+error_msg+'</span><br />Found '+n_found+' sequence(s) out of '+n_test+'<br />');
+		
+			
+			if (raw_txt.length>1000) return true;
+			$.each(transcript_stat['EXON'], function(tr_name,list_exons){ 
+			//	graphs[index_genome+"_"+tr_name]={'EXON':[],'REGION':[]}
+			graphs[index_genome+"_"+tr_name]={'EXON':'','REGION':''}
+			});
+			$.each(transcript_stat['EXON'], function(tr_name,list_exons){
+				
+				tot=0;
+				str_head='group,within region,overlap with next region\n';
+				str_value='';
+				
+					$.each(list_exons, function(index,exon){
+						if (exon[2].indexOf('Exon')==0)color='purple';
+						else if (exon[2].indexOf('Intron')==0)
+						{
+							if (exon[2].indexOf('Exon')==-1)color='blue';
+							else color='red';
+						}
+						else color='black';
+						str_value+=exon[3]+"("+exon[4]+")"+','+(exon[4]-exon[5])+','+exon[5]+'\n';
+						
+						
+						//graphs[index_genome+"_"+tr_name]['EXON'].push({'name':exon[3]+" ("+exon[4]+")",'value':exon[4],'color':color});
+						tot+=exon[3];	
+					});
+					graphs[index_genome+"_"+tr_name]['EXON']=str_head+str_value;
+					
+					
+				});
+			$.each(transcript_stat['REGION'], function(tr_name,list_regions){
+			
+				str_value='group,within region,overlap with next region\n';
+			$.each(list_regions, function(region_name,regions){
+				if (region_name.indexOf('5\'UTR')==0)color='green';
+				else if (region_name.indexOf('3\'UTR')==0)color='green';
+				else if (region_name.indexOf('CDS')==0)color='purple';
+				else if (region_name.indexOf('INTRON')==0)color='blue';
+				
+				else color='black';
+				str_value+=region_name+"("+regions[0]+")"+','+(regions[0]-regions[1])+','+regions[1]+'\n';
+				//graphs[index_genome+"_"+tr_name]['REGION'].push({'name':region_name+" ("+regions[0]+")",'value':regions[0],'color':color});
+				
+				});
+				graphs[index_genome+"_"+tr_name]['REGION']=str_value;
+				
+			});
+		
+		});
+	
+	}
+
+	
+	function loadGraph(sel)
+{
+if (graphs.length==0)return;
+$.ajax({
+				type: 'POST',
+				url: '/CONTENT/STACKED_BARCHART',
+				data: {"PARENT":'#'+map_div[sel], "DATA": graphs[sel]['EXON'],'ID':map_div[sel]+"_EX",'WIDTH':500 },
+				success: function (data) {
+					var v = jQuery.parseJSON(data);
+					console.log('#'+map_div[sel]+'_EX');
+					
+					$('#'+map_div[sel]+'_EX').html(v['code']);
+				},
+				error: function (data) {
+					$('#'+map_div[sel]+'_EX').html("An issue occured.");
+				}
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: '/CONTENT/STACKED_BARCHART',
+				data: { "PARENT":'#'+map_div[sel],"DATA": graphs[sel]['REGION'],'ID':map_div[sel]+"_RE",'WIDTH':500 },
+				success: function (data) {
+					var v = jQuery.parseJSON(data);
+					console.log('#'+map_div[sel]+'_RE');
+					
+					$('#'+map_div[sel]+'_RE').html(v['code']);
+				},
+				error: function (data) {
+					$('#'+map_div[sel]+'_RE').html("An issue occured.");
+				}
+			});
+}
+
+
+// function loadGraph(sel)
+// {
+// if (graphs.length==0)return;
+// $.ajax({
+// 				type: 'POST',
+// 				url: '/CONTENT/BARCHART',
+// 				data: {"PARENT":'#'+map_div[sel],"COLOR":true, "DATA": "["+JSON.stringify(graphs[sel]['EXON']).slice(1,-1)+"]",'ID':map_div[sel]+"_EX",'WIDTH':500 },
+// 				success: function (data) {
+// 					var v = jQuery.parseJSON(data);
+// 					console.log('#'+map_div[sel]+'_EX');
+					
+// 					$('#'+map_div[sel]+'_EX').html(v['code']);
+// 				},
+// 				error: function (data) {
+// 					$('#'+map_div[sel]+'_EX').html("An issue occured.");
+// 				}
+// 			});
+
+// 			$.ajax({
+// 				type: 'POST',
+// 				url: '/CONTENT/BARCHART',
+// 				data: { "PARENT":'#'+map_div[sel],'COLOR':true,"DATA": "["+JSON.stringify(graphs[sel]['REGION']).slice(1,-1)+"]",'ID':map_div[sel]+"_RE",'WIDTH':500 },
+// 				success: function (data) {
+// 					var v = jQuery.parseJSON(data);
+// 					console.log('#'+map_div[sel]+'_RE');
+					
+// 					$('#'+map_div[sel]+'_RE').html(v['code']);
+// 				},
+// 				error: function (data) {
+// 					$('#'+map_div[sel]+'_RE').html("An issue occured.");
+// 				}
+// 			});
+// }
+	
+
+// var div_sel = document.getElementById('div_sel'), x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+// function reCalc() { //This will restyle the div
+//     var x3 = Math.min(x1,x2); //Smaller X
+//     var x4 = Math.max(x1,x2); //Larger X
+//     var y3 = Math.min(y1,y2); //Smaller Y
+//     var y4 = Math.max(y1,y2); //Larger Y
+//     div_sel.style.left = x3 + 'px';
+//     div_sel.style.top = y3 + 'px';
+//     div_sel.style.width = x4 - x3 + 'px';
+//     div_sel.style.height = y4 - y3 + 'px';
+// }
+// onmousedown = function(e) {
+//     div_sel.hidden = 0; //Unhide the div
+//     x1 = e.clientX; //Set the initial X
+//     y1 = e.clientY; //Set the initial Y
+//     reCalc();
+// };
+// onmousemove = function(e) {
+//     x2 = e.clientX; //Update the current position X
+//     y2 = e.clientY; //Update the current position Y
+//     reCalc();
+// };
+// onmouseup = function(e) {
+//     div_sel.hidden = 1; //Hide the div
+// };
+
+	</script>
+	<style>
+		#div_sel {
+    border: 1px dotted #000;
+    position: absolute;
+}
+	</style>
+	<div id="div_sel" hidden></div>
+$[/W_MATCH]
+
+
+

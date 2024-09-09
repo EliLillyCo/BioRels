@@ -1,0 +1,46 @@
+<h3>Monitoring</h3>
+
+<div class="w3-row-padding w3-margin-bottom  ">
+		
+		
+  <ul class="nav nav-tabs s_hide">
+    <li id="monitor_admin_info_tab_1" class="active nav-item nav-link" onclick="showMenu('monitor_admin_info',1,6)">Today</li>
+    <li id="monitor_admin_info_tab_2" class="nav-item nav-link" onclick="showMenu('monitor_admin_info',2,6)">Last week</li>
+    <li id="monitor_admin_info_tab_3" class="nav-item nav-link" onclick="showMenu('monitor_admin_info',3,6)">Last month</li>
+    <li id="monitor_admin_info_tab_4" class="nav-item nav-link"  onclick="showMenu('monitor_admin_info',4,6)">This year</li>
+    <li id="monitor_admin_info_tab_5" class="nav-item nav-link"  onclick="showMenu('monitor_admin_info',5,6)">Overall</li>
+  </ul>
+  
+<div id="monitor_admin_info_view_1" class="container-grey w3-container  w3-col s12 l12 m12 s-always-show">
+  </div>
+  <div id="monitor_admin_info_view_2" class="container-grey w3-container  w3-col s12 l12 m12 s-always-show" style="display: none">
+  </div>
+  <div id="monitor_admin_info_view_3" class="container-grey w3-container  w3-col s12 l12 m12 s-always-show" style="display: none">
+  </div>
+  <div id="monitor_admin_info_view_4" class="container-grey w3-container  w3-col s12 l12 m12 s-always-show" style="display: none">
+  </div>
+  <div id="monitor_admin_info_view_5" class="container-grey w3-container  w3-col s12 l12 m12 s-always-show" style="display: none">
+  </div>
+  
+
+<div id="test_all"></div>
+<div id="results_all" style="display:none"></div>
+<img id="photo"/>
+<script>
+
+
+$(document).ready(function ()
+{
+  loadModule("monitor_admin_info_view_1","/CONTENT/MONITOR_ADMIN_INFO/PARAMS/1");
+  loadModule("monitor_admin_info_view_2","/CONTENT/MONITOR_ADMIN_INFO/PARAMS/7");
+  loadModule("monitor_admin_info_view_3","/CONTENT/MONITOR_ADMIN_INFO/PARAMS/${MONTH}");
+  loadModule("monitor_admin_info_view_4","/CONTENT/MONITOR_ADMIN_INFO/PARAMS/${YEAR}");
+  loadModule("monitor_admin_info_view_5","/CONTENT/MONITOR_ADMIN_INFO/PARAMS/1000000");
+});
+
+
+
+</script>
+
+
+

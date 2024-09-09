@@ -1,0 +1,255 @@
+<header class="w3-container">
+	<div class="page-title">
+		${DRUG_NAME}
+	</div>
+
+</header>
+<div class="w3-row-padding w3-margin-bottom">
+
+	$[NO_DATA_MESSAGE]
+	<div class="alert alert-info">
+		No compounds associated with this search term were found.
+	</div>
+	$[/NO_DATA_MESSAGE]
+
+	$[HAS_DATA]
+	<ul class="nav nav-tabs s_hide">
+		<li id="drg_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('drg_menu',1,5)">Summary</li>
+		<li id="drg_menu_tab_2" class="nav-item nav-link" onclick="showMenu('drg_menu',2,5)">News</li>
+		<li id="drg_menu_tab_3" class="nav-item nav-link" onclick="showMenu('drg_menu',3,5)">Ongoing trials</li>
+		<li id="drg_menu_tab_4" class="nav-item nav-link" onclick="showMenu('drg_menu',4,5)">Targets</li>
+		<li id="drg_menu_tab_5" class="nav-item nav-link" onclick="showMenu('drg_menu',5,5)">Diseases</li>
+		
+	</ul>
+
+	<div id="drg_menu_view_1" class="container-grey w3-container">
+		$[SM_MOL]
+		<div class=" w3-col s12 m12 l4" id="P_CPD_IMG_PARENT" >
+			<div id="P_CPD_IMG" class="s12 l12 m12 w3-center" style="margin:0 auto;max-width:500px">${NOT_SM_IMG}</div>
+			<!-- empty div for  now would contain molecule image -->
+			
+			<div class=" w3-col s12 l12 m12" >
+				<h4>Properties</h4>
+				<table class="table">
+					<tr><th>Formula:</th><td id="formula"></td></tr>
+					<tr><th>Composition:</th><td id="comp"></td></tr>
+					<tr><th>Molecular weight:</th><td id="mw"></td></tr>
+					<tr><th>Exact mass:</th><td id="emw"></td></tr>
+					<tr><th>N Acceptors:</th><td id="acc"></td></tr>
+					<tr><th>N Donors:</th><td id="don"></td></tr>
+					<tr><th>Log P (non ionic form)</th><td id="logpnonionic"></td></tr>
+				</table>
+			</div>
+			
+		</div>
+		$[/SM_MOL]
+		<div class=" w3-col s12 m12 l${SM_MOL_SIZE}">
+			<ul class="nav nav-tabs">
+				<li id="drug_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('drug_menu',1,2)">
+					Summary</li>
+				<li id="drug_menu_tab_2" class="nav-item nav-link" onclick="showMenu('drug_menu',2,2)">Names (${N_NAME}) / Identifiers (${N_IDENTIFIER})</li>
+				</li>
+				
+				
+			</ul>
+
+			<div id="drug_menu_view_1" class="container-grey w3-container w3-padding-16 w3-col s12 l12 m12  s-always-show">
+				<div class="w3-container w3-col s12 m12 l12">
+					${DESC}
+				</div>
+				
+				<div class="w3-container w3-col s12 l12 m12">	
+					${DOCS}
+				</div>
+				
+			</div>
+			
+				
+
+			<div id="drug_menu_view_2" class="container-grey w3-container w3-padding-16  s-always-show" style="display: none">
+				${LIST_NAMES}
+				
+			</div>
+		</div>
+		<div class=" w3-col s12 m12 l12">
+			
+			<div class=" w3-col s12 m6 l4" id="drug_clintriar_year" >
+				<span style="font-style: italic;">Loading clinical trials per year</span>
+			</div>
+			<div class=" w3-col s12 l4 m6" id="drug_phases">
+				<span style="font-style: italic;">Loading clinical phases</span>
+			</div>
+			$[HAS_EXPR]
+			<div class=" w3-col s12 l4 m6" style="min-height: 550px;" >
+				<h4>Public Experimental data</h4>
+				<div class=" w3-col s12 l12 m12">
+					<table class="table table-sm" id="units">
+						<thead><tr><th>Type</th><th>Unit</th><th>Min Value</th><th>Max Value</th><th>Count</th></tr></thead>
+					<tbody>${UNITS}</tbody>
+					</table>
+					
+
+				</div>
+			</div>
+			$[/HAS_EXPR]
+			<div class=" w3-col s12 l4 m6" id="publi_distrib" >
+				
+			</div>
+			
+		</div>
+
+		
+		$[HAS_ATC]
+				<div class="w3-container w3-col s12 l12 m12">	
+					${ATC}
+				</div>
+		$[/HAS_ATC]
+	</div>
+	
+	<div id="drg_menu_view_2" class="container-grey w3-container w3-padding-16 w3-col s12 l12 m12  s-always-show" style="display: none;">
+		$[NO_NEWS]
+		<div class="alert alert-info">
+			No news items associated with this compound were found.
+		</div>
+		$[/NO_NEWS]
+
+		${NEWS}
+	</div>
+	<!--todo this is closing out an extra div in news portal make sure closing div is set before merging with main -->
+</div>
+
+<div id="drg_menu_view_3" class="container-grey w3-container w3-padding-16  w3-col s12 l12 m12  s-always-show" style="display: none;">
+	
+<table id="clinical_trials_tbl" class="table">
+	<thead>
+		<tr>
+			<th>Trial ID</th>
+			<th>Disease Name</th>
+			<th>Gene Symbol</th>
+			<th>Gene ID</th>
+			<th>Clinical Phase</th>
+			<th>Start date</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		${TRIALS}
+	</tbody>
+</table>
+	<link rel="stylesheet" href="/require/css/dev/searchPanes.dataTables.min.css" 		       type="text/css"/>
+    
+<script>
+    
+$(document).ready(function() {
+    // Create date inputs
+	$("#ds_list").DataTable({responsive:true});    
+	$("#tr_list").DataTable({responsive:true});   
+	$[HAS_EXPR] 
+	$("#units").DataTable({responsive:true});
+	$[/HAS_EXPR]
+    // DataTables initialisation
+    var table = $('#clinical_trials_tbl').DataTable({
+    
+    
+			responsive:true,
+		buttons: [
+            {
+				
+                extend: 'searchPanes',
+                config: {
+                    cascadePanes: true
+                }
+            }
+        ],
+	
+		
+        dom: 'Blfrtip',
+        language: {
+            searchPanes: {
+				clearMessage: 'Clear Selections',
+                collapse: {0: 'Search Options', _: 'Search Options (%d)'},
+                count: '{total} found',
+                countFiltered: '{shown} / {total}'
+            }
+        }
+	, "order": [[ 4, "desc" ]]});
+ 
+});
+</script>
+</div>
+<div id="drg_menu_view_4" class="container-grey w3-container w3-padding-16" style="display: none;">
+	
+		<h4>Targets</h4>
+			<table class="table table-sm" id="tr_list">
+				<thead>
+					<tr><th>Symbol</th><th>Gene Id</th><th>Full Name</th></tr>
+				</thead>
+				<tbody>
+					${TARGETS}
+				</tbody>
+			</table>
+		
+		
+	
+</div>
+<div id="drg_menu_view_5" class="container-grey w3-container w3-padding-16" style="display: none;">
+
+	<h4>Diseases</h4>
+	<table class="table table-sm" id="ds_list">
+		<thead>
+			<tr><th>Disease Name</th><th>Description</th></tr>
+		</thead>
+		<tbody>
+			${DISEASES}
+		</tbody>
+	</table>
+</div>
+
+$[/HAS_DATA]
+
+<script type="text/javascript">
+${JS_CODE}
+$(document).ready(function () {
+loadModule("drug_clintriar_year",'/CONTENT/DRUG/${DRUG_PRIM_NAME}/DRUG_CLINTRIAL_YEAR');
+loadModule("drug_phases",'/CONTENT/DRUG/${DRUG_PRIM_NAME}/DRUG_CLINPHASE');
+loadModule("publi_distrib",'/CONTENT/DRUG/${DRUG_PRIM_NAME}/DRUG_PUBLI_DISTRIB');
+
+});
+
+var k;
+
+function getCompoundImageInfo(info,div_name,width=600,parent_height=-1)
+{
+    var div=$("#"+div_name);
+   
+
+    $.ajax({
+		
+        url:'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/'+info+'/PNG?image_size='+width+'x'+width,
+        type:"POST",
+	success: function(data){
+		div.html('<img style="width:'+width+'px;" src="data:image/png;base64, '+data+'"/>'); 
+		if(parent_height!=-1)
+		{
+		div.css("top",((parent_height-width)/2)+"px");
+		}
+		str='';
+		
+	
+		
+
+
+		return data;
+
+
+	},
+	error: function(xhr){
+	console.log('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
+	}
+          
+        
+      });
+}
+
+</script>
+</div>

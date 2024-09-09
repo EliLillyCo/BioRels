@@ -1,0 +1,23 @@
+$[HAS_ENTRY]
+
+<div class="pub_entry">
+
+	<a target="_blank" ${HREF}>${TITLE}</a>
+	<br />
+	${AUTHORS}
+	<br /><span class="bold">Abstract:</span> <span id="${PMID}" style="cursor:pointer"
+		onclick="$('#abst_${PMID}').toggle();if ($(this).html()=='Hide'){$(this).html('Show');}else {$(this).html('Hide');}">Show</span><br />
+	<p id="abst_${PMID}" style="display:none">${ABSTRACT}</p>
+
+	<span class="ital">${JOURNAL_ABBR}</span>, <span class="bold">${VOLUME}</span> ${PAGES} ${DATE} <a
+		href="/PUBMED/${PMID}"><img id="publi_tool_but" src="/require/img/tools.png"
+			style="width: 15px;margin-left:10px" /></a>
+
+	<br />${TAGS}
+
+
+</div>
+$[/HAS_ENTRY]
+$[NO_ENTRY]
+<div class="alert alert-info">No publication found</div>
+$[/NO_ENTRY]

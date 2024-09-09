@@ -1,0 +1,285 @@
+
+
+<div id="listing"></div>
+<script>
+
+
+var tree_dir={};
+    function getSharepointDir(site_id,dir_id,parent_name)
+    {
+tree_unit={};
+var rec_unit;
+      path2='https://graph.microsoft.com/v1.0/sites/'+site_id+'/drive/items/'+dir_id+'/children';
+      $.ajax({
+        type: "GET",
+        url: path2, 
+        async: false,
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+          success: (result)=> {
+           
+            $.each(result.value, function(index,entry)
+            {
+               rec_unit={'name':entry.name,
+               'parent':parent_name,
+               'id':entry.id,
+               'is_dir':(entry['folder']!==undefined),
+                'type':entry.file.mimeType,
+                'size':entry.size,
+                'path':entry['@microsoft.graph.downloadUrl']
+                };
+               
+               if (entry['folder']!==undefined) { 
+                console.log("TEST DIR "+site_id+" "+entry.id);
+                rec_unit['child']= getSharepointDir(site_id,entry.id);
+              }
+              tree_unit[entry.name]=rec_unit;
+            });
+
+         
+        }
+      }); 
+      return tree_unit;
+    }
+
+
+    function getSharepointTree(site_id)
+    {
+      tree={};
+      path2='https://graph.microsoft.com/v1.0/sites/'+site_id+'/drive/root/children';
+      $.ajax({
+        type: "GET",
+        url: path2, 
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+         async: false,
+          success: (result)=> {
+           
+            console.log(result);
+            $.each(result.value, function(index,entry)
+            {
+              console.log(entry);
+               rec={'name':entry.name,'parent':'root','id':entry.id,'is_dir':(entry['folder']!==undefined)};
+               
+               if (entry['folder']!==undefined) { 
+                console.log("TEST DIR "+site_id+" "+entry.id+" "+entry.name);
+              
+               rec['child']= getSharepointDir(site_id,entry.id,entry.name);
+              }
+                tree[entry.name]=rec;
+            });
+
+         
+        }
+      }); 
+      return tree;
+    }
+
+    function getTeamsChannel(teams_id,channel_id)
+    {
+      path2='https://graph.microsoft.com/v1.0/teams/'+teams_id+'/channels/'+channel_id+'/filesFolder';
+      $.ajax({
+        type: "GET",
+        url: path2, 
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+         async: false,
+          success: (result)=> {
+           
+            console.log(result);
+           
+
+         
+        }
+      });
+
+      
+    }
+
+    function getTeamsChannels(teams_id)
+    {
+      path2='https://graph.microsoft.com/v1.0/teams/'+teams_id+'/allChannels';
+      $.ajax({
+        type: "GET",
+        url: path2, 
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+         async: true,
+          success: (result)=> {
+           
+            list_teams[teams_id]=result;
+           
+
+         
+        }
+      });
+
+      
+    }
+
+    token=getToken();
+   
+
+    list_request={};
+info_me={};
+list_teams={};
+     function is_team_owner(team_id)
+    {
+     // list_res[team_id]={};
+      list_request[team_id]=0;
+        id=1;
+        path2='https://graph.microsoft.com/v1.0/teams/'+team_id+'/members';
+        list_request[team_id]++;
+        $.ajax({
+        type: "GET",
+        url: path2, 
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+         async: true,
+          success: (result)=> {
+           
+            console.log(team_id+" "+Object.keys(result.value).length);
+            $.each(result.value,function(idx,info)
+            {
+                list_teams[team_id]['access'][info.email]={'owner':info.roles.includes('owner'),'name':info.displayName};
+               // list_res[team_id][info.email]=info.roles.includes('owner');
+            });
+            list_request[team_id]--;
+            if (result['@odata.nextLink']!==undefined)
+            {
+               is_team_owner_follow(team_id,result['@odata.nextLink']);
+                
+            }
+           
+            
+        
+          }
+         
+      });
+
+      
+
+    }
+   is_team_owner('6567a148-ce2a-4a5c-9634-366ef2b89406');
+   
+
+function is_team_owner_follow(team_id,path)
+{
+  console.log("NEW_LINJ");
+list_request[team_id]++;
+                
+  $.ajax({
+      type: "GET",
+      url: path, 
+      headers: { Authorization: 'Bearer ' + token },
+      returnType: "application/json",
+      async: true,
+        success: (result2)=> {
+        
+          $.each(result2.value,function(idx2,info2)
+          {
+
+            list_teams[team_id]['access'][info2.email]={'owner':info2.roles.includes('owner'),'name':info2.displayName};
+              //list_res[team_id][info2.email]=info2.roles.includes('owner');
+          });
+          list_request[team_id]--;
+          
+          if (result2['@odata.nextLink']!==undefined)
+          {
+            is_team_owner_follow(team_id,result2['@odata.nextLink']);
+          }
+          
+
+      
+      }
+    });
+}
+
+
+   function validateAll() {
+    setTimeout(function () {
+      max_ongoing=0;  
+     // console.log(list_request);
+      $.each(list_request, function(team_id,queries)
+        {
+          if (queries>max_ongoing)max_ongoing=queries;
+        });
+        // Do Something Here
+        // Then recall the parent function to
+        // create a recursive loop.
+        if (max_ongoing>0) validateAll();
+        else showTeams();
+    }, 1000);
+}
+test_run={};
+function showTeams()
+{
+  str='';
+  $.each(list_teams, function (team_id,info_team){
+    if (info_team.access[info_me.mail].owner==false) return true;
+    str+='<div class="w3-container w3-col s12 l12 m12" style="border-radius: 13px;margin-top:10px;width:100%;border: 1px solid grey;padding: 5px;height: auto;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">\
+      <table class="table"><thead><tr><th>Name</th><th>Description</th><th>Is Archived</th></thead><tbody><tr><td>'+info_team.displayName+'</td><td>'+info_team.description+'</td><td>'+((info_team.isArchived)?'YES':'NO')+'</td></tr></tbody></table></div>';
+
+  });
+
+  $("#listing").html(str);
+
+}
+info_me={};
+function getMe()
+    {
+        path2='https://graph.microsoft.com/v1.0/me';
+      $.ajax({
+        type: "GET",
+        url: path2, 
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+         async: true,
+          success: (result)=> {
+            
+            info_me=result;
+
+           
+
+         
+        }
+      });
+     
+    }
+
+    getMe();
+
+list_teams={};
+    function getTeams()
+    {
+        path2='https://graph.microsoft.com/v1.0/me/joinedTeams';
+      $.ajax({
+        type: "GET",
+        url: path2, 
+         headers: { Authorization: 'Bearer ' + token },
+         returnType: "application/json",
+         async: true,
+          success: (result)=> {
+            //console.log(result);
+            $.each(result.value,function(index,entry){
+              
+              entry['access']={};
+              list_teams[entry.id]=entry;
+            });
+            
+            $.each(result.value,function(index,entry){
+                is_team_owner(entry.id);
+                getTeamsChannels(entry.id);
+            });
+
+           
+
+         
+        }
+      });
+      validateAll();
+    }
+    getTeams();
+    
+
+</script>

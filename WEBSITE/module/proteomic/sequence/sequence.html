@@ -1,0 +1,677 @@
+$[VALID]
+
+<h3>${TITLE}</h3>
+<div  class="w3-opts-right">
+	<a href="/FASTA/SEQUENCE/${SEQ_ID}">	<img alt='Download' src="/require/img/download.png" style="width: 20px;" /></a>
+    <div class="help-tip" style="position:unset;margin-left:5px;" onclick="$( '#sequence_info' ).dialog({width: '70%' });"></div>
+</div>
+                
+<div class="w3-col s12 m6 l6">
+	<div class="w3-container">
+	<h3 style="text-align: center">Gene Information</h3>
+		<table class="table">
+				<tr><th>Gene ID:</th><td><a href="/GENEID/${GENE_ID}">${GENE_ID}</a></td></tr>
+				<tr><th>Symbol:</th><td>${SYMBOL}</td></tr>
+				<tr><th>Full Name:</th><td>${FullName}</td></tr>
+		</table>
+	</div>
+</div>
+<div class="w3-col s12 m6 l6">
+		<div class="w3-container">
+			<h3 style="text-align: center">Protein Information</h3>
+		<table class="table">
+				<tr><th>Uniprot Entry</th><td>${UNIPROT_NAME}</td></tr>
+				<tr><th>Sequence Name:</th><td >${SEQ_NAME}</td></tr>
+				<tr><th>Sequence ID:</th><td >${SEQ_ID}</td></tr>
+				<tr><th>Length:</th><td >${LEN} AA</td></tr>
+				<tr><th>Weight:</th><td >${WEIGHT} g/mol</td></tr>
+				
+		</table>
+	</div>
+
+</div>
+
+<div class="w3-container w3-col ">
+		<ul class="nav nav-tabs s_hide">
+				<li id="sequence_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('sequence_menu',1,5)">Sequence</li>
+				
+				<li id="sequence_menu_tab_2" class="nav-item nav-link" onclick="showMenu('sequence_menu',2,5);submitSeq('simseq')">Similar sequences</li>
+				<li id="sequence_menu_tab_3" class="nav-item nav-link"  onclick="showMenu('sequence_menu',3,5)">Links</li>
+				<li id="sequence_menu_tab_4" class="nav-item nav-link"  onclick="showMenu('sequence_menu',4,5);loadOrtho();">Orthologs</li>
+				<li id="sequence_menu_tab_5" class="nav-item nav-link"  onclick="showMenu('sequence_menu',5,5);loadIsoform();">Isoforms</li>
+			</ul> 
+
+<div id="sequence_menu_view_1"    class="container-grey w3-container w3-padding-16 s-always-show">
+	<div class="w3-col s12 m12 l8" id="sequence_view_parent">
+		<div id="protein_options" style="margin:10px auto;">
+			<textarea class="w3-col s7 l10 m10" rows="1" id="protein_seq_search" placeholder="Search sequence: 'DNEAQ' or range: '1-123'" style="resize: none"></textarea>
+			<input class="w3-col s5 l2 m2" type="button" value="Search" onclick="processProteinView('protein_seq_view')"/>		
+		</div>	
+		<div class="sequence w3-padding-16" id="protein_seq_view">
+
+
+		</div>
+		<div id="legend">Legend:
+		
+		</div>
+	</div>
+<div class="w3-col s12 l4 m12">
+	<h4>Annotation</h4>
+	<div id="accordion">
+		${FEATURES}
+	</div>
+</div>
+</div>
+
+<script>
+	$( function() {
+	  $( "#accordion" ).accordion({
+		collapsible: true,
+		heightStyle: "content"
+	  });
+	} );
+	</script>
+
+
+<div id="sequence_menu_view_2"    class="container-grey w3-container w3-padding-16 s-always-show" style="position:relative;display:none">
+		
+		
+				<div id="seq_simseq_opts" style="margin:10px auto;">	
+						<span id="seq_simseq_nco">${CO_SIMSEQ}</span> sequence(s) from sequence similarity <a href="/JSON/GENEID/${GENE_ID}/SEQUENCE_REL_SEARCH/${SEQ_ID}/PARAMS/TYPE/BY_SIMSEQ"><img alt='Download' src="/require/img/download.png" style="width: 20px;" /></a>
+						<div class="help-tip" style="position:unset;margin-left:5px;display:inline-block" onclick="showDialog('/CONTENT/HELP/similar_sequence')"></div>
+						<div style="float: right;margin-right: 10px;">  Number per page:
+						<select id="seq_simseq_npage" name="per_page" onchange="updateSimPageCount('simseq')">
+							<option value="10" selected="selected">10</option>
+							<option value="20">20</option>
+							<option value="30">30</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+							<option value="200">200</option>
+						</select>
+						<input type="button" class="button" value='&lt;' onclick="prevSeqPage('simseq')"/>
+						<input type="text" class="button" value="1" id="seq_simseq_page" style="width:50px" />/<input type="text" value="${NPAGE_SIMSEQ}" style="width:50px" readonly  id="seq_simseq_pagemax"/>
+						<input type="button"  class="button" value='&gt;' onclick="nextSeqPage('simseq')"/>
+						</div>
+					</div>
+					<table class="table w3-col s12" id="seq_simseq_tbl" style="text-align:center">
+							<thead><tr><th rowspan="2">View</th>
+								<th rowspan="2">Gene ID</th>
+								<th rowspan="2">Symbol</th>
+								<th rowspan="2">Organism</th>
+								<th rowspan="2">Sequence Name</th>
+								<th colspan="2" class="ttlt" title="% calculated only on the portion of the sequences that are aligned">Aligned region</th>
+								<th colspan="2" class="ttlt" title="% calculated using the complete sequences">Overall</th>
+							</tr><tr>
+								<th>% Identity</th><th>% Similarity</th><th>% Identity</th><th>% Similarity</th></tr></thead>
+				<tbody>
+						
+				</tbody></table>
+				
+			
+</div>
+<div id="sequence_menu_view_3"    class="container-grey w3-container w3-padding-16 s-always-show" style="display:none">
+		<h3>Links</h3>
+		<table style="width:100%" class="table"> <thead><tr><th>Category</th><th>Database Name</th><th>Value</th></tr></thead><tbody>
+			${LIST_LINK}
+		</tbody></table>
+	 </div>
+	
+	 <div id="sequence_menu_view_4"    class="container-grey w3-container w3-padding-16 s-always-show" style="display:none">
+			<h3>Orthologs</h3>
+			<div id="ortholog_${SEQ_ID}"></div>
+		 </div>
+		
+		 <div id="sequence_menu_view_5"    class="container-grey w3-container w3-padding-16 s-always-show" style="display:none">
+				<h3>Isoform</h3>
+				<div id="isoform_${SEQ_ID}"></div>
+			 </div>
+			</div>
+
+				<div id="text" style="display:none;" class="container-grey w3-container w3-padding-16 w3-col s12"></div>
+				
+
+
+	
+
+	<div id="protein_seq_options" title="Protein visualization options" style="display: none;">
+		<input type="checkbox" id="protein_seq_pos" checked="checked"/><label for="protein_seq_pos">Show Positions</label><br/>
+		${LIST_PROT}
+		<hr/>
+		Export options:<br/>
+		<a    class="btn btn-primary" value="Image" onclick="captureTranscriptSeq('protein_seq_view','${SEQ_NAME}.png')">Image</a>
+		<a href="/FASTA/TRANSCRIPT/${TRANSCRIPT_NAME}" class="btn btn-primary">Get Fasta sequence</a>
+		
+		
+</div>
+
+
+<br/>
+	
+
+	<div>
+		${PUBLI}
+	</div>
+	<script src="/require/pickr/pickr.min.js"></script>
+	<script src="/require/pickr/pickr.es5.min.js"></script>
+	<link rel="stylesheet" href="/require/pickr/themes/classic.min.css"/> <!-- 'classic' theme -->
+	<script type="text/javascript">
+
+		var ortho_loaded=false;
+		var iso_loaded=false;
+		
+		var colors=['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff'];
+		
+		function loadOrtho()
+		{
+			if (ortho_loaded)return;
+			ortho_loaded=loadModule('ortholog_${SEQ_ID}',"/CONTENT/GENEID/${GENE_ID}/ORTHOLOG_ALIGN/${SEQ_ID}/PARAMS/WIDTH/"+($('#sequence_menu_view_4').css("width")),true);
+		}
+		
+		function loadIsoform()
+		{
+			if (iso_loaded)return;
+			iso_loaded=loadModule('isoform_${SEQ_ID}',"/CONTENT/GENEID/${GENE_ID}/ISOFORM_ALIGNMENT/${SEQ_ID}/PARAMS/WIDTH/"+$('#sequence_menu_view_5').css("width"),true);
+		}
+		function updateSimPageCount(type,with_refresh=true)
+		{
+			var tot=$("#seq_"+type+"_nco").html();
+			var per_page = parseInt($('#seq_'+type+'_npage').val());
+			var totmax=Math.floor(tot/per_page);
+			$("#seq_"+type+"_pagemax").val(totmax);
+			
+			var val=parseInt($('#seq_'+type+"_page").val());
+			if (val>totmax)$('#seq_'+type+"_page").val(totmax);
+			if (with_refresh)submitSeq(type);
+		}
+		function prevSeqPage(type)
+		{
+			var val=parseInt($('#seq_'+type+"_page").val());
+			if (val==1)return;
+			$('#seq_'+type+"_page").val(val-1);
+			submitSeq(type);
+		
+		}
+					
+		function nextSeqPage(type)
+		{
+			var val=parseInt($('#seq_'+type+"_page").val());
+			
+			var m=parseInt($('#seq_'+type+"_pagemax").val());
+			console.log(val+" "+m);
+			if (val>=m)return;
+			$('#seq_'+type+"_page").val(val+1);
+			
+			submitSeq(type);
+		
+		}
+		function submitSeq(type)
+			{
+				init_tbls[type]=true;
+				var url_type='';
+				if (type=="simseq")url_type="BY_SIMSEQ";
+				else if (type=='3Dstruct')url_type='3D_STRUCT';
+				var per_page = $('#seq_'+type+'_npage').val();
+				var page = $('#seq_'+type+'_page').val()-1;
+				console.log(type+" "+per_page+" "+page+" "+'#seq_'+type+'_page');
+				urlv="/JSON/GENEID/${GENE_ID}/SEQUENCE_REL_SEARCH/${SEQ_ID}/PARAMS/PER_PAGE/"+per_page+"/PAGE/"+page+"/TYPE/"+url_type;
+				$.ajax({
+				type: 'POST',
+				// make sure you respect the same origin policy with this url:
+				// http://en.wikipedia.org/wiki/Same_origin_policy
+				url: urlv,
+				//data:{ "PER_PAGE":per_page,'PAGE':page},
+				success: function(data){
+					
+					//var v=jQuery.parseJSON(data);
+					console.log(data);
+					var str='';
+					$.each(data.RESULTS, function(index,record){
+						console.log(record);
+						str+='<tr>';
+						//<thead><th>Gene ID</th><th>Symbol</th><th>Organism</th><th>Seqain Name</th><th>% Identity</th><th>% Similarity</th></thead>
+						if (type=="simseq")
+						{
+							if ((record.GENE_ID!=null))
+							{
+							str+='<td onclick="loadAlign($(this).closest(\'tr\'),\'/CONTENT/GENEID/${GENE_ID}/SEQUENCE_ALIGNMENT/${SEQ_ID}/PARAMS/'+record.GENE_ID+'/'+record.ISO_ID+'\')"><img src="/require/img/view.png" style="width: 20px;"></td>';
+							 }
+							 else str+='<td onclick="loadAlign($(this).closest(\'tr\'),\'/CONTENT/GENEID/${GENE_ID}/SEQUENCE_ALIGNMENT/${SEQ_ID}/PARAMS/'+record.ISO_ID+'\')"><img src="/require/img/view.png" style="width: 20px;"></td>';
+							str+='<td>'+((record.GENE_ID!=null)?'<a href="/GENEID/'+record.GENE_ID+'">'+record.GENE_ID+'</a></td><td><a href="/GENEID/'+record.GENE_ID+'">'+record.SYMBOL+'</a></td>':'N/A</td><td>N/A</td>')+
+							'<td>'+record.SCIENTIFIC_NAME+"</td><td>";
+								if (record.GENE_ID!=null)str+='<a href="/GENEID/'+record.GENE_ID+'/SEQUENCE/'+record.ISO_ID+'">'+record.ISO_ID+"</a>";
+								else str+=record.ISO_ID;
+								str+="</td><td>"+Math.round(record.PERC_IDENTITY_COM*100,2)+"</td><td>"+Math.round(record.PERC_SIM_COM*100,2)+"</td><td>"+Math.round(record.PERC_IDENTITY*100,2)+"</td><td>"+Math.round(record.PERC_SIM*100,2)+"</td></tr>";
+						}
+						else if (type=="3Dstruct")
+						{
+							//	<thead><th>PDB ID</th><th>Experimental Type</th><th>Resolution</th><th>Title</th><th>Deposition Date</th><th>Coverage</th></thead>
+							str+='<td><a href="/GENEID/${GENE_ID}/3D_STRUCTURE/'+record.FULL_COMMON_NAME+'">'+record.FULL_COMMON_NAME+'</a></td><td>'+record.CHAIN_NAME+"</td><td>"
+								+record.EXPR_TYPE+"</td><td>"+record.RESOLUTION+"</td><td>"+record.TITLE+"</td><td>"+record.DEPOSITION_DATE+"</td><td>"+record.COVERAGE+"</td></tr>";
+						}
+						
+					});
+					console.log(str);
+					console.log('#seq_'+type+'_tbl tbody');
+					$('#seq_'+type+'_tbl tbody').html(str); 
+		
+		
+		
+				},
+				error:function(data){$("#info").html("An issue occured.");}
+					});///END AJAX
+					return false;		
+			}
+			function loadAlign(line,path)
+			{
+				$.ajax({
+					type: 'POST',
+					// make sure you respect the same origin policy with this url:
+					// http://en.wikipedia.org/wiki/Same_origin_policy
+					url: path,
+					data:{ "WIDTH":$('#sequence_menu_view_2').css("width")},
+					success: function(data){
+						
+						var v=jQuery.parseJSON(data);
+						console.log(v);
+						$("#alignment").remove();
+						$('<tr id="alignment"><td colspan="9">'+v.code+'</td></tr>').insertAfter(line);
+					},
+					error:function(data){$("#info").html("An issue occured.");}
+				});///END AJAX
+			}
+		
+			
+		
+		function toggleRNAEditsPrim(val)
+		{
+			if ($(val).is(':checked'))
+			{
+				
+				for (i = $(val).data('pos_start');i<=$(val).data('pos_end');++i)
+				{
+					if (data_rule[i][4]=='YES'){
+						$('#seq_tag_'+i).prop('disabled','disabled');
+						data_rule[i][3]=false;
+						$('#seq_tag_'+i).prop('checked',false);
+					}
+				}
+			}
+			else
+			{
+				for (i = $(val).data('pos_start');i<=$(val).data('pos_end');++i)
+				{
+					if (data_rule[i][4]=='YES')
+					$('#seq_tag_'+i).prop('disabled',false);
+						
+				}
+			}
+		
+			processProteinView("protein_seq_view",-1,-1);
+		}
+		
+		
+		function toggleRNAEdits(val)
+		{
+			if ($(val).is(':checked'))
+			{
+				console.log("Add");
+				for (i = $(val).data('pos_start');i<=$(val).data('pos_end');++i)
+				{
+					if (data_rule[i][4]=='NO'){
+						$('#seq_tag_'+i).prop('disabled','disabled');
+						data_rule[i][3]=false;
+						$('#seq_tag_'+i).prop('checked',false);
+					}
+				}
+			}
+			else
+			{
+				for (i = $(val).data('pos_start');i<=$(val).data('pos_end');++i)
+				{
+					if (data_rule[i][4]=='NO')
+					$('#seq_tag_'+i).prop('disabled',false);
+				  
+				}
+			}
+		
+			processProteinView("protein_seq_view",-1,-1);
+		}
+		
+		
+		var init_tbls={"simseq":false,'3Dstruct':false};
+		
+			var data_protein=JSON.parse('${PROTEIN_SEQUENCE}');
+			
+			var data_rule=JSON.parse('${RULES}');
+			
+			
+		
+		
+		
+			$('.seq_tag_check').change(function() {
+		  if($(this).is(":checked")) {
+			data_rule[$(this).data('pos')][3]=true;
+		  }else data_rule[$(this).data('pos')][3]=false;
+		  processProteinView("protein_seq_view",-1,-1);
+		
+		});
+		
+		$('.seq_tag_check_all').change(function() {
+		  if($(this).is(":checked")) {
+			for (i = $(this).data('pos_start');i<=$(this).data('pos_end');++i)
+			{
+			
+			
+				if ($('#seq_tag_'+i).prop('disabled'))continue;
+				$('#seq_tag_'+i).prop('checked',true);
+				data_rule[i][3]=true;
+		  
+			
+			}
+		  }else 
+		  {
+			for (i = $(this).data('pos_start');i<=$(this).data('pos_end');++i){
+			data_rule[i][3]=false;
+			
+			$('#seq_tag_'+i).prop('checked',false);
+			
+		  
+		}
+		  }
+		
+		  processProteinView("protein_seq_view",-1,-1);
+		
+		});
+		
+		function processProteinView(view,range_start,range_end)
+		{
+			var str_legend='Legends:<br/>';
+			var color_range=-1;
+			var isRange=false;
+			var search;
+			var matches = $("#protein_seq_search").val().match(/[0-9]{1,4}\-[0-9]{1,5}/);
+			if (matches!==null){
+				isRange=true;
+				search=$("#protein_seq_search").val().split("-");
+			}else
+			{
+				isRange=false;
+			search=$("#protein_seq_search").val().toUpperCase().split("\n");
+			}
+			$("#"+view).html("We are running into an issue.");
+			
+			var dw=($("#sequence_view_parent").width()-40);	/// Width of div
+			
+			var fs = 16;					/// fs and fc set for Courier New
+			var fc = 1.61;
+			//var ratio=9.592307;
+			var ratio=9.601907;
+			var cpl = Math.floor(Math.floor(fc*dw / fs )/10+1)*10; /// Character per line.
+			console.log(dw+" "+cpl);
+			$("#"+view).css("width",(ratio*cpl+5)+"px");
+			$("#protein_options").css("width",(ratio*cpl+5)+"px");
+			var max_width=cpl*fs/fc;
+			var seq='';
+			var str='';
+			
+			$.each(data_protein, function(index,value){seq+=value['AA'];});
+			var indices=[];
+			var indices_alt=[];
+			if (!isRange){
+			
+			$.each(search, function(index,value){
+				
+				indices.push(getIndicesOf(value,seq));
+				
+				
+			});
+			if (range_start!=-1)
+			{
+				if (search[0]!=''){
+				search.push(seq.substr(range_start,range_end-range_start+1));
+				indices.push([range_start]);
+				}
+				else
+				{
+					search[0]=seq.substr(range_start,range_end-range_start+1);
+					indices[0]=[range_start];
+				}
+			}
+			}
+			else  {indices.push([parseInt(search[0])-1]);}
+		
+		
+			
+			
+			var tot_line=Math.ceil(seq.length/cpl);
+			var debug=true;
+			var match_rank=[];
+			var next_line=[];
+			var type_color=[];
+			for(pos=0; pos<seq.length;++pos)match_rank[pos]=[-1];
+			if (debug)console.log("LENGTH: "+seq.length+" ; CHAR PER LINE: "+cpl+" ; N LINES: "+tot_line+" MAX WIDTH:"+max_width);
+			var current_start=-1,current_search_len=-1,current_search_strand='+';
+			for(n_line=1;n_line<=tot_line;++n_line)
+			{
+				var start_pos=(n_line-1)*cpl;
+				var end_pos=start_pos+cpl;
+				if (debug)console.log("LINE "+n_line+" ["+start_pos+" - "+end_pos+"] /" +current_start);
+				str+='<div class="seq">';
+					if (search[0] !="")
+					{
+					
+					for(pos=start_pos; pos<end_pos;++pos)
+					{
+						if (current_start==-1)
+						{
+							$.each(indices,function(index,list_search)
+							{
+								
+								if ($.inArray(pos,list_search)!=-1 && current_start==-1)
+								{
+									
+									current_start=pos;
+									current_search_strand='+';
+									if (isRange)
+									{
+										
+										current_search_len=parseInt(search[1]);
+									}
+									else current_search_len=search[index].length;
+		
+									str+='<span style="background-color:grey">';
+								}
+							});
+							str+=seq.charAt(pos);
+						}
+						else if (current_start!=-1)
+						{
+							if (pos==start_pos)
+							{
+								str+='<span style="background-color:grey">';
+							}
+							if (pos>=current_start+current_search_len)
+							{
+								current_start=-1;
+								str+="</span>";
+							}
+							 str+=seq.charAt(pos);
+						}
+						
+					}
+					if (current_start!=-1)str+='</span>';
+				}else str+=seq.substr(start_pos,cpl);
+					console.log(n_line+" "+current_start);
+					str+="</div>";
+					str+="<div class='seq_fold' style='position:relative;top:-6px;height:$PREVWpx' >";
+					if (next_line.length>0)
+					{
+						
+						extend_line=[];
+						
+						$.each(next_line,function(index,next_linev){
+							str+='<div style="height:3px;position:absolute;margin-bottom:1px;top:0px;left:0px;background-color:'+colors[type_color[next_linev[1]]];
+							console.log("NEXTLINE: "+next_linev[0]+"/"+end_pos+"|"+next_linev[1]);
+							if (next_linev[0]>end_pos)
+							{
+								str+=';width:100%" ></div>';
+								extend_line.push([next_linev[0],next_linev[1]]);
+							}
+							else {
+							str+=';width:'+(ratio*(next_linev[0]-start_pos))+'px" ></div>';
+							}
+		
+						});
+						
+						next_line=[];
+						next_line=extend_line;
+						
+					}
+							var match_height=0;
+					for(pos=start_pos; pos<end_pos;++pos)
+				{
+						
+						$.each(data_rule,function(index,feat_info)
+						{
+							if (feat_info[3]==false)return true;
+							var ft_type=feat_info[0];
+							color_id=-1;
+							if (ft_type in type_color)
+							{
+								color_id=type_color[ft_type];
+							}
+							else
+							{
+								++color_range;
+								type_color[ft_type]=color_range;
+								str_legend+='<span style="border-left:5px solid '+colors[color_range]+';padding-left:5px;margin-left:10px;">'+ft_type+'</span>';
+								color_id=color_range;
+							}
+							//console.log(feat_info.START+ " "+pos);
+							if (feat_info[1]-1!=pos)return true;
+							current_search_len=(feat_info[2]-feat_info[1]);
+							var rank=-1;
+							var debug_str=ft_type+"::"+feat_info[1]+"::"+feat_info[2]+"  ";
+							for (kpos=pos;kpos<=pos+current_search_len;++kpos)
+							$.each(match_rank[kpos],function(idkpos,vkpos)
+							{
+								debug_str+=kpos+":"+vkpos+"|";
+								rank=Math.max(rank,vkpos);
+							});
+							debug_str+=" => RANK:"+rank;
+							console.log(debug_str+ " COLOR:"+color_id);
+							rank+=1;
+							console.log(feat_info);
+							str+='<div style="height:3px;position:absolute;margin-bottom:1px;top:'+(1+rank*5)+'px;left:'+((pos-start_pos)*ratio)+'px;';
+						
+							len=Math.min(feat_info[2]-pos,end_pos-pos);if (len==0)len=1;
+							str+=';background-color:'+colors[color_id]+';width:'+(ratio*len)+'px" ></div>';
+							if (feat_info[2]>=end_pos)
+									{
+										next_line.push([feat_info[2],ft_type]);
+									}
+							for (kpos=pos;kpos<=pos+current_search_len;++kpos)
+							if (kpos<seq.length)
+							{
+								match_rank[kpos].push(rank);
+							}
+							match_height=Math.max(match_height,6+rank*5);
+							
+						});
+					}
+					console.log("FINAL MATCH HEIGHT"+match_height);
+					str=str.replace("$PREVW",match_height);
+					str+='</div>';
+					if ($('#protein_seq_pos').prop("checked"))
+					{
+					str+="<div class='ids' style='position:relative;top:-9px'>";
+					for(var i=1;i<=cpl;++i)
+					{
+						if (i+start_pos>seq.length)break;
+						if (i%10==0)str+="|";
+						else str+="&#183;";
+					}
+					
+					str+="</div>";
+					
+					
+					str+="<div class='tens' style='position:relative;top:-9px'>";
+				var min_ten=Math.ceil(start_pos/10);
+				var max_ten=Math.floor(end_pos/10);
+				for (var ten=min_ten;ten<=max_ten;++ten)
+				{
+					if (ten*10<seq.length)
+					str+="<div class='ten_bc' style='left:"+((ten*10-start_pos-((ten==min_ten)?0:1.5))*(ratio))+"px'>"+((ten==min_ten)?ten*10+1:(ten*10))+"</div>";
+				}
+				str+="</div>";
+				}
+		
+				
+		
+		
+		
+			}
+			console.log("#"+view);
+			
+			$("#"+view).html(str);
+			$("#legend").html(str_legend);
+		}
+		
+		var waitForFinalEvent = (function () {
+		  var timers = {};
+		  return function (callback, ms, uniqueId) {
+			if (!uniqueId) {
+			  uniqueId = "Don't call this twice without a uniqueId";
+			}
+			if (timers[uniqueId]) {
+			  clearTimeout (timers[uniqueId]);
+			}
+			timers[uniqueId] = setTimeout(callback, ms);
+		  };
+		})();
+		
+		$(window).resize(function () {
+			waitForFinalEvent(function(){
+				processProteinView("protein_seq_view");
+				
+			  //...
+			}, 500, "some unique string");
+		});
+		
+		//  
+		var current_show=null;
+		
+		
+		function clean()
+		{
+			if (current_show==null)return;
+			console.log("clean");
+			$(current_show).empty();
+			$(current_show).removeClass("tooltipt");
+			$(current_show).html('-');
+		}
+		
+		
+		$(document).ready(function(){
+			
+			$('#prot_seq_ft_tbl').DataTable({
+				columnDefs: [
+			{ width: 200, targets:0 },
+			
+			{ width: 150, targets:2 }
+		  ],
+		  
+			});
+			
+			processProteinView("protein_seq_view",-1,-1);
+		
+		
+		
+		});
+		
+		$(document).ready(function(){
+		  $('.ttlt').uitooltip({track: true});
+		});
+		</script>
+
+$[/VALID]

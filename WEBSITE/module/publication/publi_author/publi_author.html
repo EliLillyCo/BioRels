@@ -1,0 +1,102 @@
+<div class="main_core_title" style="width:90%">${AUTHOR} </div>
+<div class="main_core_title" style="font-size:1.3em;width:90%">${INSTIT} </div>
+
+<br/>
+<ul class="nav nav-tabs">
+		<li id="ci_li" class="active"><a onclick="showClinvarInfo()">Publications</a></li>
+		<li id="ca_li"><a  onclick="showClinvarAssert()">Colleagues</a></li>
+		<li id="cp_li"><a  onclick="showClinvarPub()">Alternative</a></li>
+		$[NO_MUTATION]
+		<li id="cm_li"><a  onclick="showClinvarMut()">Mutation</a></li>
+		$[/NO_MUTATION]
+
+	  </ul>
+	  
+	
+<div id="ci_tbl" class="nav_box">
+		${PUBLICATIONS}
+	
+</div>
+<div id="ca_tbl" style="display:none" class="nav_box">
+	<table class="table">
+		<thead><tr><th style="width:20%">Name</th><th>Number of shared publications</th><th>Institution(s)</th></tr></thead>
+		<tbody>
+		${COLLEAGUES}
+	</tbody>
+</table>
+	
+	
+</div>
+<div id="cp_tbl" style="display:none" class="nav_box">
+		<table class="table">
+				<thead><tr><th style="width:20%">Name</th><th>Institution(s)</th></tr></thead>
+				<tbody>
+				${ALT}
+			</tbody>
+		</table>
+	
+	
+</div>
+$[NO_MUTATION]
+<div id="cm_tbl" style="display:none;width:98%" class="nav_box">
+		${MUTATION}
+</div>
+$[/NO_MUTATION]
+</div>
+<script type="text/javascript">
+		function showClinvarInfo()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#ci_li").addClass("active");
+			$("#ci_tbl").css("display","block");
+			$("#ca_tbl").css("display","none");
+			$("#cp_tbl").css("display","none");
+			$("#cm_tbl").css("display","none");
+			
+		}
+		function showClinvarAssert()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#ca_li").addClass("active");
+			$("#ci_tbl").css("display","none");
+			$("#ca_tbl").css("display","block");
+			$("#cp_tbl").css("display","none");
+			$("#cm_tbl").css("display","none");
+			
+		}
+		function showClinvarPub()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#cp_li").addClass("active");
+			$("#ci_tbl").css("display","none");
+			$("#ca_tbl").css("display","none");
+			$("#cp_tbl").css("display","block");
+			$("#cm_tbl").css("display","none");
+			
+		}
+		function showClinvarMut()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#cm_li").addClass("active");
+			$("#ci_tbl").css("display","none");
+			$("#ca_tbl").css("display","none");
+			$("#cp_tbl").css("display","none");
+			$("#cm_tbl").css("display","block");
+			
+		}
+		
+</script>
+
+

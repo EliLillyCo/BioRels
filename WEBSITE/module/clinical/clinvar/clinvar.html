@@ -1,0 +1,101 @@
+$[VALID]
+<div class="main_core_title" style="width:90%">Variant ${CLINVAR_NAME} </div>
+
+<table style="width:98%;text-align: center" class="table"><tr><td>Clinvar ID: <a target="_blank" href="${DBSNP_LINK}">${CLINVAR_ID}</a></td>
+	
+	<td>Status: ${CLINVAR_STATUS}</td></tr>
+</tr></table>
+
+
+<ul class="nav nav-tabs">
+		<li id="ci_li" class="active nav-item nav-link"><a onclick="showClinvarInfo()">Information</a></li>
+		<li id="ca_li" class="nav-item nav-link"><a  onclick="showClinvarAssert()">Assertion</a></li>
+		<li id="cp_li"  class="nav-item nav-link"><a  onclick="showClinvarPub()">Publication</a></li>
+		$[NO_MUTATION]
+		<li id="cm_li" class="nav-item nav-link"><a  onclick="showClinvarMut()">Mutation</a></li>
+		$[/NO_MUTATION]
+
+	  </ul>
+	  
+	
+<div id="ci_tbl" class="nav_box">
+		${REF_ASSERT}
+	
+</div>
+<div id="ca_tbl" style="display:none" class="nav_box">
+		${ASSERT}
+	
+	
+</div>
+<div id="cp_tbl" style="display:none" class="nav_box">
+		${PUBLI}
+	
+	
+</div>
+$[NO_MUTATION]
+<div id="cm_tbl" style="display:none;width:98%" class="nav_box">
+		${MUTATION}
+</div>
+$[/NO_MUTATION]
+</div>
+<script type="text/javascript">
+		function showClinvarInfo()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#ci_li").addClass("active");
+			$("#ci_tbl").css("display","block");
+			$("#ca_tbl").css("display","none");
+			$("#cp_tbl").css("display","none");
+			$("#cm_tbl").css("display","none");
+			
+		}
+		function showClinvarAssert()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#ca_li").addClass("active");
+			$("#ci_tbl").css("display","none");
+			$("#ca_tbl").css("display","block");
+			$("#cp_tbl").css("display","none");
+			$("#cm_tbl").css("display","none");
+			
+		}
+		function showClinvarPub()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#cp_li").addClass("active");
+			$("#ci_tbl").css("display","none");
+			$("#ca_tbl").css("display","none");
+			$("#cp_tbl").css("display","block");
+			$("#cm_tbl").css("display","none");
+			
+		}
+		function showClinvarMut()
+		{
+			$("#ci_li").removeClass("active");
+			$("#ca_li").removeClass("active");
+			$("#cp_li").removeClass("active");
+			$("#cm_li").removeClass("active");
+			$("#cm_li").addClass("active");
+			$("#ci_tbl").css("display","none");
+			$("#ca_tbl").css("display","none");
+			$("#cp_tbl").css("display","none");
+			$("#cm_tbl").css("display","block");
+			
+		}
+		
+</script>
+$[/VALID]
+$[INVALID]
+<div class="main_core_title">Clinical variant</div>
+   <br/>
+   <div class="alert alert-info">This variant identifier is not recognized/found.</div>
+$[/INVALID]

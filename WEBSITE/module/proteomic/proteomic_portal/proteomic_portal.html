@@ -1,0 +1,59 @@
+<header class="w3-container">
+		<div class="page-title">
+			${UNIPROT_ID} <span class="sm-caps">${PROT_NAME}</span>
+			
+		</div>
+		<p>
+		   <span style="font-weight:bold;padding-left:10px;">Organism:</span> ${ORGANISM}</p>
+	</header>
+	<div class="w3-row-padding w3-margin-bottom">
+		
+		
+		<ul class="nav nav-tabs">
+			<li id="gene_menu_tab_1" class="active nav-item nav-link" onclick="showMenu('gene_menu',1,3)">Summary</li>
+			<li id="gene_menu_tab_2" class="nav-item nav-link" onclick="showMenu('gene_menu',2,3)">Gene</li>
+			<li id="gene_menu_tab_3" class="nav-item nav-link" onclick="showMenu('gene_menu',3,3)">Pathway</li>
+		</ul>
+		
+	<div id="gene_menu_view_1" class="container-grey w3-container ">
+		<div class=" w3-half w3-container ">
+		<h3>Clinical trials</h3>
+		<div class="w3-col s12"><a href="GENEID/${GENE_ID}/CLINICAL_TRIALS" class="blk_font">
+		${SM_DRUG}
+		</div>
+	</a>
+	</div>
+	<div class=" w3-half overflow_y_simple long_text" >
+			<h3>Description:</h3>${FUNCTION}</div>
+	</div>
+	<div  id="gene_menu_view_2"  class="container-grey w3-container w3-padding-16" style="display: none;">
+			<div class="w3-col s6 w3-col-600">
+					<h3>Gene information</h3>
+			<table class="table table-sm">
+				
+				<tr><td class="boldright">Gene Id:</td><td>${GENE_ID}</td></tr>
+				<tr><td class="boldright">Chromosome:</td><td>${CHROMOSOME}</td></tr>
+				<tr><td class="boldright">Locus:</td><td>${LOCUS}</td></tr>
+				<tr><td class="boldright">Gene Type:</td><td>${GENE_TYPE}</td></tr>
+			</table>
+			<div class="w3-col s12">
+	
+			${TR_STAT}
+		</div>
+			</div>
+			
+	</div>
+	<div  id="gene_menu_view_3" class="container-grey w3-container w3-padding-16" style="display: none;">
+			
+			<div class="w3-col s12 w3-col-600">
+					<h3>Pathways</h3>
+					<div style="display:flex;flex-direction: column;width:fit-content;margin:0 auto">
+				${PATHWAY}
+			</div>
+			</div>
+				
+			
+	</div>
+
+	
+	</div>

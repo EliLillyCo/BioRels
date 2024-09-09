@@ -1,0 +1,255 @@
+.w3-col.s0 {display: none;}
+.w3-col.s_no_padding {padding-left:1px;padding-right: 1px;}
+.w3-col.s1 {
+	width: 8.33333%
+}
+.w3-col.s10p {
+	width: 10%;
+}
+
+.w3-col.s1_5 {
+	width: 11.11111%
+}
+
+.w3-col.s2 {
+	width: 16.66666%
+}
+
+.w3-col.s3 {
+	width: 24.99999%
+}
+.w3-col.s3_1 {
+	width: 23.99999%;
+	margin-right: 1%;
+}
+
+.w3-col.s4 {
+	width: 33.33333%
+}
+.w3-col.s4-m {
+	width: 31.33333%;
+margin:1%;
+}
+
+.w3-col.s5 {
+	width: 41.66666%
+}
+
+.w3-col.s6 {
+	width: 49.99999%
+}
+.w3-col.s6-m {
+	width: 47.99999%;
+	margin:1%;
+}
+.w3-col.s7 {
+	width: 58.33333%
+}
+
+.w3-col.s8 {
+	width: 66.66666%
+}
+
+.w3-col.s9 {
+	width: 74.99999%
+}
+
+.w3-col.s10 {
+	width: 83.33333%
+}
+
+.w3-col.s11 {
+	width: 91.66666%
+}
+
+.w3-col.s12 {
+	width: 99.99999%
+}
+
+.w3-col.s3_1 {
+	width: 23.99999%;
+	margin-right: 1%;
+}
+
+.w3-col.s-center {text-align: center;}
+.w3-col.s_dib
+{
+    display: inline-block;
+}
+
+
+.w3-scol12
+{
+	float: left;
+	width: 100%;
+	padding: 3px;
+}
+
+.s_hide{display: none;}
+.s-always-show{display: block !important;}
+
+
+.table-sm
+{
+    font-size:0.75em;
+}
+
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+ HEAD PAGE
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+*/
+
+
+
+mgt-login {
+	
+    display: none;
+}
+
+mgt-login {
+	--button-color: #fff;
+	--button-background-color--hover: transparent;
+	--button-color--hover: #161514;
+}
+
+#BIORELS_NAME {
+    display: block;
+    width:100%;
+    text-align: center;
+}
+.home-icon
+{
+    font-size: 3.2em;
+}
+
+#transcripts_list {
+    font-size: 0.5em;
+}
+
+#USER_ID {
+    font-size: 0.75em;
+}
+
+#search_options {
+    font-size: 0.5em
+}
+
+#logo_user {
+    width: 60%;
+    margin-left: 20%;
+}
+
+#user_menu {
+    width: 100%;
+    text-align: center;
+}
+
+
+.human-check {
+	position: relative;
+	top: -5px;
+    font-size:0.9em;
+}
+
+.search_input {width:100%;}
+
+
+
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+ WELCOME PAGE
+/* ###################
+/* ###################
+/* ###################
+/* ###################
+*/
+.news_source
+{
+    text-align: left;
+    width:100%;
+    
+    position: relative;
+    left:22px;
+}
+
+h4 {font-size:1em;font-weight: bold;}
+.news_content {font-size:0.7em; text-align: justify;line-height: 1.5em;}
+
+
+
+
+
+.drug_block_name {
+    font-size: 0.6em;
+    text-align: center;
+    width: 100%
+}
+
+.drug_block {
+    width: 95%;
+    margin-top:8px;
+}
+
+.drug_img {
+	width: 100%;
+text-align: center;
+max-width: unset;
+float:unset;
+position: unset;
+}
+.antibody_icon_s,
+.sm_icon_s {
+    padding: 0px 0 40% 40%;
+    position: unset;
+    top:unset;
+ 
+}
+
+.os_icon_s,
+.o_icon_s {
+    padding: 0px 0 75% 90%;
+    
+}
+
+.large_drug_icon {
+    width: 60%;
+}
+
+#transcripts_list  th:nth-child(2),
+#transcripts_list  th:nth-child(3),
+#transcripts_list  th:nth-child(7),
+#transcripts_list  th:nth-child(8),
+#transcripts_list  th:nth-child(9),
+#transcripts_list  td:nth-child(2),
+#transcripts_list  td:nth-child(3),
+#transcripts_list  td:nth-child(7),
+#transcripts_list  td:nth-child(8),
+#transcripts_list  td:nth-child(9)
+  { display: none; }
+
+  .transcript_seq_tool_but{width:10px;}
+
+  .w3-table th, .w3-table td {padding:2px;}
+  .w3-table {font-size:0.7em;}
+
+
+
+.news_source {left:0px;}
+.news_content h4 {font-size:1em;}
+
+.w3-main { padding:1px;}
+#news_block {padding:1px;}
+#data {padding:1px;}
+.tag_count{   font-size: 1.4em;
+	}
+	
+    .news_title, .news_title_long { width:94%;text-align: justify;}
+    .news_title_content{display: none;;}

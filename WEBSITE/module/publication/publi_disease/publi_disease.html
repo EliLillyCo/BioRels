@@ -1,0 +1,177 @@
+<h3>Publications related to ${SYMBOL}</h3>
+
+
+<div class="w3-container w3-col s12"  style="margin:10px auto;">	
+		<div style="display:inline-block"  class="w3-col-600"><span id="n_pub1"> ${COUNT} </span> publications</div>
+		<div style="display:inline-block"  class="w3-col-600">Number per page:
+	<select id="per_page" name="per_page" onchange="updatePageCount()">
+		<option value="10" selected="selected">10</option>
+		<option value="20">20</option>
+		<option value="30">30</option>
+		<option value="50">50</option>
+		<option value="100">100</option>
+		<option value="200">200</option>
+	</select>
+	</div>
+	<div style="display:inline-block"  class="w3-col-600">
+	<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+	<input type="text" class="button" value="1" id="page"/>/<input type="text" value="${NPAGE}" id="pagemax"/>
+	<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+	<div id="muts_options" style="display: initial">
+		<img id="muts_opt_but" src="/require/img/opt.jpg" style="width: 20px;" onclick="showFilters()">
+	</div>
+</div>
+
+<div class="w3-container w3-col s12" id="data"></div>
+<div id="trsq_options" style="margin:10px auto;">	
+		<div style="display:inline-block"  class="w3-col-600"><span id="n_pub12"> ${COUNT} </span> publications</div>
+		<div style="display:inline-block"  class="w3-col-600"> Number per page:
+		<select id="per_page2" name="per_page" onchange="updatePageCount()">
+			<option value="10" selected="selected">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+		</select>
+		</div><div style="display:inline-block"  class="w3-col-600"> 
+		<input type="button" class="button" value='&lt;' onclick="prevPage()"/>
+		<input type="text" class="button" value="1" id="page2"/>/<input type="text" value="${NPAGE}" id="pagemax2"/>
+		<input type="button"  class="button" value='&gt;' onclick="nextPage()"/>
+	</div>
+	<div id="filters_options"  title="Publication filtering options" style="display: none">
+			<table class="table">
+			<tr><th>Gene:</th><td id="gene_filter">${LIST_GENES}</td></tr>
+			<tr><th>Tissue:</th><td id="tissue_filter">${TISSUE_FILTER}</td></tr>
+			<tr><th>Topic:</th><td><select id="topic" name="topic" style="border:1px solid black"><option value=""></option>${LIST_TOPICS}</select></td></tr>
+			</table>
+			<button type="button" onclick="addFilter()">Add filter</button>
+			<br/>
+			<h3>Current filter(s) applied:</h3>
+			<div id="filter_list">
+
+			</div>
+
+
+	</div>
+	<script type="text/javascript">
+	var n_filters=0;
+	function addFilter()
+	{
+
+		if ($("#gnval_sel_1  option:selected").val()!="")
+		{
+			$( "#filter_list" ).append( '<div class="tags tagsgreen" data-value="gene-'+$("#gnval_sel_1  option:selected").val()+'"><a>Gene: '+$("#gnval_sel_1  option:selected").text() +'</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+					loadModule("gene_filter","/CONTENT/GENE_VALIDATE/PARAMS/1");
+					
+						
+		}
+		if ($("#tsval_sel_1  option:selected").val()!="")
+		{
+			$( "#filter_list" ).append( '<div class="tags tagsgreen" data-value="tissue-'+$("#tsval_sel_1  option:selected").val()+'"><a>Tissue: '+$("#tsval_sel_1  option:selected").text() +'</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+					loadModule("tissue_filter","/CONTENT/TISSUE_VALIDATE/PARAMS/1");
+					
+						
+		}
+		if ($("#topic  option:selected").val()!="")
+		{
+			
+			$( "#filter_list" ).append( '<div class="tags tagsgreen" data-value="topic-'+$("#topic  option:selected").val()+'"><a>Topic: '+$("#topic  option:selected").text() +'</a><span onclick="$(this).closest(\'div\').remove();" style="font-weight:bold;position:relative;top:-7px;cursor:pointer;right:-3px;font-size:0.8em">X</span></div>');
+
+					$("#topic").val($("#topic option:first").val());
+		}
+	}
+		function updatePageCount(with_submit=true)
+		{
+			var tot=$("#n_pub1").html();
+			var per_page = parseInt($('#per_page').val());
+			var totmax=Math.ceil(tot/per_page);
+			$("#pagemax").val(totmax);
+			$("#pagemax2").val(totmax);
+			$("#per_page2").val($('#per_page').val());
+			if (with_submit)submit();
+		}
+		function prevPage()
+		{
+			var val=parseInt($("#page").val());
+			if (val==1)return;
+			$("#page").val(val-1);
+			$("#page2").val(val-1);
+			submit();
+		
+		}
+		
+		function nextPage()
+		{
+			var val=parseInt($("#page").val());
+			var m=parseInt($("#pagemax").val());
+			if (val>=m)return;
+			$("#page").val(val+1);
+			$("#page2").val(val+1);
+			submit();
+		
+		}
+
+		
+function submit()
+{
+	var n_curr_filter=0;
+	var filters='';
+	$('#filter_list').children('div').each(function () {
+	filters+=$(this).data("value")+";"; // "this" is the current element in the loop
+	n_curr_filter++;
+	});
+	if (n_curr_filter!=n_filters)
+	{
+		$("#page").val(1);
+		$("#page2").val(1);
+		n_filters=n_curr_filter;
+	}
+
+	var per_page = $('#per_page').val();
+	var page = $('#page').val();
+	$("#info").html("Please wait while the query is running");
+	var filters='';
+	$('#filter_list').children('div').each(function () {
+    filters+=$(this).data("value")+";"; // "this" is the current element in the loop
+	});
+	urlv="/CONTENT/PUBLI_DISEASE_SEARCH";
+	$.ajax({
+    type: 'POST',
+    // make sure you respect the same origin policy with this url:
+    // http://en.wikipedia.org/wiki/Same_origin_policy
+    url: urlv,
+    data:{ "PER_PAGE":per_page,'PAGE':page,'FILTERS':filters,'DISEASE':'${TAG}'},
+    success: function(data){
+		
+		var v=jQuery.parseJSON(data);
+		$("#data").html(v.code);
+		$("#n_pub1").html(v.STAT.CO);
+		$("#n_pub12").html(v.STAT.CO);
+		console.log(v.STAT.CO);
+		$("#info").html("");
+		updatePageCount(false);
+	},
+	error:function(data){$("#info").html("An issue occured.");}
+		});///END AJAX
+		return false;		
+}
+	$(document).ready( function () {
+		//$('#mutation_search_res').DataTable();
+		submit();
+	} );
+
+	function showFilters()
+	{
+	$( "#filters_options" ).dialog({width: "60%",modal: true,
+      buttons: {
+        "Confirm": function() {
+			
+          $( this ).dialog( "close" );
+		  submit();
+        },
+        
+      }});	
+
+	}
+	</script>

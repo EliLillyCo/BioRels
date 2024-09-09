@@ -1,0 +1,62 @@
+
+$[NO_RECORD]
+<div class='alert alert-info'>No ongoing trials</div>
+$[/NO_RECORD]
+
+$[HAS_RECORD]
+	<table id="clinical_trials_tbl" class="table" style="width:100%">
+		<thead>
+			<tr>
+				$[DISEASE]
+				<th>Disease</th>
+				$[/DISEASE]
+				<th>Trial ID</th>
+				<th>Drug Name</th>
+				<th>Gene Symbol</th>
+				<th>Gene ID</th>
+				<th>Clinical Phase</th>
+				<th>Start date</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			${TRIALS}
+		</tbody>
+	</table>
+	${ALERT}
+		<link rel="stylesheet" href="/require/css/dev/searchPanes.dataTables.min.css" 		       type="text/css"/>
+		
+	<script>
+		
+	$(document).ready(function() {
+
+	
+		var table = $('#clinical_trials_tbl').DataTable({
+		
+			responsive:true,
+			buttons: [
+				{
+					
+					extend: 'searchPanes',
+					config: {
+						cascadePanes: true
+					}
+				}
+			],
+		
+			
+			dom: 'Blfrtip',
+			language: {
+				searchPanes: {
+					clearMessage: 'Clear Selections',
+					collapse: {0: 'Search Options', _: 'Search Options (%d)'},
+					count: '{total} found',
+					countFiltered: '{shown} / {total}'
+				}
+			}
+		, "order": [[ 4, "desc" ]]});
+	 
+	});
+	</script>
+	$[/HAS_RECORD]
+	

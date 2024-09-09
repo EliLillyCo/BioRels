@@ -1,0 +1,54 @@
+<h3 style="margin-top: 25px;padding-left: 10px;font-size: 2em;font-variant: small-caps">${LABEL}</h3>
+<div class="w3-container w3-col s12">
+	<div class="w3-container w3-col s6 w3-col-600">
+		<h4>Definition:</h4>
+		<p>${DEFINITION}</p>
+		<h4>Synonyms:</h4>
+		<p style="font-style: italic">${SYNONYMS}</p>
+		<h4>Clinical trials</h4>
+		<div style="width:100%"><a class="blk_font" href="DISEASE/${LABEL}/CLINICAL_TRIALS">
+				${TRIALS}</a>
+		</div>
+	</div>
+	<div class="w3-container w3-col s6 w3-col-600 blk_font"
+		style="padding:10px;line-height: 1.5em;font-size:0.9em;max-height: 500px;overflow-y: scroll;">
+		<h4>Tree</h4>
+		<div id="SimpleJSTree"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function () {
+		$.ajax({
+			async: true,
+			type: "GET",
+			url: "/JSON/DISEASE_TREE/PARAMS/${DISEASE_TAG_N}",
+			dataType: "json",
+			success: function (json) {
+				createJSTree(json);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(xhr.status);
+				alert(thrownError);
+			}
+		});
+	});
+
+
+	var t;
+
+	function createJSTree(jsondata) {
+		console.log(jsondata);
+		$('#SimpleJSTree').on('changed.jstree', function (e, data) {
+			var i, j, r = [];
+			for (i = 0, j = data.selected.length; i < j; i++) {
+				window.location = "/DISEASE/" + data.instance.get_node(data.selected[i]).text;
+			}
+		}).jstree({
+			'core': {
+				'data': jsondata
+			}
+		}).on('loaded.jstree', function () {
+			$('#SimpleJSTree').jstree('open_all');
+		});
+	}
+</script>

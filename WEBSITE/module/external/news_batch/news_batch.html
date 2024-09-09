@@ -1,0 +1,63 @@
+
+$[HAS_DATA]
+<div id="newsContent">
+    ${PUBLIS}
+</div>
+
+$[/HAS_DATA]
+$[NO_DATA]
+<div class="alert alert-info">No News found</div>
+$[/NO_DATA]
+
+<script>
+  list_hash=JSON.parse('${HASHES}');
+
+    function openLink(path) {
+        window.open(path, '_blank');
+    }
+
+function loadRecord(hash)
+{
+    entry=$("#"+hash.substring(0,6)+"_entry");
+    content=$("#"+hash.substring(0,6)+"_content");
+    arrow=$("#arrow_"+hash.substring(0,6));
+    entry.css("border-radius","13px 13px 0px 0px");
+        content.html("Please wait while we are loading the content");
+        content.addClass('placeholder-glow');
+        arrow.html('&#x25BC;');
+        
+        content.css("display","block");
+         $.ajax({
+                type: "POST",
+                url: '/CONTENT/NEWS_CONTENT/PARAMS/newsTitle/'+hash,
+                data: {  'NO_TITLE':'true' },
+                error: function () {
+                    $("#"+hash.substring(0,6)+"_content").html('<p>An error has occurred</p>');
+                    $("#"+hash.substring(0,6)+"_content").removeClass('placeholder-glow');
+                    
+                    return false;
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("#"+hash.substring(0,6)+"_content").removeClass('placeholder-glow');
+                    $("#"+hash.substring(0,6)+"_content").empty();
+                    $("#"+hash.substring(0,6)+"_content").append(data.code);
+                }
+            });
+   $.each (list_hash, function(index,value)
+   {
+    if (value == hash)return true;
+    entry=$("#"+value.substring(0,6)+"_entry");
+    content=$("#"+value.substring(0,6)+"_content");
+    arrow=$("#arrow_"+value.substring(0,6));
+    arrow.html('&#x25b6;');
+         content.css("display","none");
+         entry.css("border-radius","13px");
+
+   });
+
+}
+
+
+
+</script>

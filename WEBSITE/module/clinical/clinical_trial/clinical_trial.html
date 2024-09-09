@@ -1,0 +1,96 @@
+
+$[INVALID]
+<br/>
+<div class="alert alert-info">Clinical trial not found</div>
+$[/INVALID]
+$[VALID]
+
+
+
+<header class="w3-container">
+	<div class="page-title">
+		<a href="${LINK}" rel="noopener" target="_blank" class="blk_font">	Clinical trial ${NCT_ID} - ${OFFICIAL_TITLE}</a>
+		
+	</div>
+	
+</header>
+<!-- Timeline Block -->
+
+
+<div class="w3-row-padding w3-margin-bottom">
+	
+	
+	<ul class="nav nav-tabs  s_hide">
+		<li id="ct_menu_${NCT_ID}_tab_1" class="active nav-item nav-link" onclick="showMenu('ct_menu_${NCT_ID}',1,6)">Summary</li>
+		<li id="ct_menu_${NCT_ID}_tab_2" class="nav-item nav-link" onclick="showMenu('ct_menu_${NCT_ID}',2,6)">Eligibility/Conditions</li>
+		<li id="ct_menu_${NCT_ID}_tab_3" class="nav-item nav-link" onclick="showMenu('ct_menu_${NCT_ID}',3,6)">Context</li>
+		<li id="ct_menu_${NCT_ID}_tab_5" class="nav-item nav-link" onclick="showMenu('ct_menu_${NCT_ID}',5,6)">Arms Intervention</li>
+		<li id="ct_menu_${NCT_ID}_tab_4" class="nav-item nav-link"  onclick="showMenu('ct_menu_${NCT_ID}',4,6)">News</li>
+		
+	</ul>
+	
+<div id="ct_menu_${NCT_ID}_view_1" class="container-grey w3-container  s-always-show" >
+	<div class="w3-container w3-col s12 m8 l8 ">${SUMMARY}</div>
+	<div class="w3-container w3-col s12 m4 l4" style="padding:10px">
+		<table class="table">
+			<tbody>
+				<tr><th class="w3-right-align">Condition/Disease:</th><td>${CONDITION}</td></tr>
+				<tr><th class="w3-right-align">Phase:</th><td>${CLINICAL_PHASE}</td></tr>
+				<tr><th class="w3-right-align">Start date:</th><td>${START_DATE}</td></tr>
+				<tr><th class="w3-right-align">Completion date:</th><td>${COMPLETION_DATE}</td></tr>
+				<tr><th class="w3-right-align">Status:</th><td>${STATUS}</td></tr>
+				<tr><th class="w3-right-align">Study type:</th><td>${STUDY_TYPE}</td></tr>
+				<tr><th class="w3-right-align">Source:</th><td>${SOURCE}</td></tr>
+				
+			</tbody>
+		</table>
+	</div>
+</div>
+<div id="ct_menu_${NCT_ID}_view_2" class="container-grey w3-container  s-always-show" style="display: none;">
+		<div class="w3-container w3-col s12 m8 l8"><h4>Eligibility & Condition</h4>
+			${ELIGIBILITY}</div>
+		<div class="w3-container w3-col s12 m4 l4" style="padding:10px" id="desc">
+				<table class="table">
+					<tbody>
+							
+							
+							<tr><th class="w3-right-align">Gender:</th><td>${GENDER}</td></tr>
+							<tr><th class="w3-right-align">Minimum age:</th><td>${MIN_AGE}</td></tr>
+							<tr><th class="w3-right-align">Maximum age:</th><td>${MAX_AGE}</td></tr>
+							<tr><th class="w3-right-align">Healthy volunteers:</th><td>${H_V}</td></tr>
+							${ADDITIONAL_DESCRIPTORS}
+					</tbody>
+				</table>
+		</div>
+</div>
+
+<div id="ct_menu_${NCT_ID}_view_3" class="container-grey w3-container  s-always-show" style="display: none;"">
+	
+
+
+<h4 style="width:100%;text-align:center;margin-top:20px;">Target information</h4>
+		${TARGET}
+	
+	${DISEASE}
+
+	<h4 style="width:100%;text-align:center;margin-top:20px;">Publications</h4>
+	${PAPERS}
+</div>
+<div id="ct_menu_${NCT_ID}_view_5" class="container-grey w3-container s-always-show" style="display: none;"">
+	${ARMS}
+	<h4 style="width:100%;text-align:center;margin-top:20px;">Drug information</h4>
+	<div class="w3-container">
+	${DRUGS}
+</div>
+</div>
+<div id="ct_menu_${NCT_ID}_view_4" class="container-grey w3-container  s-always-show" style="display: none;"">
+	${NEWS_FEED}
+</div>
+
+<script type="text/javascript">
+	${JS}
+
+	
+	</script>
+	$[/VALID]
+

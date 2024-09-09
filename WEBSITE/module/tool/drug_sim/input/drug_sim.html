@@ -1,0 +1,103 @@
+
+
+<div class="w3-container genomic-portal">
+	<header class="w3-container">
+		<div class="page-title">
+			Drug similarity Search
+			<p>Test your compound against existing drugs</p>
+			
+		</div>
+		
+	</header>
+</div>
+${ALERT}
+<div class="alert alert-info " id="fail_job" style="display: none">Unable to retrieve results</div>
+<div class="w3-row-padding w3-margin-bottom container-grey">
+	<h4>Draw your molecule:</h4>
+	<div class="w3-col s6 m6 l6">
+		
+	<iframe id="ifKetcher" src="require/ketcher/index.html" width="100%" height="500px"></iframe>
+	</div>
+	<div class="w3-col s6 m6 l6">
+		<form method="post" action="/DRUG_SIM" id="form_dsim">
+		<table class="table">
+			<tr><th>Job name (required):</th><td><input type="text" id="title" name="title" maxlength="500" value="${TITLE}"/></td></tr>
+			<tr><th>Job description:</th><td><input type="text" id="description" name="description"  maxlength="2000" value="${DESCRIPTION}"/></td></tr>
+			<tr><th>Substructure search:</th><td><input type="radio" id="sub" name="search_type" value="SUBSTRUCTURE"><label for="sub">Substructure</label><br/>
+				<input type="radio" id="sim" name="search_type" value="SIMILARITY"><label for="sim">Similarity</label><br/></td></tr>
+			<tr><th>Minimum similarity:</th><td><select id="threshold"  name="threshold">${LIST}</select></td></tr>
+		</table>
+		<input type="text" id="smiles_input" name="smiles_input" value="" style="display: none;"/>
+		<input type="button" class= "btn btn-primary" value="Submit" onclick="submitForm()"/>
+		<div id="info" class="alert alert-danger" style="display: none;"></div>
+	</form>
+	</div>
+</div>
+<script>
+$('input[type=radio][name=search_type]').change(function() {
+    if (this.value == 'SUBSTRUCTURE') {
+		$('#threshold').prop('disabled', true);
+    }
+    else if (this.value == 'SIMILARITY') {
+        $('#threshold').prop('disabled', false);
+    }
+});
+
+var ketcher = null;
+	function findKetcher()
+	{
+var ketcherFrame = document.getElementById('ifKetcher');
+
+
+if ('contentDocument' in ketcherFrame)
+    ketcher = ketcherFrame.contentWindow.ketcher;
+else // IE7
+    ketcher = document.frames['ifKetcher'].window.ketcher;
+	}
+
+	async function submitForm()
+	{
+		findKetcher();
+		if (ketcher==null)
+		{
+			$("#info").html('unable to retrieve structure');
+			$("#info").css("display","block");
+		}
+		
+		await ketcher.getSmiles().then(result=>setSMILES(result));
+	}
+
+
+
+	function setSMILES(result)
+	{
+		$("#smiles_input").val(result);
+		$("#form_dsim").submit();
+	}
+
+	$(document).ready(function(){
+		findKetcher();
+		ketcher.setMolecule('${SMILES}');
+
+	});
+
+</script>
+
+${JOB_SUBMIT}
+$[MONITOR]
+
+<script>
+	
+	var myInterval;
+	
+
+$(document).ready(function(){
+	
+
+		window.location.replace("/DRUG_SIM_RESULTS/${HASH}");
+	
+	
+});
+</script>
+
+$[/MONITOR]
