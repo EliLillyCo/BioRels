@@ -205,8 +205,7 @@ function runAPIQuery(&$args,&$BLOCKS)
 		}
 	}
 
-	echo $function_name."\n";
-	print_R($USER_PARAM);
+	
 	foreach ($BLOCKS as &$BLOCK)
 	{
 		$FOUND=false;
