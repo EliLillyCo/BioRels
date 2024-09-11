@@ -288,7 +288,7 @@ biorels_timestamp	job_name
 bioassay_onto_entry	bioassay_tag_id
 cell_disease	cell_entry_id|disease_entry_id|source_id
 cell_entry	cell_acc
-cell_taxon	cell_entry_id|taxon_id|source_id
+cell_taxon_map	cell_entry_id|taxon_id|source_id
 cell_pmid	cell_entry_id|pmid_entry_id|source_id
 cell_tissue	cell_tissue_name
 cell_patent_map	cell_entry_id|patent_entry_id|source_id

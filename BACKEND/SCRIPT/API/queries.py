@@ -39,7 +39,7 @@ def convert_to_dict(json_like_string):
 # Parameter: COMPLETE | Complete taxon information | boolean | false | optional | Default: false
 # Return: Taxon ID, scientific name, common name, taxonomic lineage and child taxonomic entries
 # Ecosystem: Genomics:Species
-# Example: python3.12 prep_queries.py get_taxon_by_tax_id -TAX_ID 9606
+# Example: python3.12 biorels_api.py get_taxon_by_tax_id -TAX_ID 9606
 # $[/API]
 def get_taxon_by_tax_id(TAX_ID,COMPLETE=False):
     query = f"SELECT * FROM taxon WHERE tax_id='{TAX_ID}'"
@@ -61,7 +61,7 @@ def get_taxon_by_tax_id(TAX_ID,COMPLETE=False):
 # Description: Search for a taxon by using its scientific name
 # Parameter: SCIENTIFIC_NAME | Scientific name | string | Homo Sapiens | required
 # Ecosystem: Genomics:Species
-# Example: python3.12 prep_queries.py get_taxon_by_scientific_name -SCIENTIFIC_NAME Homo
+# Example: python3.12 biorels_api.py get_taxon_by_scientific_name -SCIENTIFIC_NAME Homo
 # $[/API]
 def get_taxon_by_scientific_name(SCIENTIFIC_NAME):
     query = f"SELECT * FROM taxon WHERE scientific_name='{SCIENTIFIC_NAME}'"
@@ -82,7 +82,7 @@ def get_taxon_by_scientific_name(SCIENTIFIC_NAME):
 # Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 # Return: Taxon ID, scientific name, common name, taxonomic lineage
 # Ecosystem: Genomics:Species
-# Example: python3.12 prep_queries.py get_taxon_parent_lineage -TAX_ID 9606
+# Example: python3.12 biorels_api.py get_taxon_parent_lineage -TAX_ID 9606
 # $[/API]
 def get_taxon_parent_lineage(TAX_ID):
     query = f"SELECT t.*, th2.tax_level FROM taxon tr, taxon_tree th1, taxon_tree th2, taxon t WHERE th1.taxon_id=tr.taxon_id AND tr.tax_id='{TAX_ID}' AND th1.level_left > th2.level_left AND th1.level_right < th2.level_right AND th2.taxon_id=t.taxon_id ORDER BY th2.tax_level ASC"
@@ -99,7 +99,7 @@ def get_taxon_parent_lineage(TAX_ID):
 # Parameter: DEPTH | Depth to add to the requested taxon's level | int | 2 | optional | Default: None
 # Return: Taxon ID, scientific name, common name, taxonomic lineage
 # Ecosystem: Genomics:Species
-# Example: python3.12 prep_queries.py get_taxon_child_lineage -TAX_ID 9606
+# Example: python3.12 biorels_api.py get_taxon_child_lineage -TAX_ID 9606
 # $[/API]
 def get_taxon_child_lineage(TAX_ID, DEPTH=None):
     query = f"SELECT t.*, th2.tax_level FROM taxon tr, taxon_tree th1, taxon_tree th2, taxon t WHERE th1.taxon_id=tr.taxon_id AND tr.tax_id='{TAX_ID}' AND th1.level_left < th2.level_left AND th1.level_right > th2.level_right AND th2.taxon_id=t.taxon_id "
@@ -123,7 +123,7 @@ def get_taxon_child_lineage(TAX_ID, DEPTH=None):
 # Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 # Return: Locus ID, locus name, taxon ID, scientific name, taxonomic identifier
 # Ecosystem: Genomics:Locus & Gene|Species
-# Example: python3.12 prep_queries.py get_chromosome_for_taxon -TAX_ID 9606
+# Example: python3.12 biorels_api.py get_chromosome_for_taxon -TAX_ID 9606
 # $[/API]
 def get_chromosome_for_taxon(TAX_ID):
     query = f"SELECT c.* FROM chromosome c, taxon t WHERE c.taxon_id = t.taxon_id AND tax_id='{TAX_ID}'"
@@ -143,8 +143,8 @@ def get_chromosome_for_taxon(TAX_ID):
 # // Parameter: SUBBAND | Chromosome subband | string | 1 | optional | 
 # Return: Group by chromosome name, returns chromosome map _id, chromosome number, map location, position, arm, ban, subband.
 # Ecosystem: Genomics:Locus & Gene|Species
-# Example: python3.12 prep_queries.py get_chromosome_map_for_taxon -TAX_ID 9606 -CHROMOSOME 1
-# Example: python3.12 prep_queries.py get_chromosome_map_for_taxon -TAX_ID 9606 -ARM p
+# Example: python3.12 biorels_api.py get_chromosome_map_for_taxon -TAX_ID 9606 -CHROMOSOME 1
+# Example: python3.12 biorels_api.py get_chromosome_map_for_taxon -TAX_ID 9606 -ARM p
 # $[/API]
 def get_chromosome_map_for_taxon(TAX_ID, CHROMOSOME=None, ARM=None, BAND=None, SUBBAND=None):
     query = f"SELECT cm.*, chr_num FROM chromosome c, chr_map cm, taxon t WHERE c.taxon_id = t.taxon_id AND cm.chr_id = c.chr_id AND tax_id='{TAX_ID}'"
@@ -171,7 +171,7 @@ def get_chromosome_map_for_taxon(TAX_ID, CHROMOSOME=None, ARM=None, BAND=None, S
 # // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 # // Return: Gene ID, gene symbol, gene name, taxon ID, scientific name, taxonomic identifier
 # // Ecosystem: Genomics:Locus & Gene|Species
-# // Example:  python3.12 prep_queries.py  get_gene_for_taxon -TAX_ID 9606
+# // Example:  python3.12 biorels_api.py  get_gene_for_taxon -TAX_ID 9606
 # // Warning: Long query execution time
 # // $[/API]
 
@@ -214,7 +214,7 @@ def get_gene_for_taxon(TAX_ID):
 # // Parameter: MAP_LOCATION | Map location | string | 1p12 | optional
 # // Return: NCBI Gene ID, symbol ,full name, gene type, map location, chromosome number, status
 # // Ecosystem: Genomics:Locus & Gene|Species
-# // Example: python3.12 prep_queries.py  get_gene_for_chromosome -TAX_ID 9606 -CHROMOSOME 1
+# // Example: python3.12 biorels_api.py  get_gene_for_chromosome -TAX_ID 9606 -CHROMOSOME 1
 # // $[/API]
 def get_gene_for_chromosome(TAX_ID, CHROMOSOME, MAP_LOCATION=None):
     
@@ -252,7 +252,7 @@ def get_gene_for_chromosome(TAX_ID, CHROMOSOME, MAP_LOCATION=None):
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Taxon ID, scientific name, taxonomic identifier, chromosome number, map location, gene ID, gene symbol, gene name, gene type, gene status
 # // Ecosystem: Genomics:Locus & Gene|Species
-# // Example: python3.12 prep_queries.py get_gene_location -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_gene_location -GENE_ID 1017
 # // $[/API]
 def get_gene_location(GENE_ID):
     
@@ -279,7 +279,7 @@ def get_gene_location(GENE_ID):
 # // Description: Search for a gene by using its gene ID
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Ecosystem: Genomics:gene
-# // Example: python3.12 prep_queries.py get_gene_by_gene_id -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_gene_by_gene_id -GENE_ID 1017
 # // $[/API]
 def get_gene_by_gene_id(GENE_ID):
    
@@ -340,7 +340,7 @@ def get_gene_by_gene_id(GENE_ID):
 # // Parameter: SYMBOL | Gene symbol | string | CDK2 | required
 # // Parameter: TAX_ID | Taxonomic identifier | array | 9606,10090 | optional | Default: None
 # // Ecosystem: Genomics:gene
-# // Example: python3.12 prep_queries.py get_gene_by_gene_symbol -SYMBOL CDK2
+# // Example: python3.12 biorels_api.py get_gene_by_gene_symbol -SYMBOL CDK2
 # // $[/API]
 def get_gene_by_gene_symbol(SYMBOL, TAX_ID=None):
     
@@ -378,7 +378,7 @@ def get_gene_by_gene_symbol(SYMBOL, TAX_ID=None):
 # // Parameter: NAME | Gene name | string | Cyclin-dependent kinase | required
 # // Parameter: TAX_ID | Taxonomic identifier | array | 9606,10090 | optional | Default: None
 # // Ecosystem: Genomics:gene
-# // Example: python3.12 prep_queries.py get_gene_by_gene_name -NAME cyclin-dependent kinase 2
+# // Example: python3.12 biorels_api.py get_gene_by_gene_name -NAME cyclin-dependent kinase 2
 # // $[/API]
 def get_gene_by_gene_name(NAME, TAX_ID=None):
     
@@ -450,7 +450,7 @@ def get_gene_by_gene_name(NAME, TAX_ID=None):
 # // Return: Genome assembly ID, taxon ID, scientific name, assembly name, assembly level, assembly type, assembly unit, assembly version, assembly date, assembly role, assembly role order, assembly role level, assembly role type, assembly role group, assembly role group order, assembly role group level, assembly role group type, assembly role group order
 # // Parameter: DUMMY | Dummy parameter | string | optional | Default: None
 # // Ecosystem: Genomics:genome assembly
-# // Example: python3.12 prep_queries.py get_all_genome_assembly
+# // Example: python3.12 biorels_api.py get_all_genome_assembly
 # // $[/API]
 def get_all_genome_assembly(Dummy=None):
 	query = "SELECT * FROM genome_assembly"
@@ -466,7 +466,7 @@ def get_all_genome_assembly(Dummy=None):
 # // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 # // Return: Scientific name, chromosome number, taxon ID, chromosome sequence ID, chromosome sequence name, RefSeq name, RefSeq version, GenBank name, GenBank version, sequence role, sequence length
 # // Ecosystem: Genomics:genome assembly
-# // Example: python3.12 prep_queries.py get_genome_assembly_by_taxon -TAX_ID 9606
+# // Example: python3.12 biorels_api.py get_genome_assembly_by_taxon -TAX_ID 9606
 # // $[/API]
 def get_genome_assembly_by_taxon(TAX_ID):
 	query = f"""
@@ -492,8 +492,8 @@ def get_genome_assembly_by_taxon(TAX_ID):
 # // Parameter: CHR_SEQ_NAME | Chromosome sequence name: Genbank or refseq | string | HSCHR1_CTG9_UNLOCALIZED | optional | Default: None
 # // Return: Scientific name, chromosome number, taxon ID, chromosome sequence ID, chromosome sequence name, RefSeq name, RefSeq version, GenBank name, GenBank version, sequence role, sequence length
 # // Ecosystem: Genomics:genome assembly
-# // Example: python3.12 prep_queries.py get_chromosome_assembly_by_taxon -TAX_ID 9606
-# // Example: python3.12 prep_queries.py get_chromosome_assembly_by_taxon -TAX_ID 9606 -CHR_SEQ_NAME HSCHR1_CTG9_UNLOCALIZED
+# // Example: python3.12 biorels_api.py get_chromosome_assembly_by_taxon -TAX_ID 9606
+# // Example: python3.12 biorels_api.py get_chromosome_assembly_by_taxon -TAX_ID 9606 -CHR_SEQ_NAME HSCHR1_CTG9_UNLOCALIZED
 # // $[/API]
 def get_chromosome_assembly_by_taxon(TAX_ID, CHR_NUM=None, SEQ_ROLE=None, CHR_SEQ_NAME=None):
     query = f"""
@@ -530,8 +530,8 @@ def get_chromosome_assembly_by_taxon(TAX_ID, CHR_NUM=None, SEQ_ROLE=None, CHR_SE
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | optional | 9606 | Default: 9606
 # // Return: Chromosome position, chromosome, chromosome sequence, RefSeq name, RefSeq version, GenBank name, GenBank version, sequence role, chromosome sequence name, assembly unit, nucleotide, position, scientific name, taxonomic identifier
 # // Ecosystem: Genomics:chromosome|chromosome position
-# // Example: python3.12 prep_queries.py get_chromosome_position_info -CHR 1 -CHR_POS 12
-# // Example: python3.12 prep_queries.py get_chromosome_position_info -CHR MT -CHR_POS 1000
+# // Example: python3.12 biorels_api.py get_chromosome_position_info -CHR 1 -CHR_POS 12
+# // Example: python3.12 biorels_api.py get_chromosome_position_info -CHR MT -CHR_POS 1000
 # // $[/API]
 def get_chromosome_position_info(CHR, CHR_POS, TAX_ID='9606'):
     query = f"""
@@ -556,8 +556,8 @@ def get_chromosome_position_info(CHR, CHR_POS, TAX_ID='9606'):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | optional | 9606 | Default: 9606
 # // Return: Chromosome sequence in fasta format
 # // Ecosystem: Genomics:chromosome|chromosome sequence
-# // Example: python3.12 prep_queries.py get_chromosome_seq_to_fasta -CHR_NAME 1 -CHR_POS_START 1 -CHR_POS_END 1000
-# // Example: python3.12 prep_queries.py get_chromosome_seq_to_fasta -CHR_NAME MT -CHR_POS_START 1 -CHR_POS_END 1000
+# // Example: python3.12 biorels_api.py get_chromosome_seq_to_fasta -CHR_NAME 1 -CHR_POS_START 1 -CHR_POS_END 1000
+# // Example: python3.12 biorels_api.py get_chromosome_seq_to_fasta -CHR_NAME MT -CHR_POS_START 1 -CHR_POS_END 1000
 # // $[/API]
 def get_chromosome_seq_to_fasta(CHR_NAME, CHR_POS_START, CHR_POS_END, TAX_ID='9606'):
 	res=get_chromosome_assembly_by_taxon(TAX_ID, CHR_SEQ_NAME=CHR_NAME)
@@ -611,8 +611,8 @@ def get_chromosome_seq_to_fasta(CHR_NAME, CHR_POS_START, CHR_POS_END, TAX_ID='96
 # // Parameter: ONLY_MAIN | Only main species | boolean | false | optional | Default: false
 # // Return: Orthologs gene ID, gene symbol, gene name, species, taxonomic identifier
 # // Ecosystem: Genomics:orthologs
-# // Example: python3.12 prep_queries.py  get_orthologs -GENE_ID 1017
-# // Example: python3.12 prep_queries.py  get_orthologs -GENE_ID 1017 -ONLY_MAIN true
+# // Example: python3.12 biorels_api.py  get_orthologs -GENE_ID 1017
+# // Example: python3.12 biorels_api.py  get_orthologs -GENE_ID 1017 -ONLY_MAIN true
 # // $[/API]
 def get_orthologs(GENE_ID, ONLY_MAIN=False):
 	query = f"""
@@ -657,8 +657,8 @@ def get_orthologs(GENE_ID, ONLY_MAIN=False):
 # // Parameter: TYPE | Range type: (DNA or RNA) | string | RNA | optional | Default: RNA
 # // Return: Transcript sequence, translation, and alignment information
 # // Ecosystem: Genomics:transcript
-# // Example: python3.12 prep_queries.py get_transcript_sequence_range -TRANSCRIPT_NAME NM_000546 -START_POS 1 -END_POS 100 -TYPE RNA
-# // Example: python3.12 prep_queries.py get_transcript_sequence_range -TRANSCRIPT_NAME NM_000546 -START_POS 7674205 -END_POS 7674225 -TYPE DNA
+# // Example: python3.12 biorels_api.py get_transcript_sequence_range -TRANSCRIPT_NAME NM_000546 -START_POS 1 -END_POS 100 -TYPE RNA
+# // Example: python3.12 biorels_api.py get_transcript_sequence_range -TRANSCRIPT_NAME NM_000546 -START_POS 7674205 -END_POS 7674225 -TYPE DNA
 # // $[/API]
 def get_transcript_sequence_range(TRANSCRIPT_NAME,START_POS=None,END_POS=None,TYPE='RNA'):
 	pos=TRANSCRIPT_NAME.find('.')
@@ -743,7 +743,7 @@ def get_transcript_sequence_range(TRANSCRIPT_NAME,START_POS=None,END_POS=None,TY
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: Transcript ID, transcript name, transcript version, start position, end position, sequence hash, gene sequence ID, chromosome sequence ID, support level, partial sequence, valid alignment, gene sequence name, gene sequence version, strand, gene entry ID, feature, biotype
 # // Ecosystem: Genomics:transcript
-# // Example: python3.12 prep_queries.py search_transcript -TRANSCRIPT_NAME NM_000546
+# // Example: python3.12 biorels_api.py search_transcript -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 def search_transcript(TRANSCRIPT_NAME):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -787,7 +787,7 @@ def search_transcript(TRANSCRIPT_NAME):
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: Exon ID, minimum position, maximum position
 # // Ecosystem: Genomics:transcript
-# // Example: python3.12 prep_queries.py get_exon_location -TRANSCRIPT_NAME NM_000546
+# // Example: python3.12 biorels_api.py get_exon_location -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 def get_exon_location(TRANSCRIPT_NAME):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -816,7 +816,7 @@ def get_exon_location(TRANSCRIPT_NAME):
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: Exon ID, minimum position, maximum position
 # // Ecosystem: Genomics:transcript
-# // Example: python3.12 prep_queries.py get_exon_dna_location -TRANSCRIPT_NAME NM_000546
+# // Example: python3.12 biorels_api.py get_exon_dna_location -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 def get_exon_dna_location(TRANSCRIPT_NAME):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -846,7 +846,7 @@ def get_exon_dna_location(TRANSCRIPT_NAME):
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: region minimum position, maximum position
 # // Ecosystem: Genomics:transcript
-# // Example: python3.12 prep_queries.py get_region_transcript -TRANSCRIPT_NAME NM_000546
+# // Example: python3.12 biorels_api.py get_region_transcript -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 def get_region_transcript(TRANSCRIPT_NAME):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -888,8 +888,8 @@ def get_region_transcript(TRANSCRIPT_NAME):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 # // Return: Assembly name, assembly unit, chromosome sequence name, gene sequence name, gene sequence version, transcript name, transcript version, transcript ID
 # // Ecosystem: Genomics:transcript|chromosome|taxon
-# // Example: python3.12 prep_queries.py get_transcript_by_chromosome -CHR_NAME 1
-# // Example: python3.12 prep_queries.py get_transcript_by_chromosome -CHR_NAME 1 -CHR_POS_START 1000 -CHR_POS_END 2000
+# // Example: python3.12 biorels_api.py get_transcript_by_chromosome -CHR_NAME 1
+# // Example: python3.12 biorels_api.py get_transcript_by_chromosome -CHR_NAME 1 -CHR_POS_START 1000 -CHR_POS_END 2000
 # // $[/API]
 def get_transcript_by_chromosome(CHR_NAME, CHR_POS_START=None, CHR_POS_END=None, TAX_ID='9606'):
 	query = f"""
@@ -919,7 +919,7 @@ def get_transcript_by_chromosome(CHR_NAME, CHR_POS_START=None, CHR_POS_END=None,
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 # // Return: Assembly name, assembly unit, chromosome sequence name, gene sequence name, gene sequence version, transcript name, transcript version, transcript ID
 # // Ecosystem: Genomics:transcript|locus|taxon
-# // Example: python3.12 prep_queries.py get_transcript_by_locus -CHR_MAP_LOCATION 1p36.33
+# // Example: python3.12 biorels_api.py get_transcript_by_locus -CHR_MAP_LOCATION 1p36.33
 # // $[/API]
 def get_transcript_by_locus(CHR_MAP_LOCATION, TAX_ID='9606'):
 	query = f"""
@@ -947,7 +947,7 @@ def get_transcript_by_locus(CHR_MAP_LOCATION, TAX_ID='9606'):
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: transcript_id, transcript_name, transcript_version, t.start_pos,t.end_pos, seq_hash, gs.gene_seq_id, gs.chr_seq_id,support_level, partial_sequence, valid_alignment, gene_seq_name,gene_seq_version,strand, ge.gn_entry_id, f.seq_type as feature, b.seq_Type as biotype
 # // Ecosystem: Genomics:transcript|gene
-# // Example: python3.12 prep_queries.py get_transcript_by_gene_id -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_transcript_by_gene_id -GENE_ID 1017
 # // $[/API]
 def get_transcript_by_gene_id(GENE_ID):
 	query = f"""
@@ -970,7 +970,7 @@ def get_transcript_by_gene_id(GENE_ID):
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Transcript ID, transcript name, transcript version, start position, end position, sequence hash, gene sequence ID, chromosome sequence ID, support level, partial sequence, valid alignment, gene sequence name, gene sequence version, strand, gene entry ID, feature, biotype
 # // Ecosystem: Genomics:transcript|gene
-# // Example: python3.12 prep_queries.py get_transcripts_sequence_by_gene -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_transcripts_sequence_by_gene -GENE_ID 1017
 # // $[/API]
 def get_transcripts_sequence_by_gene(GENE_ID):
 	query = f"""
@@ -1001,7 +1001,7 @@ def get_transcripts_sequence_by_gene(GENE_ID):
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Transcript sequences in fasta format
 # // Ecosystem: Genomics:transcript|gene
-# // Example: python3.12 prep_queries.py get_transcripts_sequence_in_fasta_by_gene -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_transcripts_sequence_in_fasta_by_gene -GENE_ID 1017
 # // $[/API]
 def get_transcripts_sequence_in_fasta_by_gene(GENE_ID):
 	query = f"""
@@ -1039,7 +1039,7 @@ def get_transcripts_sequence_in_fasta_by_gene(GENE_ID):
 # // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 # // Return: transcript_id, transcript_name, transcript_version, t.start_pos,t.end_pos, seq_hash, gs.gene_seq_id, gs.chr_seq_id,support_level, partial_sequence, valid_alignment, gene_seq_name,gene_seq_version,strand, ge.gn_entry_id, f.seq_type as feature, b.seq_Type as biotype, gene_id, symbol, chr_name, chr_map
 # // Ecosystem: Genomics:transcript|taxon
-# // Example: python3.12 prep_queries.py search_transcript_by_taxon -TAX_ID 9606
+# // Example: python3.12 biorels_api.py search_transcript_by_taxon -TAX_ID 9606
 # // Warning: Long query execution time
 # // $[/API]
 def search_transcript_by_taxon(TAX_ID):
@@ -1074,7 +1074,7 @@ def search_transcript_by_taxon(TAX_ID):
 # // Parameter: END_POSITION | Ending position in the chromosome  | int | 1000 | required
 # // Return: Transcript ID, gene sequence ID, gene sequence name, gene name, gene ID, transcript name, transcript version, strand, sequence position, exon ID, chromosome sequence position ID, transcript position type
 # // Ecosystem: Genomics:chromosome position|transcript
-# // Example: python3.12 prep_queries.py get_transcript_from_chromosome_position -CHR_SEQ_ID 1 -START_POSITION 1 -END_POSITION 1000
+# // Example: python3.12 biorels_api.py get_transcript_from_chromosome_position -CHR_SEQ_ID 1 -START_POSITION 1 -END_POSITION 1000
 # // $[/API]
 def get_transcript_from_chromosome_position(CHR_SEQ_ID, START_POSITION, END_POSITION):
 	query = f"""
@@ -1112,7 +1112,7 @@ def get_transcript_from_chromosome_position(CHR_SEQ_ID, START_POSITION, END_POSI
 # // Description: Given a list of transcript_pos_id, search for the corresponding chromosome position records.
 # // Parameter: LIST | List of transcript_pos_id | array | 1,2,3,4,5 | required
 # // Ecosystem: Genomics:chromosome position|transcript|transcript position
-# // Example: python3.12 prep_queries.py get_chromosome_positions_info_by_transcript_pos_ids -LIST 1,2,3,4,5
+# // Example: python3.12 biorels_api.py get_chromosome_positions_info_by_transcript_pos_ids -LIST 1,2,3,4,5
 # // $[/API]
 def get_chromosome_positions_info_by_transcript_pos_ids(LIST):
 	query = f"""
@@ -1140,7 +1140,7 @@ def get_chromosome_positions_info_by_transcript_pos_ids(LIST):
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | NM_001798 | required
 # // Parameter: TRANSCRIPT_VERSION | Transcript version | string | | optional | Default: None
 # // Ecosystem: Genomics:chromosome position|transcript
-# // Example: python3.12 prep_queries.py get_chromosome_seq_info_from_transcript_position -TRANSCRIPT_POSITION 1,2,3,4 -TRANSCRIPT_NAME NM_001798
+# // Example: python3.12 biorels_api.py get_chromosome_seq_info_from_transcript_position -TRANSCRIPT_POSITION 1,2,3,4 -TRANSCRIPT_NAME NM_001798
 # // $[/API]
 
 def get_chromosome_seq_info_from_transcript_position(TRANSCRIPT_POSITION, TRANSCRIPT_NAME,TRANSCRIPT_VERSION=None):
@@ -1179,8 +1179,8 @@ def get_chromosome_seq_info_from_transcript_position(TRANSCRIPT_POSITION, TRANSC
 # // Parameter: WITH_GENE | Include gene information | boolean | true | optional 
 # // Return: Variant entry record. VARIANT-> Variant entry record, ALLELES-> Variant alleles, FREQUENCY-> Variant alleles frequency, GENE-> Gene information
 # // Ecosystem: Genomics:variant
-# // Example: python3.12 prep_queries.py search_variant_by_rsid -RSID rs12345
-# // Example: python3.12 prep_queries.py search_variant_by_rsid -RSID rs12345 -WITH_ALLELES True -WITH_FREQUENCY True -WITH_GENE True
+# // Example: python3.12 biorels_api.py search_variant_by_rsid -RSID rs12345
+# // Example: python3.12 biorels_api.py search_variant_by_rsid -RSID rs12345 -WITH_ALLELES True -WITH_FREQUENCY True -WITH_GENE True
 # // $[/API]
 def search_variant_by_rsid(RSID, WITH_ALLELES = True, WITH_FREQUENCY = True,WITH_GENE=True):
 	VAL = RSID
@@ -1210,7 +1210,7 @@ def search_variant_by_rsid(RSID, WITH_ALLELES = True, WITH_FREQUENCY = True,WITH
 # // Parameter: RSID | dbSNP identifier | string | rs12345 | required
 # // Return: Variant alleles
 # // Ecosystem: Genomics:variant
-# // Example: python3.12 prep_queries.py get_variant_alleles_by_rsid -RSID rs12345
+# // Example: python3.12 biorels_api.py get_variant_alleles_by_rsid -RSID rs12345
 # // $[/API]
 def get_variant_alleles_by_rsid(RSID):
 	VAL = RSID
@@ -1246,7 +1246,7 @@ def get_variant_alleles_by_rsid(RSID):
 # // Parameter: RSID | dbSNP identifier | string | rs12345 | required
 # // Return: Variant alleles frequency
 # // Ecosystem: Genomics:variant
-# // Example: python3.12 prep_queries.py get_alleles_frequency_by_rsid -RSID rs12345
+# // Example: python3.12 biorels_api.py get_alleles_frequency_by_rsid -RSID rs12345
 # // $[/API]
 def get_alleles_frequency_by_rsid(RSID):
 	VAL = RSID
@@ -1293,7 +1293,7 @@ def get_alleles_frequency_by_rsid(RSID):
 # // Parameter: WITH_GENE | Include gene information | boolean | true | optional | Default: true
 # // Return: First level array with chromosome position as key and second level array with rsid as key and variant information as value
 # // Ecosystem: Genomics:genomic sequence|variant|gene
-# // Example: python3.12 prep_queries.py getVariantsFromChromosomeRange -CHR_SEQ_NAME 22 -START_POS 25459492 -END_POS 25459492
+# // Example: python3.12 biorels_api.py getVariantsFromChromosomeRange -CHR_SEQ_NAME 22 -START_POS 25459492 -END_POS 25459492
 # // $[/API]
 def getVariantsFromChromosomeRange(CHR_SEQ_NAME, START_POS, END_POS, TAX_ID='9606', WITH_ALLELES=True, WITH_FREQUENCY=True, WITH_GENE=True):
 	query = f"""
@@ -1335,7 +1335,7 @@ def getVariantsFromChromosomeRange(CHR_SEQ_NAME, START_POS, END_POS, TAX_ID='960
 # // Parameter: RSID | dbSNP identifier | string | rs12345 | required
 # // Return: Gene symbol, gene full name, gene ID, gene entry ID, scientific name, taxonomic identifier, rsid
 # // Ecosystem: Genomics:variant|gene
-# // Example: python3.12 prep_queries.py find_gene_from_variant -RSID rs12345
+# // Example: python3.12 biorels_api.py find_gene_from_variant -RSID rs12345
 # // $[/API]
 def find_gene_from_variant(RSID):
 	VAL = RSID
@@ -1371,8 +1371,8 @@ def find_gene_from_variant(RSID):
 # // Parameter: WITH_GENE | Include gene information | boolean | false | optional 
 # // Return: Variant entry record. VARIANT-> Variant entry record, ALLELES-> Variant alleles, FREQUENCY-> Variant alleles frequency, GENE-> Gene information
 # // Ecosystem: Genomics:variant|gene
-# // Example: python3.12 prep_queries.py find_variant_from_gene -GENE_ID 1017
-# // Example: python3.12 prep_queries.py find_variant_from_gene -GENE_ID 1017 -WITH_ALLELES True -WITH_FREQUENCY True -WITH_GENE True
+# // Example: python3.12 biorels_api.py find_variant_from_gene -GENE_ID 1017
+# // Example: python3.12 biorels_api.py find_variant_from_gene -GENE_ID 1017 -WITH_ALLELES True -WITH_FREQUENCY True -WITH_GENE True
 # // $[/API]
 def find_variant_from_gene(GENE_ID, WITH_ALLELES=False, WITH_FREQUENCY=False, WITH_GENE=False):
 	res = run_query(f"""
@@ -1420,7 +1420,7 @@ def find_variant_from_gene(GENE_ID, WITH_ALLELES=False, WITH_FREQUENCY=False, WI
 # // Return: Variant types
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
 # // Ecosystem: Genomics:variant
-# // Example: python3.12 prep_queries.py list_variant_type
+# // Example: python3.12 biorels_api.py list_variant_type
 # // $[/API]
 def list_variant_type(Dummy=None):
 	return run_query("SELECT DISTINCT variant_name FROM variant_type")
@@ -1442,8 +1442,8 @@ def list_variant_type(Dummy=None):
 # // Parameter: WITH_GENE | Include gene information | boolean | false | optional
 # // Return: Variant entry record. VARIANT-> Variant entry record, ALLELES-> Variant alleles, FREQUENCY-> Variant alleles frequency, GENE-> Gene information
 # // Ecosystem: Genomics:variant|gene
-# // Example: python3.12 prep_queries.py find_variant_type_from_gene -GENE_ID 1017 -SNP_TYPE 'del'
-# // Example: python3.12 prep_queries.py find_variant_type_from_gene -GENE_ID 1017 -SNP_TYPE 'del' -WITH_ALLELES True -WITH_FREQUENCY True -WITH_GENE True
+# // Example: python3.12 biorels_api.py find_variant_type_from_gene -GENE_ID 1017 -SNP_TYPE 'del'
+# // Example: python3.12 biorels_api.py find_variant_type_from_gene -GENE_ID 1017 -SNP_TYPE 'del' -WITH_ALLELES True -WITH_FREQUENCY True -WITH_GENE True
 # // $[/API]
 def find_variant_type_from_gene(GENE_ID, SNP_TYPE, WITH_ALLELES=False, WITH_FREQUENCY=False, WITH_GENE=False):
 	res = run_query(f"""
@@ -1506,7 +1506,7 @@ def find_variant_type_from_gene(GENE_ID, SNP_TYPE, WITH_ALLELES=False, WITH_FREQ
 # // Parameter: TRANSCRIPT_VARIANT_IMPACT | Transcript variant impact | string | coding_sequence_variant |  optional | Default: None
 # // Return: Variant entry record
 # // Ecosystem: Genomics:variant|transcript
-# // Example: python3.12 prep_queries.py get_variant_for_transcript -TRANSCRIPT_NAME 'NM_000546.5'
+# // Example: python3.12 biorels_api.py get_variant_for_transcript -TRANSCRIPT_NAME 'NM_000546.5'
 # // $[/API]
 def get_variant_for_transcript(TRANSCRIPT_NAME, START_POS=None, END_POS=None, TRANSCRIPT_VARIANT_IMPACT=None):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -1623,7 +1623,7 @@ def get_variant_for_transcript(TRANSCRIPT_NAME, START_POS=None, END_POS=None, TR
 # // Parameter: PROTEIN_VARIANT_IMPACT | Protein variant impact | string | missense_variant | optional | Default: None
 # // Return: Variant entry record
 # // Ecosystem: Genomics:variant|transcript;Proteomic:protein
-# // Example: python3.12 prep_queries.py get_variant_for_protein -PROTEIN_ISO_ID 'P04066-1' -START_POS 1
+# // Example: python3.12 biorels_api.py get_variant_for_protein -PROTEIN_ISO_ID 'P04066-1' -START_POS 1
 # // $[/API]
 def get_variant_for_protein(PROTEIN_ISO_ID, START_POS=None, END_POS=None, PROTEIN_VARIANT_IMPACT=None):
 	query = f"""
@@ -1738,8 +1738,8 @@ def get_variant_for_protein(PROTEIN_ISO_ID, START_POS=None, END_POS=None, PROTEI
 # // Description: Search for a source by using its name. First by exact match, then by partial match. Case insensitive.
 # // Parameter: source_name | Source name | string | UniProt | required
 # // Ecosystem: Global
-# // Example: python3.12 prep_queries.py source_search -source_name 'NCBI'
-# // Example: python3.12 prep_queries.py source_search -source_name 'unip'
+# // Example: python3.12 biorels_api.py source_search -source_name 'NCBI'
+# // Example: python3.12 biorels_api.py source_search -source_name 'unip'
 # // $[/API]
 def source_search(source_name):
     query = f"SELECT * FROM source where LOWER(source_name) ='{source_name.lower()}'"
@@ -1776,7 +1776,7 @@ def source_search(source_name):
 # // Parameter: IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein record
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py search_protein_by_identifier -IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py search_protein_by_identifier -IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def search_protein_by_identifier(IDENTIFIER):
 	query=f"""
@@ -1794,8 +1794,8 @@ def search_protein_by_identifier(IDENTIFIER):
 # // Parameter: IS_PRIMARY | Is primary accession | boolean | true | optional  | Default: true
 # // Return: Protein record
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py search_protein_by_accession -ACCESSION 'P24941'
-# // Example: python3.12 prep_queries.py search_protein_by_accession -ACCESSION 'P24941' -IS_PRIMARY false
+# // Example: python3.12 biorels_api.py search_protein_by_accession -ACCESSION 'P24941'
+# // Example: python3.12 biorels_api.py search_protein_by_accession -ACCESSION 'P24941' -IS_PRIMARY false
 # // $[/API]
 def search_protein_by_accession(ACCESSION, IS_PRIMARY=True):
 	query=f"""
@@ -1815,7 +1815,7 @@ def search_protein_by_accession(ACCESSION, IS_PRIMARY=True):
 # // Parameter: IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein accession, is primary
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py get_protein_accession -IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py get_protein_accession -IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def get_protein_accession(IDENTIFIER):
 	query=f"""
@@ -1834,7 +1834,7 @@ def get_protein_accession(IDENTIFIER):
 # // Parameter: IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein name, protein name type
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py get_protein_names -IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py get_protein_names -IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def get_protein_names(IDENTIFIER):
 	query=f"""
@@ -1853,7 +1853,7 @@ def get_protein_names(IDENTIFIER):
 # // Parameter: NAME | Protein name (Case sensitive) | string | Cyclin-dependent kinase 2 | required
 # // Return: Protein record
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py search_protein_by_name -NAME 'Cyclin-dependent kinase 2'
+# // Example: python3.12 biorels_api.py search_protein_by_name -NAME 'Cyclin-dependent kinase 2'
 # // $[/API]
 def search_protein_by_name(NAME):
 	query=f"""
@@ -1874,8 +1874,8 @@ def search_protein_by_name(NAME):
 # // Parameter: EC | Enzyme commission number | string | 2.7.11.22 | required
 # // Return: Protein record
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py search_protein_by_EC_number -EC '2.7.11.22'
-# // Example: python3.12 prep_queries.py search_protein_by_EC_number -EC '2.7'
+# // Example: python3.12 biorels_api.py search_protein_by_EC_number -EC '2.7.11.22'
+# // Example: python3.12 biorels_api.py search_protein_by_EC_number -EC '2.7'
 # // $[/API]
 def search_protein_by_EC_number(EC):
 	query=f"""
@@ -1902,7 +1902,7 @@ def search_protein_by_EC_number(EC):
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Protein record
 # // Ecosystem: Genomics:gene;Proteomic:protein
-# // Example: python3.12 prep_queries.py get_protein_by_gene -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_protein_by_gene -GENE_ID 1017
 # // $[/API]
 def get_protein_by_gene(GENE_ID):
 	query=f"""
@@ -1923,7 +1923,7 @@ def get_protein_by_gene(GENE_ID):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | optional | Default: 9606
 # // Return: Protein record
 # // Ecosystem: Genomics:gene;Proteomic:protein
-# // Example: python3.12 prep_queries.py get_protein_by_gene_symbol -SYMBOL 'CDK2'
+# // Example: python3.12 biorels_api.py get_protein_by_gene_symbol -SYMBOL 'CDK2'
 # // $[/API]
 def get_protein_by_gene_symbol(SYMBOL, TAX_ID='9606'):
 	data=get_gene_by_gene_symbol(SYMBOL,[TAX_ID])
@@ -1947,7 +1947,7 @@ def get_protein_by_gene_symbol(SYMBOL, TAX_ID='9606'):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | required
 # // Return: Protein record
 # // Ecosystem: Proteomic:protein;Genomics:taxon
-# // Example: python3.12 prep_queries.py list_protein_by_taxon -TAX_ID 9606
+# // Example: python3.12 biorels_api.py list_protein_by_taxon -TAX_ID 9606
 # // Warning: High volume
 # // $[/API]
 def list_protein_by_taxon(TAX_ID):
@@ -1976,7 +1976,7 @@ def list_protein_by_taxon(TAX_ID):
 # // Parameter: CANONICAL_ONLY | Is canonical sequence | boolean | false | optional | Default: false
 # // Return: Protein sequence record
 # // Ecosystem: Proteomic:protein|protein sequence
-# // Example: python3.12 prep_queries.py get_protein_sequences_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' -CANONICAL_ONLY false
+# // Example: python3.12 biorels_api.py get_protein_sequences_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' -CANONICAL_ONLY false
 # // $[/API]
 def get_protein_sequences_for_entry(PROT_IDENTIFIER, CANONICAL_ONLY=False):
 	query=f"""
@@ -1998,7 +1998,7 @@ def get_protein_sequences_for_entry(PROT_IDENTIFIER, CANONICAL_ONLY=False):
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein sequence record
 # // Ecosystem: Proteomic:protein|protein sequence
-# // Example: python3.12 prep_queries.py search_protein_sequence_by_isoform_id -ISOFORM_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py search_protein_sequence_by_isoform_id -ISOFORM_ID 'P24941-1'
 # // $[/API]
 def search_protein_sequence_by_isoform_id(ISOFORM_ID):
 	query=f"""
@@ -2018,7 +2018,7 @@ def search_protein_sequence_by_isoform_id(ISOFORM_ID):
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein isoform record
 # // Ecosystem: Proteomic:protein|protein sequence
-# // Example: python3.12 prep_queries.py get_isoform_info -ISOFORM_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py get_isoform_info -ISOFORM_ID 'P24941-1'
 # // $[/API]
 def get_isoform_info(ISOFORM_ID):
 	query=f"""
@@ -2050,7 +2050,7 @@ def get_isoform_info(ISOFORM_ID):
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein sequence in fasta format
 # // Ecosystem: Proteomic:protein|protein sequence
-# // Example: python3.12 prep_queries.py get_fasta_sequence -ISOFORM_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py get_fasta_sequence -ISOFORM_ID 'P24941-1'
 # // $[/API]
 def get_fasta_sequence(ISOFORM_ID):
 	query=f"""
@@ -2081,7 +2081,7 @@ def get_fasta_sequence(ISOFORM_ID):
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein sequences in fasta format
 # // Ecosystem: Proteomic:protein|protein sequence
-# // Example: python3.12 prep_queries.py get_fasta_sequences -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py get_fasta_sequences -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def get_fasta_sequences(PROT_IDENTIFIER):
 	query=f"""
@@ -2113,7 +2113,7 @@ def get_fasta_sequences(PROT_IDENTIFIER):
 # // Parameter: NCBI_GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Protein sequences in fasta format
 # // Ecosystem: Proteomic:protein|protein sequence;Genomics:gene
-# // Example: python3.12 prep_queries.py get_fasta_sequences_by_gene -NCBI_GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_fasta_sequences_by_gene -NCBI_GENE_ID 1017
 # // $[/API]
 def get_fasta_sequences_by_gene(NCBI_GENE_ID):
 	query=f"""
@@ -2151,7 +2151,7 @@ def get_fasta_sequences_by_gene(NCBI_GENE_ID):
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Feature record
 # // Ecosystem: Proteomic:protein sequence
-# // Example: python3.12 prep_queries.py get_isoform_feature -ISOFORM_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py get_isoform_feature -ISOFORM_ID 'P24941-1'
 # // $[/API]
 def get_isoform_feature(ISOFORM_ID):
 	query=f"""
@@ -2188,7 +2188,7 @@ def get_isoform_feature(ISOFORM_ID):
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | required
 # // Return: Protein description record
 # // Ecosystem: Proteomic:protein
-# // Example: python3.12 prep_queries.py get_protein_description -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py get_protein_description -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def get_protein_description(PROT_IDENTIFIER):
 	query=f"""
@@ -2216,7 +2216,7 @@ def get_protein_description(PROT_IDENTIFIER):
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein domain record
 # // Ecosystem: Proteomic:protein|protein domain
-# // Example: python3.12 prep_queries.py get_protein_domains_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' 
+# // Example: python3.12 biorels_api.py get_protein_domains_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' 
 # // $[/API]
 def get_protein_domains_for_entry(PROT_IDENTIFIER):
 	query=f"""
@@ -2237,8 +2237,8 @@ def get_protein_domains_for_entry(PROT_IDENTIFIER):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: None
 # // Return: Protein domain record
 # // Ecosystem: Proteomic:protein|protein domain
-# // Example: python3.12 prep_queries.py search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase' -PROT_IDENTIFIER 'CDK2_HUMAN'
-# // Example: python3.12 prep_queries.py search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase'  -TAX_ID 9606
+# // Example: python3.12 biorels_api.py search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase' -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase'  -TAX_ID 9606
 # // $[/API]
 def search_protein_domain_by_domain_name(DOMAIN_NAME, PROT_IDENTIFIER=None, TAX_ID=None):
 	query=f"""
@@ -2266,7 +2266,7 @@ def search_protein_domain_by_domain_name(DOMAIN_NAME, PROT_IDENTIFIER=None, TAX_
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein domains in fasta format
 # // Ecosystem: Proteomic:protein|protein domain
-# // Example: python3.12 prep_queries.py get_fasta_domains -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py get_fasta_domains -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def get_fasta_domains(PROT_IDENTIFIER):
 	query=f"""
@@ -2298,7 +2298,7 @@ def get_fasta_domains(PROT_IDENTIFIER):
 # // Parameter: NCBI_GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Protein domains in fasta format
 # // Ecosystem: Proteomic:protein|protein domain;Genomics:gene
-# // Example: python3.12 prep_queries.py get_fasta_domains_by_gene -NCBI_GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_fasta_domains_by_gene -NCBI_GENE_ID 1017
 # // $[/API]
 def get_fasta_domains_by_gene(NCBI_GENE_ID):
 	query=f"""
@@ -2338,7 +2338,7 @@ def get_fasta_domains_by_gene(NCBI_GENE_ID):
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein sequence alignment record
 # // Ecosystem: Proteomic:protein|protein sequence alignment
-# // Example: python3.12 prep_queries.py list_protein_sequence_alignment -ISOFORM_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py list_protein_sequence_alignment -ISOFORM_ID 'P24941-1'
 # // $[/API]
 def list_protein_sequence_alignment(ISOFORM_ID):
 	query=f"""
@@ -2359,7 +2359,7 @@ def list_protein_sequence_alignment(ISOFORM_ID):
 # // Parameter: COMP_ISO_ID | Comparison isoform identifier | string | P24941-1 | required
 # // Return: Protein sequence alignment record
 # // Ecosystem: Proteomic:protein|protein sequence alignment
-# // Example: python3.12 prep_queries.py get_protein_sequence_alignment -REF_ISO_ID 'P24941-1' -COMP_ISO_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py get_protein_sequence_alignment -REF_ISO_ID 'P24941-1' -COMP_ISO_ID 'P24941-1'
 # // $[/API]
 def get_protein_sequence_alignment(REF_ISO_ID,COMP_ISO_ID):
 	query=f"""
@@ -2438,7 +2438,7 @@ def get_protein_sequence_alignment(REF_ISO_ID,COMP_ISO_ID):
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | ENST00000379031 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomic:protein;Genomics:transcript
-# // Example: python3.12 prep_queries.py get_translation -ISOFORM_ID 'P24941-1' -TRANSCRIPT_NAME 'ENST00000379031'
+# // Example: python3.12 biorels_api.py get_translation -ISOFORM_ID 'P24941-1' -TRANSCRIPT_NAME 'ENST00000379031'
 # // $[/API]
 def get_translation(ISOFORM_ID, TRANSCRIPT_NAME):
 	data={}
@@ -2482,7 +2482,7 @@ def get_translation(ISOFORM_ID, TRANSCRIPT_NAME):
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomic:protein;Genomics:transcript
-# // Example: python3.12 prep_queries.py get_translation_for_isoform -ISOFORM_ID 'P24941-1'
+# // Example: python3.12 biorels_api.py get_translation_for_isoform -ISOFORM_ID 'P24941-1'
 # // $[/API]
 def get_translation_for_isoform(ISOFORM_ID):
 	res=run_query("SELECT * FROM transcript T, tr_protseq_al tua, prot_seq ps WHERE T.transcript_id = tua.transcript_id AND tua.prot_seq_id = ps.prot_seq_id AND ps.iso_id='"+ISOFORM_ID+"'")
@@ -2503,7 +2503,7 @@ def get_translation_for_isoform(ISOFORM_ID):
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | NM_001798 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomic:protein;Genomics:transcript
-# // Example: python3.12 prep_queries.py get_translation_for_transcript -TRANSCRIPT_NAME NM_001798
+# // Example: python3.12 biorels_api.py get_translation_for_transcript -TRANSCRIPT_NAME NM_001798
 # // $[/API]
 def get_translation_for_transcript(TRANSCRIPT_NAME):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -2538,7 +2538,7 @@ def get_translation_for_transcript(TRANSCRIPT_NAME):
 # // Parameter: POSITION | Transcript position | int | 400 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomic:protein;Genomics:transcript
-# // Example: python3.12 prep_queries.py get_translation_transcript_pos -TRANSCRIPT_NAME NM_001798 -POSITION 400
+# // Example: python3.12 biorels_api.py get_translation_transcript_pos -TRANSCRIPT_NAME NM_001798 -POSITION 400
 # // $[/API]
 def get_translation_transcript_pos(TRANSCRIPT_NAME, POSITION):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -2571,7 +2571,7 @@ def get_translation_transcript_pos(TRANSCRIPT_NAME, POSITION):
 # // Parameter: POSITION | Transcript position | int | 74 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation
 # // Ecosystem: Proteomic:protein;Genomics:transcript
-# // Example: python3.12 prep_queries.py get_translation_isoform_pos -ISOFORM_ID P24941-1 -POSITION 74
+# // Example: python3.12 biorels_api.py get_translation_isoform_pos -ISOFORM_ID P24941-1 -POSITION 74
 # // $[/API]
 def get_translation_isoform_pos(ISOFORM_ID, POSITION):
 	query = f"""
@@ -2601,9 +2601,9 @@ def get_translation_isoform_pos(ISOFORM_ID, POSITION):
 # // Parameter: NAMESPACE | Gene ontology namespace | string | biological_process | optional | Default: None
 # // Return: Gene ontology record
 # // Ecosystem: Proteomic:gene ontology
-# // Example: python3.12 prep_queries.py search_gene_ontology -AC 'GO:0010389'
-# // Example: python3.12 prep_queries.py search_gene_ontology -NAME 'cell cycle'
-# // Example: python3.12 prep_queries.py search_gene_ontology -NAMESPACE 'biological_process'
+# // Example: python3.12 biorels_api.py search_gene_ontology -AC 'GO:0010389'
+# // Example: python3.12 biorels_api.py search_gene_ontology -NAME 'cell cycle'
+# // Example: python3.12 biorels_api.py search_gene_ontology -NAMESPACE 'biological_process'
 # // $[/API]
 def search_gene_ontology(AC=None, NAME=None, NAMESPACE=None):
 	query = "SELECT * FROM go_entry WHERE 1=1"
@@ -2623,7 +2623,7 @@ def search_gene_ontology(AC=None, NAME=None, NAMESPACE=None):
 # // Parameter: AC | Gene ontology accession | string | GO:0010389 | required
 # // Return: Gene ontology external identifiers
 # // Ecosystem: Proteomic:gene ontology
-# // Example: python3.12 prep_queries.py get_gene_ontology_dbref -AC 'GO:0010389'
+# // Example: python3.12 biorels_api.py get_gene_ontology_dbref -AC 'GO:0010389'
 # // $[/API]
 def get_gene_ontology_dbref(AC):
 	query = f"""
@@ -2647,8 +2647,8 @@ def get_gene_ontology_dbref(AC):
 # // Parameter: WITH_OBSOLETE | Include obsolete records | boolean | false | optional 
 # // Return: List of Gene ontology record that are children of the given gene ontology record
 # // Ecosystem: Proteomic:gene ontology
-# // Example: python3.12 prep_queries.py get_child_gene_ontology -AC 'GO:0010389'
-# // Example: python3.12 prep_queries.py get_child_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
+# // Example: python3.12 biorels_api.py get_child_gene_ontology -AC 'GO:0010389'
+# // Example: python3.12 biorels_api.py get_child_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
 # // $[/API]
 def get_child_gene_ontology(AC, MAX_LEVEL=1, WITH_OBSOLETE=False):
 	RELS = {}
@@ -2691,8 +2691,8 @@ def get_child_gene_ontology(AC, MAX_LEVEL=1, WITH_OBSOLETE=False):
 # // Parameter: WITH_OBSOLETE | Include obsolete records | boolean | false | optional 
 # // Return: List of Gene ontology record that are parent of the given gene ontology record
 # // Ecosystem: Proteomic:gene ontology
-# // Example: python3.12 prep_queries.py get_parent_gene_ontology -AC 'GO:0010389'
-# // Example: python3.12 prep_queries.py get_parent_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
+# // Example: python3.12 biorels_api.py get_parent_gene_ontology -AC 'GO:0010389'
+# // Example: python3.12 biorels_api.py get_parent_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
 # // $[/API]
 def get_parent_gene_ontology(AC, MAX_LEVEL=1, WITH_OBSOLETE=False):
 	RELS = {}
@@ -2738,7 +2738,7 @@ def get_parent_gene_ontology(AC, MAX_LEVEL=1, WITH_OBSOLETE=False):
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Gene ontology record
 # // Ecosystem: Proteomic:protein|gene ontology
-# // Example: python3.12 prep_queries.py get_gene_onto_by_protein -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: python3.12 biorels_api.py get_gene_onto_by_protein -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 def get_gene_onto_by_protein(PROT_IDENTIFIER):
 	query=f"""
@@ -2759,8 +2759,8 @@ def get_gene_onto_by_protein(PROT_IDENTIFIER):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | optional | 9606 | Default: None
 # // Return: Protein record
 # // Ecosystem: Proteomic:protein|gene ontology
-# // Example: python3.12 prep_queries.py search_protein_by_gene_onto_ac -GO_AC 'GO:0010389'
-# // Example: python3.12 prep_queries.py search_protein_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
+# // Example: python3.12 biorels_api.py search_protein_by_gene_onto_ac -GO_AC 'GO:0010389'
+# // Example: python3.12 biorels_api.py search_protein_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
 # // $[/API]
 def search_protein_by_gene_onto_ac(GO_AC, TAX_ID=None):
 	query=f"""
@@ -2791,7 +2791,7 @@ def search_protein_by_gene_onto_ac(GO_AC, TAX_ID=None):
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Gene ontology record
 # // Ecosystem: Proteomic:gene ontology;Genomics:gene
-# // Example: python3.12 prep_queries.py get_gene_onto_by_gene_id -GENE_ID 1017
+# // Example: python3.12 biorels_api.py get_gene_onto_by_gene_id -GENE_ID 1017
 # // $[/API]
 def get_gene_onto_by_gene_id(GENE_ID):
 	query=f"""
@@ -2816,8 +2816,8 @@ def get_gene_onto_by_gene_id(GENE_ID):
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional
 # // Return: Gene record
 # // Ecosystem: Proteomic:gene ontology;Genomics:gene
-# // Example: python3.12 prep_queries.py search_gene_by_gene_onto_ac -GO_AC 'GO:0010389'
-# // Example: python3.12 prep_queries.py search_gene_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
+# // Example: python3.12 biorels_api.py search_gene_by_gene_onto_ac -GO_AC 'GO:0010389'
+# // Example: python3.12 biorels_api.py search_gene_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
 # // $[/API]
 def search_gene_by_gene_onto_ac(GO_AC, TAX_ID=''):
 	query=f"""
@@ -2852,7 +2852,7 @@ def search_gene_by_gene_onto_ac(GO_AC, TAX_ID=''):
 # // Parameter: NAME | Small molecule name | string | ATP | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py search_small_molecule_by_name -NAME 'ATP'
+# // Example: python3.12 biorels_api.py search_small_molecule_by_name -NAME 'ATP'
 # // $[/API]
 def search_small_molecule_by_name(NAME):
 	query=f"""
@@ -2874,7 +2874,7 @@ def search_small_molecule_by_name(NAME):
 # // Parameter: INCHI_KEYs | Small molecule InChI KEY | array | ZKHQWZAMYRWXGA-KQYNXXCUSA-N | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py search_small_molecule_by_inchi_key -INCHI_KEYs 'ZKHQWZAMYRWXGA-KQYNXXCUSA-N'
+# // Example: python3.12 biorels_api.py search_small_molecule_by_inchi_key -INCHI_KEYs 'ZKHQWZAMYRWXGA-KQYNXXCUSA-N'
 # // $[/API]
 def search_small_molecule_by_inchi_key(INCHI_KEYs):
 	if INCHI_KEYs==[]:
@@ -2896,7 +2896,7 @@ def search_small_molecule_by_inchi_key(INCHI_KEYs):
 # // Parameter: SMILES | Small molecule SMILES | array | Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py search_small_molecule_by_full_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
+# // Example: python3.12 biorels_api.py search_small_molecule_by_full_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
 # // $[/API]
 def search_small_molecule_by_full_smiles(SMILES):
 	if SMILES==[]:
@@ -2921,8 +2921,8 @@ def search_small_molecule_by_full_smiles(SMILES):
 # // Parameter: WITHOUT_COUNTERION | True if only molecule without counterion requested | boolean | false | optional
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
-# // Example: python3.12 prep_queries.py search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O' -WITHOUT_COUNTERION true
+# // Example: python3.12 biorels_api.py search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
+# // Example: python3.12 biorels_api.py search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O' -WITHOUT_COUNTERION true
 # // $[/API]
 def search_small_molecule_by_smiles(SMILES, WITHOUT_COUNTERION=False):
 	if SMILES==[]:
@@ -2946,7 +2946,7 @@ def search_small_molecule_by_smiles(SMILES, WITHOUT_COUNTERION=False):
 # // Parameter: SCAFFOLD_SMILES | Small molecule scaffold as SMILES | array | c1cccc1 | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py search_small_molecule_by_Scaffold -SCAFFOLD_SMILES 'c1ccccc1'
+# // Example: python3.12 biorels_api.py search_small_molecule_by_Scaffold -SCAFFOLD_SMILES 'c1ccccc1'
 # // $[/API]
 def search_small_molecule_by_Scaffold(SCAFFOLD_SMILES):
 	if SCAFFOLD_SMILES==[]:
@@ -2971,7 +2971,7 @@ def search_small_molecule_by_Scaffold(SCAFFOLD_SMILES):
 # // Parameter: COMPLETE | True if all information is requested | boolean | false | optional
 # // Return: Small molecule record with names, patents, descriptions, counterions and scaffolds
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py  get_small_molecule -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: python3.12 biorels_api.py  get_small_molecule -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 def get_small_molecule(MD5_HASH, COMPLETE=False):
 	query=f"""
@@ -3000,7 +3000,7 @@ def get_small_molecule(MD5_HASH, COMPLETE=False):
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule names
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py  get_small_molecule_names -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: python3.12 biorels_api.py  get_small_molecule_names -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 def get_small_molecule_names(MD5_HASH):
 	query=f"""
@@ -3021,7 +3021,7 @@ def get_small_molecule_names(MD5_HASH):
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule patent
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py  get_small_molecule_patent -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: python3.12 biorels_api.py  get_small_molecule_patent -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 def get_small_molecule_patent(MD5_HASH):
 	query=f"""
@@ -3042,7 +3042,7 @@ def get_small_molecule_patent(MD5_HASH):
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule description
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py  get_small_molecule_description -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: python3.12 biorels_api.py  get_small_molecule_description -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 def get_small_molecule_description(MD5_HASH):
 	query=f"""
@@ -3063,7 +3063,7 @@ def get_small_molecule_description(MD5_HASH):
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule counterion
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py  get_small_molecule_counterion -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: python3.12 biorels_api.py  get_small_molecule_counterion -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 def get_small_molecule_counterion(MD5_HASH):
 	query=f"""
@@ -3083,7 +3083,7 @@ def get_small_molecule_counterion(MD5_HASH):
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule scaffold
 # // Ecosystem: Molecular entity:small molecule
-# // Example: python3.12 prep_queries.py  get_small_molecule_scaffold -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: python3.12 biorels_api.py  get_small_molecule_scaffold -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 def get_small_molecule_scaffold(MD5_HASH):
 	query=f"""
@@ -3104,7 +3104,7 @@ def get_small_molecule_scaffold(MD5_HASH):
 # // Parameter: MOLECULAR_ENTITY_HASH | Molecular entity hash | string | 962fb0e3e47bc03f831ebe9b759d027e | required
 # // Return: Molecular entity record with components, small molecules, conjugates and nucleic acids
 # // Ecosystem: Molecular entity:molecular entity
-# // Example: python3.12 prep_queries.py  get_molecular_entity -MOLECULAR_ENTITY_HASH '962fb0e3e47bc03f831ebe9b759d027e'
+# // Example: python3.12 biorels_api.py  get_molecular_entity -MOLECULAR_ENTITY_HASH '962fb0e3e47bc03f831ebe9b759d027e'
 # // $[/API]
 def get_molecular_entity(MOLECULAR_ENTITY_HASH):
 	query=f""" SELECT * FROM molecular_entity WHERE molecular_entity_hash='{MOLECULAR_ENTITY_HASH}'"""
@@ -3157,7 +3157,7 @@ def get_molecular_entity(MOLECULAR_ENTITY_HASH):
 # // Parameter: HELM_HASH | Nucleic acid HELM hash | string | 962fb0e3e47bc03f831ebe9b759d027e | required
 # // Return: Nucleic acid sequence record with modifications
 # // Ecosystem: Molecular entity:nucleic acid
-# // Example: python3.12 prep_queries.py  get_nucleic_acid_seq -HELM_HASH '962fb0e3e47bc03f831ebe9b759d027e'
+# // Example: python3.12 biorels_api.py  get_nucleic_acid_seq -HELM_HASH '962fb0e3e47bc03f831ebe9b759d027e'
 # // $[/API]
 def get_nucleic_acid_seq(HELM_HASH):
 	query=f""" SELECT * FROM nucleic_acid_seq WHERE helm_hash='{HELM_HASH}'"""
@@ -3188,7 +3188,7 @@ def get_nucleic_acid_seq(HELM_HASH):
 # // Parameter: TAG | Disease tag | string | MONDO_0005087 | required
 # // Return: Disease record with synonyms and external database references
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py get_disease_information -TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py get_disease_information -TAG 'MONDO_0005087'
 # // $[/API]
 def get_disease_information(TAG):
 	query=f"""
@@ -3212,7 +3212,7 @@ def get_disease_information(TAG):
 # // Parameter: NAME | Disease name | string | Cancer | required
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py search_disease_by_name -NAME 'Cancer'
+# // Example: python3.12 biorels_api.py search_disease_by_name -NAME 'Cancer'
 # // $[/API]
 def search_disease_by_name(NAME):
 	query=f"""
@@ -3272,7 +3272,7 @@ def search_disease_by_name(NAME):
 # // Parameter: TAG | Disease tag | string | MONDO_0005087 | required
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py search_disease_by_tag -TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py search_disease_by_tag -TAG 'MONDO_0005087'
 # // $[/API]
 def search_disease_by_tag(TAG):
 	query=f"""
@@ -3288,7 +3288,7 @@ def search_disease_by_tag(TAG):
 # // Parameter: SYNONYM | Disease synonym | string | Cancer | required
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py search_disease_by_synonym -SYNONYM 'Cancer'
+# // Example: python3.12 biorels_api.py search_disease_by_synonym -SYNONYM 'Cancer'
 # // $[/API]
 def search_disease_by_synonym(SYNONYM):
 	query=f"""
@@ -3308,7 +3308,7 @@ def search_disease_by_synonym(SYNONYM):
 # // Parameter: SOURCE | Source of the identifier | string | MONDO | optional | Default: None
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py search_disease_by_identifier -ID J45 -SOURCE  ICD10CM
+# // Example: python3.12 biorels_api.py search_disease_by_identifier -ID J45 -SOURCE  ICD10CM
 # // $[/API]
 def search_disease_by_identifier(ID,SOURCE=None):
 	query=f"""
@@ -3332,7 +3332,7 @@ def search_disease_by_identifier(ID,SOURCE=None):
 # // Parameter: MAX_DEPTH | Maximum depth of child diseases | int | 1 | optional | Default: 1
 # // Return: List of disease records that are children of the given disease
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py get_child_disease -TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py get_child_disease -TAG 'MONDO_0005087'
 # // $[/API]
 def get_child_disease(TAG,MAX_DEPTH=1):
 	query=f"""
@@ -3362,7 +3362,7 @@ def get_child_disease(TAG,MAX_DEPTH=1):
 # // Parameter: MAX_DEPTH | Maximum depth of parent diseases | int | 1 | optional | Default: 15
 # // Return: List of disease records that are parent of the given disease
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py get_parent_disease -TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py get_parent_disease -TAG 'MONDO_0005087'
 # // $[/API]
 def get_parent_disease(TAG,MAX_DEPTH=15):
 	query=f"""
@@ -3394,7 +3394,7 @@ def get_parent_disease(TAG,MAX_DEPTH=15):
 # // Parameter: SOURCE_NAME | Source of the disease information | string | MONDO | optional
 # // Return: Textual information about the disease
 # // Ecosystem: Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py get_disease_info -TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py get_disease_info -TAG 'MONDO_0005087'
 # // $[/API]
 def get_disease_info(TAG,SOURCE_NAME=''):
 	query=f"""SELECT di.*, source_name
@@ -3422,7 +3422,7 @@ def get_disease_info(TAG,SOURCE_NAME=''):
 # // Parameter: COMPLETE | True if all information is requested | boolean | false | optional
 # // Return: anatomy record with synonyms and external database references
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  get_anatomy_information -TAG 'UBERON_0000955'
+# // Example: python3.12 biorels_api.py  get_anatomy_information -TAG 'UBERON_0000955'
 # // $[/API]
 def get_anatomy_information(TAG,COMPLETE=False):
 	query=f"""
@@ -3451,7 +3451,7 @@ def get_anatomy_information(TAG,COMPLETE=False):
 # // Parameter: IS_EXACT | True if exact match is required | boolean | true | optional | Default: true
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  search_anatomy_by_name -NAME 'Brain'
+# // Example: python3.12 biorels_api.py  search_anatomy_by_name -NAME 'Brain'
 # // $[/API]
 def search_anatomy_by_name(NAME, IS_EXACT=True):
 	query=f"""
@@ -3468,7 +3468,7 @@ def search_anatomy_by_name(NAME, IS_EXACT=True):
 # // Parameter: TAG | anatomy tag | string | UBERON_0000955 | required
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  search_anatomy_by_tag -TAG 'UBERON_0000955'
+# // Example: python3.12 biorels_api.py  search_anatomy_by_tag -TAG 'UBERON_0000955'
 # // $[/API]
 def search_anatomy_by_tag(TAG):
 	query=f"""
@@ -3484,7 +3484,7 @@ def search_anatomy_by_tag(TAG):
 # // Parameter: SYNONYM | anatomy synonym | string | Brain | required
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  search_anatomy_by_synonym -SYNONYM 'Brain'
+# // Example: python3.12 biorels_api.py  search_anatomy_by_synonym -SYNONYM 'Brain'
 # // $[/API]
 def search_anatomy_by_synonym(SYNONYM):
 	query=f"""
@@ -3502,7 +3502,7 @@ def search_anatomy_by_synonym(SYNONYM):
 # // Parameter: SOURCE | Source of the identifier | string | UBERON | optional | Default: None
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  search_anatomy_by_identifier -ID 0000955 -SOURCE UBERON
+# // Example: python3.12 biorels_api.py  search_anatomy_by_identifier -ID 0000955 -SOURCE UBERON
 # // $[/API]
 def search_anatomy_by_identifier(ID,SOURCE=None):
 	query=f"""
@@ -3526,7 +3526,7 @@ def search_anatomy_by_identifier(ID,SOURCE=None):
 # // Parameter: MAX_DEPTH | Maximum depth of child anatomys | int | 1 | optional | Default: 1
 # // Return: List of anatomy records that are children of the given anatomy
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  get_child_anatomy -TAG UBERON_0000955
+# // Example: python3.12 biorels_api.py  get_child_anatomy -TAG UBERON_0000955
 # // $[/API]
 def get_child_anatomy(TAG,MAX_DEPTH=1):
 	query=f"""
@@ -3555,7 +3555,7 @@ def get_child_anatomy(TAG,MAX_DEPTH=1):
 # // Parameter: MAX_DEPTH | Maximum depth of parent anatomys | int | 1 | optional | Default: 1
 # // Return: List of anatomy records that are parent of the given anatomy
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py  get_parent_anatomy -TAG UBERON_0000955
+# // Example: python3.12 biorels_api.py  get_parent_anatomy -TAG UBERON_0000955
 # // $[/API]
 def get_parent_anatomy(TAG,MAX_DEPTH=1):
 	query=f"""
@@ -3590,8 +3590,8 @@ def get_parent_anatomy(TAG,MAX_DEPTH=1):
 # // Parameter: INCLUDE_CHILD_DISEASE | True if child diseases should be included | boolean | false | optional
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line|disease
-# // Example: python3.12 prep_queries.py search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087'
-# // Example: python3.12 prep_queries.py search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087' -INCLUDE_CHILD_DISEASE true
+# // Example: python3.12 biorels_api.py search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087' -INCLUDE_CHILD_DISEASE true
 # // $[/API]
 def search_cell_line_by_disease(DISEASE_TAG,INCLUDE_CHILD_DISEASE=False):
 	query=f"""
@@ -3625,7 +3625,7 @@ def search_cell_line_by_disease(DISEASE_TAG,INCLUDE_CHILD_DISEASE=False):
 # // Parameter: COMPLETE | True if complete information is required | boolean | false | optional
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line|disease|anatomy|taxon
-# // Example: python3.12 prep_queries.py get_cell_info -ACC 'CVCL_B6YM'
+# // Example: python3.12 biorels_api.py get_cell_info -ACC 'CVCL_B6YM'
 # // $[/API]
 def get_cell_info(ACC,COMPLETE=False):
 	res=run_query(f"SELECT * FROM cell_entry where cell_acc='{ACC}'")
@@ -3649,7 +3649,7 @@ def get_cell_info(ACC,COMPLETE=False):
 # // Parameter: ACC | Cell line accession | string | CVCL_B6YM | required
 # // Return: List of synonyms
 # // Ecosystem: Disease_anatomy:cell line
-# // Example: python3.12 prep_queries.py get_cell_line_synonyms -ACC 'CVCL_B6YM'
+# // Example: python3.12 biorels_api.py get_cell_line_synonyms -ACC 'CVCL_B6YM'
 # // $[/API]
 def get_cell_line_synonyms(ACC):
 	res=run_query(f"""SELECT cell_syn_name, source_name 
@@ -3667,8 +3667,8 @@ def get_cell_line_synonyms(ACC):
 # // Parameter: COMPLETE | True if extended disease information is requested | boolean | false | optional
 # // Return: List of diseases
 # // Ecosystem: Disease_anatomy:cell line|disease
-# // Example: python3.12 prep_queries.py get_cell_line_disease -ACC 'CVCL_B6YM'
-# // Example: python3.12 prep_queries.py get_cell_line_disease -ACC 'CVCL_B6YM' -COMPLETE true
+# // Example: python3.12 biorels_api.py get_cell_line_disease -ACC 'CVCL_B6YM'
+# // Example: python3.12 biorels_api.py get_cell_line_disease -ACC 'CVCL_B6YM' -COMPLETE true
 # // $[/API]
 def get_cell_line_disease(ACC,COMPLETE=False):
 	res=run_query(f"""SELECT disease_tag, disease_name, source_name 
@@ -3690,8 +3690,8 @@ def get_cell_line_disease(ACC,COMPLETE=False):
 # // Parameter: COMPLETE | True if extended tissue information is requested | boolean | false | optional
 # // Return: List of tissues
 # // Ecosystem: Disease_anatomy:cell line|anatomy
-# // Example: python3.12 prep_queries.py get_cell_line_tissue -ACC 'CVCL_B6YM'
-# // Example: python3.12 prep_queries.py get_cell_line_tissue -ACC 'CVCL_B6YM' -COMPLETE true
+# // Example: python3.12 biorels_api.py get_cell_line_tissue -ACC 'CVCL_B6YM'
+# // Example: python3.12 biorels_api.py get_cell_line_tissue -ACC 'CVCL_B6YM' -COMPLETE true
 # // $[/API]
 def get_cell_line_tissue(ACC,COMPLETE=False):
 	res=run_query(f"""SELECT anatomy_tag, anatomy_name 
@@ -3712,7 +3712,7 @@ def get_cell_line_tissue(ACC,COMPLETE=False):
 # // Parameter: ACC | Cell line accession | string | CVCL_B6YM | required
 # // Return: Organism information
 # // Ecosystem: Disease_anatomy:cell line|Genomics:taxon
-# // Example: python3.12 prep_queries.py get_cell_line_taxon -ACC 'CVCL_B6YM'
+# // Example: python3.12 biorels_api.py get_cell_line_taxon -ACC 'CVCL_B6YM'
 # // $[/API]
 def get_cell_line_taxon(ACC):
 	res=run_query(f"""SELECT tax_id, scientific_name,source_name 
@@ -3731,7 +3731,7 @@ def get_cell_line_taxon(ACC):
 # // Parameter: ACC | Cell line accession | string | CVCL_B6YM | required
 # // Return: Patent information
 # // Ecosystem: Disease_anatomy:cell line|Scientific_community:patent
-# // Example: python3.12 prep_queries.py get_cell_line_patent -ACC 'CVCL_B6YM'
+# // Example: python3.12 biorels_api.py get_cell_line_patent -ACC 'CVCL_B6YM'
 # // $[/API]
 def get_cell_line_patent(ACC):
 	res=run_query(f"""SELECT source_name, patent_application 
@@ -3750,7 +3750,7 @@ def get_cell_line_patent(ACC):
 # // Return: List of cell line types
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
 # // Ecosystem: Disease_anatomy:cell line
-# // Example: python3.12 prep_queries.py list_cell_line_type
+# // Example: python3.12 biorels_api.py list_cell_line_type
 # // $[/API]
 def list_cell_line_type(Dummy=None):
 	res=run_query(f"""SELECT count(*) n_cell_line, cell_type 
@@ -3767,7 +3767,7 @@ def list_cell_line_type(Dummy=None):
 # // Return: Count, scientific name, tax id
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
 # // Ecosystem: Disease_anatomy:cell line;Genomics:taxon
-# // Example: python3.12 prep_queries.py list_cell_line_taxon
+# // Example: python3.12 biorels_api.py list_cell_line_taxon
 # // $[/API]
 def list_cell_line_taxon(Dummy=None):
 	res=run_query(f"""SELECT count(*) n_cell_line, scientific_name, tax_id 
@@ -3783,7 +3783,7 @@ def list_cell_line_taxon(Dummy=None):
 # // Return: Count, tissue name, tissue tag
 # // Ecosystem: Disease_anatomy:cell line|anatomy
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
-# // Example: python3.12 prep_queries.py list_cell_line_tissue
+# // Example: python3.12 biorels_api.py list_cell_line_tissue
 # // $[/API]
 def list_cell_line_tissue(Dummy:None):
 	res=run_query(f"""SELECT count(*) n_cell_line, anatomy_name, anatomy_tag 
@@ -3802,7 +3802,7 @@ def list_cell_line_tissue(Dummy:None):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line
-# // Example: python3.12 prep_queries.py search_cell_line -PARAMS "CELL_TYPE=Cancer cell line"
+# // Example: python3.12 biorels_api.py search_cell_line -PARAMS "CELL_TYPE=Cancer cell line"
 # // $[/API]
 def search_cell_line(PARAMS,COMPLETE=false):
 	query="SELECT * FROM cell_entry ce";
@@ -3868,7 +3868,7 @@ def search_cell_line(PARAMS,COMPLETE=false):
 # // Description: List all RNA expression samples with their source, organ, and tissue information
 # // Ecosystem: RNA expression
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
-# // Example: python3.12 prep_queries.py  list_rna_expression_samples
+# // Example: python3.12 biorels_api.py  list_rna_expression_samples
 # // $[/API]
 def list_rna_expression_samples(Dummy=None):
 	query=f"""
@@ -3895,7 +3895,7 @@ def list_rna_expression_samples(Dummy=None):
 # // Parameter: SAMPLE_ID | Sample ID | array | GTEX-1117F | optional | Default: None
 # // Parameter: ANATOMY_TAG | Anatomy tag | array | UBERON_0002037 | optional | Default: None
 # // Ecosystem: RNA expression
-# // Example: python3.12 prep_queries.py  search_rna_expression_samples -SOURCE_NAME 'GTEX' -ORGAN 'Brain' -TISSUE 'Cerebellum' -SAMPLE_ID 'GTEX-1117F' -ANATOMY_TAG 'UBERON_0002037'
+# // Example: python3.12 biorels_api.py  search_rna_expression_samples -SOURCE_NAME 'GTEX' -ORGAN 'Brain' -TISSUE 'Cerebellum' -SAMPLE_ID 'GTEX-1117F' -ANATOMY_TAG 'UBERON_0002037'
 # // $[/API]
 def search_rna_expression_samples(SOURCE_NAME=None,ORGAN=None, TISSUE=None, SAMPLE_ID=None, ANATOMY_TAG=None):
 	query=f"""
@@ -3930,7 +3930,7 @@ def search_rna_expression_samples(SOURCE_NAME=None,ORGAN=None, TISSUE=None, SAMP
 # // Parameter: SAMPLE_IDS | List of sample IDs | array | GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI | optional | Default: None
 # // Return: TPM, sample ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:transcript
-# // Example: python3.12 prep_queries.py  get_transcript_expression -TRANSCRIPT_NAME 'ENST00000379031' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
+# // Example: python3.12 biorels_api.py  get_transcript_expression -TRANSCRIPT_NAME 'ENST00000379031' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
 # // $[/API]
 def get_transcript_expression(TRANSCRIPT_NAME, SAMPLE_IDS=None):
 	LIST_SAMPLES = []
@@ -3968,7 +3968,7 @@ def get_transcript_expression(TRANSCRIPT_NAME, SAMPLE_IDS=None):
 # // Parameter: SOURCE_NAME | Source name | string | GTEX | required
 # // Return: TPM, transcript name, transcript version, gene sequence name, gene sequence version, symbol, gene ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene|transcript
-# // Example: python3.12 prep_queries.py  get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
+# // Example: python3.12 biorels_api.py  get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
 # // $[/API]
 def get_sample_rna_expression(SAMPLE_ID, SOURCE_NAME):
 	query=f"""
@@ -3992,7 +3992,7 @@ def get_sample_rna_expression(SAMPLE_ID, SOURCE_NAME):
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | ENST00000379031 | required
 # // Return: Organ name, tissue name, number of samples, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:transcript
-# // Example: python3.12 prep_queries.py  get_transcript_rna_expression_stat -TRANSCRIPT_NAME 'ENST00000379031'
+# // Example: python3.12 biorels_api.py  get_transcript_rna_expression_stat -TRANSCRIPT_NAME 'ENST00000379031'
 # // $[/API]
 def get_transcript_rna_expression_stat(TRANSCRIPT_NAME):
 	pos = TRANSCRIPT_NAME.find('.')
@@ -4025,9 +4025,9 @@ def get_transcript_rna_expression_stat(TRANSCRIPT_NAME):
 # // Parameter: ANATOMY_TAG | Anatomy tag | array | optional | Default: None
 # // Return: Transcript name, transcript version, organ name, tissue name, number of samples, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:transcript
-# // Example: python3.12 prep_queries.py  get_tissue_transcript_rna_expression_stat -ORGAN 'Brain'
-# // Example: python3.12 prep_queries.py  get_tissue_transcript_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
-# // Example: python3.12 prep_queries.py  get_tissue_transcript_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037' 
+# // Example: python3.12 biorels_api.py  get_tissue_transcript_rna_expression_stat -ORGAN 'Brain'
+# // Example: python3.12 biorels_api.py  get_tissue_transcript_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
+# // Example: python3.12 biorels_api.py  get_tissue_transcript_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037' 
 # // $[/API]
 def get_tissue_transcript_rna_expression_stat(SOURCE_NAME=None,ORGAN=None, TISSUE=None, ANATOMY_TAG=None):
 	query=f"""
@@ -4056,7 +4056,7 @@ def get_tissue_transcript_rna_expression_stat(SOURCE_NAME=None,ORGAN=None, TISSU
 # // Parameter: SAMPLE_IDS | List of sample IDs | array | GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI | optional | Default: None
 # // Return: TPM, sample ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: python3.12 prep_queries.py get_gene_expression -GENE_SEQ_NAME 'ENSG00000223972' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
+# // Example: python3.12 biorels_api.py get_gene_expression -GENE_SEQ_NAME 'ENSG00000223972' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
 # // $[/API]
 def get_gene_expression(GENE_SEQ_NAME, SAMPLE_IDS=None):
 	LIST_SAMPLES = []
@@ -4091,7 +4091,7 @@ def get_gene_expression(GENE_SEQ_NAME, SAMPLE_IDS=None):
 # // Parameter: SOURCE_NAME | Source name | string | GTEX | required
 # // Return: TPM,  gene sequence name, gene sequence version, symbol, gene ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: python3.12 prep_queries.py get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
+# // Example: python3.12 biorels_api.py get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
 # // $[/API]
 def get_sample_gene_rna_expression(SAMPLE_ID, SOURCE_NAME):
 	query=f"""
@@ -4114,7 +4114,7 @@ def get_sample_gene_rna_expression(SAMPLE_ID, SOURCE_NAME):
 # // Parameter: GENE_SEQ_NAME | Gene sequence name | string | ENSG00000223972 | required
 # // Return: Organ name, tissue name, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: python3.12 prep_queries.py get_gene_rna_expression_stat -GENE_SEQ_NAME 'ENSG00000223972'
+# // Example: python3.12 biorels_api.py get_gene_rna_expression_stat -GENE_SEQ_NAME 'ENSG00000223972'
 # // $[/API]
 def get_gene_rna_expression_stat(GENE_SEQ_NAME):
 	pos = GENE_SEQ_NAME.find('.')
@@ -4145,9 +4145,9 @@ def get_gene_rna_expression_stat(GENE_SEQ_NAME):
 # // Parameter: ANATOMY_TAG | Anatomy tag | array | optional | UBERON_0002037 | Default: None
 # // Return: gene seq name, gene version, organ name, tissue name, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: python3.12 prep_queries.py get_tissue_gene_rna_expression_stat -ORGAN 'Brain'
-# // Example: python3.12 prep_queries.py get_tissue_gene_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
-# // Example: python3.12 prep_queries.py get_tissue_gene_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037' 
+# // Example: python3.12 biorels_api.py get_tissue_gene_rna_expression_stat -ORGAN 'Brain'
+# // Example: python3.12 biorels_api.py get_tissue_gene_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
+# // Example: python3.12 biorels_api.py get_tissue_gene_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037' 
 # // $[/API]
 def get_tissue_gene_rna_expression_stat(SOURCE_NAME=None,ORGAN=None, TISSUE=None, ANATOMY_TAG=None):
 	query=f"""
@@ -4174,9 +4174,9 @@ def get_tissue_gene_rna_expression_stat(SOURCE_NAME=None,ORGAN=None, TISSUE=None
 # // Parameter: ANATOMY_TAG | Anatomy tag | array | UBERON_0002037 | optional
 # // Return: gene seq name, gene version, organ name, tissue name, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: python3.12 prep_queries.py get_tissue_gene_rna_expression_stat -ORGAN 'Brain'
-# // Example: python3.12 prep_queries.py get_tissue_gene_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
-# // Example: python3.12 prep_queries.py get_tissue_gene_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037'
+# // Example: python3.12 biorels_api.py get_tissue_gene_rna_expression_stat -ORGAN 'Brain'
+# // Example: python3.12 biorels_api.py get_tissue_gene_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
+# // Example: python3.12 biorels_api.py get_tissue_gene_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037'
 # // $[/API]
 def get_tissue_gene_rna_expression_stat(ORGAN=[],TISSUE=[],ANATOMY_TAG=[]):
 	query=f"""SELECT GENE_SEQ_NAME,GENE_SEQ_VERSION, ORGAN_NAME,TISSUE_NAME,AUC,LOWER_VALUE,LR,MIN_VALUE,Q1,MED_VALUE,Q3,MAX_VALUE
@@ -4211,7 +4211,7 @@ def get_tissue_gene_rna_expression_stat(ORGAN=[],TISSUE=[],ANATOMY_TAG=[]):
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
 # // Return: Count, clinical variant type
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: python3.12 prep_queries.py list_clinical_variant_type
+# // Example: python3.12 biorels_api.py list_clinical_variant_type
 # // $[/API]
 def list_clinical_variant_type(Dummy:None):
 	return run_query("""SELECT count(*) n_clinical_variant, clinical_variant_type 
@@ -4228,7 +4228,7 @@ def list_clinical_variant_type(Dummy:None):
 # // Return: Count, gene ID, symbol, full name
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
 # // Ecosystem: Disease_anatomy:clinical variant;Genomics:gene
-# // Example: python3.12 prep_queries.py list_clinical_variant_by_gene
+# // Example: python3.12 biorels_api.py list_clinical_variant_by_gene
 # // $[/API]
 def list_clinical_variant_by_gene(Dummy:None):
 	return run_query("""SELECT count(*) n_clinical_variant, gene_id, symbol, full_name
@@ -4246,7 +4246,7 @@ def list_clinical_variant_by_gene(Dummy:None):
 # // Description: List and count the number of clinical variant by significance
 # // Return: Count, clinical significance
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: python3.12 prep_queries.py list_clinical_variant_significance
+# // Example: python3.12 biorels_api.py list_clinical_variant_significance
 # // $[/API]
 def list_clinical_variant_significance():
 	return run_query("""SELECT count(distinct clinvar_entry_id) n_clinical_variant, clin_sign as clinical_significance
@@ -4262,7 +4262,7 @@ def list_clinical_variant_significance():
 # // Parameter: CLINICAL_VARIANT_NAME | Clinical variant name | string | NM_000059.3:c.35G>A | required
 # // Return: Clinical variant record
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: python3.12 prep_queries.py get_clinical_variant_information -CLINICAL_VARIANT_NAME 'NM_001798.5(CDK2):c.28A>C (p.Ile10Leu)'
+# // Example: python3.12 biorels_api.py get_clinical_variant_information -CLINICAL_VARIANT_NAME 'NM_001798.5(CDK2):c.28A>C (p.Ile10Leu)'
 # // $[/API]
 
 def get_clinical_variant_information(CLINICAL_VARIANT_NAME):
@@ -4292,7 +4292,7 @@ def get_clinical_variant_information(CLINICAL_VARIANT_NAME):
 # // Parameter: SCV_ID | SCV ID | string | SCV004922085.1 | required
 # // Return: Clinical variant submission record
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: python3.12 prep_queries.py get_clinical_variant_submission -SCV_ID 'SCV004922085.1'
+# // Example: python3.12 biorels_api.py get_clinical_variant_submission -SCV_ID 'SCV004922085.1'
 # // $[/API]
 def get_clinical_variant_submission(SCV_ID):
 	query=f"""SELECT *
@@ -4334,12 +4334,12 @@ def get_clinical_variant_submission(SCV_ID):
 # // Parameter: PARAMS | List of parameters, Use $PARAMS=array('NAMES'=>array(),'TYPE'=>array(),'STATUS'=>array(),'GENE_IDS'=>array(),'TRANSCRIPTS'=>array(),'SIGNIFICANCE'=>array()); | multi_array | required
 # // Return: Clinical variant record
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: python3.12 prep_queries.py search_clinical_variant -PARAMS "SIGNIFICANCE=Pathogenic"
-# // Example: python3.12 prep_queries.py search_clinical_variant -PARAMS "GENE_IDS=1017,1018"
-# // Example: python3.12 prep_queries.py search_clinical_variant -PARAMS "NAMES=NM_001798.5(CDK2):c.28A>C (p.Ile10Leu)"
-# // Example: python3.12 prep_queries.py search_clinical_variant -PARAMS "TYPE=deletion"
-# // Example: python3.12 prep_queries.py search_clinical_variant -PARAMS "STATUS=1"
-# // Example: python3.12 prep_queries.py search_clinical_variant -PARAMS "DISEASE=MONDO_0005087"
+# // Example: python3.12 biorels_api.py search_clinical_variant -PARAMS "SIGNIFICANCE=Pathogenic"
+# // Example: python3.12 biorels_api.py search_clinical_variant -PARAMS "GENE_IDS=1017,1018"
+# // Example: python3.12 biorels_api.py search_clinical_variant -PARAMS "NAMES=NM_001798.5(CDK2):c.28A>C (p.Ile10Leu)"
+# // Example: python3.12 biorels_api.py search_clinical_variant -PARAMS "TYPE=deletion"
+# // Example: python3.12 biorels_api.py search_clinical_variant -PARAMS "STATUS=1"
+# // Example: python3.12 biorels_api.py search_clinical_variant -PARAMS "DISEASE=MONDO_0005087"
 
 # // $[/API]
 def search_clinical_variant(PARAMS):
@@ -4436,7 +4436,7 @@ def search_clinical_variant(PARAMS):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_information -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_information -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_information(TRIAL_ID,COMPLETE=False):
 	query=f"SELECT * FROM clinical_trial WHERE trial_id='{TRIAL_ID}'"
@@ -4458,7 +4458,7 @@ def get_clinical_trial_information(TRIAL_ID,COMPLETE=False):
 # // Return: Count, clinical phase
 # // Parameter: Dummy | Dummy parameter | string | optional | Default: None
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py list_clinical_phases
+# // Example: python3.12 biorels_api.py list_clinical_phases
 # // $[/API]
 def list_clinical_phases(Dummy:None):
 	return run_query("""SELECT count(*) n_clinical_trial, clinical_phase
@@ -4473,9 +4473,9 @@ def list_clinical_phases(Dummy:None):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional 
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py search_clinical_trial -PARAMS "phase=1,2;status=Recruiting"
-# // Example: python3.12 prep_queries.py search_clinical_trial -PARAMS "phase=1,2;status=Recruiting" -COMPLETE true
-# // Example: python3.12 prep_queries.py search_clinical_trial -PARAMS "gene_symbol=CDK2"
+# // Example: python3.12 biorels_api.py search_clinical_trial -PARAMS "phase=1,2;status=Recruiting"
+# // Example: python3.12 biorels_api.py search_clinical_trial -PARAMS "phase=1,2;status=Recruiting" -COMPLETE true
+# // Example: python3.12 biorels_api.py search_clinical_trial -PARAMS "gene_symbol=CDK2"
 # // $[/API]
 def search_clinical_trial(PARAMS,COMPLETE=False):
 	query=[]
@@ -4598,7 +4598,7 @@ def search_clinical_trial(PARAMS,COMPLETE=False):
 # // Parameter: WITH_CHILDREN | True if clinical trials for children diseases are requested | false | boolean | optional
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial|Disease_anatomy:disease
-# // Example: python3.12 prep_queries.py get_clinical_trial_by_disease -DISEASE_TAG 'MONDO_0005087'
+# // Example: python3.12 biorels_api.py get_clinical_trial_by_disease -DISEASE_TAG 'MONDO_0005087'
 # // $[/API]
 def get_clinical_trial_by_disease(DISEASE_TAG,COMPLETE=False,WITH_CHILDREN=False):
 	list_child=[]
@@ -4631,7 +4631,7 @@ def get_clinical_trial_by_disease(DISEASE_TAG,COMPLETE=False,WITH_CHILDREN=False
 # // Parameter: GENE_SYMBOL | Gene symbol | string | BRCA1 | required
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial;Genomics:gene
-# // Example: python3.12 prep_queries.py get_clinical_trial_by_gene -GENE_SYMBOL 'BRCA1'
+# // Example: python3.12 biorels_api.py get_clinical_trial_by_gene -GENE_SYMBOL 'BRCA1'
 # // $[/API]
 def get_clinical_trial_by_gene(GENE_SYMBOL):
 	query=f"""SELECT trial_id FROM clinical_trial ct,clinical_trial_drug ctd,drug_disease dd,gn_entry g
@@ -4653,7 +4653,7 @@ def get_clinical_trial_by_gene(GENE_SYMBOL):
 # # // Parameter: DRUG_NAME | Drug name | string | Omeprazole | required
 # # // Return: Clinical trial record
 # # // Ecosystem: Drug_clinical_trial:clinical trial|drug
-# # // Example: python3.12 prep_queries.py search_clinical_trial_by_drug -DRUG_NAME 'Omeprazole'
+# # // Example: python3.12 biorels_api.py search_clinical_trial_by_drug -DRUG_NAME 'Omeprazole'
 # # // $[/API]
 def search_clinical_trial_by_drug(DRUG_NAME):
 	res=search_drug_by_name(DRUG_NAME,False)
@@ -4680,7 +4680,7 @@ def search_clinical_trial_by_drug(DRUG_NAME):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Clinical trial title
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_title -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_title -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_title(TRIAL_ID):
 	query=f"SELECT official_title FROM clinical_trial WHERE trial_id='{TRIAL_ID}'"
@@ -4697,7 +4697,7 @@ def get_clinical_trial_title(TRIAL_ID):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Clinical trial brief summary
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_brief_summary -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_brief_summary -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_brief_summary(TRIAL_ID):
 	query=f"SELECT brief_summary FROM clinical_trial WHERE trial_id='{TRIAL_ID}'"
@@ -4712,7 +4712,7 @@ def get_clinical_trial_brief_summary(TRIAL_ID):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Intervention name, intervention type, intervention description
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_intervention -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_intervention -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_intervention(TRIAL_ID):
 	query=f"""SELECT intervention_name,intervention_type,intervention_description
@@ -4730,7 +4730,7 @@ def get_clinical_trial_intervention(TRIAL_ID):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Arm label, arm type, arm description
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_arms -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_arms -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_arms(TRIAL_ID):
 	query=f"""SELECT arm_label,arm_type,arm_description
@@ -4748,7 +4748,7 @@ def get_clinical_trial_arms(TRIAL_ID):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Condition name
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_condition -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_condition -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_condition(TRIAL_ID):
 	query=f"""SELECT condition_name
@@ -4766,7 +4766,7 @@ def get_clinical_trial_condition(TRIAL_ID):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219|  required
 # // Return: Arm label, intervention name
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: python3.12 prep_queries.py get_clinical_trial_arm_intervention -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_arm_intervention -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_arm_intervention(TRIAL_ID):
 	query=f"""SELECT arm_label,arm_type,arm_description,intervention_name,intervention_type,intervention_description
@@ -4787,7 +4787,7 @@ def get_clinical_trial_arm_intervention(TRIAL_ID):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional
 # // Return: Drug name
 # // Ecosystem: Drug_clinical_trial:clinical trial|drug
-# // Example: python3.12 prep_queries.py get_clinical_trial_drug -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_drug -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_drug(TRIAL_ID,COMPLETE=False):
 	query=f"""SELECT drug_primary_name
@@ -4811,7 +4811,7 @@ def get_clinical_trial_drug(TRIAL_ID,COMPLETE=False):
 # // Parameter: TRIAL_ID | Clinical trial ID | string | required
 # // Return: PMID
 # // Ecosystem: Drug_clinical_trial:clinical trial;Scientific_Community:publication
-# // Example: python3.12 prep_queries.py get_clinical_trial_publications -TRIAL_ID 'NCT00005219'
+# // Example: python3.12 biorels_api.py get_clinical_trial_publications -TRIAL_ID 'NCT00005219'
 # // $[/API]
 def get_clinical_trial_publications(TRIAL_ID):
 	query=f"""SELECT pmid 
@@ -4836,9 +4836,9 @@ def get_clinical_trial_publications(TRIAL_ID):
 # // Parameter: ID | Drug identifier | string | CHEMBL1201583 | required
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py search_drug_by_identifier -ID 'DB00006'
-# // Example: python3.12 prep_queries.py search_drug_by_identifier -ID 'CHEMBL1201583'
-# // Example: python3.12 prep_queries.py search_drug_by_identifier -ID 'DRUGBANK:DB00006'
+# // Example: python3.12 biorels_api.py search_drug_by_identifier -ID 'DB00006'
+# // Example: python3.12 biorels_api.py search_drug_by_identifier -ID 'CHEMBL1201583'
+# // Example: python3.12 biorels_api.py search_drug_by_identifier -ID 'DRUGBANK:DB00006'
 # // $[/API]
 def search_drug_by_identifier(ID):
 	RULES=[]
@@ -4872,7 +4872,7 @@ def search_drug_by_identifier(ID):
 # // Parameter: COMPLETE | True if complete drug information is requested | boolean | false | optional
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py search_drug_by_name -NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py search_drug_by_name -NAME 'Omeprazole'
 # // $[/API]
 def search_drug_by_name(NAME,WITH_DRUG_INFORMATION=True,COMPLETE=False):
 	query="SELECT distinct drug_primary_name FROM drug_entry de,drug_name dn"
@@ -4899,7 +4899,7 @@ def search_drug_by_name(NAME,WITH_DRUG_INFORMATION=True,COMPLETE=False):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | true | optional | Default: true
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_information -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_information -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_information(DRUG_PRIMARY_NAME,COMPLETE=True):
 	query=f"SELECT * FROM drug_entry WHERE LOWER(drug_primary_name)=LOWER('{DRUG_PRIMARY_NAME}')"
@@ -4934,7 +4934,7 @@ def get_drug_information(DRUG_PRIMARY_NAME,COMPLETE=True):
 # // Parameter: WITH_EXTENDED_ASSAY_INFO | True if extended assay information is requested | boolean | false | optional
 # // Return: Molecular entity hash, is preferred, source name, activity
 # // Ecosystem: Drug_clinical_trial:drug;Assay:assay|activity
-# // Example: python3.12 prep_queries.py get_drug_activity -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_activity -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_activity(DRUG_PRIMARY_NAME,WITH_ASSAY=False,WITH_EXTENDED_ASSAY_INFO=False):
 	
@@ -4957,7 +4957,7 @@ def get_drug_activity(DRUG_PRIMARY_NAME,WITH_ASSAY=False,WITH_EXTENDED_ASSAY_INF
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: Drug name, is primary, is tradename, source name
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_names -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_names -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_names(DRUG_PRIMARY_NAME):
 	query=f"""SELECT drug_name,is_primary,is_tradename,source_name
@@ -4978,7 +4978,7 @@ def get_drug_names(DRUG_PRIMARY_NAME):
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: Source name, drug external database value
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_extdb -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_extdb -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_extdb(DRUG_PRIMARY_NAME):
 	query=f"""SELECT source_name,drug_extdb_value FROM drug_entry de, drug_extdb dx, source s
@@ -4999,7 +4999,7 @@ def get_drug_extdb(DRUG_PRIMARY_NAME):
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: Drug type name, drug type group
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_type -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_type -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_type(DRUG_PRIMARY_NAME):
 	query=f"""SELECT drug_type_name,drug_Type_group FROM drug_entry de, drug_type_map dtm, drug_type dt
@@ -5016,7 +5016,7 @@ def get_drug_type(DRUG_PRIMARY_NAME):
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_atc_class -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_atc_class -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_atc_class(DRUG_PRIMARY_NAME):
 	query=f"""SELECT atc_code,atc_title FROM drug_entry de, drug_atc_map da, atc_entry ae
@@ -5033,7 +5033,7 @@ def get_drug_atc_class(DRUG_PRIMARY_NAME):
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: ATC level, ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_atc_hierarchy -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: python3.12 biorels_api.py get_drug_atc_hierarchy -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 def get_drug_atc_hierarchy(DRUG_PRIMARY_NAME):
 	query=f"""SELECT distinct atc_entry_id FROM drug_entry de, drug_atc_map da
@@ -5060,7 +5060,7 @@ def get_drug_atc_hierarchy(DRUG_PRIMARY_NAME):
 # // Parameter: WITH_CHILD | True if child ATC codes are included | boolean | true | optional | Default: true
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py get_drug_from_ATC_Code -ATC_CODE 'A02BC01'
+# // Example: python3.12 biorels_api.py get_drug_from_ATC_Code -ATC_CODE 'A02BC01'
 # // $[/API]
 def get_drug_from_ATC_Code(ATC_CODE,WITH_CHILD=True):
 	query=f"""SELECT drug_primary_name, ae.atc_code, ae.atc_title
@@ -5097,7 +5097,7 @@ def get_drug_from_ATC_Code(ATC_CODE,WITH_CHILD=True):
 # // Parameter: WITH_CHILD | True if child ATC codes are included | boolean | false | optional | Default: false
 # // Return: Target symbol, gene ID, count
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py  get_target_stat_for_ATC_Code -ATC_CODE 'A02'
+# // Example: python3.12 biorels_api.py  get_target_stat_for_ATC_Code -ATC_CODE 'A02'
 # // $[/API]
 def get_target_stat_for_ATC_Code(ATC_CODE,WITH_CHILD=False):
 	list=[]
@@ -5126,7 +5126,7 @@ def get_target_stat_for_ATC_Code(ATC_CODE,WITH_CHILD=False):
 # // Parameter: ATC_CODE | ATC code | string | A02BC01 | required
 # // Return: ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py  get_ATC_info -ATC_CODE 'A02BC01'
+# // Example: python3.12 biorels_api.py  get_ATC_info -ATC_CODE 'A02BC01'
 # // $[/API]
 def get_ATC_info(ATC_CODE):
 	query=f"SELECT atc_code, atc_title FROM atc_entry WHERE atc_code='{ATC_CODE}'"
@@ -5141,7 +5141,7 @@ def get_ATC_info(ATC_CODE):
 # // Parameter: ATC_CODE | ATC code | string | A02BC01 | required
 # // Return: ATC level, ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py  get_ATC_hierarchy -ATC_CODE 'A02BC01'
+# // Example: python3.12 biorels_api.py  get_ATC_hierarchy -ATC_CODE 'A02BC01'
 # // $[/API]
 def get_ATC_hierarchy(ATC_CODE):
 	query=f"""SELECT ah1.atc_level, ae.atc_code, ae.atc_title 
@@ -5162,7 +5162,7 @@ def get_ATC_hierarchy(ATC_CODE):
 # // Parameter: ATC_CODE | ATC code | string | A02 | required
 # // Return: ATC level, ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: python3.12 prep_queries.py  get_ATC_child_hierarchy -ATC_CODE 'A02'
+# // Example: python3.12 biorels_api.py  get_ATC_child_hierarchy -ATC_CODE 'A02'
 # // $[/API]
 def get_ATC_child_hierarchy(ATC_CODE):
 	query=f"""SELECT ah1.atc_level, ae.atc_code, ae.atc_title 
@@ -5194,7 +5194,7 @@ def get_ATC_child_hierarchy(ATC_CODE):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py search_assay_by_name -NAME 'BRCA1'
+# // Example: python3.12 biorels_api.py search_assay_by_name -NAME 'BRCA1'
 # // $[/API]
 def search_assay_by_name(NAME,COMPLETE=False):
 	query=f"""SELECT assay_name,source_name FROM assay_entry ae, source s 
@@ -5214,7 +5214,7 @@ def search_assay_by_name(NAME,COMPLETE=False):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py search_assay_by_description -DESC 'BRCA1'
+# // Example: python3.12 biorels_api.py search_assay_by_description -DESC 'BRCA1'
 # // $[/API]
 def search_assay_by_description(DESC,COMPLETE=False):
 	query=f"""SELECT assay_name,source_name
@@ -5245,7 +5245,7 @@ def search_assay_by_description(DESC,COMPLETE=False):
 # // Parameter: Dummy | Dummy parameter | string | | optional
 # // Return: Assay type, number of assays
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py list_assay_type
+# // Example: python3.12 biorels_api.py list_assay_type
 # // $[/API]
 def list_assay_type(Dummy=None):
 	query=f"""SELECT assay_desc, count(*) n_assay
@@ -5264,7 +5264,7 @@ def list_assay_type(Dummy=None):
 # // Parameter: ASSAY_TYPE | Assay type | string | Binding | required
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py search_assay_by_type -ASSAY_TYPE 'Binding'
+# // Example: python3.12 biorels_api.py search_assay_by_type -ASSAY_TYPE 'Binding'
 # // $[/API]
 def search_assay_by_type(ASSAY_TYPE):
 	query=f"""SELECT assay_name,source_name
@@ -5296,7 +5296,7 @@ def search_assay_by_type(ASSAY_TYPE):
 # // Parameter: Dummy | Dummy parameter | string |  | optional
 # // Return: Assay category name, number of assays
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py list_assay_category
+# // Example: python3.12 biorels_api.py list_assay_category
 # // $[/API]
 def list_assay_category(Dummy:None):
 	query=f"""SELECT assay_category, count(*) n_assay
@@ -5315,7 +5315,7 @@ def list_assay_category(Dummy:None):
 # // Parameter: CATEGORY | Assay category | string | Screening | required
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py search_assay_by_category -CATEGORY 'Screening'
+# // Example: python3.12 biorels_api.py search_assay_by_category -CATEGORY 'Screening'
 # // $[/API]
 def search_assay_by_category(CATEGORY):
 	query=f"""SELECT assay_name, source_name
@@ -5346,9 +5346,9 @@ def search_assay_by_category(CATEGORY):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record with taxon, assay type, assay tissue, assay cell, assay target, confidence
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py get_assay_information -ASSAY_NAME 'CHEMBL944488' -SOURCE_NAME ChEMBL
-# // Example: python3.12 prep_queries.py get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL
-# // Example: python3.12 prep_queries.py get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL -COMPLETE true
+# // Example: python3.12 biorels_api.py get_assay_information -ASSAY_NAME 'CHEMBL944488' -SOURCE_NAME ChEMBL
+# // Example: python3.12 biorels_api.py get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL
+# // Example: python3.12 biorels_api.py get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL -COMPLETE true
 # // $[/API]
 def get_assay_information(ASSAY_NAME,SOURCE_NAME,COMPLETE=False):
 	LIST=[]
@@ -5387,7 +5387,7 @@ def get_assay_information(ASSAY_NAME,SOURCE_NAME,COMPLETE=False):
 # // Parameter: COMPLETE | True if complete information is requested | false | boolean | optional
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Genomics:taxon
-# // Example: python3.12 prep_queries.py search_assay_by_taxon -NCBI_TAX_ID '9606'
+# // Example: python3.12 biorels_api.py search_assay_by_taxon -NCBI_TAX_ID '9606'
 # // $[/API]
 def search_assay_by_taxon(NCBI_TAX_ID,COMPLETE=False):
 	query=f"""SELECT assay_name, source_name
@@ -5424,7 +5424,7 @@ def search_assay_by_taxon(NCBI_TAX_ID,COMPLETE=False):
 # // Parameter: Dummy | Dummy parameter | string | | optional
 # // Return: Assay tissue name, anatomy tag, anatomy name, number of assays
 # // Ecosystem: Assay:assay;Disease_anatomy:tissue
-# // Example: python3.12 prep_queries.py list_assay_tissue
+# // Example: python3.12 biorels_api.py list_assay_tissue
 # // $[/API]
 def list_assay_tissue(Dummy=None):
 	query=f"""SELECT assay_tissue_name,anatomy_tag,anatomy_name, count(*) n_assay
@@ -5444,7 +5444,7 @@ def list_assay_tissue(Dummy=None):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py search_assay_by_anatomy_tag -ANATOMY_TAG 'UBERON_0001004'
+# // Example: python3.12 biorels_api.py search_assay_by_anatomy_tag -ANATOMY_TAG 'UBERON_0001004'
 # // $[/API]
 def search_assay_by_anatomy_tag(ANATOMY_TAG,COMPLETE=False):
 	query=f"""SELECT assay_name, source_name
@@ -5473,7 +5473,7 @@ def search_assay_by_anatomy_tag(ANATOMY_TAG,COMPLETE=False):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Disease_anatomy:anatomy
-# // Example: python3.12 prep_queries.py search_assay_by_anatomy_name -ANATOMY_NAME 'Valve'
+# // Example: python3.12 biorels_api.py search_assay_by_anatomy_name -ANATOMY_NAME 'Valve'
 # // $[/API]
 def search_assay_by_anatomy_name(ANATOMY_NAME,COMPLETE=False):
 	TAGS=search_anatomy_by_name(ANATOMY_NAME)
@@ -5511,7 +5511,7 @@ def search_assay_by_anatomy_name(ANATOMY_NAME,COMPLETE=False):
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay tissue record
 # // Ecosystem: Assay:assay;Disease_anatomy:tissue
-# // Example: python3.12 prep_queries.py get_assay_tissue -ASSAY_NAME 'CHEMBL2176111' -SOURCE_NAME 'CHEMBL'
+# // Example: python3.12 biorels_api.py get_assay_tissue -ASSAY_NAME 'CHEMBL2176111' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 def get_assay_tissue(ASSAY_NAME,SOURCE_NAME):
 	res=run_query(f"""SELECT at.*,an.anatomy_tag 
@@ -5542,7 +5542,7 @@ def get_assay_tissue(ASSAY_NAME,SOURCE_NAME):
 # // Parameter: Dummy | Dummy parameter | string | | optional
 # // Return: Cell line accession, cell line name, number of assays
 # // Ecosystem: Assay:assay;Disease_anatomy:cell
-# // Example: python3.12 prep_queries.py list_assay_cell
+# // Example: python3.12 biorels_api.py list_assay_cell
 # // $[/API]
 def list_assay_cell(Dummy=None):
 	query=f"""SELECT ac.cell_name,cell_acc, count(*) n_assay
@@ -5565,7 +5565,7 @@ def list_assay_cell(Dummy=None):
 # // Parameter: FULLY_COMPLETE | True if complete information about cell line is requested | boolean | false | optional 
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Disease_anatomy:cell line
-# // Example: python3.12 prep_queries.py search_assay_by_cell_line -CELL_LINE 'A549'
+# // Example: python3.12 biorels_api.py search_assay_by_cell_line -CELL_LINE 'A549'
 # // $[/API]
 def search_assay_by_cell_line(CELL_LINE,COMPLETE=False,FULLY_COMPLETE=False):
 	input={}
@@ -5629,7 +5629,7 @@ def search_assay_by_cell_line(CELL_LINE,COMPLETE=False,FULLY_COMPLETE=False):
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay cell record
 # // Ecosystem: Assay:assay;Disease_anatomy:cell line
-# // Example: python3.12 prep_queries.py get_assay_cell -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
+# // Example: python3.12 biorels_api.py get_assay_cell -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 def get_assay_cell(ASSAY_NAME,SOURCE_NAME):
 	res=run_query(f"""SELECT ac.*,cell_acc, t.* FROM assay_cell ac
@@ -5658,8 +5658,8 @@ def get_assay_cell(ASSAY_NAME,SOURCE_NAME):
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay target record
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py get_assay_target -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
-# // Example: python3.12 prep_queries.py get_assay_target -ASSAY_NAME 'CHEMBL1061685' -SOURCE_NAME 'CHEMBL'
+# // Example: python3.12 biorels_api.py get_assay_target -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
+# // Example: python3.12 biorels_api.py get_assay_target -ASSAY_NAME 'CHEMBL1061685' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 def get_assay_target(ASSAY_NAME,SOURCE_NAME):
 	res=run_query(f"""SELECT at.*,att.*
@@ -5718,7 +5718,7 @@ def get_assay_target(ASSAY_NAME,SOURCE_NAME):
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay variant record
 # // Ecosystem: Assay:assay
-# // Example: python3.12 prep_queries.py get_assay_variant -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
+# // Example: python3.12 biorels_api.py get_assay_variant -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 def get_assay_variant(ASSAY_NAME,SOURCE_NAME):
 	query=f"""SELECT mutation_list,iso_id, ac,av.assay_variant_id FROM assay_Variant av
@@ -5756,7 +5756,7 @@ def get_assay_variant(ASSAY_NAME,SOURCE_NAME):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Genomics:gene
-# // Example: python3.12 prep_queries.py get_assay_by_gene -GENE_ID '1017'
+# // Example: python3.12 biorels_api.py get_assay_by_gene -GENE_ID '1017'
 # // $[/API]
 def get_assay_by_gene(GENE_ID,COMPLETE=False):
 	query=f"""SELECT DISTINCT assay_name,source_name
@@ -5799,7 +5799,7 @@ def get_assay_by_gene(GENE_ID,COMPLETE=False):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Proteomic:protein
-# // Example: python3.12 prep_queries.py get_assay_by_prot_accession -AC 'P24941'
+# // Example: python3.12 biorels_api.py get_assay_by_prot_accession -AC 'P24941'
 # // $[/API]
 def get_assay_by_prot_accession(AC,COMPLETE=False):
 	query=f"""SELECT DISTINCT assay_name,source_name
@@ -5833,12 +5833,12 @@ def get_assay_by_prot_accession(AC,COMPLETE=False):
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay-Genomic-Proteomic-Disease_anatomy:assay|gene|protein|isoform|transcript|cell line|tissue|anatomy
-# // Example: python3.12 prep_queries.py search_assay -PARAMS 'DESCRIPTION=BRCA1'
-# // Example: python3.12 prep_queries.py search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606'
-# // Example: python3.12 prep_queries.py search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding'
-# // Example: python3.12 prep_queries.py search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding,CATEGORY=Functional'
-# // Example: python3.12 prep_queries.py search_assay -PARAMS 'TISSUE=Valve'
-# // Example: python3.12 prep_queries.py search_assay -PARAMS 'CELL_ACC=A549'
+# // Example: python3.12 biorels_api.py search_assay -PARAMS 'DESCRIPTION=BRCA1'
+# // Example: python3.12 biorels_api.py search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606'
+# // Example: python3.12 biorels_api.py search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding'
+# // Example: python3.12 biorels_api.py search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding,CATEGORY=Functional'
+# // Example: python3.12 biorels_api.py search_assay -PARAMS 'TISSUE=Valve'
+# // Example: python3.12 biorels_api.py search_assay -PARAMS 'CELL_ACC=A549'
 # // $[/API]
 def search_assay(PARAMS,COMPLETE=False):
 	TABLES={}
@@ -5961,7 +5961,7 @@ def search_assay(PARAMS,COMPLETE=False):
 # // Parameter: WITH_STRUCTURE | True if full molecular entity information is requested | boolean | false | optional | Default: false
 # // Return: Assay activity record
 # // Ecosystem: Assay-Molecular entity:molecular entity|assay|activity
-# // Example: python3.12 prep_queries.py get_assay_activity -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
+# // Example: python3.12 biorels_api.py get_assay_activity -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 def get_assay_activity(ASSAY_NAME,SOURCE_NAME,WITH_STRUCTURE=False):
 	query=f"""SELECT me.*,aa.*,bo.bioassay_label, bo.bioassay_tag_id
@@ -6136,7 +6136,7 @@ def get_batch_assay_info(SOURCE_NAME,LIST_ASSAY,WITH_EXTENDED_ASSAY_INFO=False):
 # // Parameter: WITH_ASSAY | True if full assay information is requested | boolean | false | optional | Default: false
 # // Return: Assay activity record
 # // Ecosystem: Assay:assay;Molecular entity:molecular entity|activity
-# // Example: python3.12 prep_queries.py get_molecular_entity_activity -MOLECULAR_ENTITY_HASH 'd8c4c21996d99a71d75cf788d964b6cf'
+# // Example: python3.12 biorels_api.py get_molecular_entity_activity -MOLECULAR_ENTITY_HASH 'd8c4c21996d99a71d75cf788d964b6cf'
 # // $[/API]
 def get_molecular_entity_activity(MOLECULAR_ENTITY_HASH,WITH_ASSAY=False,WITH_EXTENDED_ASSAY_INFO=False):
 	query=f"""SELECT me.*,aa.*,bo.bioassay_label, bo.bioassay_tag_id, source_name,assay_name
@@ -6179,7 +6179,7 @@ def get_molecular_entity_activity(MOLECULAR_ENTITY_HASH,WITH_ASSAY=False,WITH_EX
 # // Parameter: WITH_EXTENDED_ASSAY_INFO | True if extended assay information is requested | boolean | false | optional | Default: false
 # // Return: Assay activity record
 # // Ecosystem: Assay:assay;Molecular entity:molecular entity|activity|scaffold
-# // Example: python3.12 prep_queries.py get_scaffold_activity -SCAFFOLD_SMILES 'c1ncncc1'
+# // Example: python3.12 biorels_api.py get_scaffold_activity -SCAFFOLD_SMILES 'c1ncncc1'
 # // $[/API]
 def get_scaffold_activity(SCAFFOLD_SMILES,WITH_ASSAY=False,WITH_EXTENDED_ASSAY_INFO=False):
 	query=f"""SELECT me.*,aa.*,bo.bioassay_label, bo.bioassay_tag_id, source_name,assay_name
