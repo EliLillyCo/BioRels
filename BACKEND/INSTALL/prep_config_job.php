@@ -15,6 +15,7 @@ $DB_SIZE=array('TAXONOMY'=>290,
 'REACTOME'=>15,
 'ECO'=>2,
 'EFO'=>1,
+'CHEBI'=>100,
 'BIOASSAY_ONTO'=>1,
 'CLINICAL_TRIAL'=>45000,
 'LIVERTOX'=>500,
@@ -119,18 +120,24 @@ $DEPS=array();
 /// GLB_TREE contains all the scripts and the information provided in CONFIG_JOB
 foreach ($GLB_TREE as &$REC)
 {
+    
 	/// DIR is the directory name used for each data source
 	/// 
     $DIRS[$REC['DIR']]=false;
+
+    if ($REC['REQ_RULE']=='A')continue;
+
 	/// Now we look at the required scripts and find their data sources
 	/// Those data sources will be the dependencies.
     foreach ($REC['REQUIRE'] as $RQ)
     {
         if ($RQ==-1)continue;
         $PARENT=&$GLB_TREE[$RQ];
+        //echo $PARENT['DIR']."\t".$REC['DIR']."\n";
+        
         if ($PARENT['DIR']==$REC['DIR'])continue;
 		/// So here we say that the data source defined in $REC['DIR] will be dependent on $PARENT['DIR]
-        $DEPS[$REC['DIR']][$PARENT['DIR']]=true;
+        $DEPS[$REC['DIR']][$PARENT['DIR']]=($REC['REQ_RULE']!='D');
     }
 }
 
@@ -298,7 +305,7 @@ function generateJobFile(&$fp,&$fpO)
     $MAP=array();
     foreach ($GLB_TREE as $ID=>&$INFO)$MAP[$INFO['NAME']]=$ID;
     
-    $IGNORE_JOBS=array('web_job','ck_faers_rel','wh_faers','wh_meddra');
+    $IGNORE_JOBS=array('web_job');
 
     while(!feof($fp))
     {
@@ -327,14 +334,15 @@ function generateJobFile(&$fp,&$fpO)
             continue;}
         
         $JOB_INFO=$GLB_TREE[$MAP[$HEAD]];
-        $STATUS=$tab[$V];
+        $STATUS='F';
         echo $HEAD."\t".$JOB_INFO['DIR']."\t".((isset($LIST_RESOURCES[$JOB_INFO['DIR']]))?'Y':'N')."\n";
         if (isset($LIST_RESOURCES[$JOB_INFO['DIR']]))$STATUS='T';
         if (isset($JOB_SPECIFIC_RULE[$HEAD]))$STATUS=$JOB_SPECIFIC_RULE[$HEAD];
         /// Process_ scripts are run by rmj_ scripts and MUST NOT be run by themselves
         if (substr($HEAD,0,8)=='process_')$STATUS='F';
         if (in_array($HEAD,$IGNORE_JOBS))$STATUS='F';
-        if ($STATUS !=$tab[$V]) echo "update ".$HEAD." From ".$tab[$V].' to '.$STATUS."\n";
+        
+        if ($STATUS !=$tab[$V]) echo "Update ".$HEAD." From ".$tab[$V].' to '.$STATUS."\n";
         $tab[$V]=$STATUS;
         fputs($fpO,implode("\t",$tab)."\n");
     }
@@ -545,11 +553,7 @@ function defineOrgsRequirements()
         {
             if ($RECORD[1]=='REFSEQ'){$RESOURCES['REFSEQ']=true;$RESOURCES['GENOME']=true;}
             if ($RECORD[1]=='ENSEMBL'){$RESOURCES['ENSEMBL']=true;$RESOURCES['GENOME']=true;}
-            if ($RECORD['TRANSCRIPTOME']=='Y')$RESOURCES['TRANSCRIPTOME']=true;
-            if ($RECORD['regions']=='Y')$RESOURCES['TRANSCRIPTOME']=true;
-            if ($RECORD['pre-mRNA']=='Y'){$JOB_SPECIFIC_RULE['gen_gene_seq']=true;}
-            if ($RECORD['promoter']=='Y'){$JOB_SPECIFIC_RULE['gen_gene_seq']=true;$W_PROMOTER=true;}
-            //if ($RECORD['TRANSCRIPTOME']=='Y')$RESOURCES['TRANSCRIPTOME']=true;
+
 
         }
         if ($W_PROMOTER && !isset($GLOBAL_OPTIONS['PROMOTER_RANGE']))
@@ -1060,14 +1064,22 @@ function askCheck($QUESTION,$ANSWERS=array('Y'=>array('',true),'N'=>array('You d
 
     function addDeps($SEL)
     {
+
         global $DEPS;
+       // print_R($DEPS);
         global $DIRS;
         $DEP_ADDED=array();
+        //print_R($SEL);
         foreach ($SEL as $DB)
         {
             if (isset($DEPS[$DB]))
-            foreach ($DEPS[$DB] as $DB_DEP=>&$DUMMY)
+            foreach ($DEPS[$DB] as $DB_DEP=>&$RULE)
             {
+                if (!$RULE)
+                {
+                    if (!in_array($DB_DEP,$SEL))continue;
+                   
+                }
                 if ($DIRS[$DB_DEP])continue;
                 if (in_array($DB_DEP,$DEP_ADDED))continue;
                 if (in_array($DB_DEP,$SEL))continue;
