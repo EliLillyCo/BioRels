@@ -20,7 +20,7 @@
 // Parameter: COMPLETE | Complete taxon information | boolean | false | optional | Default: false
 // Return: Taxon ID, scientific name, common name, taxonomic lineage and child taxonomic entries
 // Ecosystem: Genomics:Species
-// Example: php prep_queries.php get_taxon_by_tax_id -TAX_ID 9606
+// Example: php biorels_api.php get_taxon_by_tax_id -TAX_ID 9606
 // $[/API]
 function get_taxon_by_tax_id(int $TAX_ID,$COMPLETE=false)
 {
@@ -54,7 +54,7 @@ function get_taxon_by_tax_id(int $TAX_ID,$COMPLETE=false)
 // Description: Search for a taxon by using its scientific name
 // Parameter: SCIENTIFIC_NAME | Scientific name | string | Homo sapiens | required
 // Ecosystem: Genomics:Species
-// Example: php prep_queries.php get_taxon_by_scientific_name -SCIENTIFIC_NAME
+// Example: php biorels_api.php get_taxon_by_scientific_name -SCIENTIFIC_NAME
 // $[/API]
 function get_taxon_by_scientific_name($SCIENTIFIC_NAME)
 {
@@ -94,7 +94,7 @@ function get_taxon_by_scientific_name($SCIENTIFIC_NAME)
 // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 // Return: Taxon ID, scientific name, common name, taxonomic lineage
 // Ecosystem: Genomics:Species
-// Example: php prep_queries.php get_taxon_parent_lineage -TAX_ID 9606
+// Example: php biorels_api.php get_taxon_parent_lineage -TAX_ID 9606
 // $[/API]
 function get_taxon_parent_lineage(int $TAX_ID)
 {
@@ -117,7 +117,7 @@ function get_taxon_parent_lineage(int $TAX_ID)
 // Parameter: DEPTH | Depth to add to the requested taxon's level | int | 2 | optional | Default: -1
 // Return: Taxon ID, scientific name, common name, taxonomic lineage
 // Ecosystem: Genomics:Species
-// Example: php prep_queries.php get_taxon_child_lineage -TAX_ID 9606
+// Example: php biorels_api.php get_taxon_child_lineage -TAX_ID 9606
 // $[/API]
 function get_taxon_child_lineage(int $TAX_ID, int $DEPTH=-1)
 {
@@ -146,7 +146,7 @@ function get_taxon_child_lineage(int $TAX_ID, int $DEPTH=-1)
 // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 // Return: Locus ID, locus name, taxon ID, scientific name, taxonomic identifier
 // Ecosystem: Genomics:Locus & Gene|Species
-// Example: php prep_queries.php get_chromosome_for_taxon -TAX_ID 9606
+// Example: php biorels_api.php get_chromosome_for_taxon -TAX_ID 9606
 // $[/API]
 function get_chromosome_for_taxon(int $TAX_ID)
 {
@@ -169,8 +169,8 @@ function get_chromosome_for_taxon(int $TAX_ID)
 // Parameter: SUBBAND | Chromosome subband | string | 1 | optional | 
 // Return: Group by chromosome name, returns chromosome map _id, chromosome number, map location, position, arm, ban, subband.
 // Ecosystem: Genomics:Locus & Gene|Species
-// Example: php prep_queries.php get_chromosome_map_for_taxon -TAX_ID 9606 -CHROMOSOME 1
-// Example: php prep_queries.php get_chromosome_map_for_taxon -TAX_ID 9606 -ARM p
+// Example: php biorels_api.php get_chromosome_map_for_taxon -TAX_ID 9606 -CHROMOSOME 1
+// Example: php biorels_api.php get_chromosome_map_for_taxon -TAX_ID 9606 -ARM p
 // $[/API]
 function get_chromosome_map_for_taxon(int $TAX_ID, string $CHROMOSOME='',$ARM='',$BAND='',$SUBBAND='')
 {
@@ -204,7 +204,7 @@ function get_chromosome_map_for_taxon(int $TAX_ID, string $CHROMOSOME='',$ARM=''
 // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 // Return: Gene ID, gene symbol, gene name, taxon ID, scientific name, taxonomic identifier
 // Ecosystem: Genomics:Locus & Gene|Species
-// Example: php prep_queries.php get_gene_for_taxon -TAX_ID 9606
+// Example: php biorels_api.php get_gene_for_taxon -TAX_ID 9606
 // Warning: Long query execution time
 // $[/API]
 function get_gene_for_taxon(int $TAX_ID)
@@ -236,7 +236,7 @@ function get_gene_for_taxon(int $TAX_ID)
 // Parameter: MAP_LOCATION | Map location | string | 1p12 | optional
 // Return: NCBI Gene ID, symbol ,full name, gene type, map location, chromosome number, status
 // Ecosystem: Genomics:Locus & Gene|Species
-// Example: php prep_queries.php get_gene_for_chromosome -TAX_ID 9606 -CHROMOSOME 1
+// Example: php biorels_api.php get_gene_for_chromosome -TAX_ID 9606 -CHROMOSOME 1
 // $[/API]
 function get_gene_for_chromosome(int $TAX_ID,string $CHROMOSOME, $MAP_LOCATION='')
 {
@@ -267,7 +267,7 @@ function get_gene_for_chromosome(int $TAX_ID,string $CHROMOSOME, $MAP_LOCATION='
 // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 // Return: Taxon ID, scientific name, taxonomic identifier, chromosome number, map location, gene ID, gene symbol, gene name, gene type, gene status
 // Ecosystem: Genomics:Locus & Gene|Species
-// Example: php prep_queries.php get_gene_location -GENE_ID 1017
+// Example: php biorels_api.php get_gene_location -GENE_ID 1017
 // $[/API]
 function get_gene_location(int $GENE_ID)
 {
@@ -372,7 +372,7 @@ function get_gene_by_gene_symbol($SYMBOL,$TAX_ID=array())
             WHERE LOWER(symbol)='".strtolower($SYMBOL)."' ".$STR_TAXON."
             GROUP BY SYMBOL, FULL_NAME, GENE_ID, GN_ENTRY_ID, SCIENTIFIC_NAME, TAX_ID
             ";
-	echo $query."\n";
+	
     $res = runQuery($query);
 	foreach ($res as $line)
 	{
@@ -479,7 +479,7 @@ function get_gene_by_gene_name($NAME,$TAX_ID=array())
 // Description: Get all genome assembly
 // Return: Genome assembly ID, taxon ID, scientific name, assembly name, assembly level, assembly type, assembly unit, assembly version, assembly date, assembly role, assembly role order, assembly role level, assembly role type, assembly role group, assembly role group order, assembly role group level, assembly role group type, assembly role group order
 // Ecosystem: Genomics:genome assembly
-// Example: php prep_queries.php get_all_genome_assembly
+// Example: php biorels_api.php get_all_genome_assembly
 // $[/API]
 function get_all_genome_assembly()
 {
@@ -497,7 +497,7 @@ function get_all_genome_assembly()
 // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 // Return: Scientific name, chromosome number, taxon ID, chromosome sequence ID, chromosome sequence name, RefSeq name, RefSeq version, GenBank name, GenBank version, sequence role, sequence length
 // Ecosystem: Genomics:genome assembly
-// Example: php prep_queries.php get_genome_assembly_by_taxon -TAX_ID 9606
+// Example: php biorels_api.php get_genome_assembly_by_taxon -TAX_ID 9606
 // $[/API]
 function get_genome_assembly_by_taxon(int $TAX_ID)
 {
@@ -527,8 +527,8 @@ function get_genome_assembly_by_taxon(int $TAX_ID)
 // Parameter: CHR_SEQ_NAME | Chromosome sequence name: Genbank or refseq | string | HSCHR1_CTG9_UNLOCALIZED| optional
 // Return: Scientific name, chromosome number, taxon ID, chromosome sequence ID, chromosome sequence name, RefSeq name, RefSeq version, GenBank name, GenBank version, sequence role, sequence length
 // Ecosystem: Genomics:genome assembly
-// Example: php prep_queries.php get_chromosome_assembly_by_taxon -TAX_ID 9606
-// Example: php prep_queries.php get_chromosome_assembly_by_taxon -TAX_ID 9606 -CHR_SEQ_NAME HSCHR1_CTG9_UNLOCALIZED
+// Example: php biorels_api.php get_chromosome_assembly_by_taxon -TAX_ID 9606
+// Example: php biorels_api.php get_chromosome_assembly_by_taxon -TAX_ID 9606 -CHR_SEQ_NAME HSCHR1_CTG9_UNLOCALIZED
 // $[/API]
 function get_chromosome_assembly_by_taxon(int $TAX_ID, string $CHR_NUM='', string $SEQ_ROLE='', string $CHR_SEQ_NAME='')
 {
@@ -572,8 +572,8 @@ function get_chromosome_assembly_by_taxon(int $TAX_ID, string $CHR_NUM='', strin
 // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 // Return: Chromosome position, chromosome, chromosome sequence, RefSeq name, RefSeq version, GenBank name, GenBank version, sequence role, chromosome sequence name, assembly unit, nucleotide, position, scientific name, taxonomic identifier
 // Ecosystem: Genomics:chromosome|chromosome position
-// Example: php prep_queries.php get_chromosome_position_info -CHR 1 -CHR_POS 12
-// Example: php prep_queries.php get_chromosome_position_info -CHR MT -CHR_POS 1000
+// Example: php biorels_api.php get_chromosome_position_info -CHR 1 -CHR_POS 12
+// Example: php biorels_api.php get_chromosome_position_info -CHR MT -CHR_POS 1000
 // $[/API]
 function get_chromosome_position_info($CHR,$CHR_POS, $TAX_ID='9606')
 {
@@ -600,7 +600,7 @@ function get_chromosome_position_info($CHR,$CHR_POS, $TAX_ID='9606')
 // Description: Given a list of transcript_pos_id, search for the corresponding chromosome position records.
 // Parameter: LIST | List of transcript_pos_id | array | 1,2,3,4,5 | required
 // Ecosystem: Genomics:chromosome position|transcript|transcript position
-// Example: php prep_queries.php get_chromosome_positions_info -LIST 1,2,3,4,5
+// Example: php biorels_api.php get_chromosome_positions_info -LIST 1,2,3,4,5
 // $[/API]
 function get_chromosome_positions_info($LIST)
 {
@@ -627,8 +627,8 @@ function get_chromosome_positions_info($LIST)
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 # // Return: Chromosome sequence in fasta format
 # // Ecosystem: Genomics:chromosome|chromosome sequence
-# // Example:  php prep_queries.php get_chromosome_seq_to_fasta -CHR_NAME 1 -CHR_POS_START 1 -CHR_POS_END 1000
-# // Example:  php prep_queries.php get_chromosome_seq_to_fasta -CHR_NAME MT -CHR_POS_START 1 -CHR_POS_END 1000
+# // Example:  php biorels_api.php get_chromosome_seq_to_fasta -CHR_NAME 1 -CHR_POS_START 1 -CHR_POS_END 1000
+# // Example:  php biorels_api.php get_chromosome_seq_to_fasta -CHR_NAME MT -CHR_POS_START 1 -CHR_POS_END 1000
 # // $[/API]
 function get_chromosome_seq_to_fasta($CHR_NAME, $CHR_POS_START, $CHR_POS_END, $TAX_ID='9606')
 {
@@ -699,8 +699,8 @@ function get_chromosome_seq_to_fasta($CHR_NAME, $CHR_POS_START, $CHR_POS_END, $T
 # // Parameter: ONLY_MAIN | Only main species | boolean | false | optional | Default: false
 # // Return: Orthologs gene ID, gene symbol, gene name, species, taxonomic identifier
 # // Ecosystem: Genomics:orthologs
-# // Example: php prep_queries.php get_orthologs -GENE_ID 1017
-# // Example: php prep_queries.php get_orthologs -GENE_ID 1017 -ONLY_MAIN true
+# // Example: php biorels_api.php get_orthologs -GENE_ID 1017
+# // Example: php biorels_api.php get_orthologs -GENE_ID 1017 -ONLY_MAIN true
 # // $[/API]
 function get_orthologs($GENE_ID, $ONLY_MAIN = false)
 {
@@ -742,8 +742,8 @@ function get_orthologs($GENE_ID, $ONLY_MAIN = false)
 # // Parameter: TYPE | Range type: (DNA or RNA) | string | RNA | optional | Default: RNA
 # // Return: Transcript sequence, translation, and alignment information
 # // Ecosystem: Genomics:transcript
-# // Example: php prep_queries.php getTranscriptSequenceRange -TRANSCRIPT_NAME NM_000546 -START_POS 1 -END_POS 100 -TYPE RNA
-# // Example: php prep_queries.php getTranscriptSequenceRange -TRANSCRIPT_NAME NM_000546 -START_POS 7674205 -END_POS 7674225 -TYPE DNA
+# // Example: php biorels_api.php getTranscriptSequenceRange -TRANSCRIPT_NAME NM_000546 -START_POS 1 -END_POS 100 -TYPE RNA
+# // Example: php biorels_api.php getTranscriptSequenceRange -TRANSCRIPT_NAME NM_000546 -START_POS 7674205 -END_POS 7674225 -TYPE DNA
 # // $[/API]
 function getTranscriptSequenceRange($TRANSCRIPT_NAME, $START_POS=-1, $END_POS=-1, $TYPE='RNA')
 {
@@ -835,7 +835,7 @@ function getTranscriptSequenceRange($TRANSCRIPT_NAME, $START_POS=-1, $END_POS=-1
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 |required
 # // Return: Transcript ID, transcript name, transcript version, start position, end position, sequence hash, gene sequence ID, chromosome sequence ID, support level, partial sequence, valid alignment, gene sequence name, gene sequence version, strand, gene entry ID, feature, biotype
 # // Ecosystem: Genomics:transcript
-# // Example: php prep_queries.php search_transcript -TRANSCRIPT_NAME NM_000546
+# // Example: php biorels_api.php search_transcript -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 function search_transcript($TRANSCRIPT_NAME)
 {
@@ -880,7 +880,7 @@ WHERE T.GENE_SEQ_ID = GS.GENE_SEQ_ID
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: Exon ID, minimum position, maximum position
 # // Ecosystem: Genomics:transcript
-# // Example: php prep_queries.php get_exon_location -TRANSCRIPT_NAME NM_000546
+# // Example: php biorels_api.php get_exon_location -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 function get_exon_location($TRANSCRIPT_NAME)
 {
@@ -907,7 +907,7 @@ function get_exon_location($TRANSCRIPT_NAME)
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: Exon ID, minimum position, maximum position
 # // Ecosystem: Genomics:transcript
-# // Example: php prep_queries.php get_exon_dna_location -TRANSCRIPT_NAME NM_000546
+# // Example: php biorels_api.php get_exon_dna_location -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 function get_exon_dna_location($TRANSCRIPT_NAME)
 {
@@ -938,7 +938,7 @@ function get_exon_dna_location($TRANSCRIPT_NAME)
 # // Parameter: TRANSCRIPT_NAME | Transcript name with or without version | string | NM_000546 | required
 # // Return: region minimum position, maximum position
 # // Ecosystem: Genomics:transcript
-# // Example: php prep_queries.php get_region_transcript -TRANSCRIPT_NAME NM_000546
+# // Example: php biorels_api.php get_region_transcript -TRANSCRIPT_NAME NM_000546
 # // $[/API]
 function get_region_transcript($TRANSCRIPT_NAME)
 {
@@ -975,8 +975,8 @@ function get_region_transcript($TRANSCRIPT_NAME)
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 # // Return: Assembly name, assembly unit, chromosome sequence name, gene sequence name, gene sequence version, transcript name, transcript version, transcript ID
 # // Ecosystem: Genomics:transcript|chromosome|taxon
-# // Example: php prep_queries.php get_transcript_by_chromosome -CHR_NAME 1 -CHR_POS_START 1 -CHR_POS_END 1000
-# // Example: php prep_queries.php get_transcript_by_chromosome -CHR_NAME MT
+# // Example: php biorels_api.php get_transcript_by_chromosome -CHR_NAME 1 -CHR_POS_START 1 -CHR_POS_END 1000
+# // Example: php biorels_api.php get_transcript_by_chromosome -CHR_NAME MT
 # // $[/API]
 function get_transcript_by_chromosome($CHR_NAME, $CHR_POS_START=-1, $CHR_POS_END=-1, $TAX_ID='9606')
 {
@@ -1004,7 +1004,7 @@ function get_transcript_by_chromosome($CHR_NAME, $CHR_POS_START=-1, $CHR_POS_END
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 # // Return: Assembly name, assembly unit, chromosome sequence name, gene sequence name, gene sequence version, transcript name, transcript version, transcript ID
 # // Ecosystem: Genomics:transcript|locus|taxon
-# // Example: php prep_queries.php get_transcript_by_locus -CHR_MAP_LOCATION 1p36.33
+# // Example: php biorels_api.php get_transcript_by_locus -CHR_MAP_LOCATION 1p36.33
 # // $[/API]
 function get_transcript_by_locus($CHR_MAP_LOCATION, $TAX_ID='9606')
 {
@@ -1032,7 +1032,7 @@ function get_transcript_by_locus($CHR_MAP_LOCATION, $TAX_ID='9606')
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: transcript_id, transcript_name, transcript_version, t.start_pos,t.end_pos, seq_hash, gs.gene_seq_id, gs.chr_seq_id,support_level, partial_sequence, valid_alignment, gene_seq_name,gene_seq_version,strand, ge.gn_entry_id, f.seq_type as feature, b.seq_Type as biotype
 # // Ecosystem: Genomics:transcript|gene
-# // Example: php prep_queries.php get_transcript_by_gene_id -GENE_ID 1017
+# // Example: php biorels_api.php get_transcript_by_gene_id -GENE_ID 1017
 # // $[/API]
 function get_transcript_by_gene_id($GENE_ID)
 {
@@ -1055,7 +1055,7 @@ function get_transcript_by_gene_id($GENE_ID)
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Transcript ID, transcript name, transcript version, start position, end position, sequence hash, gene sequence ID, chromosome sequence ID, support level, partial sequence, valid alignment, gene sequence name, gene sequence version, strand, gene entry ID, feature, biotype
 # // Ecosystem: Genomics:transcript|gene
-# // Example: php prep_queries.php get_transcripts_sequence_by_gene -GENE_ID 1017
+# // Example: php biorels_api.php get_transcripts_sequence_by_gene -GENE_ID 1017
 # // $[/API]
 function get_transcripts_sequence_by_gene($GENE_ID)
 {
@@ -1086,7 +1086,7 @@ function get_transcripts_sequence_by_gene($GENE_ID)
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Transcript sequences in fasta format
 # // Ecosystem: Genomics:transcript|gene
-# // Example: php prep_queries.php get_transcripts_sequence_in_fasta_by_gene -GENE_ID 1017
+# // Example: php biorels_api.php get_transcripts_sequence_in_fasta_by_gene -GENE_ID 1017
 # // $[/API]
 function get_transcripts_sequence_in_fasta_by_gene($GENE_ID)
 {
@@ -1132,7 +1132,7 @@ function get_transcripts_sequence_in_fasta_by_gene($GENE_ID)
 # // Parameter: TAX_ID | NCBI Taxon ID | int | 9606 | required
 # // Return: transcript_id, transcript_name, transcript_version, t.start_pos,t.end_pos, seq_hash, gs.gene_seq_id, gs.chr_seq_id,support_level, partial_sequence, valid_alignment, gene_seq_name,gene_seq_version,strand, ge.gn_entry_id, f.seq_type as feature, b.seq_Type as biotype, gene_id, symbol, chr_name, chr_map
 # // Ecosystem: Genomics:transcript|taxon
-# // Example: php prep_queries.php search_transcript_by_taxon -TAX_ID 9606
+# // Example: php biorels_api.php search_transcript_by_taxon -TAX_ID 9606
 # // Warning: Long query execution time
 # // $[/API]
 function search_transcript_by_taxon($TAX_ID)
@@ -1175,7 +1175,7 @@ function search_transcript_by_taxon($TAX_ID)
 // Parameter: CHR_POSITION | chromosome position | int | 1000 | required
 // Return: Transcript ID, gene sequence ID, gene sequence name, gene name, gene ID, transcript name, transcript version, strand, sequence position, exon ID, chromosome sequence position ID, transcript position type
 // Ecosystem: Genomics:chromosome position|transcript
-// Example: php prep_queries.php getTranscriptFromChr -CHR_SEQ_ID 1 -CHR_SEQ_POS_ID 1 -CHR_POSITION 1000
+// Example: php biorels_api.php getTranscriptFromChr -CHR_SEQ_ID 1 -CHR_SEQ_POS_ID 1 -CHR_POSITION 1000
 // $[/API]
 function getTranscriptFromChr($CHR_SEQ_ID,$CHR_SEQ_POS_ID,$CHR_POSITION)
 {
@@ -1212,7 +1212,7 @@ function getTranscriptFromChr($CHR_SEQ_ID,$CHR_SEQ_POS_ID,$CHR_POSITION)
 //  Description: Given a list of transcript_pos_id, search for the corresponding chromosome position records.
 //  Parameter: LIST | List of transcript_pos_id | array | 1,2,3,4,5 | required
 //  Ecosystem: Genomics:chromosome position|transcript|transcript position
-//  Example: php prep_queries.php getChromosomePositionsInfoByTranscriptPosIds -LIST 1,2,3,4,5
+//  Example: php biorels_api.php getChromosomePositionsInfoByTranscriptPosIds -LIST 1,2,3,4,5
 //  $[/API]
 function getChromosomePositionsInfoByTranscriptPosIds($LIST)
 {
@@ -1238,7 +1238,7 @@ function getChromosomePositionsInfoByTranscriptPosIds($LIST)
 //  Parameter: TRANSCRIPT_NAME | Transcript name | string | NM_001798 | required
 //  Parameter: TRANSCRIPT_VERSION | Transcript version | string | | optional | Default: None
 //  Ecosystem: Genomics:chromosome position|transcript
-//  Example: php prep_queries.php getChromosomeSeqInfoFromTranscriptPosition -TRANSCRIPT_POSITION 1,2,3,4 -TRANSCRIPT_NAME NM_001798
+//  Example: php biorels_api.php getChromosomeSeqInfoFromTranscriptPosition -TRANSCRIPT_POSITION 1,2,3,4 -TRANSCRIPT_NAME NM_001798
 //  $[/API]
 function getChromosomeSeqInfoFromTranscriptPosition($TRANSCRIPT_POSITION, $TRANSCRIPT_NAME,$TRANSCRIPT_VERSION='')
 {
@@ -1279,7 +1279,7 @@ function getChromosomeSeqInfoFromTranscriptPosition($TRANSCRIPT_POSITION, $TRANS
 # // Parameter: WITH_GENE | Include gene information | boolean | true | optional | Default: true
 # // Return: Variant entry record. VARIANT-> Variant entry record, ALLELES-> Variant alleles, FREQUENCY-> Variant alleles frequency, GENE-> Gene information
 # // Ecosystem: Genomics:variant
-# // Example: php prep_queries.php search_variant_by_rsid -RSID rs12345
+# // Example: php biorels_api.php search_variant_by_rsid -RSID rs12345
 # // $[/API]
 function search_variant_by_rsid($RSID, $WITH_ALLELES = true, $WITH_FREQUENCY = true,$WITH_GENE=true) 
 {
@@ -1303,7 +1303,7 @@ function search_variant_by_rsid($RSID, $WITH_ALLELES = true, $WITH_FREQUENCY = t
 # // Parameter: RSID | dbSNP identifier | string | rs12345 | required
 # // Return: Variant alleles
 # // Ecosystem: Genomics:variant
-# // Example: php prep_queries.php get_variant_alleles_by_rsid -RSID rs12345
+# // Example: php biorels_api.php get_variant_alleles_by_rsid -RSID rs12345
 # // $[/API]
 function get_variant_alleles_by_rsid($RSID)
 {
@@ -1337,7 +1337,7 @@ function get_variant_alleles_by_rsid($RSID)
 # // Parameter: RSID | dbSNP identifier | string | rs12345 | required
 # // Return: Variant alleles frequency
 # // Ecosystem: Genomics:variant
-# // Example: php prep_queries.php get_alleles_frequency_by_rsid -RSID rs12345
+# // Example: php biorels_api.php get_alleles_frequency_by_rsid -RSID rs12345
 # // $[/API]
 function get_alleles_frequency_by_rsid($RSID)
 {
@@ -1383,7 +1383,7 @@ function get_alleles_frequency_by_rsid($RSID)
 // Parameter: WITH_GENE | Include gene information | boolean | true | optional | Default: true
 // Return: First level array with chromosome position as key and second level array with rsid as key and variant information as value
 // Ecosystem: Genomics:genomic sequence|variant|gene
-// Example: php prep_queries.php getVariantsFromChromosomeRange -CHR_SEQ_NAME 22 -START_POS 25459492 -END_POS 25459492
+// Example: php biorels_api.php getVariantsFromChromosomeRange -CHR_SEQ_NAME 22 -START_POS 25459492 -END_POS 25459492
 // $[/API]
 function getVariantsFromChromosomeRange($CHR_SEQ_NAME,$START_POS,$END_POS,$TAX_ID='9606',$WITH_ALLELES=true,$WITH_FREQUENCY=true,$WITH_GENE=true)
 {
@@ -1423,7 +1423,7 @@ function getVariantsFromChromosomeRange($CHR_SEQ_NAME,$START_POS,$END_POS,$TAX_I
 # // Parameter: RSID | dbSNP identifier | string | rs12345 | required
 # // Return: Gene symbol, gene full name, gene ID, gene entry ID, scientific name, taxonomic identifier, rsid
 # // Ecosystem: Genomics:variant|gene
-# // Example: php prep_queries.php find_gene_from_variant -RSID rs12345
+# // Example: php biorels_api.php find_gene_from_variant -RSID rs12345
 # // $[/API]
 function find_gene_from_variant($RSID)
 {
@@ -1456,7 +1456,7 @@ function find_gene_from_variant($RSID)
 # // Parameter: WITH_GENE | Include gene information | boolean | true | optional 
 # // Return: Variant entry record. VARIANT-> Variant entry record, ALLELES-> Variant alleles, FREQUENCY-> Variant alleles frequency, GENE-> Gene information
 # // Ecosystem: Genomics:variant|gene
-# // Example: php prep_queries.php find_variant_from_gene -GENE_ID 1017
+# // Example: php biorels_api.php find_variant_from_gene -GENE_ID 1017
 # // $[/API]
 function find_variant_from_gene($GENE_ID,$WITH_ALLELES=false,$WITH_FREQUENCY=false,$WITH_GENE=false)
 {
@@ -1510,7 +1510,7 @@ function find_variant_from_gene($GENE_ID,$WITH_ALLELES=false,$WITH_FREQUENCY=fal
 # // Description: List all variant types
 # // Return: Variant types
 # // Ecosystem: Genomics:variant
-# // Example: php prep_queries.php list_variant_type
+# // Example: php biorels_api.php list_variant_type
 # // $[/API]
 function list_variant_type()
 {
@@ -1531,7 +1531,7 @@ function list_variant_type()
 # // Parameter: WITH_GENE | Include gene information | boolean | false | optional
 # // Return: Variant entry record. VARIANT-> Variant entry record, ALLELES-> Variant alleles, FREQUENCY-> Variant alleles frequency, GENE-> Gene information
 # // Ecosystem: Genomics:variant|gene
-# // Example: php prep_queries.php find_variant_type_from_gene -GENE_ID 1017 -SNP_TYPE 'del'
+# // Example: php biorels_api.php find_variant_type_from_gene -GENE_ID 1017 -SNP_TYPE 'del'
 # // $[/API]
 function find_variant_type_from_gene($GENE_ID,$SNP_TYPE=null,$WITH_ALLELES=false,$WITH_FREQUENCY=false,$WITH_GENE=false)
 {
@@ -1625,7 +1625,7 @@ function find_variant_type_from_gene($GENE_ID,$SNP_TYPE=null,$WITH_ALLELES=false
 # // Parameter: TRANSCRIPT_VARIANT_IMPACT | Transcript variant impact | string | coding_sequence_variant | optional
 # // Return: Variant entry record
 # // Ecosystem: Genomics:variant|transcript
-# // Example: php prep_queries.php get_variant_for_transcript -TRANSCRIPT_NAME 'NM_000546.5'
+# // Example: php biorels_api.php get_variant_for_transcript -TRANSCRIPT_NAME 'NM_000546.5'
 # // $[/API]
 function get_variant_for_transcript($TRANSCRIPT_NAME,$START_POS=null,$END_POS=null,$TRANSCRIPT_VARIANT_IMPACT=null)
 {
@@ -1760,7 +1760,7 @@ function get_variant_for_transcript($TRANSCRIPT_NAME,$START_POS=null,$END_POS=nu
 # // Parameter: PROTEIN_VARIANT_IMPACT | Protein variant impact | string | missense_variant | optional
 # // Return: Variant entry record
 # // Ecosystem: Genomics:variant;Proteomics:protein
-# // Example: php prep_queries.php get_variant_for_protein -PROTEIN_ISO_ID 'P04066-1' -START_POS 1
+# // Example: php biorels_api.php get_variant_for_protein -PROTEIN_ISO_ID 'P04066-1' -START_POS 1
 # // $[/API]
 function get_variant_for_protein($PROTEIN_ISO_ID,$START_POS=null,$END_POS=null,$PROTEIN_VARIANT_IMPACT=null)
 {
@@ -1888,8 +1888,8 @@ function get_variant_for_protein($PROTEIN_ISO_ID,$START_POS=null,$END_POS=null,$
 // Description: Search for a source by using its name. First by exact match, then by partial match. Case insensitive.
 // Parameter: source_name | Source name | string | UniProt | required
 // Ecosystem: Global
-// Example: php prep_queries.php source_search -source_name 'NCBI'
-// Example: php prep_queries.php source_search -source_name 'unip'
+// Example: php biorels_api.php source_search -source_name 'NCBI'
+// Example: php biorels_api.php source_search -source_name 'unip'
 // $[/API]
 function source_search($source_name)
 {
@@ -1931,7 +1931,7 @@ function source_search($source_name)
 # // Parameter: IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein record
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php search_protein_by_identifier -IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php search_protein_by_identifier -IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function search_protein_by_identifier($IDENTIFIER)
 {
@@ -1949,8 +1949,8 @@ function search_protein_by_identifier($IDENTIFIER)
 # // Parameter: IS_PRIMARY | Is primary accession | boolean | true | optional | Default: true
 # // Return: Protein record
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php search_protein_by_accession -ACCESSION 'P24941'
-# // Example: php prep_queries.php search_protein_by_accession -ACCESSION 'P24941' -IS_PRIMARY false
+# // Example: php biorels_api.php search_protein_by_accession -ACCESSION 'P24941'
+# // Example: php biorels_api.php search_protein_by_accession -ACCESSION 'P24941' -IS_PRIMARY false
 # // $[/API]
 function search_protein_by_accession($ACCESSION, $IS_PRIMARY=true)
 {
@@ -1969,7 +1969,7 @@ function search_protein_by_accession($ACCESSION, $IS_PRIMARY=true)
 # // Parameter: IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein accession, is primary
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php get_protein_accession -IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php get_protein_accession -IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function get_protein_accession($IDENTIFIER)
 {
@@ -1988,7 +1988,7 @@ function get_protein_accession($IDENTIFIER)
 # // Parameter: IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein name, protein name type
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php get_protein_names -IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php get_protein_names -IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function get_protein_names($IDENTIFIER)
 {
@@ -2006,7 +2006,7 @@ function get_protein_names($IDENTIFIER)
 # // Parameter: NAME | Protein name (Case sensitive) | string | Cyclin-dependent kinase 2 | required
 # // Return: Protein record
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php search_protein_by_name -NAME 'Cyclin-dependent kinase 2'
+# // Example: php biorels_api.php search_protein_by_name -NAME 'Cyclin-dependent kinase 2'
 # // $[/API]
 function search_protein_by_name($NAME)
 {
@@ -2027,8 +2027,8 @@ function search_protein_by_name($NAME)
 # // Parameter: EC | Enzyme commission number | string | 2.7.11.22 | required
 # // Return: Protein record
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php search_protein_by_EC_number -EC '2.7.11.22'
-# // Example: php prep_queries.php search_protein_by_EC_number -EC '2.7'
+# // Example: php biorels_api.php search_protein_by_EC_number -EC '2.7.11.22'
+# // Example: php biorels_api.php search_protein_by_EC_number -EC '2.7'
 # // $[/API]
 function search_protein_by_EC_number($EC)
 {
@@ -2052,7 +2052,7 @@ function search_protein_by_EC_number($EC)
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Protein record
 # // Ecosystem: Genomics:gene;Proteomics:protein
-# // Example: php prep_queries.php get_protein_by_gene -GENE_ID 1017
+# // Example: php biorels_api.php get_protein_by_gene -GENE_ID 1017
 # // $[/API]
 function get_protein_by_gene($GENE_ID)
 {
@@ -2072,7 +2072,7 @@ function get_protein_by_gene($GENE_ID)
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional | Default: 9606
 # // Return: Protein record
 # // Ecosystem: Genomics:gene;Proteomics:protein
-# // Example: php prep_queries.php get_protein_by_gene_symbol -SYMBOL 'CDK2'
+# // Example: php biorels_api.php get_protein_by_gene_symbol -SYMBOL 'CDK2'
 # // $[/API]
 function get_protein_by_gene_symbol($SYMBOL,$TAX_ID='9606')
 {
@@ -2099,7 +2099,7 @@ function get_protein_by_gene_symbol($SYMBOL,$TAX_ID='9606')
 // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | required
 // Return: Protein record
 // Ecosystem: Proteomics:protein;Genomics:taxon
-// Example: php prep_queries.php list_protein_by_taxon -TAX_ID 9606
+// Example: php biorels_api.php list_protein_by_taxon -TAX_ID 9606
 // Warning: High volume
 // $[/API]
 function list_protein_by_taxon($TAX_ID)
@@ -2125,7 +2125,7 @@ function list_protein_by_taxon($TAX_ID)
 // Parameter: CANONICAL_ONLY | Is canonical sequence | boolean | false | optional | Default: false
 // Return: Protein sequence record
 // Ecosystem: Proteomics:protein|protein sequence
-// Example: php prep_queries.php get_protein_sequences_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' -CANONICAL_ONLY false
+// Example: php biorels_api.php get_protein_sequences_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' -CANONICAL_ONLY false
 // $[/API]
 function get_protein_sequences_for_entry($PROT_IDENTIFIER, $CANONICAL_ONLY=false)
 {
@@ -2145,7 +2145,7 @@ function get_protein_sequences_for_entry($PROT_IDENTIFIER, $CANONICAL_ONLY=false
 // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 // Return: Protein sequence record
 // Ecosystem: Proteomics:protein|protein sequence
-// Example: php prep_queries.php search_protein_sequence_by_isoform_id -ISOFORM_ID 'P24941-1'
+// Example: php biorels_api.php search_protein_sequence_by_isoform_id -ISOFORM_ID 'P24941-1'
 // $[/API]
 function search_protein_sequence_by_isoform_id($ISOFORM_ID)
 {
@@ -2165,7 +2165,7 @@ function search_protein_sequence_by_isoform_id($ISOFORM_ID)
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein isoform record
 # // Ecosystem: Proteomics:protein|protein sequence
-# // Example: php prep_queries.php get_isoform_info -ISOFORM_ID 'P24941-1'
+# // Example: php biorels_api.php get_isoform_info -ISOFORM_ID 'P24941-1'
 # // $[/API]
 function get_isoform_info($ISOFORM_ID)
 {
@@ -2196,7 +2196,7 @@ function get_isoform_info($ISOFORM_ID)
 // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 // Return: Protein sequence in fasta format
 // Ecosystem: Proteomics:protein|protein sequence
-// Example: php prep_queries.php get_fasta_sequence -ISOFORM_ID 'P24941-1'
+// Example: php biorels_api.php get_fasta_sequence -ISOFORM_ID 'P24941-1'
 // $[/API]
 function get_fasta_sequence($ISOFORM_ID)
 {
@@ -2227,7 +2227,7 @@ function get_fasta_sequence($ISOFORM_ID)
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein sequences in fasta format
 # // Ecosystem: Proteomics:protein|protein sequence
-# // Example: php prep_queries.php get_fasta_sequences -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php get_fasta_sequences -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function get_fasta_sequences($PROT_IDENTIFIER)
 {
@@ -2258,7 +2258,7 @@ function get_fasta_sequences($PROT_IDENTIFIER)
 # // Parameter: NCBI_GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Protein sequences in fasta format
 # // Ecosystem: Proteomics:protein|protein sequence;Genomics:gene
-# // Example: php prep_queries.php get_fasta_sequences_by_gene -NCBI_GENE_ID 1017
+# // Example: php biorels_api.php get_fasta_sequences_by_gene -NCBI_GENE_ID 1017
 # // $[/API]
 function get_fasta_sequences_by_gene($NCBI_GENE_ID)
 {
@@ -2292,7 +2292,7 @@ function get_fasta_sequences_by_gene($NCBI_GENE_ID)
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Feature record
 # // Ecosystem: Proteomics:protein sequence
-# // Example: php prep_queries.php get_isoform_feature -ISOFORM_ID 'P24941-1'
+# // Example: php biorels_api.php get_isoform_feature -ISOFORM_ID 'P24941-1'
 # // $[/API]
 
 function get_isoform_feature($ISOFORM_ID)
@@ -2329,7 +2329,7 @@ function get_isoform_feature($ISOFORM_ID)
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein description record
 # // Ecosystem: Proteomics:protein
-# // Example: php prep_queries.php get_protein_description -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php get_protein_description -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function get_protein_description($PROT_IDENTIFIER)
 {
@@ -2353,7 +2353,7 @@ function get_protein_description($PROT_IDENTIFIER)
 // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 // Return: Protein domain record
 // Ecosystem: Proteomics:protein|protein domain
-// Example: php prep_queries.php get_protein_domains_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' 
+// Example: php biorels_api.php get_protein_domains_for_entry -PROT_IDENTIFIER 'CDK2_HUMAN' 
 // $[/API]
 function get_protein_domains_for_entry($PROT_IDENTIFIER)
 {
@@ -2374,8 +2374,8 @@ function get_protein_domains_for_entry($PROT_IDENTIFIER)
 // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional
 // Return: Protein domain record
 // Ecosystem: Proteomics:protein|protein domain
-// Example: php prep_queries.php search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase' -PROT_IDENTIFIER 'CDK2_HUMAN'
-// Example: php prep_queries.php search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase'  -TAX_ID 9606
+// Example: php biorels_api.php search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase' -PROT_IDENTIFIER 'CDK2_HUMAN'
+// Example: php biorels_api.php search_protein_domain_by_domain_name -DOMAIN_NAME 'Protein kinase'  -TAX_ID 9606
 // $[/API]
 function search_protein_domain_by_domain_name($DOMAIN_NAME,$PROT_IDENTIFIER='',$TAX_ID='')
 {
@@ -2404,7 +2404,7 @@ function search_protein_domain_by_domain_name($DOMAIN_NAME,$PROT_IDENTIFIER='',$
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Protein domains in fasta format
 # // Ecosystem: Proteomics:protein|protein domain
-# // Example: php prep_queries.php get_fasta_domains -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php get_fasta_domains -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function get_fasta_domains($PROT_IDENTIFIER)
 {
@@ -2437,7 +2437,7 @@ function get_fasta_domains($PROT_IDENTIFIER)
 # // Parameter: NCBI_GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Protein domains in fasta format
 # // Ecosystem: Proteomics:protein|protein domain;Genomics:gene
-# // Example: php prep_queries.php get_fasta_domains_by_gene -NCBI_GENE_ID 1017
+# // Example: php biorels_api.php get_fasta_domains_by_gene -NCBI_GENE_ID 1017
 # // $[/API]
 function get_fasta_domains_by_gene($NCBI_GENE_ID)
 {
@@ -2479,7 +2479,7 @@ function get_fasta_domains_by_gene($NCBI_GENE_ID)
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein sequence alignment record
 # // Ecosystem: Proteomics:protein|protein sequence alignment
-# // Example: php prep_queries.php list_protein_sequence_alignment -ISOFORM_ID 'P24941-1'
+# // Example: php biorels_api.php list_protein_sequence_alignment -ISOFORM_ID 'P24941-1'
 # // $[/API]
 function list_protein_sequence_alignment($ISOFORM_ID)
 {
@@ -2500,7 +2500,7 @@ function list_protein_sequence_alignment($ISOFORM_ID)
 # // Parameter: COMP_ISO_ID | Comparison isoform identifier | string | P24941-1 | required
 # // Return: Protein sequence alignment record
 # // Ecosystem: Proteomics:protein|protein sequence alignment
-# // Example: php prep_queries.php get_protein_sequence_alignment -REF_ISO_ID 'P24941-1' -COMP_ISO_ID 'P24941-1'
+# // Example: php biorels_api.php get_protein_sequence_alignment -REF_ISO_ID 'P24941-1' -COMP_ISO_ID 'P24941-1'
 # // $[/API]
 function get_protein_sequence_alignment($REF_ISO_ID,$COMP_ISO_ID)
 {
@@ -2591,7 +2591,7 @@ function get_protein_sequence_alignment($REF_ISO_ID,$COMP_ISO_ID)
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | ENST00000379031 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomics:protein;Genomics:transcript
-# // Example: php prep_queries.php get_translation -ISOFORM_ID 'P24941-1' -TRANSCRIPT_NAME 'ENST00000379031'
+# // Example: php biorels_api.php get_translation -ISOFORM_ID 'P24941-1' -TRANSCRIPT_NAME 'ENST00000379031'
 # // $[/API]
 function get_translation($ISOFORM_ID,$TRANSCRIPT_NAME)
 {
@@ -2662,7 +2662,7 @@ function get_translation($ISOFORM_ID,$TRANSCRIPT_NAME)
 # // Parameter: ISOFORM_ID | Isoform identifier | string | P24941-1 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomics:protein;Genomics:transcript
-# // Example: php prep_queries.php get_translation_for_isoform -ISOFORM_ID 'P24941-1'
+# // Example: php biorels_api.php get_translation_for_isoform -ISOFORM_ID 'P24941-1'
 # // $[/API]
 function get_translation_for_isoform($ISOFORM_ID)
 {
@@ -2683,7 +2683,7 @@ function get_translation_for_isoform($ISOFORM_ID)
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | NM_001798 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomics:protein;Genomics:transcript
-# // Example: php prep_queries.php get_translation_for_transcript -TRANSCRIPT_NAME NM_001798
+# // Example: php biorels_api.php get_translation_for_transcript -TRANSCRIPT_NAME NM_001798
 # // $[/API]
 function get_translation_for_transcript($TRANSCRIPT_NAME)
 {
@@ -2714,7 +2714,7 @@ function get_translation_for_transcript($TRANSCRIPT_NAME)
 # // Parameter: POSITION | Transcript position | int | 400 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation order by transcript sequence
 # // Ecosystem: Proteomics:protein;Genomics:transcript
-# // Example: php prep_queries.php get_translation_transcript_pos -TRANSCRIPT_NAME NM_001798 -POSITION 400
+# // Example: php biorels_api.php get_translation_transcript_pos -TRANSCRIPT_NAME NM_001798 -POSITION 400
 # // $[/API]
 function get_translation_transcript_pos($TRANSCRIPT_NAME,$POSITION)
 {
@@ -2748,7 +2748,7 @@ function get_translation_transcript_pos($TRANSCRIPT_NAME,$POSITION)
 # // Parameter: POSITION | Transcript position | int | 74 | required
 # // Return: Protein record and sequence, transcript record and sequence, translation
 # // Ecosystem: Proteomics:protein;Genomics:transcript
-# // Example: php prep_queries.php get_translation_isoform_pos -ISOFORM_ID P24941-1 -POSITION 74
+# // Example: php biorels_api.php get_translation_isoform_pos -ISOFORM_ID P24941-1 -POSITION 74
 # // $[/API]
 function get_translation_isoform_pos($ISOFORM_ID,$POSITION)
 {
@@ -2779,9 +2779,9 @@ function get_translation_isoform_pos($ISOFORM_ID,$POSITION)
 # // Parameter: NAMESPACE | Gene ontology namespace | string | biological_process |  optional
 # // Return: Gene ontology record
 # // Ecosystem: Proteomics:gene ontology
-# // Example: php prep_queries.php search_gene_ontology -AC 'GO:0010389'
-# // Example: php prep_queries.php search_gene_ontology -NAME 'cell cycle'
-# // Example: php prep_queries.php search_gene_ontology -NAMESPACE 'biological_process'
+# // Example: php biorels_api.php search_gene_ontology -AC 'GO:0010389'
+# // Example: php biorels_api.php search_gene_ontology -NAME 'cell cycle'
+# // Example: php biorels_api.php search_gene_ontology -NAMESPACE 'biological_process'
 # // $[/API]
 function search_gene_ontology($AC='',$NAME='',$NAMESPACE='')
 {
@@ -2800,7 +2800,7 @@ function search_gene_ontology($AC='',$NAME='',$NAMESPACE='')
 # // Parameter: AC | Gene ontology accession | string | GO:0010389 | required
 # // Return: Gene ontology external identifiers
 # // Ecosystem: Proteomics:gene ontology
-# // Example: php prep_queries.php get_gene_ontology_dbref -AC 'GO:0010389'
+# // Example: php biorels_api.php get_gene_ontology_dbref -AC 'GO:0010389'
 # // $[/API]
 function get_gene_ontology_dbref($AC)
 {
@@ -2821,8 +2821,8 @@ function get_gene_ontology_dbref($AC)
 # // Parameter: WITH_OBSOLETE | Include obsolete records | boolean | false | optional 
 # // Return: List of Gene ontology record that are children of the given gene ontology record
 # // Ecosystem: Proteomics:gene ontology
-# // Example: php prep_queries.php get_child_gene_ontology -AC 'GO:0010389'
-# // Example: php prep_queries.php get_child_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
+# // Example: php biorels_api.php get_child_gene_ontology -AC 'GO:0010389'
+# // Example: php biorels_api.php get_child_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
 # // $[/API]
 function get_child_gene_ontology($AC, $MAX_LEVEL=1,$WITH_OBSOLETE=false)
 {
@@ -2869,8 +2869,8 @@ function get_child_gene_ontology($AC, $MAX_LEVEL=1,$WITH_OBSOLETE=false)
 # // Parameter: WITH_OBSOLETE | Include obsolete records | boolean | false | optional 
 # // Return: List of Gene ontology record that are parent of the given gene ontology record
 # // Ecosystem: Proteomics:gene ontology
-# // Example: php prep_queries.php get_parent_gene_ontology -AC 'GO:0010389'
-# // Example: php prep_queries.php get_parent_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
+# // Example: php biorels_api.php get_parent_gene_ontology -AC 'GO:0010389'
+# // Example: php biorels_api.php get_parent_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 2
 # // $[/API]
 function get_parent_gene_ontology($AC, $MAX_LEVEL=1,$WITH_OBSOLETE=false)
 {
@@ -2918,7 +2918,7 @@ function get_parent_gene_ontology($AC, $MAX_LEVEL=1,$WITH_OBSOLETE=false)
 # // Parameter: PROT_IDENTIFIER | Protein identifier | string | CDK2_HUMAN | required
 # // Return: Gene ontology record
 # // Ecosystem: Proteomics:protein|gene ontology
-# // Example: php prep_queries.php get_gene_onto_by_protein -PROT_IDENTIFIER 'CDK2_HUMAN'
+# // Example: php biorels_api.php get_gene_onto_by_protein -PROT_IDENTIFIER 'CDK2_HUMAN'
 # // $[/API]
 function get_gene_onto_by_protein($PROT_IDENTIFIER)
 {
@@ -2938,8 +2938,8 @@ function get_gene_onto_by_protein($PROT_IDENTIFIER)
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional
 # // Return: Protein record
 # // Ecosystem: Proteomics:protein|gene ontology
-# // Example: php prep_queries.php search_protein_by_gene_onto_ac -GO_AC 'GO:0010389'
-# // Example: php prep_queries.php search_protein_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
+# // Example: php biorels_api.php search_protein_by_gene_onto_ac -GO_AC 'GO:0010389'
+# // Example: php biorels_api.php search_protein_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
 # // $[/API]
 function search_protein_by_gene_onto_ac($GO_AC,$TAX_ID='')
 {
@@ -2967,7 +2967,7 @@ function search_protein_by_gene_onto_ac($GO_AC,$TAX_ID='')
 # // Parameter: GENE_ID | NCBI Gene ID | int | 1017 | required
 # // Return: Gene ontology record
 # // Ecosystem: Proteomics:gene ontology;Genomics:gene
-# // Example: php prep_queries.php get_gene_onto_by_gene_id -GENE_ID 1017
+# // Example: php biorels_api.php get_gene_onto_by_gene_id -GENE_ID 1017
 # // $[/API]
 function get_gene_onto_by_gene_id($GENE_ID)
 {
@@ -2990,8 +2990,8 @@ function get_gene_onto_by_gene_id($GENE_ID)
 # // Parameter: TAX_ID | Taxonomic Identifier of the organism | string | 9606 | optional
 # // Return: Gene record
 # // Ecosystem: Proteomics:gene ontology;Genomics:gene
-# // Example: php prep_queries.php search_gene_by_gene_onto_ac -GO_AC 'GO:0010389'
-# // Example: php prep_queries.php search_gene_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
+# // Example: php biorels_api.php search_gene_by_gene_onto_ac -GO_AC 'GO:0010389'
+# // Example: php biorels_api.php search_gene_by_gene_onto_ac -GO_AC 'GO:0010389' -TAX_ID 9606
 # // $[/API]
 function search_gene_by_gene_onto_ac($GO_AC,$TAX_ID='')
 {
@@ -3027,7 +3027,7 @@ function search_gene_by_gene_onto_ac($GO_AC,$TAX_ID='')
 # // Parameter: NAME | Small molecule name | string | ATP | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php search_small_molecule_by_name -NAME 'ATP'
+# // Example: php biorels_api.php search_small_molecule_by_name -NAME 'ATP'
 # // $[/API]
 function search_small_molecule_by_name($NAME)
 {
@@ -3048,7 +3048,7 @@ function search_small_molecule_by_name($NAME)
 # // Parameter: INCHI_KEYs | Small molecule InChI KEY | array | ZKHQWZAMYRWXGA-KQYNXXCUSA-N | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php search_small_molecule_by_inchi_key -INCHI_KEYs 'ZKHQWZAMYRWXGA-KQYNXXCUSA-N'
+# // Example: php biorels_api.php search_small_molecule_by_inchi_key -INCHI_KEYs 'ZKHQWZAMYRWXGA-KQYNXXCUSA-N'
 # // $[/API]
 function search_small_molecule_by_inchi_key($INCHI_KEYs)
 {
@@ -3070,7 +3070,7 @@ function search_small_molecule_by_inchi_key($INCHI_KEYs)
 # // Parameter: SMILES | Small molecule SMILES | array | Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O | required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php search_small_molecule_by_full_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
+# // Example: php biorels_api.php search_small_molecule_by_full_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
 # // $[/API]
 function search_small_molecule_by_full_smiles($FULL_SMILES)
 {
@@ -3095,8 +3095,8 @@ function search_small_molecule_by_full_smiles($FULL_SMILES)
 # // Parameter: WITHOUT_COUNTERION | True if only molecule without counterion requested | boolean | false | optional
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
-# // Example: php prep_queries.php search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O' -WITHOUT_COUNTERION true
+# // Example: php biorels_api.php search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O'
+# // Example: php biorels_api.php search_small_molecule_by_smiles -SMILES 'Nc1[n]c[n]c2[n](c[n]c12)[C@@H]1O[C@H](COP(=O)(OP(=O)(OP(=O)(O)O)O)O)[C@H]([C@H]1O)O' -WITHOUT_COUNTERION true
 # // $[/API]
 function search_small_molecule_by_smiles($FULL_SMILES,$WITHOUT_COUNTERION=false)
 {
@@ -3120,7 +3120,7 @@ function search_small_molecule_by_smiles($FULL_SMILES,$WITHOUT_COUNTERION=false)
 # // Parameter: SCAFFOLD_SMILES | Small molecule scaffold as SMILES | array | c1ccccc1 |required
 # // Return: Small molecule record
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php search_small_molecule_by_Scaffold -SCAFFOLD_SMILES 'c1ccccc1'
+# // Example: php biorels_api.php search_small_molecule_by_Scaffold -SCAFFOLD_SMILES 'c1ccccc1'
 # // $[/API]
 function search_small_molecule_by_Scaffold($SCAFFOLD_SMILES)
 {
@@ -3144,7 +3144,7 @@ function search_small_molecule_by_Scaffold($SCAFFOLD_SMILES)
 # // Parameter: COMPLETE | True if all information is requested | boolean | false | optional
 # // Return: Small molecule record with names, patents, descriptions, counterions and scaffolds
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php get_small_molecule -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: php biorels_api.php get_small_molecule -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 function get_small_molecule($MD5_HASH,$COMPLETE=false)
 {
@@ -3175,7 +3175,7 @@ function get_small_molecule($MD5_HASH,$COMPLETE=false)
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule names
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php get_small_molecule_names -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: php biorels_api.php get_small_molecule_names -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 function get_small_molecule_names($MD5_HASH)
 {
@@ -3195,7 +3195,7 @@ function get_small_molecule_names($MD5_HASH)
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule patent
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php get_small_molecule_patent -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: php biorels_api.php get_small_molecule_patent -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 
 function get_small_molecule_patent($MD5_HASH)
@@ -3216,7 +3216,7 @@ function get_small_molecule_patent($MD5_HASH)
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule description
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php get_small_molecule_description -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: php biorels_api.php get_small_molecule_description -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 function get_small_molecule_description($MD5_HASH)
 {
@@ -3236,7 +3236,7 @@ function get_small_molecule_description($MD5_HASH)
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule counterion
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php get_small_molecule_counterion -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: php biorels_api.php get_small_molecule_counterion -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 
 function get_small_molecule_counterion($MD5_HASH)
@@ -3256,7 +3256,7 @@ function get_small_molecule_counterion($MD5_HASH)
 # // Parameter: MD5_HASH | Small molecule MD5 hash | string | 6a561fabdd49ff7e4298d0cea562f2c6 | required
 # // Return: Small molecule scaffold
 # // Ecosystem: Molecular entity:small molecule
-# // Example: php prep_queries.php get_small_molecule_scaffold -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
+# // Example: php biorels_api.php get_small_molecule_scaffold -MD5_HASH '6a561fabdd49ff7e4298d0cea562f2c6'
 # // $[/API]
 function get_small_molecule_scaffold($MD5_HASH)
 {
@@ -3277,7 +3277,7 @@ function get_small_molecule_scaffold($MD5_HASH)
 # // Parameter: MOLECULAR_ENTITY_HASH | Molecular entity hash | string | 962fb0e3e47bc03f831ebe9b759d027e | required
 # // Return: Molecular entity record with components, small molecules, conjugates and nucleic acids
 # // Ecosystem: Molecular entity:molecular entity
-# // Example: php prep_queries.php get_molecular_entity -MOLECULAR_ENTITY_HASH '962fb0e3e47bc03f831ebe9b759d027e'
+# // Example: php biorels_api.php get_molecular_entity -MOLECULAR_ENTITY_HASH '962fb0e3e47bc03f831ebe9b759d027e'
 # // $[/API]
 function get_molecular_entity($MOLECULAR_ENTITY_HASH)
 {
@@ -3339,7 +3339,7 @@ function get_molecular_entity($MOLECULAR_ENTITY_HASH)
 # // Parameter: HELM_HASH | Nucleic acid HELM hash | string | 962fb0e3e47bc03f831ebe9b759d027e | required
 # // Return: Nucleic acid sequence record with modifications
 # // Ecosystem: Molecular entity:nucleic acid
-# // Example: php prep_queries.php get_nucleic_acid_seq -HELM_HASH '962fb0e3e47bc03f831ebe9b759d027e'
+# // Example: php biorels_api.php get_nucleic_acid_seq -HELM_HASH '962fb0e3e47bc03f831ebe9b759d027e'
 # // $[/API]
 function get_nucleic_acid_seq($HELM_HASH)
 {
@@ -3382,7 +3382,7 @@ function get_nucleic_acid_seq($HELM_HASH)
 # // Parameter: TAG | Disease tag | string | MONDO_0005087 | required
 # // Return: Disease record with synonyms and external database references
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php get_disease_information -TAG 'MONDO_0005087'
+# // Example: php biorels_api.php get_disease_information -TAG 'MONDO_0005087'
 # // $[/API]
 function get_disease_information($TAG)
 {
@@ -3408,7 +3408,7 @@ function get_disease_information($TAG)
 # // Parameter: NAME | Disease name | string | Cancer | required
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php search_disease_by_name -NAME 'Cancer'
+# // Example: php biorels_api.php search_disease_by_name -NAME 'Cancer'
 # // $[/API]
 function search_disease_by_name($NAME)
 {
@@ -3455,7 +3455,7 @@ function search_disease_by_name($NAME)
 # // Parameter: TAG | Disease tag | string | MONDO_0005087 | required
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php search_disease_by_tag -TAG 'MONDO_0005087'
+# // Example: php biorels_api.php search_disease_by_tag -TAG 'MONDO_0005087'
 # // $[/API]
 function search_disease_by_tag($TAG)
 {
@@ -3471,7 +3471,7 @@ function search_disease_by_tag($TAG)
 # // Parameter: SYNONYM | Disease synonym | string | Cancer | required
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php search_disease_by_synonym -SYNONYM 'Cancer'
+# // Example: php biorels_api.php search_disease_by_synonym -SYNONYM 'Cancer'
 # // $[/API]
 function search_disease_by_synonym($SYNONYM)
 {
@@ -3490,7 +3490,7 @@ function search_disease_by_synonym($SYNONYM)
 # // Parameter: SOURCE | Source of the identifier | string | MONDO | optional
 # // Return: Disease record
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php search_disease_by_identifier -ID 'MONDO_0005087' -SOURCE 'MONDO'
+# // Example: php biorels_api.php search_disease_by_identifier -ID 'MONDO_0005087' -SOURCE 'MONDO'
 # // $[/API]
 function search_disease_by_identifier($ID,$SOURCE=null)
 {
@@ -3513,7 +3513,7 @@ function search_disease_by_identifier($ID,$SOURCE=null)
 # // Parameter: MAX_DEPTH | Maximum depth of child diseases | int | 1 | optional | Default: 1
 # // Return: List of disease records that are children of the given disease
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php get_child_disease -TAG 'MONDO_0005087'
+# // Example: php biorels_api.php get_child_disease -TAG 'MONDO_0005087'
 # // $[/API]
 function get_child_disease($TAG,$MAX_DEPTH=1)
 {
@@ -3541,7 +3541,7 @@ function get_child_disease($TAG,$MAX_DEPTH=1)
 # // Parameter: MAX_DEPTH | Maximum depth of parent diseases | int | 1 | optional | Default: 1
 # // Return: List of disease records that are parent of the given disease
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php get_parent_disease -TAG 'MONDO_0005087'
+# // Example: php biorels_api.php get_parent_disease -TAG 'MONDO_0005087'
 # // $[/API]
 function get_parent_disease($TAG,$MAX_DEPTH=1)
 {
@@ -3570,7 +3570,7 @@ function get_parent_disease($TAG,$MAX_DEPTH=1)
 # // Parameter: SOURCE_NAME | Source of the disease information | string | MONDO | optional
 # // Return: Textual information about the disease
 # // Ecosystem: Disease_anatomy:disease
-# // Example: php prep_queries.php get_disease_info -TAG 'MONDO_0005087'
+# // Example: php biorels_api.php get_disease_info -TAG 'MONDO_0005087'
 # // $[/API]
 function get_disease_info($TAG,$SOURCE_NAME='')
 {
@@ -3598,7 +3598,7 @@ function get_disease_info($TAG,$SOURCE_NAME='')
 # // Parameter: COMPLETE | True if all information is requested | boolean | false | optional
 # // Return: anatomy record with synonyms and external database references
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php get_anatomy_information -TAG 'UBERON_0000955'
+# // Example: php biorels_api.php get_anatomy_information -TAG 'UBERON_0000955'
 # // $[/API]
 function get_anatomy_information($TAG,$COMPLETE=false)
 {
@@ -3626,7 +3626,7 @@ function get_anatomy_information($TAG,$COMPLETE=false)
 # // Parameter: IS_EXACT | True if exact match is required | boolean | true | optional | Default: true
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php search_anatomy_by_name -NAME 'Brain'
+# // Example: php biorels_api.php search_anatomy_by_name -NAME 'Brain'
 # // $[/API]
 function search_anatomy_by_name($NAME, $IS_EXACT=true)
 {
@@ -3643,7 +3643,7 @@ function search_anatomy_by_name($NAME, $IS_EXACT=true)
 # // Parameter: TAG | anatomy tag | string | UBERON_0000955 | required
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php search_anatomy_by_tag -TAG 'UBERON_0000955'
+# // Example: php biorels_api.php search_anatomy_by_tag -TAG 'UBERON_0000955'
 # // $[/API]
 function search_anatomy_by_tag($TAG)
 {
@@ -3659,7 +3659,7 @@ function search_anatomy_by_tag($TAG)
 # // Parameter: SYNONYM | anatomy synonym | string | Brain | required
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php search_anatomy_by_synonym -SYNONYM 'Brain'
+# // Example: php biorels_api.php search_anatomy_by_synonym -SYNONYM 'Brain'
 # // $[/API]
 function search_anatomy_by_synonym($SYNONYM)
 {
@@ -3678,7 +3678,7 @@ function search_anatomy_by_synonym($SYNONYM)
 # // Parameter: SOURCE | Source of the identifier | string | UBERON | optional
 # // Return: anatomy record
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php search_anatomy_by_identifier -ID 0000955 -SOURCE UBERON
+# // Example: php biorels_api.php search_anatomy_by_identifier -ID 0000955 -SOURCE UBERON
 # // $[/API]
 function search_anatomy_by_identifier($ID,$SOURCE=null)
 {
@@ -3700,7 +3700,7 @@ function search_anatomy_by_identifier($ID,$SOURCE=null)
 # // Parameter: MAX_DEPTH | Maximum depth of child anatomys | int | 1 | optional | Default: 1
 # // Return: List of anatomy records that are children of the given anatomy
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php get_child_anatomy -TAG UBERON_0000955
+# // Example: php biorels_api.php get_child_anatomy -TAG UBERON_0000955
 # // $[/API]
 function get_child_anatomy($TAG,$MAX_DEPTH=1)
 {
@@ -3729,7 +3729,7 @@ function get_child_anatomy($TAG,$MAX_DEPTH=1)
 # // Parameter: MAX_DEPTH | Maximum depth of parent anatomys | int | 1 | optional | Default: 1
 # // Return: List of anatomy records that are parent of the given anatomy
 # // Ecosystem: Disease_anatomy:anatomy
-# // Example: php prep_queries.php get_parent_anatomy -TAG UBERON_0000955
+# // Example: php biorels_api.php get_parent_anatomy -TAG UBERON_0000955
 # // $[/API]
 function get_parent_anatomy($TAG,$MAX_DEPTH=1)
 {
@@ -3764,8 +3764,8 @@ function get_parent_anatomy($TAG,$MAX_DEPTH=1)
 # // Parameter: INCLUDE_CHILD_DISEASE | True if child diseases should be included | boolean | false | optional | Default: false
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line|disease
-# // Example: php prep_queries.php search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087'
-# // Example: php prep_queries.php search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087' -INCLUDE_CHILD_DISEASE true
+# // Example: php biorels_api.php search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087'
+# // Example: php biorels_api.php search_cell_line_by_disease -DISEASE_TAG 'MONDO_0005087' -INCLUDE_CHILD_DISEASE true
 # // $[/API]
 function search_cell_line_by_disease($DISEASE_TAG,$INCLUDE_CHILD_DISEASE=false)
 {
@@ -3799,7 +3799,7 @@ function search_cell_line_by_disease($DISEASE_TAG,$INCLUDE_CHILD_DISEASE=false)
 # // Parameter: COMPLETE | True if complete information is required | boolean | false | optional | Default: false
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line;Genomics:taxon
-# // Example: php prep_queries.php get_cell_info -ACC 'CVCL_B6YM'
+# // Example: php biorels_api.php get_cell_info -ACC 'CVCL_B6YM'
 # // $[/API]
 function get_cell_info($ACC,$COMPLETE=false)
 {
@@ -3827,7 +3827,7 @@ function get_cell_info($ACC,$COMPLETE=false)
 # // Parameter: ACC | Cell line accession | string | CVCL_B6YM | required
 # // Return: List of synonyms
 # // Ecosystem: Disease_anatomy:cell line
-# // Example: php prep_queries.php get_cell_line_synonyms -ACC 'CVCL_B6YM'
+# // Example: php biorels_api.php get_cell_line_synonyms -ACC 'CVCL_B6YM'
 # // $[/API]
 function get_cell_line_synonyms($ACC)
 {
@@ -3846,8 +3846,8 @@ function get_cell_line_synonyms($ACC)
 # // Parameter: COMPLETE | True if extended disease information is requested | boolean | false | optional | Default: false
 # // Return: List of diseases
 # // Ecosystem: Disease_anatomy:cell line|disease
-# // Example: php prep_queries.php get_cell_line_disease -ACC 'CVCL_B6YM'
-# // Example: php prep_queries.php get_cell_line_disease -ACC 'CVCL_B6YM' -COMPLETE true
+# // Example: php biorels_api.php get_cell_line_disease -ACC 'CVCL_B6YM'
+# // Example: php biorels_api.php get_cell_line_disease -ACC 'CVCL_B6YM' -COMPLETE true
 # // $[/API]
 function get_cell_line_disease($ACC,$COMPLETE=false)
 {
@@ -3875,8 +3875,8 @@ function get_cell_line_disease($ACC,$COMPLETE=false)
 # // Parameter: COMPLETE | True if extended tissue information is requested | boolean | false | optional | Default: false
 # // Return: List of tissues
 # // Ecosystem: Disease_anatomy:cell line|anatomy
-# // Example: php prep_queries.php get_cell_line_tissue -ACC 'CVCL_B6YM'
-# // Example: php prep_queries.php get_cell_line_tissue -ACC 'CVCL_B6YM' -COMPLETE true
+# // Example: php biorels_api.php get_cell_line_tissue -ACC 'CVCL_B6YM'
+# // Example: php biorels_api.php get_cell_line_tissue -ACC 'CVCL_B6YM' -COMPLETE true
 # // $[/API]
 function get_cell_line_tissue($ACC,$COMPLETE=false)
 {
@@ -3900,7 +3900,7 @@ function get_cell_line_tissue($ACC,$COMPLETE=false)
 # // Parameter: ACC | Cell line accession | string | CVCL_B6YM | required
 # // Return: Organism information
 # // Ecosystem: Disease_anatomy:cell line;Genomics:taxon
-# // Example: php prep_queries.php get_cell_line_taxon -ACC 'CVCL_B6YM'
+# // Example: php biorels_api.php get_cell_line_taxon -ACC 'CVCL_B6YM'
 # // $[/API]
 function get_cell_line_taxon($ACC)
 {
@@ -3916,7 +3916,7 @@ function get_cell_line_taxon($ACC)
 # // Parameter: ACC | Cell line accession | string | CVCL_B6YM | required
 # // Return: Patent information
 # // Ecosystem: Disease_anatomy:cell line;Scientific_community:patent
-# // Example: php prep_queries.php get_cell_line_patent -ACC 'CVCL_B6YM'
+# // Example: php biorels_api.php get_cell_line_patent -ACC 'CVCL_B6YM'
 # // $[/API]
 function get_cell_line_patent($ACC)
 {
@@ -3932,7 +3932,7 @@ function get_cell_line_patent($ACC)
 # // Description: List the different types of cell lines
 # // Return: List of cell line types
 # // Ecosystem: Disease_anatomy:cell line
-# // Example: php prep_queries.php list_cell_line_type
+# // Example: php biorels_api.php list_cell_line_type
 # // $[/API]
 function list_cell_line_type()
 {
@@ -3951,7 +3951,7 @@ function list_cell_line_type()
 # // Description: Count the number of cell lines per organism
 # // Return: Count, scientific name, tax id
 # // Ecosystem: Disease_anatomy:cell line;Genomics:taxon
-# // Example: php prep_queries.php list_cell_line_taxon
+# // Example: php biorels_api.php list_cell_line_taxon
 # // $[/API]
 function list_cell_line_taxon()
 {
@@ -3968,7 +3968,7 @@ function list_cell_line_taxon()
 # // Description: Count the number of cell lines per tissue
 # // Return: Count, tissue name, tissue tag
 # // Ecosystem: Disease_anatomy:cell line|anatomy
-# // Example: php prep_queries.php list_cell_line_tissue
+# // Example: php biorels_api.php list_cell_line_tissue
 # // $[/API]
 function list_cell_line_tissue()
 {
@@ -3989,7 +3989,7 @@ function list_cell_line_tissue()
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line
-# // Example: php prep_queries.php search_cell_line -PARAMS "CELL_TYPE=Cancer cell line"
+# // Example: php biorels_api.php search_cell_line -PARAMS "CELL_TYPE=Cancer cell line"
 # // $[/API]
 function search_cell_line($PARAMS,$COMPLETE=false)
 {
@@ -4045,7 +4045,7 @@ function search_cell_line($PARAMS,$COMPLETE=false)
 // Function: list_rna_expression_samples
 // Description: List all RNA expression samples with their source, organ, and tissue information
 // Ecosystem: Disease_anatomy:RNA expression|anatomy
-// Example: php prep_queries.php list_rna_expression_samples
+// Example: php biorels_api.php list_rna_expression_samples
 // $[/API]
 function list_rna_expression_samples()
 {
@@ -4067,7 +4067,7 @@ function list_rna_expression_samples()
 // Parameter: SAMPLE_ID | Sample ID | array | GTEX-1117F |  optional
 // Parameter: ANATOMY_TAG | Anatomy tag | array | UBERON_0002037 | optional
 // Ecosystem: Disease_anatomy:RNA expression
-// Example: php prep_queries.php search_rna_expression_samples -SOURCE_NAME 'GTEX' -ORGAN 'Brain' -TISSUE 'Cerebellum' -SAMPLE_ID 'GTEX-1117F' -ANATOMY_TAG 'UBERON_0002037'
+// Example: php biorels_api.php search_rna_expression_samples -SOURCE_NAME 'GTEX' -ORGAN 'Brain' -TISSUE 'Cerebellum' -SAMPLE_ID 'GTEX-1117F' -ANATOMY_TAG 'UBERON_0002037'
 // $[/API]
 function search_rna_expression_samples($SOURCE_NAME=array(),$ORGAN=array(),$TISSUE=array(),$SAMPLE_ID=array(),$ANATOMY_TAG=array())
 {
@@ -4095,7 +4095,7 @@ function search_rna_expression_samples($SOURCE_NAME=array(),$ORGAN=array(),$TISS
 # // Parameter: SAMPLE_IDS | List of sample IDs | array | GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI | optional
 # // Return: TPM, sample ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:transcript
-# // Example: php prep_queries.php get_transcript_expression -TRANSCRIPT_NAME 'ENST00000379031' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
+# // Example: php biorels_api.php get_transcript_expression -TRANSCRIPT_NAME 'ENST00000379031' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
 # // $[/API]
 function get_transcript_expression($TRANSCRIPT_NAME,$SAMPLE_IDS=array())
 {
@@ -4133,7 +4133,7 @@ function get_transcript_expression($TRANSCRIPT_NAME,$SAMPLE_IDS=array())
 # // Parameter: SOURCE_NAME | Source name | string | GTEX | required
 # // Return: TPM, transcript name, transcript version, gene sequence name, gene sequence version, symbol, gene ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene|transcript
-# // Example: php prep_queries.php get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
+# // Example: php biorels_api.php get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
 # // $[/API]
 function get_sample_rna_expression($SAMPLE_ID,$SOURCE_NAME)
 {
@@ -4158,7 +4158,7 @@ function get_sample_rna_expression($SAMPLE_ID,$SOURCE_NAME)
 # // Parameter: TRANSCRIPT_NAME | Transcript name | string | ENST00000379031 | required
 # // Return: Organ name, tissue name, number of samples, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:transcript
-# // Example: php prep_queries.php get_transcript_rna_expression_stat -TRANSCRIPT_NAME 'ENST00000379031'
+# // Example: php biorels_api.php get_transcript_rna_expression_stat -TRANSCRIPT_NAME 'ENST00000379031'
 # // $[/API]
 function get_transcript_rna_expression_stat($TRANSCRIPT_NAME)
 {
@@ -4192,9 +4192,9 @@ function get_transcript_rna_expression_stat($TRANSCRIPT_NAME)
 # // Parameter: ANATOMY_TAG | Anatomy tag | array | GTEX | optional
 # // Return: Transcript name, transcript version, organ name, tissue name, number of samples, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:transcript
-# // Example: php prep_queries.php get_tissue_transcript_rna_expression_stat -ORGAN 'Brain'
-# // Example: php prep_queries.php get_tissue_transcript_rna_expression_stat -TISSUE 'Cerebellum,Cortex' 
-# // Example: php prep_queries.php get_tissue_transcript_rna_expression_stat -ANATOMY_TAG 'UBERON_0002037'  -SOURCE_NAME 'GTEX'
+# // Example: php biorels_api.php get_tissue_transcript_rna_expression_stat -ORGAN 'Brain'
+# // Example: php biorels_api.php get_tissue_transcript_rna_expression_stat -TISSUE 'Cerebellum,Cortex' 
+# // Example: php biorels_api.php get_tissue_transcript_rna_expression_stat -ANATOMY_TAG 'UBERON_0002037'  -SOURCE_NAME 'GTEX'
 # // $[/API]
 function get_tissue_transcript_rna_expression_stat($SOURCE_NAME=array(),$ORGAN=array(),$TISSUE=array(),$ANATOMY_TAG=array())
 {
@@ -4223,7 +4223,7 @@ function get_tissue_transcript_rna_expression_stat($SOURCE_NAME=array(),$ORGAN=a
 # // Parameter: SAMPLE_IDS | List of sample IDs | array | GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI | optional
 # // Return: TPM, sample ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: php prep_queries.php get_gene_expression -GENE_SEQ_NAME 'ENSG00000223972' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
+# // Example: php biorels_api.php get_gene_expression -GENE_SEQ_NAME 'ENSG00000223972' -SAMPLE_IDS GTEX-ZVZQ-0011-R11a-SM-51MS6,GTEX-ZVT3-0011-R11b-SM-57WBI
 # // $[/API]
 function get_gene_expression($GENE_SEQ_NAME,$SAMPLE_IDS=array())
 {
@@ -4261,7 +4261,7 @@ function get_gene_expression($GENE_SEQ_NAME,$SAMPLE_IDS=array())
 # // Parameter: SOURCE_NAME | Source name | string | GTEX | required
 # // Return: TPM,  gene sequence name, gene sequence version, symbol, gene ID
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: php prep_queries.php get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
+# // Example: php biorels_api.php get_sample_rna_expression -SAMPLE_ID 'GTEX-ZVZQ-0011-R11a-SM-51MS6' -SOURCE_NAME 'GTEX'
 # // $[/API]
 function get_sample_gene_rna_expression($SAMPLE_ID,$SOURCE_NAME)
 {
@@ -4286,7 +4286,7 @@ function get_sample_gene_rna_expression($SAMPLE_ID,$SOURCE_NAME)
 # // Parameter: GENE_SEQ_NAME | Gene sequence name | string | ENSG00000223972 | required
 # // Return: Organ name, tissue name, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: php prep_queries.php get_gene_rna_expression_stat -GENE_SEQ_NAME 'ENSG00000223972'
+# // Example: php biorels_api.php get_gene_rna_expression_stat -GENE_SEQ_NAME 'ENSG00000223972'
 # // $[/API]
 function get_gene_rna_expression_stat($GENE_SEQ_NAME)
 {
@@ -4322,9 +4322,9 @@ function get_gene_rna_expression_stat($GENE_SEQ_NAME)
 # // Parameter: ANATOMY_TAG | Anatomy tag | array | UBERON_0002037 | optional
 # // Return: gene seq name, gene version, organ name, tissue name, AUC, lower value, LR, minimum value, Q1, median value, Q3, maximum value
 # // Ecosystem: Disease_anatomy:RNA expression;Genomics:gene
-# // Example: php prep_queries.php get_tissue_gene_rna_expression_stat -ORGAN 'Brain'
-# // Example: php prep_queries.php get_tissue_gene_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
-# // Example: php prep_queries.php get_tissue_gene_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037'
+# // Example: php biorels_api.php get_tissue_gene_rna_expression_stat -ORGAN 'Brain'
+# // Example: php biorels_api.php get_tissue_gene_rna_expression_stat  -TISSUE 'Cerebellum,Cortex' 
+# // Example: php biorels_api.php get_tissue_gene_rna_expression_stat  -ANATOMY_TAG 'UBERON_0002037'
 # // $[/API]
 function get_tissue_gene_rna_expression_stat($ORGAN=array(),$TISSUE=array(),$ANATOMY_TAG=array())
 {
@@ -4353,7 +4353,7 @@ function get_tissue_gene_rna_expression_stat($ORGAN=array(),$TISSUE=array(),$ANA
 # // Description: List and count the number of clinical variant by type
 # // Return: Count, clinical variant type
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: php prep_queries.php list_clinical_variant_type
+# // Example: php biorels_api.php list_clinical_variant_type
 # // $[/API]
 function list_clinical_variant_type()
 {
@@ -4371,7 +4371,7 @@ function list_clinical_variant_type()
 # // Description: List and count the number of clinical variant by gene
 # // Return: Count, gene ID, symbol, full name
 # // Ecosystem: Disease_anatomy:clinical variant;Genomics:gene
-# // Example: php prep_queries.php list_clinical_variant_by_gene
+# // Example: php biorels_api.php list_clinical_variant_by_gene
 # // $[/API]
 function list_clinical_variant_by_gene()
 {
@@ -4391,7 +4391,7 @@ function list_clinical_variant_by_gene()
 # // Description: List and count the number of clinical variant by significance
 # // Return: Count, clinical significance
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: php prep_queries.php list_clinical_variant_significance
+# // Example: php biorels_api.php list_clinical_variant_significance
 # // $[/API]
 function list_clinical_variant_significance()
 {
@@ -4410,7 +4410,7 @@ function list_clinical_variant_significance()
 # // Parameter: CLINICAL_VARIANT_NAME | Clinical variant name | string | NM_000059.3:c.35G>A | required
 # // Return: Clinical variant record
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: php prep_queries.php get_clinical_variant_information -CLINICAL_VARIANT_NAME 'NM_000059.3:c.35G>A'
+# // Example: php biorels_api.php get_clinical_variant_information -CLINICAL_VARIANT_NAME 'NM_000059.3:c.35G>A'
 # // $[/API]
 function get_clinical_variant_information($CLINICAL_VARIANT_NAME)
 {
@@ -4443,7 +4443,7 @@ function get_clinical_variant_information($CLINICAL_VARIANT_NAME)
 # // Parameter: SCV_ID | SCV ID | string | SCV004922085.1 | required
 # // Return: Clinical variant submission record
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: php prep_queries.php get_clinical_variant_submission -SCV_ID 'SCV004922085.1'
+# // Example: php biorels_api.php get_clinical_variant_submission -SCV_ID 'SCV004922085.1'
 # // $[/API]
 function get_clinical_variant_submission($SCV_ID)
 {
@@ -4505,8 +4505,8 @@ function get_clinical_variant_submission($SCV_ID)
 # // Parameter: PARAMS | List of parameters, Use $PARAMS=array('NAMES'=>array(),'TYPE'=>array(),'STATUS'=>array(),'GENE_IDS'=>array(),'TRANSCRIPTS'=>array(),'SIGNIFICANCE'=>array()); | multi_array | | required
 # // Return: Clinical variant record
 # // Ecosystem: Disease_anatomy:clinical variant
-# // Example: php prep_queries.php search_clinical_variant -PARAMS "SIGNIFICANCE=Pathogenic"
-# // Example: php prep_queries.php search_clinical_variant -PARAMS "GENE_IDS=1017,1018"
+# // Example: php biorels_api.php search_clinical_variant -PARAMS "SIGNIFICANCE=Pathogenic"
+# // Example: php biorels_api.php search_clinical_variant -PARAMS "GENE_IDS=1017,1018"
 # // $[/API]
 function search_clinical_variant($PARAMS)
 {
@@ -4591,7 +4591,7 @@ function search_clinical_variant($PARAMS)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_information -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_information -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_information($TRIAL_ID,$COMPLETE=false)
 {
@@ -4624,7 +4624,7 @@ function get_clinical_trial_information($TRIAL_ID,$COMPLETE=false)
 # // Description: List and count the number of clinical trials by phase
 # // Return: Count, clinical phase
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php list_clinical_phases
+# // Example: php biorels_api.php list_clinical_phases
 # // $[/API]
 function list_clinical_phases()
 {
@@ -4641,7 +4641,7 @@ function list_clinical_phases()
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional 
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php search_clinical_trial -PARAMS "phase=1,2;status=Recruiting"
+# // Example: php biorels_api.php search_clinical_trial -PARAMS "phase=1,2;status=Recruiting"
 # // $[/API]
 function search_clinical_trial($PARAMS,$COMPLETE=false)
 {
@@ -4792,7 +4792,7 @@ function search_clinical_trial($PARAMS,$COMPLETE=false)
 # // Parameter: WITH_CHILDREN | True if clinical trials for children diseases are requested | boolean | false | optional
 # // Return: Clinical trial record
 # // Ecosystem:  Drug_clinical_trial:clinical trial;Disease_anatomy:disease
-# // Example: php prep_queries.php get_clinical_trial_by_disease -DISEASE_TAG 'MONDO_0005087'
+# // Example: php biorels_api.php get_clinical_trial_by_disease -DISEASE_TAG 'MONDO_0005087'
 # // $[/API]
 function get_clinical_trial_by_disease($DISEASE_TAG,$COMPLETE=false,$WITH_CHILDREN=false)
 {
@@ -4828,7 +4828,7 @@ function get_clinical_trial_by_disease($DISEASE_TAG,$COMPLETE=false,$WITH_CHILDR
 # // Parameter: GENE_SYMBOL | Gene symbol | string | BRCA1 | required
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial;Genomics:gene
-# // Example: php prep_queries.php get_clinical_trial_by_gene -GENE_SYMBOL 'BRCA1'
+# // Example: php biorels_api.php get_clinical_trial_by_gene -GENE_SYMBOL 'BRCA1'
 # // $[/API]
 function get_clinical_trial_by_gene($GENE_SYMBOL)
 {
@@ -4854,7 +4854,7 @@ function get_clinical_trial_by_gene($GENE_SYMBOL)
 # // Parameter: DRUG_NAME | Drug name | string | Omeprazole | required
 # // Return: Clinical trial record
 # // Ecosystem: Drug_clinical_trial:clinical trial|drug
-# // Example: php prep_queries.php search_clinical_trial_by_drug -DRUG_NAME 'Omeprazole'
+# // Example: php biorels_api.php search_clinical_trial_by_drug -DRUG_NAME 'Omeprazole'
 # // $[/API]
 function search_clinical_trial_by_drug($DRUG_NAME)
 {
@@ -4895,7 +4895,7 @@ function search_clinical_trial_by_drug($DRUG_NAME)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Clinical trial title
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_title -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_title -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_title($TRIAL_ID)
 {
@@ -4913,7 +4913,7 @@ function get_clinical_trial_title($TRIAL_ID)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Clinical trial brief summary
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_brief_summary -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_brief_summary -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_brief_summary($TRIAL_ID)
 {
@@ -4930,7 +4930,7 @@ function get_clinical_trial_brief_summary($TRIAL_ID)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Intervention name, intervention type, intervention description
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_intervention -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_intervention -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_intervention($TRIAL_ID)
 {
@@ -4950,7 +4950,7 @@ function get_clinical_trial_intervention($TRIAL_ID)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Arm label, arm type, arm description
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_arms -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_arms -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_arms($TRIAL_ID)
 {
@@ -4969,7 +4969,7 @@ function get_clinical_trial_arms($TRIAL_ID)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Condition name
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_condition -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_condition -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_condition($TRIAL_ID)
 {
@@ -4989,7 +4989,7 @@ function get_clinical_trial_condition($TRIAL_ID)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: Arm label, intervention name
 # // Ecosystem: Drug_clinical_trial:clinical trial
-# // Example: php prep_queries.php get_clinical_trial_arm_intervention -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_arm_intervention -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_arm_intervention($TRIAL_ID)
 {
@@ -5012,7 +5012,7 @@ function get_clinical_trial_arm_intervention($TRIAL_ID)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | true | optional
 # // Return: Drug name
 # // Ecosystem: Drug_clinical_trial:clinical trial|drug
-# // Example: php prep_queries.php get_clinical_trial_drug -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_drug -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_drug($TRIAL_ID,$COMPLETE=false)
 {
@@ -5042,7 +5042,7 @@ function get_clinical_trial_drug($TRIAL_ID,$COMPLETE=false)
 # // Parameter: TRIAL_ID | Clinical trial ID | string | NCT00005219 | required
 # // Return: PMID
 # // Ecosystem: Drug_clinical_trial:clinical trial;Scientific_community:publication
-# // Example: php prep_queries.php get_clinical_trial_publications -TRIAL_ID 'NCT00005219'
+# // Example: php biorels_api.php get_clinical_trial_publications -TRIAL_ID 'NCT00005219'
 # // $[/API]
 function get_clinical_trial_publications($TRIAL_ID)
 {
@@ -5072,9 +5072,9 @@ function get_clinical_trial_publications($TRIAL_ID)
 # // Parameter: ID | Drug identifier | string | CHEMBL1201583 | required
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php search_drug_by_identifier -ID 'DB00006'
-# // Example: php prep_queries.php search_drug_by_identifier -ID 'CHEMBL1201583'
-# // Example: php prep_queries.php search_drug_by_identifier -ID 'DRUGBANK:DB00006'
+# // Example: php biorels_api.php search_drug_by_identifier -ID 'DB00006'
+# // Example: php biorels_api.php search_drug_by_identifier -ID 'CHEMBL1201583'
+# // Example: php biorels_api.php search_drug_by_identifier -ID 'DRUGBANK:DB00006'
 # // $[/API]
 
 function search_drug_by_identifier($ID)
@@ -5119,7 +5119,7 @@ return $data;
 # // Parameter: COMPLETE | True if complete drug information is requested | boolean | false | optional | Default: false
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php search_drug_by_name -NAME 'Omeprazole'
+# // Example: php biorels_api.php search_drug_by_name -NAME 'Omeprazole'
 # // $[/API]
 function search_drug_by_name($NAME,$WITH_DRUG_INFORMATION=true,$COMPLETE=false)
 {
@@ -5156,7 +5156,7 @@ function search_drug_by_name($NAME,$WITH_DRUG_INFORMATION=true,$COMPLETE=false)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | true | optional
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_information -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_information -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_information($DRUG_PRIMARY_NAME,$COMPLETE=true)
 {
@@ -5200,7 +5200,7 @@ function get_drug_information($DRUG_PRIMARY_NAME,$COMPLETE=true)
 # // Parameter: WITH_EXTENDED_ASSAY_INFO | True if extended assay information is requested | boolean | false | optional | Default: false
 # // Return: Molecular entity hash, is preferred, source name, activity
 # // Ecosystem: Drug_clinical_trial:drug;Assay:assay;Molecular entity:activity
-# // Example: php prep_queries.php get_drug_activity -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_activity -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_activity($DRUG_PRIMARY_NAME,$WITH_ASSAY=false,$WITH_EXTENDED_ASSAY_INFO=false)
 {
@@ -5230,7 +5230,7 @@ function get_drug_activity($DRUG_PRIMARY_NAME,$WITH_ASSAY=false,$WITH_EXTENDED_A
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: Drug name, is primary, is tradename, source name
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_names -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_names -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_names($DRUG_PRIMARY_NAME)
 {
@@ -5255,7 +5255,7 @@ function get_drug_names($DRUG_PRIMARY_NAME)
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: Source name, drug external database value
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_extdb -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_extdb -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_extdb($DRUG_PRIMARY_NAME)
 {
@@ -5277,7 +5277,7 @@ function get_drug_extdb($DRUG_PRIMARY_NAME)
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: Drug type name, drug type group
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_type -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_type -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_type($DRUG_PRIMARY_NAME)
 {
@@ -5298,7 +5298,7 @@ function get_drug_type($DRUG_PRIMARY_NAME)
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_atc_class -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_atc_class -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_atc_class($DRUG_PRIMARY_NAME)
 {
@@ -5317,7 +5317,7 @@ function get_drug_atc_class($DRUG_PRIMARY_NAME)
 # // Parameter: DRUG_PRIMARY_NAME | Drug primary name | string | Omeprazole | required
 # // Return: ATC level, ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_atc_hierarchy -DRUG_PRIMARY_NAME 'Omeprazole'
+# // Example: php biorels_api.php get_drug_atc_hierarchy -DRUG_PRIMARY_NAME 'Omeprazole'
 # // $[/API]
 function get_drug_atc_hierarchy($DRUG_PRIMARY_NAME)
 {
@@ -5347,7 +5347,7 @@ function get_drug_atc_hierarchy($DRUG_PRIMARY_NAME)
 # // Parameter: WITH_CHILD | True if child ATC codes are included | boolean | true | optional | Default: true
 # // Return: Drug record
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_drug_from_ATC_Code -ATC_CODE 'A02BC01'
+# // Example: php biorels_api.php get_drug_from_ATC_Code -ATC_CODE 'A02BC01'
 # // $[/API]
 function get_drug_from_ATC_Code($ATC_CODE,$WITH_CHILD=true)
 {
@@ -5394,7 +5394,7 @@ function get_drug_from_ATC_Code($ATC_CODE,$WITH_CHILD=true)
 # // Parameter: WITH_CHILD | True if child ATC codes are included | boolean | false | optional | Default: false
 # // Return: Target symbol, gene ID, count
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_target_stat_for_ATC_Code -ATC_CODE 'A02'
+# // Example: php biorels_api.php get_target_stat_for_ATC_Code -ATC_CODE 'A02'
 # // $[/API]
 
 function get_target_stat_for_ATC_Code($ATC_CODE,$WITH_CHILD=false)
@@ -5431,7 +5431,7 @@ function get_target_stat_for_ATC_Code($ATC_CODE,$WITH_CHILD=false)
 # // Parameter: ATC_CODE | ATC code | string | A02BC01 | required
 # // Return: ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_ATC_info -ATC_CODE 'A02BC01'
+# // Example: php biorels_api.php get_ATC_info -ATC_CODE 'A02BC01'
 # // $[/API]
 
 function get_ATC_info($ATC_CODE)
@@ -5448,7 +5448,7 @@ function get_ATC_info($ATC_CODE)
 # // Parameter: ATC_CODE | ATC code | string | A02BC01 | required
 # // Return: ATC level, ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_ATC_hierarchy -ATC_CODE 'A02BC01'
+# // Example: php biorels_api.php get_ATC_hierarchy -ATC_CODE 'A02BC01'
 # // $[/API]
 function get_ATC_hierarchy($ATC_CODE)
 {
@@ -5472,7 +5472,7 @@ function get_ATC_hierarchy($ATC_CODE)
 # // Parameter: ATC_CODE | ATC code | string | A02 | required
 # // Return: ATC level, ATC code, ATC title
 # // Ecosystem: Drug_clinical_trial:drug
-# // Example: php prep_queries.php get_ATC_child_hierarchy -ATC_CODE 'A02'
+# // Example: php biorels_api.php get_ATC_child_hierarchy -ATC_CODE 'A02'
 # // $[/API]
 function get_ATC_child_hierarchy($ATC_CODE)
 {
@@ -5509,7 +5509,7 @@ function get_ATC_child_hierarchy($ATC_CODE)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php search_assay_by_name -NAME 'BRCA1'
+# // Example: php biorels_api.php search_assay_by_name -NAME 'BRCA1'
 # // $[/API]
 function search_assay_by_name($NAME,$COMPLETE=false)
 {
@@ -5534,7 +5534,7 @@ function search_assay_by_name($NAME,$COMPLETE=false)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php search_assay_by_description -DESC 'BRCA1'
+# // Example: php biorels_api.php search_assay_by_description -DESC 'BRCA1'
 # // $[/API]
 function search_assay_by_description($DESC,$COMPLETE=false)
 {
@@ -5568,7 +5568,7 @@ function search_assay_by_description($DESC,$COMPLETE=false)
 # // Description: Provide a list of assay types and the number of assays for each type (Functional, Binding, etc.)
 # // Return: Assay type, number of assays
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php list_assay_type
+# // Example: php biorels_api.php list_assay_type
 # // $[/API]
 
 function list_assay_type()
@@ -5590,7 +5590,7 @@ function list_assay_type()
 # // Parameter: ASSAY_TYPE | Assay type | string | Binding | required
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php search_assay_by_type -ASSAY_TYPE 'Binding'
+# // Example: php biorels_api.php search_assay_by_type -ASSAY_TYPE 'Binding'
 # // $[/API]
 function search_assay_by_type($ASSAY_TYPE)
 {
@@ -5616,7 +5616,7 @@ function search_assay_by_type($ASSAY_TYPE)
 # // Description: Provide a list of assay categories and the number of assays for each category
 # // Return: Assay category name, number of assays
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php list_assay_category
+# // Example: php biorels_api.php list_assay_category
 # // $[/API]
 function list_assay_category()
 {
@@ -5636,7 +5636,7 @@ function list_assay_category()
 # // Parameter: CATEGORY | Assay category | string | Screening | required
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php search_assay_by_category -CATEGORY 'Screening'
+# // Example: php biorels_api.php search_assay_by_category -CATEGORY 'Screening'
 # // $[/API]
 function search_assay_by_category($CATEGORY)
 {
@@ -5665,9 +5665,9 @@ function search_assay_by_category($CATEGORY)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record with taxon, assay type, assay tissue, assay cell, assay target, confidence
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php get_assay_information -ASSAY_NAME 'CHEMBL944488' -SOURCE_NAME ChEMBL
-# // Example: php prep_queries.php get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL
-# // Example: php prep_queries.php get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL -COMPLETE true
+# // Example: php biorels_api.php get_assay_information -ASSAY_NAME 'CHEMBL944488' -SOURCE_NAME ChEMBL
+# // Example: php biorels_api.php get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL
+# // Example: php biorels_api.php get_assay_information -ASSAY_NAME 'CHEMBL944488,CHEMBL944489' -SOURCE_NAME ChEMBL -COMPLETE true
 # // $[/API]
 function get_assay_information($ASSAY_NAME,$SOURCE_NAME,$COMPLETE=false)
 {
@@ -5712,7 +5712,7 @@ function get_assay_information($ASSAY_NAME,$SOURCE_NAME,$COMPLETE=false)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Genomics:taxon
-# // Example: php prep_queries.php search_assay_by_taxon -NCBI_TAX_ID '9606'
+# // Example: php biorels_api.php search_assay_by_taxon -NCBI_TAX_ID '9606'
 # // $[/API]
 function search_assay_by_taxon($NCBI_TAX_ID,$COMPLETE=false)
 {
@@ -5743,7 +5743,7 @@ function search_assay_by_taxon($NCBI_TAX_ID,$COMPLETE=false)
 # // Description: Provide a list of assay tissues and the number of assays for each tissue
 # // Return: Assay tissue name, anatomy tag, anatomy name, number of assays
 # // Ecosystem: Assay:assay;Disease_anatomy:tissue
-# // Example: php prep_queries.php list_assay_tissue
+# // Example: php biorels_api.php list_assay_tissue
 # // $[/API]
 function list_assay_tissue()
 {
@@ -5765,7 +5765,7 @@ function list_assay_tissue()
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Disease_anatomy:anatomy
-# // Example: php prep_queries.php search_assay_by_anatomy_tag -ANATOMY_TAG 'UBERON_0001004'
+# // Example: php biorels_api.php search_assay_by_anatomy_tag -ANATOMY_TAG 'UBERON_0001004'
 # // $[/API]
 function search_assay_by_anatomy_tag($ANATOMY_TAG,$COMPLETE=false)
 {
@@ -5797,7 +5797,7 @@ function search_assay_by_anatomy_tag($ANATOMY_TAG,$COMPLETE=false)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Disease_anatomy:anatomy
-# // Example: php prep_queries.php search_assay_by_anatomy_name -ANATOMY_NAME 'Valve'
+# // Example: php biorels_api.php search_assay_by_anatomy_name -ANATOMY_NAME 'Valve'
 # // $[/API]
 function search_assay_by_anatomy_name($ANATOMY_NAME,$COMPLETE=false)
 {
@@ -5856,7 +5856,7 @@ function search_assay_by_anatomy_name($ANATOMY_NAME,$COMPLETE=false)
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay tissue record
 # // Ecosystem: Assay:assay;Disease_anatomy:tissue
-# // Example: php prep_queries.php get_assay_tissue -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
+# // Example: php biorels_api.php get_assay_tissue -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 function get_assay_tissue($ASSAY_NAME,$SOURCE_NAME)
 {
@@ -5892,7 +5892,7 @@ function get_assay_tissue($ASSAY_NAME,$SOURCE_NAME)
 # // Description: Provide a list of cell lines and the number of assays for each cell line
 # // Return: Cell line accession, cell line name, number of assays
 # // Ecosystem: Assay:assay;Disease_anatomy:cell line
-# // Example: php prep_queries.php list_assay_cell
+# // Example: php biorels_api.php list_assay_cell
 # // $[/API]
 function list_assay_cell()
 {
@@ -5915,7 +5915,7 @@ function list_assay_cell()
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Disease_anatomy:cell line
-# // Example: php prep_queries.php search_assay_by_cell_line -CELL_LINE 'A549'
+# // Example: php biorels_api.php search_assay_by_cell_line -CELL_LINE 'A549'
 # // $[/API]
 function search_assay_by_cell_line($CELL_LINE,$COMPLETE=false)
 {
@@ -5982,7 +5982,7 @@ function search_assay_by_cell_line($CELL_LINE,$COMPLETE=false)
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay cell record
 # // Ecosystem: Assay:assay;Disease_anatomy:cell line
-# // Example: php prep_queries.php get_assay_cell -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
+# // Example: php biorels_api.php get_assay_cell -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 function get_assay_cell($ASSAY_NAME,$SOURCE_NAME)
 {
@@ -6015,8 +6015,8 @@ function get_assay_cell($ASSAY_NAME,$SOURCE_NAME)
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay target record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php get_assay_target -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
-# // Example: php prep_queries.php get_assay_target -ASSAY_NAME 'CHEMBL1061685' -SOURCE_NAME 'CHEMBL'
+# // Example: php biorels_api.php get_assay_target -ASSAY_NAME 'CHEMBL967748' -SOURCE_NAME 'CHEMBL'
+# // Example: php biorels_api.php get_assay_target -ASSAY_NAME 'CHEMBL1061685' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 function get_assay_target($ASSAY_NAME,$SOURCE_NAME)
 {
@@ -6083,7 +6083,7 @@ function get_assay_target($ASSAY_NAME,$SOURCE_NAME)
 # // Parameter: SOURCE_NAME | Source name | string | ChEMBL | required
 # // Return: Assay variant record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php get_assay_variant -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
+# // Example: php biorels_api.php get_assay_variant -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 function get_assay_variant($ASSAY_NAME,$SOURCE_NAME)
 {
@@ -6126,7 +6126,7 @@ function get_assay_variant($ASSAY_NAME,$SOURCE_NAME)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Genomics:gene
-# // Example: php prep_queries.php get_assay_by_gene -GENE_ID '1017'
+# // Example: php biorels_api.php get_assay_by_gene -GENE_ID '1017'
 # // $[/API]
 
 function get_assay_by_gene($GENE_ID,$COMPLETE=false)
@@ -6176,7 +6176,7 @@ function get_assay_by_gene($GENE_ID,$COMPLETE=false)
 # // Parameter: COMPLETE | True if complete information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Proteomics:protein
-# // Example: php prep_queries.php get_assay_by_prot_accession -AC 'P24941'
+# // Example: php biorels_api.php get_assay_by_prot_accession -AC 'P24941'
 # // $[/API]
 function get_assay_by_prot_accession($AC,$COMPLETE=false)
 
@@ -6230,10 +6230,10 @@ function get_assay_by_prot_accession($AC,$COMPLETE=false)
 # // Multi-array: PARAMS | VARIANT | Variant | string | P24941 | optional
 # // Return: Assay record
 # // Ecosystem: Assay:assay
-# // Example: php prep_queries.php search_assay -PARAMS 'DESCRIPTION=BRCA1'
-# // Example: php prep_queries.php search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606'
-# // Example: php prep_queries.php search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding'
-# // Example: php prep_queries.php search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding,CATEGORY=Functional'
+# // Example: php biorels_api.php search_assay -PARAMS 'DESCRIPTION=BRCA1'
+# // Example: php biorels_api.php search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606'
+# // Example: php biorels_api.php search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding'
+# // Example: php biorels_api.php search_assay -PARAMS 'DESCRIPTION=BRCA1,TAX_ID=9606,TYPE=Binding,CATEGORY=Functional'
 # // $[/API]
 function search_assay($PARAMS,$COMPLETE=false)
 {
@@ -6413,7 +6413,7 @@ function search_assay($PARAMS,$COMPLETE=false)
 # // Parameter: WITH_STRUCTURE | True if full molecular entity information is requested | boolean | false | optional | Default: false
 # // Return: Assay activity record
 # // Ecosystem: Assay:assay;Molecular entity:molecular entity|activity
-# // Example: php prep_queries.php get_assay_activity -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
+# // Example: php biorels_api.php get_assay_activity -ASSAY_NAME 'CHEMBL1218392' -SOURCE_NAME 'CHEMBL'
 # // $[/API]
 function get_assay_activity($ASSAY_NAME,$SOURCE_NAME,$WITH_STRUCTURE=false)
 {
@@ -6620,7 +6620,7 @@ function get_batch_assay_info($SOURCE_NAME,$LIST_ASSAY,$WITH_EXTENDED_ASSAY_INFO
 # // Parameter: WITH_ASSAY | True if full assay information is requested | boolean | false | optional | Default: false
 # // Return: Assay activity record
 # // Ecosystem: Assay:assay;Molecular entity:molecular entity|activity
-# // Example: php prep_queries.php get_molecular_entity_activity -MOLECULAR_ENTITY_HASH 'd8c4c21996d99a71d75cf788d964b6cf'
+# // Example: php biorels_api.php get_molecular_entity_activity -MOLECULAR_ENTITY_HASH 'd8c4c21996d99a71d75cf788d964b6cf'
 # // $[/API]
 function get_molecular_entity_activity($MOLECULAR_ENTITY_HASH,$WITH_ASSAY=false,$WITH_EXTENDED_ASSAY_INFO=false)
 {
@@ -6676,7 +6676,7 @@ function get_molecular_entity_activity($MOLECULAR_ENTITY_HASH,$WITH_ASSAY=false,
 # // Parameter: WITH_EXTENDED_ASSAY_INFO | True if extended assay information is requested | boolean | false | optional | Default: false
 # // Return: Assay activity record
 # // Ecosystem: Assay:assay;Molecular entity:molecular entity|activity|scaffold
-# // Example: php prep_queries.php get_scaffold_activity -SCAFFOLD_SMILES 'c1ncncc1'
+# // Example: php biorels_api.php get_scaffold_activity -SCAFFOLD_SMILES 'c1ncncc1'
 # // $[/API]
 function get_scaffold_activity($SCAFFOLD_SMILES,$WITH_ASSAY=false,$WITH_EXTENDED_ASSAY_INFO=false)
 {
@@ -6724,7 +6724,7 @@ function get_scaffold_activity($SCAFFOLD_SMILES,$WITH_ASSAY=false,$WITH_EXTENDED
 # // Parameter: MOLECULE_NAME | Molecule name | string | CHEMBL1218392 | required
 # // Return: Assay activity record
 # // Ecosystem: Assay:assay;Molecular entity:molecular entity|activity
-# // Example: php prep_queries.php get_activity_by_molecule_name -MOLECULE_NAME 'CHEMBL1218392'
+# // Example: php biorels_api.php get_activity_by_molecule_name -MOLECULE_NAME 'CHEMBL1218392'
 # // $[/API]
 function get_activity_by_molecule_name($MOLECULE_NAME)
 {
@@ -6819,7 +6819,7 @@ function get_activity_by_molecule_name($MOLECULE_NAME)
 # // Description: Get list of journals
 # // Return: Journal record
 # // Ecosystem: Scientific_community:journal
-# // Example: php prep_queries.php get_list_journals
+# // Example: php biorels_api.php get_list_journals
 # // $[/API]
 function get_list_journals()
 {
@@ -6835,7 +6835,7 @@ function get_list_journals()
 # // Parameter: NAME | Journal name | string | Nature | required
 # // Return: Journal record
 # // Ecosystem: Scientific_community:journal
-# // Example: php prep_queries.php search_journal_by_name -NAME 'Nature'
+# // Example: php biorels_api.php search_journal_by_name -NAME 'Nature'
 # // $[/API]
 function search_journal_by_name($NAME)
 {
@@ -6858,7 +6858,7 @@ function search_journal_by_name($NAME)
 # // Parameter: ISSN | ISSN | string | 0028-0836 | required
 # // Return: Journal record
 # // Ecosystem: Scientific_community:journal
-# // Example: php prep_queries.php search_journal_by_issn -ISSN '0028-0836'
+# // Example: php biorels_api.php search_journal_by_issn -ISSN '0028-0836'
 # // $[/API]
 function search_journal_by_issn($ISSN)
 {
@@ -6879,7 +6879,7 @@ function search_journal_by_issn($ISSN)
 # // Parameter: NAME | Institution name | string | INSERM | required
 # // Return: Institution record
 # // Ecosystem: Scientific_community:institution
-# // Example: php prep_queries.php search_institution_by_name -NAME 'INSERM'
+# // Example: php biorels_api.php search_institution_by_name -NAME 'INSERM'
 # // $[/API]
 function search_institution_by_name($NAME)
 {
@@ -6903,7 +6903,7 @@ function search_institution_by_name($NAME)
 # // Parameter: INSTITUTION | Institution name | string | Strasbourg | optional
 # // Return: Author record
 # // Ecosystem: Scientific_community:author
-# // Example: php prep_queries.php search_author_by_name -LAST_NAME 'Desaphy' -FIRST_NAME 'Jeremy'
+# // Example: php biorels_api.php search_author_by_name -LAST_NAME 'Desaphy' -FIRST_NAME 'Jeremy'
 # // $[/API]
 function search_author_by_name($LAST_NAME,$FIRST_NAME,$INSTITUTION='')
 {
@@ -6932,7 +6932,7 @@ function search_author_by_name($LAST_NAME,$FIRST_NAME,$INSTITUTION='')
 # // Parameter: ORCID | ORCID | string | 0000-0002-1694-233X | required
 # // Return: Author record
 # // Ecosystem: Scientific_community:author
-# // Example: php prep_queries.php search_author_by_orcid_id -ORCID '0000-0002-1694-233X'
+# // Example: php biorels_api.php search_author_by_orcid_id -ORCID '0000-0002-1694-233X'
 # // $[/API]
 
 function search_author_by_orcid_id($ORCID)
@@ -6955,8 +6955,8 @@ function search_author_by_orcid_id($ORCID)
 # // Parameter: PARAMS | Parameters | multi_array | | required
 # // Return: Publication record
 # // Ecosystem: Scientific_community:publication
-# // Example: php prep_queries.php search_publication -PARAMS 'TITLE=BRCA1'
-# // Example: php prep_queries.php search_publication -PARAMS 'TITLE=BRCA1,INSTITUTION=INSERM'
+# // Example: php biorels_api.php search_publication -PARAMS 'TITLE=BRCA1'
+# // Example: php biorels_api.php search_publication -PARAMS 'TITLE=BRCA1,INSTITUTION=INSERM'
 # // $[/API]
 function search_publication($PARAMS)
 {
@@ -7067,7 +7067,7 @@ function search_publication($PARAMS)
 # // Parameter: WITH_ANNOTATION | True if annotation information is requested | boolean | false | optional | Default: false
 # // Return: Publication record
 # // Ecosystem: Scientific_community:publication
-# // Example: php prep_queries.php get_publication_information -PMID '24280686,25254650'
+# // Example: php biorels_api.php get_publication_information -PMID '24280686,25254650'
 # // $[/API]
 function get_publication_information($PMID,$COMPLETE=false,$WITH_ANNOTATION=false)
 {
@@ -7126,7 +7126,7 @@ function get_publication_information($PMID,$COMPLETE=false,$WITH_ANNOTATION=fals
 # // Parameter: PMID | PMID | string | 18721477 | required
 # // Return: Protein record
 # // Ecosystem: Proteomics:protein;Scientific_community:publication
-# // Example: php prep_queries.php get_protein_from_publication -PMID '18721477'
+# // Example: php biorels_api.php get_protein_from_publication -PMID '18721477'
 # // $[/API]
 
 function get_protein_desc_from_publication($PMID)
@@ -7160,7 +7160,7 @@ function get_protein_desc_from_publication($PMID)
 # // Parameter: PMID | PMID | string | 3891096 | required
 # // Return: Protein domain record
 # // Ecosystem: Proteomics:protein|domain;Scientific_community:publication
-# // Example: php prep_queries.php get_protein_domain_from_publication -PMID '3891096'
+# // Example: php biorels_api.php get_protein_domain_from_publication -PMID '3891096'
 # // $[/API]
 function get_protein_domain_from_publication($PMID)
 {
@@ -7181,7 +7181,7 @@ function get_protein_domain_from_publication($PMID)
 # // Parameter: COMPLETE | True if full information is requested | boolean | false | optional | Default: false
 # // Return: Assay record
 # // Ecosystem: Assay:assay;Scientific_community:publication
-# // Example: php prep_queries.php get_assay_from_publication -PMID '18721477'
+# // Example: php biorels_api.php get_assay_from_publication -PMID '18721477'
 # // $[/API]
 function get_assay_from_publication($PMID,$COMPLETE=false)
 {
@@ -7230,7 +7230,7 @@ function get_assay_from_publication($PMID,$COMPLETE=false)
 # // Parameter: PMID | PMID | string | 23186163 | required
 # // Return: Protein feature record
 # // Ecosystem: Proteomics:protein|feature;Scientific_community:publication
-# // Example: php prep_queries.php get_protein_Feature_from_publication -PMID '23186163'
+# // Example: php biorels_api.php get_protein_Feature_from_publication -PMID '23186163'
 # // $[/API]
 function get_protein_Feature_from_publication($PMID)
 {
@@ -7258,7 +7258,7 @@ function get_protein_Feature_from_publication($PMID)
 # // Parameter: PMID | PMID | string | 18721477 |required
 # // Return: Clinical trial record 
 # // Ecosystem: Drug_clinical_trial:clinical trial;Scientific_community:publication
-# // Example: php prep_queries.php get_clinical_trial_from_publication -PMID '18721477'
+# // Example: php biorels_api.php get_clinical_trial_from_publication -PMID '18721477'
 # // $[/API]
 
 function get_clinical_trial_from_publication($PMID)
@@ -7284,7 +7284,7 @@ function get_clinical_trial_from_publication($PMID)
 # // Parameter: PMID | PMID | string | 18721477 | required
 # // Return: Cell line record
 # // Ecosystem: Disease_anatomy:cell line;Scientific_community:publication
-# // Example: php prep_queries.php get_cell_line_from_publication -PMID '18721477'
+# // Example: php biorels_api.php get_cell_line_from_publication -PMID '18721477'
 # // $[/API]
 function get_cell_line_from_publication($PMID)
 {
@@ -7311,7 +7311,7 @@ function get_cell_line_from_publication($PMID)
 # // Parameter: PMID | PMID | string | 12241803 | required
 # // Return: Clinical variant record
 # // Ecosystem: Disease_anatomy:clinical variant;Scientific_community:publication
-# // Example: php prep_queries.php get_clinical_variant_from_publication -PMID '12241803'
+# // Example: php biorels_api.php get_clinical_variant_from_publication -PMID '12241803'
 # // $[/API]
 function get_clinical_variant_from_publication($PMID)
 {
@@ -7340,7 +7340,7 @@ function get_clinical_variant_from_publication($PMID)
 # // Parameter: GENE_ID | Gene ID | string | 1017 | required
 # // Return: YEAR/MONTH/Count
 # // Ecosystem: Genomics:gene;Scientific_community:publication
-# // Example: php prep_queries.php get_gene_publication_distribution -GENE_ID 1017
+# // Example: php biorels_api.php get_gene_publication_distribution -GENE_ID 1017
 # // $[/API]
 function get_gene_publication_distribution($GENE_ID)
 {
@@ -7365,10 +7365,10 @@ function get_gene_publication_distribution($GENE_ID)
 # // Parameter: PARAMS | Parameters | multi_array | | required
 # // Return: YEAR/MONTH/Count
 # // Ecosystem: Scientific_community:publication
-# // Example: php prep_queries.php get_publication_distribution -PARAMS 'GENE_ID=1017,1018'
-# // Example: php prep_queries.php get_publication_distribution -PARAMS 'DISEASE_TAG=MONDO_0005087'
-# // Example: php prep_queries.php get_publication_distribution -PARAMS 'DISEASE_TAG=MONDO_0005087;GENE_ID=1017'
-# // Example: php prep_queries.php get_publication_distribution -PARAMS 'ANATOMY_TAG=UBERON_0002107'
+# // Example: php biorels_api.php get_publication_distribution -PARAMS 'GENE_ID=1017,1018'
+# // Example: php biorels_api.php get_publication_distribution -PARAMS 'DISEASE_TAG=MONDO_0005087'
+# // Example: php biorels_api.php get_publication_distribution -PARAMS 'DISEASE_TAG=MONDO_0005087;GENE_ID=1017'
+# // Example: php biorels_api.php get_publication_distribution -PARAMS 'ANATOMY_TAG=UBERON_0002107'
 # // $[/API]
 function get_publication_distribution($PARAMS)
 {
@@ -7391,10 +7391,10 @@ function get_publication_distribution($PARAMS)
 # // Parameter: PARAMS | Parameters | multi_array | | required
 # // Return: Publication record
 # // Ecosystem: Scientific_community:publication
-# // Example: php prep_queries.php search_publication_by_tags -PARAMS 'GENE_ID=1017,1018'
-# // Example: php prep_queries.php search_publication_by_tags -PARAMS 'DISEASE_TAG=MONDO_0005087'
-# // Example: php prep_queries.php search_publication_by_tags -PARAMS 'DISEASE_TAG=MONDO_0005087;GENE_ID=1017'
-# // Example: php prep_queries.php search_publication_by_tags -PARAMS 'ANATOMY_TAG=UBERON_0002107'
+# // Example: php biorels_api.php search_publication_by_tags -PARAMS 'GENE_ID=1017,1018'
+# // Example: php biorels_api.php search_publication_by_tags -PARAMS 'DISEASE_TAG=MONDO_0005087'
+# // Example: php biorels_api.php search_publication_by_tags -PARAMS 'DISEASE_TAG=MONDO_0005087;GENE_ID=1017'
+# // Example: php biorels_api.php search_publication_by_tags -PARAMS 'ANATOMY_TAG=UBERON_0002107'
 # // $[/API]
 function search_publication_by_tags($PARAMS)
 {
@@ -7573,7 +7573,7 @@ function get_fulltext_by_pmid($PMID)
 # // Parameter: PMC | PMC | string | PMC523836 | required
 # // Return: Full text record
 # // Ecosystem: Scientific_community:publication
-# // Example: php prep_queries.php get_fulltext_publication -PMC 'PMC523836'
+# // Example: php biorels_api.php get_fulltext_publication -PMC 'PMC523836'
 # // $[/API]
 function get_fulltext_publication($PMC,$WITH_ANNOTATION=false)
 {
@@ -7733,8 +7733,8 @@ function get_fulltext_publication($PMC,$WITH_ANNOTATION=false)
 # // Parameter: PARAMS | Parameters | multi_array | | required
 # // Return: Full text record
 # // Ecosystem: Scientific_community:publication
-# // Example: php prep_queries.php get_fulltext_analysis -PARAMS 'GENE_SYMBOL=TP53'
-# // Example: php prep_queries.php get_fulltext_analysis -PARAMS 'GENE_SYMBOL=TP53;DISEASE_TAG=MONDO_0005087'
+# // Example: php biorels_api.php get_fulltext_analysis -PARAMS 'GENE_SYMBOL=TP53'
+# // Example: php biorels_api.php get_fulltext_analysis -PARAMS 'GENE_SYMBOL=TP53;DISEASE_TAG=MONDO_0005087'
 # // $[/API]
 function get_fulltext_analysis($PARAMS)
 {
