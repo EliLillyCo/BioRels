@@ -21,6 +21,11 @@ BioRels will require the following:
   * OR single cpu (experimental)
   * Cloud computing with Nextflow coming soon
 
+
+## Quickstart
+
+If you want to evaluate BioRels with the minimal amount of configuration, please go to [QUICKSTART](BACKEND/INSTALL/QUICKSTART/README.md)
+
 ## INSTALLATION:
 
 Please follow the guidelines provided in the documentation file. 
