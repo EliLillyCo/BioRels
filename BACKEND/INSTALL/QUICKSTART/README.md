@@ -66,6 +66,9 @@ You can execute the following queries:
 * biorels_php biorels_api.php get_gene_location -GENE_ID 1017
 * biorels_php biorels_api.php get_cell_info -ACC 'CVCL_B6YM'
 * biorels_php biorels_api.php search_cell_line_by_disease -DISEASE_TAG 'MONDO_0009692'
+* biorels_php biorels_api.php search_gene_ontology -AC 'GO:0010389'
+* biorels_php biorels_api.php get_child_gene_ontology -AC 'GO:0010389' -MAX_LEVEL 4
+
 
 ## Exporting & Importing:
 
