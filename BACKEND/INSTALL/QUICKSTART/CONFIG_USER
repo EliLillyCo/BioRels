@@ -1,0 +1,358 @@
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+####################################################################################### GLOBAL #######################################################################################
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+
+
+
+
+
+
+
+#[GLOB]
+GLOB	EMAIL				test@test.com
+GLOB	EMAIL_FROM			test@test.com
+GLOB	PROXY				N/A
+# Processing
+GLOB	WEBJOB_LIMIT				20						Max number of web jobs running in parallel
+GLOB	MONITOR_TYPE				SINGLE					Type of parallel work. SINGLE (for local machine only), CLUSTER (for cluster use)
+GLOB	SINGLE_PARALLEL				5						For SINGLE use, max number of jobs allowed to run in parallel
+GLOB	JOB_PREFIX					TT1					Job prefix
+GLOB	CHECK_ITER					3600					Time in seconds in which the system will run a check when no jobs are running
+GLOB	CHECK_RUN					5						Time in seconds in which the system will run a check when some jobs are running
+GLOB	WEBJOB_PREFIX				TGWJT2					Webjob prefix
+GLOB	KEEP_PREVIOUS_DATA			N						Delete previous data downloads (N) or keep them (Y)
+#PRIVATE VARIABLES
+GLOB	PRIVATE_ENABLED				T						T: Private schema is enabled. F: Private schema is disabled. If enabled, set up variables below
+#PUBLI
+GLOB	PUBLI_W_ABSTRACT			N						Do you want to have the abstracts loaded in the database (Y/N)
+GLOB	PUBLI_W_CITATIONS			N						Do you want to have the citations loaded in the database (Y/N)
+GLOB	PUBMED_API_ID				N/A
+#GENE
+GLOB	TAXON_LIMIT					9606										If you want to limit to a given set of organisms: TAX_ID1|TAX_ID2 .... otherwise: N/A
+GLOB	UNIPROT_GENE				Y										If you have enabled Uniprot, process all genes from all organisms considered in UniProt. This is in addition to TAXON_LIMIT list.
+GLOB	CHEMBL_GENE					N										If you have enabled ChEMBL,  process all genes from all organisms considered in UniProt. This is in addition to TAXON_LIMIT list.
+#GENOME
+GLOB	PROMOTER_RANGE			5000						Number of nucleotides to consider for the promoter region
+#UNIPROT
+GLOB	WITH_UNIPROT_TREMBL	N						If you want to consider TrEMBL (Y) or ignore it (N). This is independent from the configuration of dl_trembl job
+GLOB	WITH_UNIPROT_SP		Y						If you want to consider SwissProt (Y) or ignore it (N). This is independent from the configuration of dl_swissprot job
+#OMIM
+GLOB	OMIM_API_KEY	N/A
+#DRUGBANK
+GLOB	DRUGBANK_LOGIN	N/A
+
+
+#[/GLOB]
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+####################################################################################### GENOME #######################################################################################
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+
+#List of species that needs to be totally included in Biorels
+#Column  1: GENOME tag
+#Column  2: TaxID
+#Column  3: Source (RefSeq/Ensembl)
+#Column  4: Genbank Assembly
+#Column  5: Assembly name
+#Column  6: RefSeq/Ensembl assembly name
+#Column  7: Organism Name
+#Column  8: Version status
+#Column  9: release_type
+#Column 10: refseq_category
+#Column 11: annotation_date
+#Column 12: group
+#GENOME	Tax_ID	Source	GenBank Assembly	Assembly Name	Refseq/Ensembl Name		Organism		Version	Releasetype	RefSeqCategory	Annot_date	Group
+#GENOME	9606	REFSEQ	GCA_009914755.4		T2T-CHM13v2.0	GCF_009914755.1			Homo sapiens	latest	Major	na					2023/10/02	vertebrate_mammalian
+#GENOME	9606	REFSEQ	GCA_000001405.29	GRCh38.p14		GCF_000001405.40		Homo sapiens	latest	Patch	reference genome	2023/10/02	vertebrate_mammalian
+#GENOME	9606	ENSEMBL	GCA_000001405.29	GRCh38.p14		2014-01-Ensembl/2023-03	Human			N/A		N/A		N/A					N/A			N/A
+#GENOME	10090	REFSEQ	GCA_000001635.9		GRCm39			GCF_000001635.27		Mus musculus	latest	Major	reference genome	2023/04/05	vertebrate_mammalian
+#GENOME	10090	ENSEMBL	GCA_000001635.9		GRCm39			2020-08-Ensembl/2023-04	Mouse			N/A		N/A		N/A					N/A			N/A
+
+
+
+
+
+
+#[GENOME]
+
+#[/GENOME]
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+####################################################################################### PROTEOME #######################################################################################
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+
+
+#List of species that needs to be totally included in Biorels
+#Column  1: PROTEOME tag
+#Column  2: Uniprot Proteome ID
+#Column  3: TaxID
+#Column  4: OSCODE
+#Column  5: SUPERREGNUM
+#Column  6: Number of entries in main fasta (canonical)
+#Column  7: Number of entries in additional fasta (isoforms)
+#Column  8: Number of entries in gene2acc mapping file
+#Column  9: Species name
+#PROTEOME	Proteome_ID     Tax_ID  OSCODE  SUPERREGNUM     #(1)    #(2)    #(3)    Species Name
+#PROTEOME	UP000831796     2932248 None    bacteria        5354    0       5354    Hymenobacter sp. 5116S-3
+#PROTEOME	UP000606720     2763064 None    bacteria        3121    0       3124    Roseburia zhanii
+#PROTEOME	UP000218573     2029858 None    bacteria        2905    0       2906    Kocuria sp. WRN011
+
+
+
+
+
+
+#[PROTEOME]
+
+#[/PROTEOME]
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+######################################################################################### JOBS ########################################################################################
+#######################################################################################################################################################################################
+#######################################################################################################################################################################################
+
+
+
+
+
+
+#[JOB]
+
+
+# TAXONOMY
+JOB		wh_taxonomy				T
+
+# GENE
+JOB	dl_gene					T
+JOB	db_gene					T
+JOB	db_gene_syn				T
+JOB	db_mv_gene				T
+JOB	db_orthologs				T
+JOB	prd_gene				T
+
+# SEQ_ONTOLOGY
+JOB	ck_seq_ontol	T
+JOB	wh_seq_ontol	T
+
+# REFSEQ
+JOB	ck_refseq_rel	F
+JOB	dl_refseq	F
+JOB	pp_refseq	F
+
+# ENSEMBL
+JOB	ck_ensembl_rel	F
+JOB	dl_ensembl	F
+
+# GENOME
+JOB	db_genome	F
+JOB	db_transcriptome	F
+JOB	db_dna	F
+JOB	pmj_transcript	F
+JOB	process_transcript	F
+JOB	rmj_transcript	F
+JOB	db_transcript_seq	F
+
+# VARIANT
+JOB	ck_dbsnp_rel	F
+JOB	dl_dbsnp	F
+JOB	pmj_dbsnp	F
+JOB	rmj_dbsnp	F
+JOB	process_dbsnp	F
+JOB	db_dbsnp	F
+JOB	pmj_alfa	F
+JOB	process_alfa	F
+JOB	rmj_alfa	F
+
+# PUBLI
+JOB	dl_pubmed	F
+JOB	db_pubmed	F
+JOB	db_pubmed_info	F
+JOB	db_publi_ontology	F
+JOB	db_publi_gene	F
+JOB	db_publi_drug	F
+JOB	db_publi_disease	F
+JOB	db_publi_tissues	F
+JOB	prd_pubmed	F
+
+# GO
+JOB	ck_go_rel	T
+JOB	wh_go	T
+
+# REACTOME
+JOB	ck_reactome_rel	F
+JOB	wh_reactome	F
+
+# ECO
+JOB	ck_eco_rel	T
+JOB	wh_eco	T
+
+# EFO
+JOB	ck_efo_rel	T
+JOB	wh_efo	T
+
+# BIOASSAY
+JOB	ck_bioassay_onto	T
+JOB	wh_bioassay_onto	T
+
+# CLINICAL TRIAL
+JOB	wh_clinical_trials	F
+
+# UNIPROT
+JOB	ck_uniprot_rel	F
+JOB	dl_proteome	F
+JOB	dl_swissprot	F
+JOB	dl_trembl	F
+JOB	pp_uniprot	F
+JOB	db_uniprot_extdb	F
+JOB	pmj_uniprot	F
+JOB	process_uniprot	F
+JOB	rmj_uniprot	F
+JOB	db_insert_uniprot	F
+JOB	del_obsl_uniprot	F
+JOB	prd_uniprot	F
+
+# TRANSLATE
+JOB	pmj_translate	F
+JOB	process_translate	F
+JOB	rmj_translate	F
+JOB	db_translate	F
+JOB	prd_translate	F
+
+# GTEX
+JOB	ck_gtex_rel	F
+JOB		dl_gtex	F
+JOB		db_gtex	F
+JOB		pmj_gtex	F
+JOB		process_gtex	F
+JOB		rmj_gtex	F
+JOB		db_stat_gtex	F
+JOB		prd_gtex	F
+
+# OPEN TARGETS
+JOB		ck_ot_rel	F
+JOB		dl_ot	F
+JOB		pp_ot_eco	F
+JOB		db_ot_drug	F
+JOB		db_ot_clintrial	F
+JOB		db_ot_evidence	F
+JOB		db_stat_gene_dis	F
+JOB		prd_ot	F
+
+# OPEN TARGETS GENETICS
+JOB		ck_ot_g_rel	F
+JOB		dl_ot_g	F
+
+# INTERPRO
+JOB		ck_interpro_rel	F
+JOB		dl_interpro	F
+JOB		db_interpro	F
+
+# MONDO
+JOB		ck_mondo_rel	T
+JOB		db_mondo	T
+JOB		db_mondo_tree	T
+JOB		prd_mondo	T
+
+# OMIM
+JOB		ck_omim_rel	F
+JOB		wh_omim	F
+
+
+# SEQ_SIM
+JOB		pmj_seq_sim	F
+JOB		process_seq_sim	F
+JOB		rmj_seq_sim	F
+JOB		db_insert_seq_sim	F
+JOB		prd_seq_sim	F
+
+# CHEMBL
+JOB		ck_chembl_rel	F
+JOB		dl_chembl	F
+JOB		db_chembl_cpd	F
+JOB		db_chembl_data	F
+
+# SURECHEMBL
+JOB		ck_surechembl_rel	F
+JOB		dl_surechembl	F
+JOB		db_surechembl_cpd	F
+JOB		prd_surechembl	F
+
+# SCAFFOLD
+JOB		db_scaffold	F
+
+# SWISSLIPIDS
+JOB		ck_swisslipids_rel	T
+JOB		dl_swisslipids	T
+JOB		db_swisslipids	T
+JOB		prd_swisslipids	T
+
+
+# CELLAUSORUS
+JOB		ck_cellausorus_rel	T
+JOB		dl_cellausorus	T
+JOB		db_cellausorus	T
+JOB		prd_cellausorus	T
+
+# UBERON
+JOB		ck_uberon_rel	F
+JOB		wh_uberon	F
+
+# GENE REVIEWS
+JOB		ck_genereviews_rel	T
+JOB		wh_genereviews	T
+
+# LIVERTOX
+JOB		ck_livertox_rel	T
+JOB		wh_livertox	T
+
+# ONTOLOGY
+JOB		wh_ontology	F
+
+# OPEN TARGETS GENETICS
+JOB		ck_ot_g_rel	F
+JOB		dl_ot_g	F
+
+
+# CLINVAR
+JOB		ck_clinvar_rel	F
+JOB		dl_clinvar	F
+JOB		db_clinvar	F
+JOB		prd_clinvar	F
+
+
+# WEBJOB
+JOB		web_job	F
+
+# DRUGBANK
+JOB		ck_drugbank_rel	F
+JOB		dl_drugbank	F
+JOB		db_drugbank_cpd	F
+JOB		db_drugbank	F
+JOB		prd_drugbank	F
+
+# CHEBI
+JOB		ck_chebi_rel	F
+JOB		dl_chebi		F
+JOB		db_chebi		F
+
+
+# ANNOT
+JOB		wh_gen_annot	F
+
+# PMC
+JOB		dl_pmc			F
+JOB		pmj_pmc			F
+JOB		process_pmc		F
+JOB		rmj_pmc			F
+
+
+#[/JOB]
+
+
+
+
+
