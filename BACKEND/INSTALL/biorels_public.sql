@@ -5420,8 +5420,7 @@ CREATE TABLE DB_SCHEMA_NAME.variant_frequency (
     variant_change_id bigint NOT NULL,
     variant_freq_study_id smallint NOT NULL,
     ref_count integer NOT NULL,
-    alt_count integer NOT NULL,
-    source_id smallint
+    alt_count integer NOT NULL
 );
 
 COMMENT ON TABLE DB_SCHEMA_NAME.variant_frequency IS 'Frequency in different studies of a given allele';
@@ -5436,7 +5435,6 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.variant_frequency.ref_count IS 'Reference count
 
 COMMENT ON COLUMN DB_SCHEMA_NAME.variant_frequency.alt_count IS 'Total count';
 
-COMMENT ON COLUMN DB_SCHEMA_NAME.variant_frequency.source_id IS 'Foreign key to source.';
 
 CREATE SEQUENCE DB_SCHEMA_NAME.variant_frequency_sq
     START WITH 1
