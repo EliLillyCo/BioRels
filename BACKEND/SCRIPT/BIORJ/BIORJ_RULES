@@ -195,6 +195,7 @@ BLOCK	variant_entry
 CHILD	variant_position<chr_seq_pos<chr_seq<chromosome<taxon
 CHILD	variant_position<chr_seq_pos<chr_seq<genome_assembly<taxon
 CHILD	variant_position<variant_allele
+CHILD	clinical_variant_map<clinical_variant_entry:E
 CHILD	variant_position>variant_change<variant_type<so_entry
 CHILD	variant_position>variant_change<variant_allele
 CHILD	variant_position>variant_change>variant_frequency<variant_freq_study<source
