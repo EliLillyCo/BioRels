@@ -13,6 +13,8 @@ $FILE_TO_LOAD=array(
 	'/LIB/loader_process.php'=>0
 );
 
+$DEBUG=false;
+
 function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());

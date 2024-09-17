@@ -49,6 +49,7 @@ $GLB_VAR['SCHEMA_PRIVATE']=getenv('SCHEMA_PRIVATE');
 
 connectDB();
 
+$DEBUG=false;
 
 
 if ($argc<2)
