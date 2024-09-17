@@ -382,7 +382,7 @@ pmid_abstract	pmid_entry_id|abstract_type
 pmid_citation	pmid_entry_id|citation_pmid_entry_id
 pmid_company_map	company_entry_id|pmid_entry_id
 pmid_instit	instit_hash
-pmid_journal	journal_name
+pmid_journal	journal_name|issn_print
 prot_ac	ac|prot_entry_id
 prot_desc	prot_entry_id|desc_type|description
 prot_desc_pmid	prot_desc_id|pmid_entry_id
