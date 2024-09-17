@@ -155,14 +155,15 @@ CHILD	drug_atc_map<atc_entry
 #CHILD	drug_mol_entity_map
 END
 
-BLOCK	clinical_variant
+BLOCK	clinical_variant_entry
 PARENT	clinical_variant_review_status
-CHILD	clinical_variant_disease_map<disease_entry
-CHILD	clinical_variant_gn_map<gn_entry
-CHILD	clinical_variant_map<variant_entry
-CHILD	clinical_variant_pmid_map<pmid_entry:E
+PARENT	clinical_variant_type<so_entry
+CHILD	clinical_variant_map<variant_entry:E
+CHILD	clinical_variant_submission>clinical_variant_pmid_map<pmid_entry:E
 CHILD	clinical_variant_submission<clinical_variant_review_status
 CHILD	clinical_variant_submission<clinical_significance
+CHILD	clinical_variant_submission>clinical_variant_disease_map<disease_entry:E
+CHILD	clinical_variant_submission>clinical_variant_gn_map<gn_entry:E
 END
 
 
