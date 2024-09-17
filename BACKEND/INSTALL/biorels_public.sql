@@ -7388,6 +7388,9 @@ ALTER TABLE ONLY DB_SCHEMA_NAME.variant_freq_study
 ALTER TABLE ONLY DB_SCHEMA_NAME.variant_frequency
     ADD CONSTRAINT variant_frequency_pkey PRIMARY KEY (variant_frequency_id);
 
+ALTER TABLE ONLY DB_SCHEMA_NAME.variant_frequency
+    ADD CONSTRAINT variant_frequency_uk UNIQUE (variant_change_id, variant_freq_study_id);
+
 ALTER TABLE ONLY DB_SCHEMA_NAME.variant_info
     ADD CONSTRAINT variant_info_pkey PRIMARY KEY (variant_info_id);
 
