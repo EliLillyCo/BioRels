@@ -114,7 +114,7 @@ TOOL	TR_ALIGN	/TG_SCALE/BioRels_app/transcript_align.py
 TOOL	MAKEBLAST	/TG_SCALE/BACKEND/APPS/blast/blast/bin/makeblastdb
 TOOL	BLASTP		/TG_SCALE/BACKEND/APPS/blast/blast/bin/blastp
 TOOL	BLASTN		/TG_SCALE/BACKEND/APPS/blast/blast/bin/blastn
-TOOL	PYTHON		/usr/bin/python3.12
+TOOL	PYTHON		/usr/bin/python3.10
 TOOL	NCBI_DATASET	/TG_SCALE/BACKEND/APPS/NCBI/datasets
 TOOL	NCBI_DATAFORMAT	/TG_SCALE/BACKEND/APPS/NCBI/dataformat
 

@@ -129,9 +129,9 @@ JOB		wh_taxonomy				T
 # GENE
 JOB	dl_gene					T
 JOB	db_gene					T
-JOB	db_gene_syn				T
+JOB	db_gene_syn				F
 JOB	db_mv_gene				T
-JOB	db_orthologs				T
+JOB	db_orthologs			F
 JOB	prd_gene				T
 
 # SEQ_ONTOLOGY
