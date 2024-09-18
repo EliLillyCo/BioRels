@@ -155,14 +155,15 @@ CHILD	drug_atc_map<atc_entry
 #CHILD	drug_mol_entity_map
 END
 
-BLOCK	clinical_variant
+BLOCK	clinical_variant_entry
 PARENT	clinical_variant_review_status
-CHILD	clinical_variant_disease_map<disease_entry
-CHILD	clinical_variant_gn_map<gn_entry
-CHILD	clinical_variant_map<variant_entry
-CHILD	clinical_variant_pmid_map<pmid_entry:E
+PARENT	clinical_variant_type<so_entry
+CHILD	clinical_variant_map<variant_entry:E
+CHILD	clinical_variant_submission>clinical_variant_pmid_map<pmid_entry:E
 CHILD	clinical_variant_submission<clinical_variant_review_status
 CHILD	clinical_variant_submission<clinical_significance
+CHILD	clinical_variant_submission>clinical_variant_disease_map<disease_entry:E
+CHILD	clinical_variant_submission>clinical_variant_gn_map<gn_entry:E
 END
 
 
@@ -195,6 +196,7 @@ BLOCK	variant_entry
 CHILD	variant_position<chr_seq_pos<chr_seq<chromosome<taxon
 CHILD	variant_position<chr_seq_pos<chr_seq<genome_assembly<taxon
 CHILD	variant_position<variant_allele
+CHILD	clinical_variant_map<clinical_variant_entry:E
 CHILD	variant_position>variant_change<variant_type<so_entry
 CHILD	variant_position>variant_change<variant_allele
 CHILD	variant_position>variant_change>variant_frequency<variant_freq_study<source
@@ -306,6 +308,7 @@ clinical_trial_intervention	intervention_name|clinical_trial_id|intervention_typ
 clinical_trial_intervention_drug_map	clinical_trial_intervention_id|drug_entry_id|source_id
 clinical_trial_arm_intervention_map	clinical_trial_arm_id|clinical_trial_intervention_id
 clinical_trial_alias	alias_name|clinical_trial_id
+clinical_variant_entry	clinical_variant_name
 clinical_variant_disease_map	disease_entry_id|clinvar_submission_id
 clinical_variant_gn_map	gn_entry_id|clinvar_submission_id
 clinical_variant_map	clinvar_entry_id|variant_entry_id
@@ -382,7 +385,7 @@ pmid_abstract	pmid_entry_id|abstract_type
 pmid_citation	pmid_entry_id|citation_pmid_entry_id
 pmid_company_map	company_entry_id|pmid_entry_id
 pmid_instit	instit_hash
-pmid_journal	journal_name
+pmid_journal	journal_name|issn_print
 prot_ac	ac|prot_entry_id
 prot_desc	prot_entry_id|desc_type|description
 prot_desc_pmid	prot_desc_id|pmid_entry_id

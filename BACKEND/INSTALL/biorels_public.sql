@@ -3272,14 +3272,14 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.org_group_map.org_group_id IS 'Foreign key to o
 COMMENT ON COLUMN DB_SCHEMA_NAME.org_group_map.web_user_id IS 'Foreign key to web_user representing a scientist';
 
 CREATE SEQUENCE DB_SCHEMA_NAME.org_group_map_sq
-    START WITH 3822421
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
 CREATE SEQUENCE DB_SCHEMA_NAME.org_group_sq
-    START WITH 75516
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -5121,7 +5121,7 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.source.source_type IS 'Type of database/resourc
 COMMENT ON COLUMN DB_SCHEMA_NAME.source.source_metadata IS 'Additional information';
 
 CREATE SEQUENCE DB_SCHEMA_NAME.source_seq
-    START WITH 1194
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -5420,8 +5420,7 @@ CREATE TABLE DB_SCHEMA_NAME.variant_frequency (
     variant_change_id bigint NOT NULL,
     variant_freq_study_id smallint NOT NULL,
     ref_count integer NOT NULL,
-    alt_count integer NOT NULL,
-    source_id smallint
+    alt_count integer NOT NULL
 );
 
 COMMENT ON TABLE DB_SCHEMA_NAME.variant_frequency IS 'Frequency in different studies of a given allele';
@@ -5436,10 +5435,9 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.variant_frequency.ref_count IS 'Reference count
 
 COMMENT ON COLUMN DB_SCHEMA_NAME.variant_frequency.alt_count IS 'Total count';
 
-COMMENT ON COLUMN DB_SCHEMA_NAME.variant_frequency.source_id IS 'Foreign key to source.';
 
 CREATE SEQUENCE DB_SCHEMA_NAME.variant_frequency_sq
-    START WITH 18778296255
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -5659,7 +5657,7 @@ CREATE SEQUENCE DB_SCHEMA_NAME.web_job_document_sq
     CACHE 1;
 
 CREATE SEQUENCE DB_SCHEMA_NAME.web_job_sq
-    START WITH 1640
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -5734,7 +5732,7 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.web_user.manager_id IS 'Foreign key to web_user
 COMMENT ON COLUMN DB_SCHEMA_NAME.web_user.worker_type IS 'Type of worker - employee or contingent';
 
 CREATE SEQUENCE DB_SCHEMA_NAME.web_user_seq
-    START WITH 2000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -7389,6 +7387,9 @@ ALTER TABLE ONLY DB_SCHEMA_NAME.variant_freq_study
 
 ALTER TABLE ONLY DB_SCHEMA_NAME.variant_frequency
     ADD CONSTRAINT variant_frequency_pkey PRIMARY KEY (variant_frequency_id);
+
+ALTER TABLE ONLY DB_SCHEMA_NAME.variant_frequency
+    ADD CONSTRAINT variant_frequency_uk UNIQUE (variant_change_id, variant_freq_study_id);
 
 ALTER TABLE ONLY DB_SCHEMA_NAME.variant_info
     ADD CONSTRAINT variant_info_pkey PRIMARY KEY (variant_info_id);
