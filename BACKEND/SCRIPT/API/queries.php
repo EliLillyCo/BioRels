@@ -2774,14 +2774,12 @@ function get_translation_isoform_pos($ISOFORM_ID,$POSITION)
 # // Title: Search gene ontology record by name and/or accession and/or namespace
 # // Function: search_gene_ontology
 # // Description: Search for a gene ontology record by using its name and/or accession and/or namespace
-# // Parameter: AC | Gene ontology accession | string | GO:0010389 | optional
+# // Parameter: AC | Gene ontology accession | string | GO:0010389 
 # // Parameter: NAME | Gene ontology name | string | cell cycle | optional
 # // Parameter: NAMESPACE | Gene ontology namespace | string | biological_process |  optional
 # // Return: Gene ontology record
 # // Ecosystem: Proteomics:gene ontology
 # // Example: php biorels_api.php search_gene_ontology -AC 'GO:0010389'
-# // Example: php biorels_api.php search_gene_ontology -NAME 'cell cycle'
-# // Example: php biorels_api.php search_gene_ontology -NAMESPACE 'biological_process'
 # // $[/API]
 function search_gene_ontology($AC='',$NAME='',$NAMESPACE='')
 {

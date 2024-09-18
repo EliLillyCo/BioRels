@@ -98,15 +98,15 @@ function process_document($schema,$FILE_NAME)
 
 				if (count($TABLE_DATA)<50000)continue;
 				/// Above 50K records, we insert the data
-				echo "INSERTING ".$TABLE." - ".count($TABLE_DATA)." records \n";
+				echo "PROCESSING ".$TABLE." - ".count($TABLE_DATA)." records \n";
 				insert_table_data($schema,$TABLE,$TABLE_DATA,$ID_MAP);
-				echo "END INSERTING ".$TABLE." - ".count($TABLE_DATA)." records \n";
+				echo "END PROCESSING ".$TABLE." - ".count($TABLE_DATA)." records \n";
 				$TABLE_DATA=array();
 			}
 			/// We insert the remaining data
-			echo "INSERTING ".$TABLE." - ".count($TABLE_DATA)." records \n";
+			echo "PROCESSING ".$TABLE." - ".count($TABLE_DATA)." records \n";
 			insert_table_data($schema,$TABLE,$TABLE_DATA,$ID_MAP);
-			echo "END INSERTING ".$TABLE." - ".count($TABLE_DATA)." records \n";
+			echo "END PROCESSING ".$TABLE." - ".count($TABLE_DATA)." records \n";
 		}
 		fclose($fp);
 
@@ -117,7 +117,7 @@ function process_document($schema,$FILE_NAME)
 		//print_R($ID_MAP);
 		/// Rollback the transaction if issue
 		$DB_CONN->rollBack();
-		die($e->getMessage());
+		echo ($e->getMessage());
 	}
 }
 
@@ -136,6 +136,7 @@ function quoteValues(&$VALUES)
 
 function insert_table_data($schema,$TABLE_NAME,&$TABLE_DATA,&$ID_MAP)
 {
+	global $DEBUG;
 	global $NOT_NULL;
 	global $JSON_PARENT_FOREIGN;
 	global $PRIMARY_KEYS;
@@ -156,16 +157,10 @@ function insert_table_data($schema,$TABLE_NAME,&$TABLE_DATA,&$ID_MAP)
 	/// We need to know the foreign keys for that table
 	$PARENT_RULES=&$JSON_PARENT_FOREIGN['PARENT'][$schema.'.'.$TABLE_NAME];
 	
-
-	$MAX_PK=-1;
-	$PK=null;
-
-	/// Loop through the data
-	foreach ($TABLE_DATA as &$ENTRY)
-	{
-		
-		/// First things first, we need to convert any foreign key values defined in the file to the primary key of the parent table
-		if ($PARENT_RULES!=null)
+	/// First things first, we need to convert any foreign key values defined in the file to the primary key of the parent table
+	if ($PARENT_RULES!=null)	
+		/// Loop through the data
+		foreach ($TABLE_DATA as &$ENTRY)
 		{
 			/// Therefore we need to check the PARENT_RULES array
 			foreach ($PARENT_RULES as $TBL_COL=>&$PARENT_INFO)
@@ -185,166 +180,289 @@ function insert_table_data($schema,$TABLE_NAME,&$TABLE_DATA,&$ID_MAP)
 			}
 		}
 
-		//print_R($ENTRY);
+	/// Now we break it down into chunks of 1000 records to get inserted	
+	$CHUNKS=array_chunk($TABLE_DATA,1000);
 
-		/// Now we check if the record exists:
-		$query="SELECT * FROM ".$schema.'.'.$TABLE_NAME." WHERE  ";
-		/// To do that we use the unique columns for that table:
-		foreach ($KEYS[$TABLE_NAME] as $KEY)
+	foreach ($CHUNKS as &$CHUNK) insert_table_data_chunk($CHUNK,$schema,$TABLE_NAME,$ID_MAP);
+}
+
+
+
+function insert_table_data_chunk(&$TABLE_DATA,$schema,$TABLE_NAME,&$ID_MAP)
+{
+	global $NOT_NULL;
+	global $JSON_PARENT_FOREIGN;
+	global $PRIMARY_KEYS;
+	global $KEYS;
+	global $DEBUG;
+
+	/// Getting the primary keys specific to that table
+ 	$PRIMARY_KEY=$PRIMARY_KEYS[$schema.'.'.$TABLE_NAME];
+
+	/// And the keys
+	$TABLE_KEYS=&$KEYS[$TABLE_NAME];
+	
+
+	/// The first step is to check if the record is already in the database or not
+	/// A challenge arise when some of the values are NULL since in a group query the NULL is not recognized
+	/// Therefore, we need to do multiple queries depending on which set of column is null or not
+	/// Example. Given 3 columns A B and C, in which B and C are nullable
+	/// We can have 4 cases:
+	/// A B C
+	/// 1 1 1	=> (A,B,C) IN ((x,x,x),(x,x,x),(x,x,x))
+	/// 1 1 0   => (A,B) IN ((x,x),(x,x),(x,x)) AND C IS NULL
+	/// 1 0 1	=> (A,C) IN ((x,x),(x,x),(x,x)) AND B IS NULL
+	/// 1 0 0	=> (A) IN ((x),(x),(x)) AND B IS NULL AND C IS NULL
+	/// That's what query_params is about. It's an array with the query head as key and the values as values
+	
+
+	$QUERY_PARAMS=array();
+
+	/// ID_PARAMS is used to map the different values represented as a hash to the position in the TABLE_DATA array
+	/// This will help us to know which record we are dealing with when we get the result of the query
+	$ID_PARAMS=array();
+
+	foreach ($TABLE_DATA as $ENTRY_POS=>&$ENTRY)
+	{
+		/// The string ID is used to store the values of the record so we can hash it
+		$STR_ID='';
+		
+		/// Temporary array to store the values
+		$VALUES=array();
+		foreach ($TABLE_KEYS as $KEY)
 		{
 			if (!isset($ENTRY[$KEY]))die('Key '.$KEY.' not found in entry '.$TABLE_NAME);
 			/// The value is NULL? Special case applies:
+			
 			if ($ENTRY[$KEY]=='NULL')
 			{
-				echo $schema.'.'.$TABLE_NAME.'.'.$KEY."\n";
-				
+			//	echo $schema.'.'.$TABLE_NAME.'.'.$KEY."\n";
+				$STR_ID.='|||';
 				/// If the column is not nullable, then we need to replace it by either IS NULL or ='' depending on the type
 				if (isset($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY]))
 				{
 					if ($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY][0])
 					{
-						$query.=' '.$KEY."= '' AND ";
+						$VALUES[$KEY]="''";
 					}
 					else 
 					{
 						//echo "NOT\n";
-						$query.=" (".$KEY." IS NULL ";
-						switch($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY][1])
-							{
-								case 'integer':
-								case 'bigint':
-								case 'smallint':
-								case 'numeric':
-								case 'real':
-								case 'double precision':
-									
-									break;
-								case 'timestamp':
-								case 'date':
-									
-									break;
-								default:
-									$query.=' OR '.$KEY." = ''";
-							}
-
-						
-						$query.=") AND ";
+						$sub_q="NULL";
+						$VALUES[$KEY]=$sub_q;
 					}
 				}
 				else 
 				{
-					$query.=' '.$KEY."= NULL AND ";
+					$VALUES[$KEY]="NULL";
 				}
 			}
 			/// Otherwise easy enough $KEY=>$VALUE
-			else $query.=" ".$KEY."='".str_replace("'","''",$ENTRY[$KEY])."' AND ";
+			else 
+			{
+				$VALUES[$KEY]="'".str_replace("'","''",$ENTRY[$KEY])."'";
+				$STR_ID.=$ENTRY[$KEY]."|||";
+			}
 		}
-		/// Remove the last AND with space
-		$query=substr($query,0,-4);
-		/// We run the query
+
+		/// Now we need to separate the values in 2 arrays, one for the values that are not NULL and one for the values that are NULL
+		$STR_NULL=array();
+		$STR_HEAD=array();$VALUE_HEAD=array();
+		foreach ($VALUES as $KEY_V=>&$VALUE_V)
+		{
+			if ($VALUE_V!='NULL')
+			{
+				$STR_HEAD[]=$KEY_V;
+				$VALUE_HEAD[]=$VALUE_V;
+			}
+			else $STR_NULL[]=$KEY_V.' IS NULL';
+		}
+		/// We build the query head
+		$STR_LEN_NULL=implode(' AND ',$STR_NULL);
+		if ($STR_LEN_NULL!='')$STR_LEN_NULL=$STR_LEN_NULL.' AND ';
+		$STR_KEY_HEAD="SELECT * FROM ".$schema.'.'.$TABLE_NAME." WHERE  ".$STR_LEN_NULL.' ('.implode(",",$STR_HEAD).') IN (';
+
+		/// We store the query head and the values
+		$QUERY_PARAMS[$STR_KEY_HEAD][]='('.implode(",",$VALUE_HEAD).")";
+
+		/// We store the position of the record in the TABLE_DATA array
+		$ID_PARAMS[md5($STR_ID)]=$ENTRY_POS;
+	}
+
+	if ($DEBUG)print_R($QUERY_PARAMS);
+	
+	/// Now we run the queries
+	/// N_FOUND is used to count the number of records found
+	$N_FOUND=0;
+	foreach ($QUERY_PARAMS as $STR_KEY_HEAD=>&$QUERY_VALUES)
+	{
+		/// Merge the query head with the values
+		$query=$STR_KEY_HEAD.' '.implode(",",$QUERY_VALUES).")";
 		$res=runQuery($query);
-		
 		if ($res===false)throw new Exception("Unable to run query ".$query);
 
-
-		/// No results! We need to insert the
-		if ($res==array())
+		
+		
+		/// The record exists, we store the primary key
+		foreach ($res as &$line)
 		{
-			/// So we need to know the primary key for that table
-			/// Get it's max value so we can increment it
-			if ($MAX_PK==-1)
-			{
-				if (count($PRIMARY_KEY)==1)
-				{
-					echo "SELECT MAX(".$PRIMARY_KEY[0].") m FROM ".$schema.'.'.$TABLE_NAME."\n";
-					$res=runQuery("SELECT MAX(".$PRIMARY_KEY[0].") m FROM ".$schema.'.'.$TABLE_NAME);
-					if ($res[0]['m']!='')					$MAX_PK=$res[0]['m'];
-					else $MAX_PK=0;
-					$PK=$PRIMARY_KEY[0];
-				}
-				echo "MAX PK : ".$MAX_PK."\t".$PK;
-			}
 			
-			/// Now we build the query
-			$query="INSERT INTO ".$schema.'.'.$TABLE_NAME." (";
-			/// By looping through the columns
-			foreach ($ENTRY as $KEY=>$VALUE)
+			/// So first we need to create the hash based on the value
+			$str_k='';
+			foreach ($TABLE_KEYS as $KEY)
 			{
-				$query.=$KEY.",";
+				if ($line[$KEY]=='NULL')$str_k.='|||';
+				else
+				$str_k.=$line[$KEY]."|||";
 			}
-			$query=substr($query,0,-1).") VALUES (";
-			
-			/// Then the values:
-			foreach ($ENTRY as $KEY=>$VALUE)
-			{
-				/// Special case for NULL values, we need to check if the column is nullable
-				/// and if it is, we need to replace it by NULL or ''
-				
-				if ($ENTRY[$KEY]=='NULL')
-				{
-					if (isset($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY]))
-					{
-						//print_R($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY]);
-						if  ($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY][0])
-						{
-							
-							$query.=" '' , ";
-							
-						}
-						else 
-						{
-							if ($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY][1])$query.="NULL,";
-							else $query.="NULL,";
-						}
-					}
-					else 
-					{
-						$query.='NULL,';
-					}
-					
-				}
-				else if ($PK!=null && $PK==$KEY)
-				{
-					$MAX_PK++;
-					$query.=$MAX_PK.",";
-				}else  $query.="'".str_replace("'","''",$VALUE)."',";
+			$hash=md5($str_k);
+			//echo implode("\t",$line)."\t".$hash."\n";
+			/// So we can find the corresponding position of the record in TABLE_DATA
+			if (!isset($ID_PARAMS[$hash]))throw new Exception("Unable to find entry in ID_PARAMS");
+
+			/// Now technically, we should not have multiple records found, so if DB_ID is already set, we throw an exception
+			if (isset($TABLE_DATA[$ID_PARAMS[$hash]]['DB_ID']))
+			{print_R($TABLE_DATA[$ID_PARAMS[$hash]]);
+				throw new Exception("Multiple records found");
 			}
 
-			/// Remove the last comma
-			$query=substr($query,0,-1).") RETURNING *";
-			
-			echo $query."\n";
-			
-			$res=runQuery($query);
-			
-			if ($res===false)throw new Exception("Unable to run query ".$query);
-			
-			/// We store the primary key of the record we just inserted
-			$ID_MAP[$TABLE_NAME][$ENTRY[$PK]]=$MAX_PK;
-			
-		}
-		else
-		{
+			/// Reference to the record
+			$ENTRY=&$TABLE_DATA[$ID_PARAMS[$hash]];
+			//	echo "\t=>".$ID_PARAMS[$hash]."\t==>".implode("\t",$ENTRY)."\n";
+			/// We store the primary key
+			$ENTRY['DB_ID']=$line[$PRIMARY_KEY[0]];
 
-			if (count($res)!=1) throw new Exception("Multiple entries found for ".$query);
-			/// The record exists, we store the primary key
+			/// Then we need to store the primary key in the ID_MAP,
+			/// which will help mapping for a given table the ID in the file to the ID in the database
 			$str_k='';
 			$db_k='';
 			foreach ($PRIMARY_KEY as $K)
 			{
 				$str_k.=$ENTRY[$K].'||';
-				$db_k.=$res[0][$K].'||';
+				$db_k.=$line[$K].'||';
 			}
-
+			if ($DEBUG)echo $TABLE_NAME.' '.substr($str_k,0,-2).' '.substr($db_k,0,-2)."\n";
 			$ID_MAP[$TABLE_NAME][substr($str_k,0,-2)]=substr($db_k,0,-2);
-		}
 
-		
+			++$N_FOUND;
+		}
 	}
 
+	echo "FOUND ".$N_FOUND."/".count($TABLE_DATA)." records\n";
+	
+	/// All records are found, we can return as the job is done
+	if ($N_FOUND==count($TABLE_DATA))return;
+
+
+	//// So we need to know the primary key for that table
+	/// Get it's max value so we can increment it
+	$MAX_PK=-1;
+	$PK=null;
+	if (count($PRIMARY_KEY)==1)
+	{
+		if ($DEBUG) echo "SELECT MAX(".$PRIMARY_KEY[0].") m FROM ".$schema.'.'.$TABLE_NAME."\n";
+		$res=runQuery("SELECT MAX(".$PRIMARY_KEY[0].") m FROM ".$schema.'.'.$TABLE_NAME);
+		if ($res[0]['m']!='')					$MAX_PK=$res[0]['m'];
+		else $MAX_PK=0;
+		$PK=$PRIMARY_KEY[0];
+	}else throw new Exception("Multiple primary keys for table ".$schema.'.'.$TABLE_NAME);
+	
+	if ($DEBUG)echo "MAX PK : ".$MAX_PK."\t".$PK;
+
+	/// Now we build the single query with multiple insert records
+	$query="INSERT INTO ".$schema.'.'.$TABLE_NAME." (";
+	/// The easiest is to create arrays of keys and values and then implode them
+	
+	$QUERY_KEYS=array();
+	$RECORDS=array();
+
+	foreach ($TABLE_DATA as $ENTRY_POS=>&$ENTRY)
+	{
+		if (isset($ENTRY['DB_ID']))continue;
+		if ($DEBUG)print_R($ENTRY);
+
+		/// First record to process, we extract the keys
+		if ($QUERY_KEYS==array())
+		{
+			$QUERY_KEYS=array_keys($ENTRY);
+		}
+
+		/// Then the values:
+		$VALUES=array();
+		
+		foreach ($ENTRY as $KEY=>&$VALUE)
+		{
+			/// Special case for NULL values, we need to check if the column is nullable
+			/// and if it is, we need to replace it by NULL or ''
+			
+			if ($ENTRY[$KEY]=='NULL')
+			{
+				if (isset($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY]))
+				{
+					//print_R($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY]);
+					if  ($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY][0])
+					{
+						$VALUES[]="''";
+					}
+					else 
+					{
+						if ($NOT_NULL[$schema.'.'.$TABLE_NAME.'.'.$KEY][1])$VALUES[]="NULL";
+						else $VALUES[]="NULL";
+					}
+				}
+				else $VALUES[]='NULL';
+			}
+			else if ($PK!=null && $PK==$KEY)
+			{
+				$MAX_PK++;
+				$VALUES[]=$MAX_PK;
+			}else  $VALUES[]="'".str_replace("'","''",$VALUE)."'";
+		}
+		/// concatenate the values into a string and add that to the record array
+		$RECORDS[]="(".implode(",",$VALUES).")\n";
+	}
+	if ($RECORDS==array())return;
+
+	/// Now we create the complete query and request to return everything
+	$query.=implode(",",$QUERY_KEYS).") VALUES ".implode(",",$RECORDS)." RETURNING *";
+	
+	if ($DEBUG)echo $query."\n";
+	
+	$res=runQuery($query);
+	if ($DEBUG)print_R($res);
+	if ($res===false)throw new Exception("Unable to run query ".$query);
+	
+	//print_r($ID_PARAMS);
+	foreach ($res as &$line)
+	{
+		if ($DEBUG)print_R($line);
+		
+		/// Similar to the previous case, we need to create a hash to find the corresponding record in TABLE_DATA
+		$str_k='';
+		foreach ($TABLE_KEYS as $KEY)
+		{
+			$str_k.=$line[$KEY]."|||";
+		}
+		$hash=md5($str_k);
+		if (!isset($ID_PARAMS[$hash]))throw new Exception("Unable to find entry in ID_PARAMS");
+		/// Reference to the record
+		$ENTRY=&$TABLE_DATA[$ID_PARAMS[$hash]];
+		/// Then we need to store the primary key in the ID_MAP,
+			/// which will help mapping for a given table the ID in the file to the ID in the database
+		$ID_MAP[$TABLE_NAME][$ENTRY[$PK]]=$line[$PK];
+		if ($DEBUG)
+		{
+			print_R($ENTRY);
+			echo $ENTRY[$PK].'>>>>'.$line[$PK]."\n";
+			echo "#####\n";
+		}
+	}
+	
 	
 	
 }
+
+
 
 
 

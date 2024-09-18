@@ -52,7 +52,7 @@ While still in $TG_DIR/BACKEND/INSTALL, please execute the following command:
 biorels_php gen_single_script.php > biorels_execute.sh
 sh biorels_execute.sh
 
-This will execute the necessary scripts in the correct order.
+This will execute the necessary scripts in the correct order. It will take about an hour and a half.
 
 
 ## Querying the database
@@ -76,3 +76,4 @@ Please go to $TG_DIR/BACKEND/SCRIPT/BIORJ/
 You can execute the following scripts:
 * biorels_php api_import.php --JSON Example/HeLa.biorj
 * biorels_php api_export.php -JSON_OUTPUT=CVCL_B6YM.biorj --JSON_PRETTY_PRINT CELL CVCL_B6YM && more CVCL_B6YM.biorj
+* biorels_php api_import.php --JSON Example/rs712.json
