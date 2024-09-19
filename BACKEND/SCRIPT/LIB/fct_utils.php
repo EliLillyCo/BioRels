@@ -248,6 +248,7 @@ function getForeignTables($TABLE,$TABLE_SCHEMA,$FILTER=array())
 }
 
 
+
 function getDepTableList($TABLE,$TABLE_SCHEMA,$FILTER=array())
 {
 	global $GLB_VAR;
@@ -274,7 +275,7 @@ function getDepTableList($TABLE,$TABLE_SCHEMA,$FILTER=array())
 	  AND tc.table_schema = kcu.table_schema
 	JOIN information_schema.constraint_column_usage AS ccu
 	  ON ccu.constraint_name = tc.constraint_name
-	  AND ccu.table_schema = tc.table_schema
+	  
 	WHERE tc.constraint_type = 'FOREIGN KEY'  AND ccu.table_name='".$TABLE."' AND ccu.table_schema='".$TABLE_SCHEMA."';";
 	
 	$res=runQuery($query);if ($res===false)																	failProcess("FCT_001",'Unable to get dependent tables');
@@ -283,15 +284,14 @@ function getDepTableList($TABLE,$TABLE_SCHEMA,$FILTER=array())
 	$DEP_TABLES=array();
 	foreach ($res as $line)
 	{
-		echo implode("\t",$line)."\n";
-		if (!in_array($line['table_schema'],$SCHEMAS)||!in_array($line['foreign_table_schema'],$SCHEMAS))continue;
+		//echo $line['constraint_schema'].'||'.$line['table_schema']."\t".$line['foreign_table_schema']."\t".$line['foreign_table_name']."\t".$line['foreign_column_name']."\n";
+		if (!in_array($line['constraint_schema'],$SCHEMAS)||!in_array($line['foreign_table_schema'],$SCHEMAS))continue;
 		if ($FILTER!=array() && in_array($line['table_name'],$FILTER))continue;
-		$DEP_TABLES[$line['foreign_column_name']][]=array('SCHEMA'=>$line['table_schema'],'TABLE'=>$line['table_name'],'COLUMN'=>$line['column_name']);
+		$DEP_TABLES[$line['foreign_column_name']][]=array('SCHEMA'=>$line['constraint_schema'],'TABLE'=>$line['table_name'],'COLUMN'=>$line['column_name']);
 	}
-	print_R($DEP_TABLES);
+	
 	return $DEP_TABLES;
 }
-
 
 
 function getDepTables($TABLE,$TABLE_SCHEMA,$FILTER=array())
