@@ -551,12 +551,12 @@ function processVariantInfo(&$ENTRY)
 	foreach ($LIST as $VARIANT_ENTRY_ID)	$LIST_ID[]=$VARIANT_ENTRY_ID;
 	if ($LIST_ID==array())return;
 	
+	$query="SELECT * 
+	FROM variant_info 
+	where source_entry LIKE '".$OMIM_ID."%' 
+	AND  source_id = ".$SOURCE_ID;
 	
-	$res=runQuery("SELECT * 
-		FROM variant_info 
-		where variant_entry_id in (".implode(',',$LIST_ID).") 
-		AND source_entry LIKE '".$OMIM_ID."%' 
-		AND  source_id = ".$SOURCE_ID);
+	$res=runQuery($query);
 	if ($res===false)														failProcess($JOB_ID."F01",'Unable to fetch from database');
 	
 
