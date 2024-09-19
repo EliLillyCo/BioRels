@@ -355,7 +355,7 @@ function processDiseaseInfo(&$ENTRY)
 	/// Finding all OMIM disease_info records that are associated with the disease 
 	$res=runQuery("SELECT * 
 		FROM disease_info 
-		where disease_entry_id in (".implode(',',$OMIM_TO_DISEASE[$OMIM_ID]).") 
+		where disease_entry_id in (".implode(',',$OMIM_TO_DISEASE[$OMIM_ID]).")  AND info_type LIKE '".$OMIM_ID."%'
 		AND source_id = ".$SOURCE_ID);
 	if ($res===false)														failProcess($JOB_ID."C01",'Unable to fetch from database');
 
