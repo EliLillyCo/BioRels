@@ -163,22 +163,22 @@ addLog("Get OMIM to Disease mapping");
 		if (isset($OMIM_TO_DISEASE[$OMIM_ID]))
 		{
 			++$N;++$N_ALL;
-			echo "DS\t".ftell($fp)."\t".$OMIM_ID."\t".$N."\t".$N_ALL."\t".implode("|",$OMIM_TO_DISEASE[$OMIM_ID])."\n";
+			// "DS\t".ftell($fp)."\t".$OMIM_ID."\t".$N."\t".$N_ALL."\t".implode("|",$OMIM_TO_DISEASE[$OMIM_ID])."\n";
 			processDiseaseInfo($ENTRY);
 		}
 		if (isset($MAP_GENES[$OMIM_ID]))
 		{
 			++$N;++$N_ALL;
-			echo "GN\t".ftell($fp)."\t".$OMIM_ID."\t".$N."\t".$N_ALL."\t".implode("|",$MAP_GENES[$OMIM_ID])."\n";
+			//echo "GN\t".ftell($fp)."\t".$OMIM_ID."\t".$N."\t".$N_ALL."\t".implode("|",$MAP_GENES[$OMIM_ID])."\n";
 			processGeneInfo($ENTRY);
 		}
 		if (isset($MAP_VARIANTS[$OMIM_ID]))
 		{
 			++$N;++$N_ALL;
-			echo "VARIANT\t".ftell($fp)."\t".$OMIM_ID."\t".$N."\t".$N_ALL."\n";
+			//echo "VARIANT\t".ftell($fp)."\t".$OMIM_ID."\t".$N."\t".$N_ALL."\n";
 			processVariantInfo($ENTRY);
 		}
-		echo "\n";
+		//echo "\n";
 	
 		/// And we push every 100 records
 		if ($N<100)continue;
@@ -392,6 +392,7 @@ function processDiseaseInfo(&$ENTRY)
 		/// Otherwise if it's the same type, we don't update, we delete and insert
 		foreach ($FROM_DB as &$DB_REC)
 		{
+			
 			if ($DB_REC['info_type']==$TEXT['textSectionTitle'] 
 			&& $DB_REC['info_text']==$TEXT['textSectionContent'])
 			{
@@ -583,8 +584,10 @@ function processVariantInfo(&$ENTRY)
 		convertToBiorelsText($TEXT,$ENTRY['referenceList']);
 		
 		$ID=$OMIM_ID.'.'.$ALL_REC['number'];
+		
 		if (!isset($VARIANTS[$ALL_REC['number']]))
 		{
+			
 			if (!isset($ALL_REC['dbSnps']))continue;
 			/// We are going to get the list of rsids using a regular expression
 			preg_match_all('/rs([0-9]{1,10})/',$ALL_REC['dbSnps'],$matches);
@@ -601,6 +604,7 @@ function processVariantInfo(&$ENTRY)
 					$VARIANTS[(int)$ALL_REC['number']][substr($rsid,2)]=$res[0]['variant_entry_id'];
 				}
 			}
+			
 
 			/// Loop through the list of variants
 			foreach ($VARIANTS[$ALL_REC['number']] as $RSID=>&$VARIANT_ENTRY_ID)
@@ -804,7 +808,7 @@ function pushToDB($LAST_CALL=false)
 		// If no records have been written to the file we don't need to insert it
 		if (!$FILE_STATUS[$NAME])
 		{
-			echo "SKIPPING ".$NAME."\t";
+			//echo "SKIPPING ".$NAME."\t";
 			continue;
 		}
 		
