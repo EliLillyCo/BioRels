@@ -196,6 +196,7 @@ BLOCK	variant_entry
 CHILD	variant_position<chr_seq_pos<chr_seq<chromosome<taxon
 CHILD	variant_position<chr_seq_pos<chr_seq<genome_assembly<taxon
 CHILD	variant_position<variant_allele
+CHILD	variant_info<source
 CHILD	clinical_variant_map<clinical_variant_entry:E
 CHILD	variant_position>variant_change<variant_type<so_entry
 CHILD	variant_position>variant_change<variant_allele
@@ -430,6 +431,7 @@ transcript_al	transcript_comp_id|transcript_ref_id
 transcript_al_pos	al_pos|transcript_al_id
 transcript_pos	seq_pos|transcript_id
 transcript_pos_type	transcript_pos_type
+variant_info	variant_entry_id|source_id|source_entry|info_type
 variant_change	variant_position_id|alt_all
 variant_frequency	variant_freq_study_id|variant_change_id
 variant_freq_study	variant_freq_study_name
