@@ -25,7 +25,7 @@ RUN apt-get update && \
 
 RUN apt-get update; \
     apt-get install -y libpq5 libpq-dev; \
-    docker-php-ext-install pdo pdo_pgsql gd zip; \    
+    docker-php-ext-install pdo pdo_pgsql gd zip bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gd gettext gmp hash iconv imap intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_pgsql pgsql phar posix pspell random readline reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem sysvshm tidy tokenizer xml xmlreader xmlwriter xsl zend_test; \    
     apt-get autoremove --purge -y libpq-dev; \
     apt-get clean ; \    
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
