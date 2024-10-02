@@ -1,5 +1,6 @@
 FROM php:8.3.8-apache-bullseye
 
+
 RUN apt-get update && \ 
     apt-get upgrade -y && \
     apt-get install -y git && \ 
@@ -12,7 +13,11 @@ RUN apt-get update && \
     apt-get install -y tar && \
     apt-get install -y openssl && \
     apt-get install -y libcurl4 && \
-    apt-get install -y sendmail-bin 
+    apt-get install -y sendmail-bin && \
+    apt-get install -y python3 libxrender1 && \
+    apt-get install -y python3-pip && \
+    python3 -m pip install --upgrade pip && \
+    python3 -m pip install rdkit pillow
     # \    
     # next line for email testing     
     #  && apt-get install -y golang-go 
