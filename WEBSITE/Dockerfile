@@ -41,6 +41,7 @@ RUN apt-get update; \
 
 
 COPY ./WEBSITE /var/www/html
+COPY ./BACKEND/SCRIPT/API/queries.php /var/www/html/module/api/api_home/api_queries.php
 
 # Install packages
 COPY --from=docker.io/library/composer:2.6.3 /usr/bin/composer /usr/local/bin/composer
