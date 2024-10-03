@@ -60,7 +60,8 @@ addLog("Setting up");
 	$ALFA_STUDY	  =$STATIC_DIR.'/ALFA_POP';
 	if (!checkFileExist($ALFA_STUDY))											   		failProcess($JOB_ID."010",'Missing ALFA_STUDY setup file ');
 
-
+		$N_LINES=getLineCount('ALFA/freq.vcf');
+		$N_PER_JOBS=ceil($N_LINES/200);
 
 	/// Find dbSNP-ALFA as a source
 	$SOURCE_ID=getSource('dbSNP-ALFA');
@@ -74,7 +75,7 @@ addLog("Setting up");
 	if (!is_dir("jobs_alfa") && !mkdir("jobs_alfa"))									failProcess($JOB_ID."012",'Unable to create jobs directory');
 	if (!is_dir("DATA_ALFA") && !mkdir("DATA_ALFA"))									failProcess($JOB_ID."013",'Unable to create DATA_alfa directory');
 
-	for ($I=0;$I<500;++$I)
+	for ($I=0;$I<200;++$I)
 	{
 		
 
@@ -91,7 +92,7 @@ addLog("Setting up");
 		fputs($fp,'#!/bin/sh'."\n");
 		fputs($fp,'cd '.$W_DIR."\n");/// Go to the working directory
 		fputs($fp,"source ".$SETENV."\n");/// Load the environment
-		fputs($fp,'biorels_php '.$RUNSCRIPT.' '.$I.'  &> LOG_ALFA_'.$I."\n");// Run the script
+		fputs($fp,'biorels_php '.$RUNSCRIPT.' '.$I.' '.($N_PER_JOBS*$I).' '.(($N_PER_JOBS)*($I+1)).' &> LOG_ALFA_'.$I."\n");// Run the script
 		fputs($fp,'echo $? > status_ALFA_'.$I."\n");/// Save the status
 		fclose($fp);
 	}
