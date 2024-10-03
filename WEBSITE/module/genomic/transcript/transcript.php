@@ -58,6 +58,7 @@ $MODULE_DATA['PROT']['ALIGN'][$ALIGN_ID]=$CORRECTION;
 //changeValue("transcript","TRANSCRIPT_SEQUENCE",str_replace("'","\\'",json_encode($MODULE_DATA)));
 changeValue("transcript","TRANSCRIPT_NAME",$TRANSCRIPT_NAME);
 changeValue("transcript","SEQ_LEN",max(array_keys($MODULE_DATA['SEQUENCE']['SEQUENCE'])));
+
 changeValue("transcript","BIOTYPE",$MODULE_DATA['INFO']['BIOTYPE_NAME']);
 changeValue("transcript","FEATURE",$MODULE_DATA['INFO']['FEATURE_NAME']);
 changeValue("transcript","RANGE",'['.$MODULE_DATA['INFO']['START_POS'].' - '.$MODULE_DATA['INFO']['END_POS'].']');
