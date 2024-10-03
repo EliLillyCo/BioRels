@@ -64,9 +64,9 @@ SC	101	db_pubmed					100							-1		-1	PUBLI			C	D	P		S	102|100																-1
 SC	102	db_pubmed_info				101							-1		-1	PUBLI			C	D	P		S	100o																-1	Push pubmed authors & institution to database
 SC	103	db_publi_ontology			101							-1		-1	PUBLI			C	D	P		S	/																-1	Push pubmed to database
 SC	104	db_publi_gene				101							-1		13	PUBLI			C	D	P		S	11|12|13|15|206														-1	Match genes to publications
-SC	105	db_publi_drug				101							-1		204	PUBLI			C	D	P		S	204																-1	Match drug to publications
-SC	106	db_publi_disease			101							-1		223	PUBLI			C	D	P		S	221|223|206																-1	Match disease to publications
-SC	107	db_publi_tissues			101							-1		540	PUBLI			C	D	P		S	540|541																-1	Match tissues to publications
+SC	105	db_publi_drug				101							-1		204	PUBLI			C	D	P		S	204|643																-1	Match drug to publications
+SC	106	db_publi_disease			101							-1		223	PUBLI			C	D	P		S	221|223|206|203													-1	Match disease to publications
+SC	107	db_publi_tissues			101							-1		540	PUBLI			C	D	P		S	540|541															-1	Match tissues to publications
 
 SC	120	ck_go_rel					-1							-1		-1	GO				C	D	00:10	S	/																-1	Check Gene ontology release
 SC	121	wh_go						120|101						-1		-1	GO				C	P	P		S	11|12|15|212|159|160												-1	Process and move gene ontology to prod
@@ -115,8 +115,8 @@ SC	177	prd_gtex					172|176						-1		-1	GTEX			C	D	P		S	/																-1	Push
 
 SC	201	ck_ot_rel					-1							-1		-1	OPENTARGETS		A	D	00:10	S	/																-1	Check for new OPEN TARGETS release	
 SC	202	dl_ot						201							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Download open targets
-SC	203	pp_ot_eco					202|221						-1		131	OPENTARGETS		A	D	P		S	/																-1	List all reported EFO diseases and map them to mondo - Any parent will trigger the update
-SC	204	db_ot_drug					203							-1		-1	OPENTARGETS		C	D	P		S	412|422|502|642|662|										-1	Process open targets
+SC	203	pp_ot_eco					202|221						-1		131	OPENTARGETS		A	D	P		S	106																-1	List all reported EFO diseases and map them to mondo - Any parent will trigger the update
+SC	204	db_ot_drug					203							-1		-1	OPENTARGETS		C	D	P		S	412|422|502|642|662|104										-1	Process open targets
 SC	205	db_ot_clintrial				204|15|223|650				-1		-1	OPENTARGETS		C	D	P		S	12|15|223														-1	Process open targets clinical trials
 SC	206	db_ot_evidence				203|101|12|223				-1		-1	OPENTARGETS		C	D	P		S	12|104|105|106|223|222|221																-1	Process open targets evidence 
 SC	207	db_stat_gene_dis			204							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Compute statistics
@@ -133,8 +133,8 @@ SC	212	db_interpro					211|162|121					-1		-1	INTERPRO		C	P	P		S	121|157|159|160
 
 
 SC	220	ck_mondo_rel				-1							-1		-1	MONDO			A	D	00:10	S	/																-1	Check for new MONDO release	
-SC	221	db_mondo					220							-1		-1	MONDO			C	D	P		S	532|602|502|206|205|231											-1	Download/process/push to db/push to prd MONDO
-SC	222	db_mondo_tree				203|221						-1		-1	MONDO			A	D	P		S	532|602|502|206|205|231											-1	Create mondo tree
+SC	221	db_mondo					220							-1		-1	MONDO			C	D	P		S	532|602|502|206|205|231|106										-1	Download/process/push to db/push to prd MONDO
+SC	222	db_mondo_tree				203|221						-1		-1	MONDO			A	D	P		S	532|602|502|206|205|231|106										-1	Create mondo tree
 SC	223	prd_mondo					222							-1		-1	MONDO			C	P	P		S	/																-1	Move to production
 
 SC	230	ck_omim_rel					-1							-1		-1	OMIM			A	D	00:10	S	/																-1	Check for new OMIM release	
@@ -172,7 +172,7 @@ SC	532	db_cellausorus				531|101|1|223				-1		-1	CELLAUSORUS		C	D	P		S	221|222		
 SC	533	prd_cellausorus				532							-1		-1	CELLAUSORUS		C	D	P		S	/																-1	Process cellausorus 
 
 SC	540	ck_uberon_rel				-1							-1		-1	UBERON			C	D	00:10	S	/																-1	Check for uberon updates
-SC	541	wh_uberon					540							-1		-1	UBERON			C	P	P		S	/																-1	Process uberon
+SC	541	wh_uberon					540							-1		-1	UBERON			C	P	P		S	107																-1	Process uberon
 
 SC	550	ck_genereviews_rel			-1							-1		-1	GENEREVIEWS		C	D	00:10	S	/																-1	Check for genereivews updates
 SC	551	wh_genereviews				550|101						-1		-1	GENEREVIEWS		C	P	P		S	11|203|221|553																-1	Process GENEREVIEWS
@@ -190,7 +190,7 @@ SC	604	prd_clinvar					602							-1		-1	CLINVAR			C	D	P		S	/																-1	M
 SC	640	ck_drugbank_rel				-1							-1		-1	DRUGBANK		C	D	00:10	S	/																-1	Check drugbank files
 SC	641	dl_drugbank					640							-1		-1	DRUGBANK		C	D	P		S	/																-1	Download drugbank files
 SC	642	db_drugbank_cpd				641							-1		-1	DRUGBANK		C	D	P		S	412|502|422|502|204|662											-1	Process compounds from drugbank files
-SC	643	db_drugbank					642							-1		-1	DRUGBANK		C	D	P		S	650|205|413															-1	Process data from drugbank files
+SC	643	db_drugbank					642							-1		-1	DRUGBANK		C	D	P		S	650|205|413|105													-1	Process data from drugbank files
 SC	644	prd_drugbank				643							-1		-1	DRUGBANK		C	P	P		S	/																-1	Push Drugbank to prod
 
 SC	650	wh_clinical_trials			643							-1	204|221	CLINICAL_TRIAL	D	D	D3		S	205|221|222|643|650												-1	Download and push clinical trial information

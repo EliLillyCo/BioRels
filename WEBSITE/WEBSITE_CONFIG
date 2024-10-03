@@ -190,6 +190,19 @@ WITH_EXPORT		true
 WITH_DATA		true
 END		PAGE	API_HOME
 
+
+
+START	PAGE	COMPOUND_IMAGE
+LOC				/compound/compound_image
+FNAME			compound_image
+HTML_TAG		compound_image
+TAG				COMPOUND_IMAGE
+WITH_EXPORT		true
+WITH_DATA		true
+END		PAGE	COMPOUND_IMAGE
+
+
+
 ###################################################################################################
 ###################################################################################################
 ############################################### SEARCH ############################################

@@ -1,5 +1,6 @@
 FROM php:8.3.8-apache-bullseye
 
+
 RUN apt-get update && \ 
     apt-get upgrade -y && \
     apt-get install -y git && \ 
@@ -12,7 +13,11 @@ RUN apt-get update && \
     apt-get install -y tar && \
     apt-get install -y openssl && \
     apt-get install -y libcurl4 && \
-    apt-get install -y sendmail-bin 
+    apt-get install -y sendmail-bin && \
+    apt-get install -y python3 libxrender1 && \
+    apt-get install -y python3-pip && \
+    python3 -m pip install --upgrade pip && \
+    python3 -m pip install rdkit pillow
     # \    
     # next line for email testing     
     #  && apt-get install -y golang-go 
@@ -20,7 +25,7 @@ RUN apt-get update && \
 
 RUN apt-get update; \
     apt-get install -y libpq5 libpq-dev; \
-    docker-php-ext-install pdo pdo_pgsql gd zip; \    
+    docker-php-ext-install pdo pdo_pgsql gd zip bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gd gettext gmp hash iconv imap intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_pgsql pgsql phar posix pspell random readline reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem sysvshm tidy tokenizer xml xmlreader xmlwriter xsl zend_test; \    
     apt-get autoremove --purge -y libpq-dev; \
     apt-get clean ; \    
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
@@ -36,6 +41,7 @@ RUN apt-get update; \
 
 
 COPY ./WEBSITE /var/www/html
+COPY ./BACKEND/SCRIPT/API/queries.php /var/www/html/module/api/api_home/api_queries.php
 
 # Install packages
 COPY --from=docker.io/library/composer:2.6.3 /usr/bin/composer /usr/local/bin/composer
