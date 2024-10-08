@@ -2358,6 +2358,7 @@ function processProtName(&$ENTRY,$VALUES)
 			$REF['DB_STATUS']='VALID';
 			if ($REF['name_link']!=$T['name_link']){$REF['name_link']=$T['name_link'];$REF['DB_STATUS']='TO_UPD';}
 			if ($REF['is_primary']!=$T['is_primary']){$REF['is_primary']=$T['is_primary'];$REF['DB_STATUS']='TO_UPD';}
+			break;
 		}
 		if ($FOUND)continue;
 
