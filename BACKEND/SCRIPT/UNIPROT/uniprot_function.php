@@ -2273,7 +2273,7 @@ function processProtName(&$ENTRY,$VALUES)
 			//echo "STEP1\t".$start.'|'.$end.'|';
 			$value=substr($line,$start,$end-$start);
 			//echo "name_type:|".$value."|\t";
-            
+            $IS_FLAG=($value=='Flags:');
             /// Get Type:
             if ($value=="RecName:")     {$pname['name_type']="REC";$prev_type=$pname['name_type'];   $EC="";$EC_link="";}
             else if ($value=="AltName:"){$pname['name_type']="ALT";$prev_type=$pname['name_type'];   $EC="";$EC_link="";}
@@ -2314,7 +2314,8 @@ function processProtName(&$ENTRY,$VALUES)
             }
 
 			/// Get the protein name and link
-            $start=$end+1;
+            $start=$end;
+			if (!$IS_FLAG)$start++;
             $end=strpos($line,";",$start);
             $end2=strpos($line,"{",$start);
             if ($end2===false)   $pname['name']=substr($line,$start,$end-$start);
@@ -2357,6 +2358,7 @@ function processProtName(&$ENTRY,$VALUES)
 			$REF['DB_STATUS']='VALID';
 			if ($REF['name_link']!=$T['name_link']){$REF['name_link']=$T['name_link'];$REF['DB_STATUS']='TO_UPD';}
 			if ($REF['is_primary']!=$T['is_primary']){$REF['is_primary']=$T['is_primary'];$REF['DB_STATUS']='TO_UPD';}
+			break;
 		}
 		if ($FOUND)continue;
 
@@ -2408,8 +2410,16 @@ function processProtName(&$ENTRY,$VALUES)
 		}
 	}
 	
-	
-	
+	foreach ($ENTRY['pname'] as &$REF)
+	{
+		if ($REF['DB_STATUS']!='FROM_DB')continue;
+		if (!runQueryNoRes("DELETE FROM prot_name_map where prot_name_map_id = ".$REF['DB_MAPID']))
+		{
+			echo "Unable to delete ".$REF['name'][1]."\n";
+			return false;
+		}
+	}
+	//print_R($ENTRY['pname']);exit;
 	return true;;
 
 	

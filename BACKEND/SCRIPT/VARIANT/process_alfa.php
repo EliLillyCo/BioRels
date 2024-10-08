@@ -43,15 +43,9 @@ addLog("Go to directory");
 	if (!checkFileExist($ALFA_STUDY))											   			 			failProcess($JOB_ID."005",'Missing ALFA_STUDY setup file ');
 
 
-	/// Checking master script:
-	$ALL_FILE=$U_DIR.'/SCRIPTS/all.sh';
-	if (!is_file($ALL_FILE))																			failProcess($JOB_ID."006",'Unable to find master job file at '.$ALL_FILE);
-	$TOT_JOBS=getLineCount($ALL_FILE);
-
-
-
 	$TASK_ID=$argv[1];
-	
+	$START_LINE=$argv[2];	/// Starting line to be processed in the file
+	$END_LINE=$argv[3];		/// Ending line in the file
 
 addLog("Verification of ALFA studies");
 	/// Then we look for all studies associated to ALFA
@@ -84,8 +78,11 @@ addLog("Verification of ALFA studies");
 	}
 	ksort($STATIC_DATA['CHR_SEQ']);
 		
-	$STATS=array('N_LINE'=>0,'NO_RSID'=>0,'NO_VARIANT_CHANGE'=>0);
+	$STATS=array('N_LINE'=>0,'NO_RSID'=>0,'NO_VARIANT_CHANGE'=>0,'VALID_FREQ'=>0,'DEL_FREQ'=>0,'UPD_FREQ'=>0,'NEW_FREQ'=>0);
 		
+
+
+	
 	/// Processing file
 	$fp=fopen('ALFA/freq.vcf','r');if (!$fp)																failProcess($JOB_ID."008",'Unable to open freq.vcf');
 
@@ -117,15 +114,33 @@ addLog("Verification of ALFA studies");
 			break;
 		}
 	}
+	//print_R($HEADER);
 	if ($HEADER==array())																			failProcess($JOB_ID."010",'No header found');
 	
-	/// We are going to process the file by starting to the JOB_IDth line, process it
-	/// then skipping the next TOT_JOB-1 lines, process the next one, etc.
-	for ($I=0;$I<$TASK_ID;++$I)
+	
+	$CURRENT_LINE=0;
+
+	/// We are going to process the file by starting to the START_LINE line
+	for ($I=0;$I<$START_LINE;++$I)
 	{
 		$line=stream_get_line($fp,10000,"\n");
+		++$CURRENT_LINE;
 	//	echo "SKIP:".$line."\n";
 	}
+
+
+	/// If there is a restart file, we restart from that point - 1000 lines, to be safe
+	if (is_file('STATS_'.$TASK_ID))
+	{
+		$restart=explode("\t",file_get_contents('STATS_'.$TASK_ID));
+
+		/// So moving to the restart point
+		for (;$CURRENT_LINE!=$restart[0]-1000;++$CURRENT_LINE)$line=stream_get_line($fp,10000,"\n");
+		echo "RESTART AT LINE ".$restart[0]."\n";
+		$K=0;
+		foreach ($STATS as $N=>&$V){++$K;$V=$restart[$K];}
+	}
+	
 
 	$N_BLOCK=0;
 	$BLOCK=array();
@@ -134,48 +149,47 @@ addLog("Verification of ALFA studies");
 		$line=stream_get_line($fp,10000,"\n");
 		//echo $line."\n";
 		if (substr($line,0,2)=='##')continue;
+		
 		/// Line starting with CHROM is the header
+		++$CURRENT_LINE;
+		if ($CURRENT_LINE==$END_LINE)break;
+		
 		
 		$STATS['N_LINE']++;
 
 		$tab=explode("\t",$line);
+		if (array_filter($tab)==array())continue;
 		
 		$tab[]=$line;
-		/// We process by block to 2K lines to reduce the amount of queries to do
+		/// We process by block to 1K lines to reduce the amount of queries to do
 		$BLOCK[]=$tab;
 		
-		$N_L=0;
-		for ($I_SHIFT=0;$I_SHIFT<$TOT_JOBS-1;++$I_SHIFT)
-		{
-			$line=stream_get_line($fp,10000,"\n");
-			if (substr($line,0,2)=='##'){$I_SHIFT--;continue;}
-			
-			//echo $line."\n";
-			$N_L++;
-		}
-
+		/// If we don't have 1K line yet, we continue to read the file
 		if (count($BLOCK)<1000)continue;
 
+
+		echo $START_LINE."\t".$CURRENT_LINE."\t".$END_LINE."\t";
+		
 		/// Then we process the block
 		processBlock($BLOCK);
+		
 		++$N_BLOCK;
-		print_r($STATS);
+		
+		$fpO=fopen('STATS_'.$TASK_ID,'w'); if (!$fpO)							failProcess($JOB_ID."011",'Unable to open STATS_'.$TASK_ID);
+		fputs($fpO,$CURRENT_LINE."\t".implode("\t",$STATS)."\n");
+		foreach ($STATS as $K=>$V) echo $K.'='.$V."\t";echo "\n";
+		
+		/// Clean the block
+		$BLOCK=array();
 		$BLOCK=null;
 		$BLOCK=array();
-		/// And once we processed 20 blocks (about 40K lines), we insert the results
-		if ($N_BLOCK%20!=0)continue;
-		
-		echo "FPOS:".ftell($fp)."\n";
-		
-		//break;
 		
 	}	
-
+	/// Last block
+	processBlock($BLOCK);
 	fclose($fp);
 		
-	print_r($STATS);
-
-
+	
 
 
 
@@ -189,18 +203,20 @@ function processBlock(&$BLOCK)
 	global $HEADER;
 	global $DB_STUDIES;
 	global $DBIDS;
+	global $STMT;
 	
 	global $STATIC_DATA;
-
 	/// First, we are going to get all the chromosome and chromosome position listed
 	$CHR_POS=array();
 	foreach ($BLOCK as $N=>$B)
 	{
+		
 		/// $B[0] is the chromosome sequence: NC_000001.9
 		$CHR_SEQ=explode(".",$B[0]);
 
 
 		/// We check that we have that chromsome sequence in the STATIC_DATA array
+		//echo $CHR_SEQ[0]."\n";
 		if (!isset($STATIC_DATA['CHR_SEQ'][$CHR_SEQ[0]]))
 		{
 			$STATS['NO_CHR_SEQ']++;
@@ -222,7 +238,7 @@ function processBlock(&$BLOCK)
 		$CHR_POS[$CHR_SEQ_ID]['('.$B[1].','.substr($B[2],2).')']=$N;
 		
 	}
-	echo count($CHR_POS)." CHROMOSOMES\n";
+	echo "\tCHROMOSOMES=".count($CHR_POS);
 	
 	$LIST_VAR_POS=array();
 	
@@ -236,10 +252,10 @@ function processBlock(&$BLOCK)
 		AND chr_seq_id = '.$CHR_SEQ_ID.' 
 		AND (chr_pos,rsid) IN ('.implode(',',array_keys($INFO)).')';
 		//echo $query."\n";
-		echo "\t".$CHR_SEQ_ID." => ".count($INFO)."\n";
+		echo "\tCHR:".$CHR_SEQ_ID." => ".count($INFO)." ; ";
 		$res=runQuery($query);
 		if ($res===false)																failProcess($JOB_ID."A01",'Unable to get variant positions'); 
-		////print_r($res);
+		
 		foreach ($res as $line)
 		{
 			$BP=$CHR_POS[$CHR_SEQ_ID]['('.$line['chr_pos'].','.$line['rsid'].')'];
@@ -254,7 +270,7 @@ function processBlock(&$BLOCK)
 	
 	
 	$MAP=array();
-	echo "\tVAR POS : ".count($LIST_VAR_POS)."\n";
+	echo "\tVAR POS=".count($LIST_VAR_POS)."\t";
 	/// Otherwise we are going to retrieve the alternative alleles
 	
 	$res=runQuery("SELECT variant_position_id,variant_seq as alt_all,vc.variant_change_id
@@ -277,7 +293,7 @@ function processBlock(&$BLOCK)
 		WHERE variant_change_id IN (".implode(",",array_keys($MAP)).')');
 	if ($res===false)																failProcess($JOB_ID."A03",'Unable to get variant frequency');
 	
-	echo "\tFREQ : ".count($MAP)."\n";
+	echo "\tFREQ=".count($MAP)."\t";
 	// print_r($res);
 	foreach ($res as $line)
 	{
@@ -287,12 +303,13 @@ function processBlock(&$BLOCK)
 		//$BLOCK[$BP]['DATA'][$line['alt_all']]['VC_ID']=$line['variant_change_id'];
 		$BLOCK[$BP[0]]['DATA'][$BP[1]]['FREQ'][$ALLOWED_STUDIES[$line['variant_freq_study_id']]]=array($line['ref_count'],$line['alt_count'],$line['variant_frequency_id'],'FROM_DB');
 	}
-
+	
+	$NEW=array();
 	$TO_DEL=array();
 	$N_HEADER=count($HEADER);
 	foreach ($BLOCK as $K=> &$BLK)
 	{
-		// echo "##################\n\n\n";
+		// echo "##################\n\n\t".$N_HEADER."\n";
 		if (!isset($BLK['DATA'])){
 			$STATS['NO_VARIANT_CHANGE']++; 
 			unset($BLOCK[$K]);
@@ -312,7 +329,7 @@ function processBlock(&$BLOCK)
 			
 			$tot_stat = $tab_t[$FORMAT['AN']];
 			$alt_stat=explode(",",$tab_t[$FORMAT['AC']]);
-			
+			//echo $STUDY_NAME."\t".$VALUE."\t".$tot_stat."\t".implode("|",$alt_stat)."\n";
 			/// So we loop over each alternative allele 
 			foreach($alt_all as $K_ALT=>$ALLELE)
 			{
@@ -348,11 +365,13 @@ function processBlock(&$BLOCK)
 						
 						if ($BLK['DATA'][$ALLELE]['VC_ID']!='')	
 						{
-							//echo $DB_STUDIES[$STUDY_NAME].",".$alt_stat[$K_ALT].",".$tot_stat."\n";
-							if (!runQueryNoRes("INSERT INTO variant_frequency(variant_frequency_id , variant_change_id , variant_freq_study_id , ref_count , alt_count)
-								VALUES (nextval('biorels.variant_frequency_sq'),".$BLK['DATA'][$ALLELE]['VC_ID'].",".$DB_STUDIES[$STUDY_NAME].",".$alt_stat[$K_ALT].",".$tot_stat.')'))
-							failProcess($JOB_ID."A04",'Unable to insert variant frequency');
-							//	fputs($FILE,$BLK['DATA'][$ALLELE]['VC_ID']."\t".$DB_STUDIES[$STUDY_NAME]."\t".$alt_stat[$K_ALT]."\t".$tot_stat."\n");
+							$PARAMS=array(
+								':change_id'=>$BLK['DATA'][$ALLELE]['VC_ID'],
+								':freq_id'=>$DB_STUDIES[$STUDY_NAME],
+								':ref'=>$alt_stat[$K_ALT],
+							':alt'=>$tot_stat);
+							$NEW[]=$PARAMS;
+						   
 						}
 					}
 					else $STATS['VALID_FREQ']++;
@@ -364,17 +383,18 @@ function processBlock(&$BLOCK)
 					//echo "IB";
 					if ($BLK['DATA'][$ALLELE]['VC_ID']!='')
 					{
-						//echo "INSERT ".$DB_STUDIES[$STUDY_NAME].",".$alt_stat[$K_ALT].",".$tot_stat."\n";
-						if (!runQueryNoRes("INSERT INTO variant_frequency(variant_frequency_id , variant_change_id , variant_freq_study_id , ref_count , alt_count)
-								VALUES (nextval('biorels.variant_frequency_sq'),".$BLK['DATA'][$ALLELE]['VC_ID'].",".$DB_STUDIES[$STUDY_NAME].",".$alt_stat[$K_ALT].",".$tot_stat.')'))
-								failProcess($JOB_ID."A05",'Unable to insert variant frequency - 2');
-						//fputs($FILE,$BLK['DATA'][$ALLELE]['VC_ID']."\t".$DB_STUDIES[$STUDY_NAME]."\t".$alt_stat[$K_ALT]."\t".$tot_stat."\n");
-
+						
+						$PARAMS=array(
+							':change_id'=>$BLK['DATA'][$ALLELE]['VC_ID'],
+							':freq_id'=>$DB_STUDIES[$STUDY_NAME],
+							':ref'=>$alt_stat[$K_ALT],
+						':alt'=>$tot_stat);
+						
+						$NEW[]=$PARAMS;
+								
+						
 					}
-						// $ALL_DATA[$STUDY_NAME]=array($tot_stat,
-						// $alt_stat[$K_ALT],
-						// $DBIDS['variant_frequency'],
-						// 'TO_INS');
+					
 				}
 			}
 			
@@ -412,14 +432,20 @@ function processBlock(&$BLOCK)
 						$query='UPDATE variant_frequency SET ref_count = '.$ref_stat.', alt_count='.$tot_stat.' WHERE variant_frequency_id = '.$ALL_DATA[$STUDY_NAME][2];
 						//	echo $query."\n";
 						
-						if (!runQueryNoRes($query))	 failProcess($JOB_ID."A06",'Unable to update variant frequency');
+						if (!runQueryNoRes($query))	 failProcess($JOB_ID."A04",'Unable to update variant frequency');
 						//fputs($FILE,$BLK['DATA'][$BLK[3]]['VC_ID']."\t".$DB_STUDIES[$STUDY_NAME]."\t".$ref_stat."\t".$tot_stat."\n");
 					}else 
 					{
 						$TO_DEL[]=$ALL_DATA[$STUDY_NAME][2];
-						if (!runQueryNoRes("INSERT INTO variant_frequency(variant_frequency_id , variant_change_id , variant_freq_study_id , ref_count , alt_count)
-								VALUES (nextval('biorels.variant_frequency_sq'),".$BLK['DATA'][$BLK[3]]['VC_ID'].",".$DB_STUDIES[$STUDY_NAME].",".$ref_stat.",".$tot_stat.')'))
-							failProcess($JOB_ID."A07",'Unable to update variant frequency');
+						
+						$PARAMS=array(
+							':change_id'=>$BLK['DATA'][$ALLELE]['VC_ID'],
+							':freq_id'=>$DB_STUDIES[$STUDY_NAME],
+							':ref'=>$alt_stat[$K_ALT],
+							':alt'=>$tot_stat);
+						$NEW[]=$PARAMS;
+						
+							
 					}
 				
 				}else $STATS['VALID_FREQ']++;
@@ -428,31 +454,40 @@ function processBlock(&$BLOCK)
 			{
 				$STATS['NEW_FREQ']++;
 
-				if ($BLK['DATA'][$BLK[3]]['VC_ID']!='') 
-				{
-					$query="INSERT INTO variant_frequency(variant_frequency_id , variant_change_id , variant_freq_study_id , ref_count , alt_count)
-					VALUES (nextval('biorels.variant_frequency_sq'),".
-							$BLK['DATA'][$BLK[3]]['VC_ID'].",".
-							$DB_STUDIES[$STUDY_NAME].",".
-							$ref_stat.",".
-							$tot_stat.')';
-					if (!runQueryNoRes($query))														failProcess($JOB_ID."A08",'Unable to insert variant frequency');
-					
-				}
+				if ($BLK['DATA'][$BLK[3]]['VC_ID']=='') continue;
+			
+				
+				$PARAMS=array(
+					':change_id'=>$BLK['DATA'][$BLK[3]]['VC_ID'],
+					':freq_id'=>$DB_STUDIES[$STUDY_NAME],
+					':ref'=>$ref_stat,
+				':alt'=>$tot_stat);
+					$NEW[]=$PARAMS;
+				
 			}
 
 			// exit;
 		}
-		// print_r($BLK);
+		
 	}
+
 	if ($TO_DEL!=array())/// Then we delete all old data
 	{
 		$STATS['DEL_FREQ']+=count($TO_DEL);
 		echo count($TO_DEL).' DELETE RECORDS'."\n";
 		$query='DELETE FROM VARIANT_FREQUENCY WHERE VARIANT_FREQUENCY_ID IN ('.implode(',',$TO_DEL).')';
-		if (!runQueryNoRes($query))		failProcess($JOB_ID."A09",'Unable to delete variant frquency records');
+		if (!runQueryNoRes($query))		failProcess($JOB_ID."A05",'Unable to delete variant frquency records');
 	}
-	
+	if ($NEW!=array())
+	{
+		$query="INSERT INTO variant_frequency(variant_frequency_id , variant_change_id , variant_freq_study_id , ref_count , alt_count) VALUES ";
+		foreach ($NEW as &$PARAMS)
+		{
+			$query .=" ( nextval('biorels.variant_frequency_sq'),".implode(',',$PARAMS).'),';
+		}
+		 if (runQueryNoRes(substr($query,0,-1))===false)failProcess($JOB_ID."A06",'Unable to insert variant frequency');
+		
+	}
 
 }
 ?>

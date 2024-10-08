@@ -216,7 +216,7 @@ function processDisease($DISEASE_ENTRY_ID,$LISTS)
 			if (isset($EXEMPT[$L]))
 			{
 				// Not additional rule => ignore
-				if ($EXEMPT_[$L]=='""')continue;
+				if ($EXEMPT[$L]=='""')continue;
 				/// Additional rule => add to the query
 				$ADD.=' '.$EXEMPT[$L];
 			}

@@ -4,6 +4,21 @@ if (!defined("BIORELS")) header("Location:/");
 $MODULE_DATA['API']=array();
 
 
+$t=file_get_contents("php://input");
+$Temp=json_decode($t,true);
+if ($Temp!=null)
+{
+	 foreach ($Temp as $K=>$V)
+	 {
+		 $USER_INPUT['PARAMS'][]=$K;
+		 $USER_INPUT['PARAMS'][]=$V;
+	 }
+		
+	
+	
+}
+
+
 try{
 require_once('module/api/api_home/api_queries.php');
 
@@ -188,12 +203,14 @@ function findBlocks(&$str_file)
 function runAPIQuery($function_name,&$args,&$BLOCKS)
 {
 	
+	//print_R($args);
 	
 	$USER_PARAM=array();
 	$KEY_MAP=array();
 	for ($I=0;$I<count($args);++$I)
 	{
 		$tab=explode("__",$args[$I]);
+		//print_R($tab);
 		if (count($tab)==3)
 		{
 			
@@ -223,7 +240,6 @@ function runAPIQuery($function_name,&$args,&$BLOCKS)
 		}
 	}
 
-	
 	$MODULE_DATA=array('RESULTS'=>array(),'PARAMETERS'=>array());
 	foreach ($BLOCKS as &$BLOCK)
 	{

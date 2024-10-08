@@ -275,6 +275,11 @@ addLog("Process files");
 	//	exit;
 	}
 
+	///Clean up unused protein names:
+	if (!runQueryNoRes("DELETE FROM prot_name where prot_name_id NOT IN (SELECT DISTINCT prot_name_id FROM prot_name_map)"))$ALL_SUCCESS=false;
+
+
+
 	if ($ALL_SUCCESS)successProcess();
 else 	failProcess($JOB_ID."013",'Unable to fully insert uniprot information');
 
