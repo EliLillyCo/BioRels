@@ -2410,8 +2410,16 @@ function processProtName(&$ENTRY,$VALUES)
 		}
 	}
 	
-	
-	
+	foreach ($ENTRY['pname'] as &$REF)
+	{
+		if ($REF['DB_STATUS']!='FROM_DB')continue;
+		if (!runQueryNoRes("DELETE FROM prot_name_map where prot_name_map_id = ".$REF['DB_MAPID']))
+		{
+			echo "Unable to delete ".$REF['name'][1]."\n";
+			return false;
+		}
+	}
+	//print_R($ENTRY['pname']);exit;
 	return true;;
 
 	
