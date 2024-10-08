@@ -2273,7 +2273,7 @@ function processProtName(&$ENTRY,$VALUES)
 			//echo "STEP1\t".$start.'|'.$end.'|';
 			$value=substr($line,$start,$end-$start);
 			//echo "name_type:|".$value."|\t";
-            
+            $IS_FLAG=($value=='Flags:');
             /// Get Type:
             if ($value=="RecName:")     {$pname['name_type']="REC";$prev_type=$pname['name_type'];   $EC="";$EC_link="";}
             else if ($value=="AltName:"){$pname['name_type']="ALT";$prev_type=$pname['name_type'];   $EC="";$EC_link="";}
@@ -2314,7 +2314,8 @@ function processProtName(&$ENTRY,$VALUES)
             }
 
 			/// Get the protein name and link
-            $start=$end+1;
+            $start=$end;
+			if (!$IS_FLAG)$start++;
             $end=strpos($line,";",$start);
             $end2=strpos($line,"{",$start);
             if ($end2===false)   $pname['name']=substr($line,$start,$end-$start);
