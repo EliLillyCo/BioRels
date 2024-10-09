@@ -221,6 +221,7 @@ function insertEntry(&$ENTRY)
 		global $PROT_NAMES;
 		foreach ($ENTRY['pname'] as &$PN)
 		{
+			if ($PN['DB_STATUS']!='TO_INS')continue;
 			if ($PN['name'][0]==-1)
 			{
 				$PROT_NAMES[$PN['name'][1].'__'.$PN['name'][2]]['LIST']=array($ENTRY['prot_entry']['prot_entry_id']."\t".'${PROT_NAME_ID}'."\t".$PN['group_id']."\t".$PN['class_name']."\t".$PN['name_type']."\t".$PN['name_subtype']."\t".$PN['name_link']."\t".$PN['is_primary']."\n");
