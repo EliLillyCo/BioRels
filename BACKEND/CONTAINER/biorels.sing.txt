@@ -1,5 +1,5 @@
 BootStrap:docker
-From: ubuntu
+From: ubuntu:24.04
 
 %environment
 	export TG_DIR=/TG_SCALE 
@@ -33,7 +33,6 @@ From: ubuntu
 	
 	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 
-	
 # PART 1 - Linux packages	
 	
 	apt-get -y install \
@@ -171,29 +170,17 @@ From: ubuntu
 
 # PART 2 - Python packages	
 
-	python3 -m pip install --break-system-packages attrs \
+	python3 -m pip install --break-system-packages  setuptools attrs \
 	pytz \
 	grappa \
 	langchain \
-	yake \
 	flashtext \
 	Office365 \
 	spacy \
 	attrs \
 	python-dateutil \
 	psycopg2-binary \
-	pytz \
-	grappa \
-	yake \
-	flashtext \
-	scikit-learn \
-	python-pptx \
 	rdkit \
-	PyPDF4 \
-	docx2txt \
-	striprtf \
-	pdf2image \
-	pytesseract \
 	Office365-REST-Python-Client
 
 
