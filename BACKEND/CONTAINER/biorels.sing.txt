@@ -1,5 +1,5 @@
 BootStrap:docker
-From: ubuntu:24.04
+From: ubuntu
 
 %environment
 	export TG_DIR=/TG_SCALE 
@@ -33,6 +33,7 @@ From: ubuntu:24.04
 	
 	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 
+	
 # PART 1 - Linux packages	
 	
 	apt-get -y install \
@@ -56,6 +57,8 @@ From: ubuntu:24.04
 	libeigen3-dev \
 	libexif12 \
  	libexif-dev \
+	libfreetype6 \
+	libfreetype6-dev \
 	libffi8 \
 	libffi-dev  \
 	libgcc-11-dev \
@@ -95,7 +98,7 @@ From: ubuntu:24.04
 	php-json \
 	php-json \
 	php-mbstring \
-        php-pear \
+    php-pear \
 	php-pgsql \
 	php-php-gettext \
 	php-xml \
@@ -247,22 +250,22 @@ From: ubuntu:24.04
 
 	mkdir -p $TG_DIR/BACKEND/APPS/sequence 
 	cd $TG_DIR/BACKEND/APPS/sequence
- 	wget https://github.com/samtools/samtools/releases/download/1.20/samtools-1.20.tar.bz2
-	tar -xf samtools-1.20.tar.bz2
-	cd samtools-1.20
+ 	wget https://github.com/samtools/samtools/releases/download/1.21/samtools-1.21.tar.bz2
+	tar -xf samtools-1.21.tar.bz2
+	cd samtools-1.21
 	./configure --prefix=$TG_DIR/BACKEND/APPS/sequence/
 	make
 	make install
 	cd $TG_DIR/BACKEND/APPS/sequence
-	rm -rf samtools-1.20.tar.bz2 samtools-1.20
-	wget https://github.com/samtools/bcftools/releases/download/1.20/bcftools-1.20.tar.bz2
-	tar -xf bcftools-1.20.tar.bz2
-	cd bcftools-1.20
+	rm -rf samtools-1.21.tar.bz2 samtools-1.21
+	wget https://github.com/samtools/bcftools/releases/download/1.21/bcftools-1.21.tar.bz2
+	tar -xf bcftools-1.21.tar.bz2
+	cd bcftools-1.21
 	./configure --prefix=$TG_DIR/BACKEND/APPS/sequence/
 	make
 	make install
 	cd $TG_DIR/BACKEND/APPS/sequence
-	rm -rf bcftools-1.20.tar.bz2 bcftools-1.20	
+	rm -rf bcftools-1.21.tar.bz2 bcftools-1.21	
 	
 	mkdir -p $TG_DIR/BACKEND/APPS/blast/
 	cd $TG_DIR/BACKEND/APPS/blast/ &&   \
