@@ -517,19 +517,19 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.bioassay_onto_hierarchy.bioassay_onto_level_lef
 
 COMMENT ON COLUMN DB_SCHEMA_NAME.bioassay_onto_hierarchy.bioassay_onto_level_right IS 'Right boundary for the nested set representation';
 
-CREATE TABLE DB_SCHEMA_NAME.DB_SCHEMA_NAME_datasource (
+CREATE TABLE DB_SCHEMA_NAME.biorels_datasource (
     source_name character varying(200) NOT NULL,
     release_version character varying(200) NOT NULL,
     date_released date NOT NULL
 );
 
-COMMENT ON TABLE DB_SCHEMA_NAME.DB_SCHEMA_NAME_datasource IS 'List all data sources and their current version processed by DB_SCHEMA_NAME';
+COMMENT ON TABLE DB_SCHEMA_NAME.biorels_datasource IS 'List all data sources and their current version processed by DB_SCHEMA_NAME';
 
-COMMENT ON COLUMN DB_SCHEMA_NAME.DB_SCHEMA_NAME_datasource.source_name IS 'Data source name';
+COMMENT ON COLUMN DB_SCHEMA_NAME.biorels_datasource.source_name IS 'Data source name';
 
-COMMENT ON COLUMN DB_SCHEMA_NAME.DB_SCHEMA_NAME_datasource.release_version IS 'Current version of this data source';
+COMMENT ON COLUMN DB_SCHEMA_NAME.biorels_datasource.release_version IS 'Current version of this data source';
 
-COMMENT ON COLUMN DB_SCHEMA_NAME.DB_SCHEMA_NAME_datasource.date_released IS 'Date this data source has been made available in DB_SCHEMA_NAME';
+COMMENT ON COLUMN DB_SCHEMA_NAME.biorels_datasource.date_released IS 'Date this data source has been made available in DB_SCHEMA_NAME';
 
 CREATE TABLE DB_SCHEMA_NAME.biorels_timestamp (
     br_timestamp_id smallint NOT NULL,
@@ -6487,8 +6487,8 @@ ALTER TABLE ONLY DB_SCHEMA_NAME.bioassay_onto_extdb
 ALTER TABLE ONLY DB_SCHEMA_NAME.bioassay_onto_hierarchy
     ADD CONSTRAINT bioassay_onto_hierarchy_pkey PRIMARY KEY (bioassay_onto_entry_id, bioassay_onto_level, bioassay_onto_level_left, bioassay_onto_level_right);
 
-ALTER TABLE ONLY DB_SCHEMA_NAME.DB_SCHEMA_NAME_datasource
-    ADD CONSTRAINT DB_SCHEMA_NAME_datasource_pkey PRIMARY KEY (source_name);
+ALTER TABLE ONLY DB_SCHEMA_NAME.biorels_datasource
+    ADD CONSTRAINT biorels_datasource_pkey PRIMARY KEY (source_name);
 
 ALTER TABLE ONLY DB_SCHEMA_NAME.biorels_timestamp
     ADD CONSTRAINT biorels_timestamp_job_name_key UNIQUE (job_name);
