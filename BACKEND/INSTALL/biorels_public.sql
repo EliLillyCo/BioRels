@@ -5121,7 +5121,7 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.source.source_type IS 'Type of database/resourc
 COMMENT ON COLUMN DB_SCHEMA_NAME.source.source_metadata IS 'Additional information';
 
 CREATE SEQUENCE DB_SCHEMA_NAME.source_seq
-    START WITH 1
+    START WITH 2000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
