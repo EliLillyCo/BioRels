@@ -2077,7 +2077,7 @@ function processSequence(&$ENTRY,&$VALUES,$FPATH)
 	}
 	fclose($fp);
 	if ($DEBUG)echo "READ FASTA FILE TIME:".round(microtime_float()-$time,3)."s\n";$time=microtime_float();
-	echo "N SEQ:". count($SEQS)."\n";
+	//echo "N SEQ:". count($SEQS)."\n";
 	
 		//print_r($SEQS);
 		//exit;
@@ -2195,7 +2195,7 @@ function processSequence(&$ENTRY,&$VALUES,$FPATH)
 		//print_r($ENTRY['ft']);
 		exit;
 	}
-	echo "OUT SEQ\n";
+	//echo "OUT SEQ\n";
 	return true;;
 //	exit;	
 
