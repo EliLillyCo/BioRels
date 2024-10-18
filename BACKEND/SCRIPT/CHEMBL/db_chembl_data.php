@@ -2302,7 +2302,7 @@ function processDrugs()
 	if ($return_code !=0 )																		failProcess($JOB_ID."P06",'Unable to insert drug_entry'); 
 	
 	
-	$command='\COPY '.$SCHEMA.'.drug_name (drug_name_id,drug_entry_id,drug_name,is_primary,is_tradename,source_id) FROM \'DRUG_NAME.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+	$command='\COPY '.$SCHEMA.'.drug_name (drug_name_id,drug_entry_id,drug_name,is_primary,is_tradename,source_id) FROM \'DRUG_NAME.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\", ESCAPE '\\\\' ,format CSV )";
 	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 	system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
 	if ($return_code !=0 )																		failProcess($JOB_ID."P07",'Unable to insert drug_name'); 
@@ -2447,7 +2447,7 @@ function processDrugSynonyms(&$FROM_CHEMBL,$FROM_DB,&$FILES)
 		if ($FOUND)continue;
 		echo $FROM_DB['drug_primary_name']."\tNAME:".$line['synonyms']."\n";
 		++$FILES['NAME_ID'];
-		fputs($FILES['NAME'],$FILES['NAME_ID']."\t".$FROM_DB['drug_entry_id']."\t".str_replace("\t","",$line['synonyms'])."\tF\tF\t".$source_id."\n");
+		fputs($FILES['NAME'],$FILES['NAME_ID']."\t".$FROM_DB['drug_entry_id']."\t\"".str_replace('"','\"',str_replace("\t","",$line['synonyms']))."\"\tF\tF\t".$source_id."\n");
 		//$query='INSERT INTO drug_name VALUES ('.$FILES['NAME_ID'].','.$FROM_DB['drug_entry_id'].',"'.$line['synonyms'].'","F","F",'.$source_id.')';
 	}
 
