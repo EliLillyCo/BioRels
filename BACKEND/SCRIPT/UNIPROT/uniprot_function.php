@@ -221,6 +221,7 @@ function insertEntry(&$ENTRY)
 		global $PROT_NAMES;
 		foreach ($ENTRY['pname'] as &$PN)
 		{
+			if ($PN['DB_STATUS']!='TO_INS')continue;
 			if ($PN['name'][0]==-1)
 			{
 				$PROT_NAMES[$PN['name'][1].'__'.$PN['name'][2]]['LIST']=array($ENTRY['prot_entry']['prot_entry_id']."\t".'${PROT_NAME_ID}'."\t".$PN['group_id']."\t".$PN['class_name']."\t".$PN['name_type']."\t".$PN['name_subtype']."\t".$PN['name_link']."\t".$PN['is_primary']."\n");
@@ -2026,54 +2027,57 @@ function processSequence(&$ENTRY,&$VALUES,$FPATH)
 	if ($DEBUG)echo "PRIMARY ac:".$PRIM_ac."\n";
 	if ($DEBUG)echo "FILE:".$FPATH.' || ../../'.$MAP_SEQ[$FPATH]."\n";
 	/// If it is a TrEMBL record
-	$fpos=-1;
+	$fpos=array();
 	
-		exec("egrep -m 1 '^".$PRIM_ac."\s' ../".$POINTERS[$FPATH],$res,$return_code);
+		exec("egrep  '^".$PRIM_ac."(\-[0-9]{1,10}){0,1}' ../".$POINTERS[$FPATH],$res,$return_code);
 		if ($return_code==0)
 		{
-			//print_r($res);
-			if (count($res)==1)
-			{
-				$tab=explode("\t",$res[0]);
-				$fpos=$tab[2];
+			foreach ($res as $line){
+				$tab=explode("\t",$line);
+				$fpos[]=$tab[2];
 			}
 		}
 	
 	if ($DEBUG)echo "GET ISOFORM - TIME:".round(microtime_float()-$time,3)."s\n";$time=microtime_float();
 
 	$fp=fopen('../'.$MAP_SEQ[$FPATH],'r');if (!$fp)failProcess($JOB_ID."019","Unable to open file ".$FILE);
-	if ($fpos!=-1)fseek($fp,$fpos);
-	$SEQS=array();$NAME='';
-	while(!feof($fp))
+	$SEQS=array();
+	foreach ($fpos as $fps)
 	{
-		$line=stream_get_line($fp,1000,"\n");
-	//	echo $line."\n";
-		/// Some ac can be found in other: B4HVU2 and A0A0B4HVU2
-		/// Therefore we need to add a prefix. Since two prefixs are available: sp| for swiss-prot and tr| for trembl, we put them both.
-		if (preg_match("/(sp|tr)\|".$PRIM_ac.'(\-[0-9]{1,10}){0,1}\|/',$line,$matches)==0)break;
-		$tab=explode("|",$line);
-		if ($DEBUG)echo $line."\n";
-		$NAME=$tab[1];
-		if (strpos($NAME,'-')===false)$NAME.='-1';
-		$FULL_NAME='';
-		$pos=strpos($line,'OS');
-		$p1=strpos($line," ");
-		if ($pos!==false)$FULL_NAME=substr($line,$p1+1,$pos-$p1-1);
-		else $FULL_NAME=substr($line,$p1);
-		$SEQ=array('INFO'=>$line,'SEQ'=>'','NAME'=>$FULL_NAME,'IS_ISOFORM'=>(strpos($FULL_NAME,'Isoform')!==false));
-		do
+		if ($fps==-1)continue;
+		fseek($fp,$fps);
+		$NAME='';
+		while(!feof($fp))
 		{
-			$pos=ftell($fp);
 			$line=stream_get_line($fp,1000,"\n");
-			if ($line[0]=='>'){fseek($fp,$pos);break;}
-			$SEQ['SEQ'].=$line;
-		}while(!feof($fp));
-		$SEQS[$NAME]=$SEQ;
-		
+		//	echo $line."\n";
+			/// Some ac can be found in other: B4HVU2 and A0A0B4HVU2
+			/// Therefore we need to add a prefix. Since two prefixs are available: sp| for swiss-prot and tr| for trembl, we put them both.
+			if (preg_match("/(sp|tr)\|".$PRIM_ac.'(\-[0-9]{1,10}){0,1}\|/',$line,$matches)==0)break;
+			$tab=explode("|",$line);
+			if ($DEBUG)echo $line."\n";
+			$NAME=$tab[1];
+			if (strpos($NAME,'-')===false)$NAME.='-1';
+			$FULL_NAME='';
+			$pos=strpos($line,'OS');
+			$p1=strpos($line," ");
+			if ($pos!==false)$FULL_NAME=substr($line,$p1+1,$pos-$p1-1);
+			else $FULL_NAME=substr($line,$p1);
+			$SEQ=array('INFO'=>$line,'SEQ'=>'','NAME'=>$FULL_NAME,'IS_ISOFORM'=>(strpos($FULL_NAME,'Isoform')!==false));
+			do
+			{
+				$pos=ftell($fp);
+				$line=stream_get_line($fp,1000,"\n");
+				if ($line[0]=='>'){fseek($fp,$pos);break;}
+				$SEQ['SEQ'].=$line;
+			}while(!feof($fp));
+			$SEQS[$NAME]=$SEQ;
+			
+		}
 	}
 	fclose($fp);
 	if ($DEBUG)echo "READ FASTA FILE TIME:".round(microtime_float()-$time,3)."s\n";$time=microtime_float();
-	echo "N SEQ:". count($SEQS)."\n";
+	//echo "N SEQ:". count($SEQS)."\n";
 	
 		//print_r($SEQS);
 		//exit;
@@ -2191,7 +2195,7 @@ function processSequence(&$ENTRY,&$VALUES,$FPATH)
 		//print_r($ENTRY['ft']);
 		exit;
 	}
-	echo "OUT SEQ\n";
+	//echo "OUT SEQ\n";
 	return true;;
 //	exit;	
 
