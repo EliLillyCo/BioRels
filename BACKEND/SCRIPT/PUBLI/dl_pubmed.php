@@ -40,9 +40,9 @@ addLog("Create directory");
 addLog("Working directory:".$W_DIR);
 
 addLog("Get last refresh date");
-	/// Get the last refresh date from prd_pubmed job
+	/// Get the last refresh date from db_pubmed_info job
 	/// i.e. the last date the process was completely run
-	$PRD_PUBLI=$GLB_TREE[getJobIDByName('prd_pubmed')];
+	$PRD_PUBLI=$GLB_TREE[getJobIDByName('db_pubmed_info')];
 	$PUBLI_START_STATUS= ($PRD_PUBLI['TIME']['DEV_DIR']=='-1');
 	
 	$PREV_DIR=$R_DIR.'/'.$PRD_PUBLI['TIME']['DEV_DIR'];
