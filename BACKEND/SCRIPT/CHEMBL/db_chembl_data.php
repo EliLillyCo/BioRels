@@ -2144,7 +2144,7 @@ $DEBUG=true;
 			$S_E=&$SEARCH_AC["'".$line['ac']."'"];
 			$isoform='';
 			$tab=explode("-",$line['iso_id']);
-			if (isset($tab[1]))$isoform=$tab[1]-1;
+			if (isset($tab[1]))$isoform=$tab[1];
 			$FOUND=false;
 			foreach ($S_E['POS'] as &$P)
 			{
