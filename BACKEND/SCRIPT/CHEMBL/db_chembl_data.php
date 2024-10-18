@@ -2434,6 +2434,7 @@ function processDrugSynonyms(&$FROM_CHEMBL,$FROM_DB,&$FILES)
 	foreach ($res as $line)
 	{
 		$FOUND=false;
+		$line['synonyms']=trim($line['synonyms']);
 		if (isset($FROM_DB['SYN']))
 		foreach ($FROM_DB['SYN'] as &$SYN_DB)
 		{
