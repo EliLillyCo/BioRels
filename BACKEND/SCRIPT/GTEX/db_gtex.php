@@ -249,6 +249,7 @@ function prepareSamples(&$GTEX_TISSUE)
 	{
 		$line=stream_Get_line($fp,10000000,"\n");if ($line=='')continue;
 		$t=explode("\t",$line);
+		if (count($t)!=count($HEAD))																failProcess($JOB_ID."B04",'Invalid number of columns');
 		
 		/// Converting to hash map based on header
 		$tab=array_combine($HEAD,$t);
@@ -274,7 +275,7 @@ function prepareSamples(&$GTEX_TISSUE)
 						$SAMPLES[$tab['SAMPID']]['TISSUE']."\t".
 						$tab['SMTS'].':'.
 						$tab['SMTSD']."\n";
-																							failProcess($JOB_ID."B04",'Different organ/tissue for given sample - not currently covered');
+																							failProcess($JOB_ID."B05",'Different organ/tissue for given sample - not currently covered');
 				}
 			}
 			else 
@@ -283,7 +284,7 @@ function prepareSamples(&$GTEX_TISSUE)
 				$SAMPLES[$tab['SAMPID']]['TISSUE']."\t".
 				$tab['SMTS'].':'.
 				$tab['SMTSD']."\n";
-																							failProcess($JOB_ID."B05",' organ/tissue nt found');
+																							failProcess($JOB_ID."B06",' organ/tissue nt found');
 			}
 		}
 		else
@@ -292,9 +293,9 @@ function prepareSamples(&$GTEX_TISSUE)
 			$HAS_NEW_SAMPLE=true;
 			//print_r($line);
 			++$MAX_SAMPLE_ID;
-			if (!isset($GTEX_TISSUE[$tab['SMTS']][$tab['SMTSD']])) 									failProcess($JOB_ID."B06", 'Unrecognized tissue/organ:'.$tab['SMTS'].'//'.$tab['SMTSD']);
+			if (!isset($GTEX_TISSUE[$tab['SMTS']][$tab['SMTSD']])) 									failProcess($JOB_ID."B07", 'Unrecognized tissue/organ:'.$tab['SMTS'].'//'.$tab['SMTSD']);
 			$G_T=&$GTEX_TISSUE[$tab['SMTS']][$tab['SMTSD']];
-			if (!isset($DB_TISSUE[$G_T[0]][$G_T[1]]))												failProcess($JOB_ID."B07", 'tissue/organ mapping not found'.$tab['SMTS'].'//'.$tab['SMTSD']);
+			if (!isset($DB_TISSUE[$G_T[0]][$G_T[1]]))												failProcess($JOB_ID."B08", 'tissue/organ mapping not found'.$tab['SMTS'].'//'.$tab['SMTSD']);
 			$RNA_TISSUE_ID=$DB_TISSUE[$G_T[0]][$G_T[1]];
 			
 			
@@ -316,7 +317,7 @@ function prepareSamples(&$GTEX_TISSUE)
 	
 		exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 	
-		if ($return_code !=0 )																		failProcess($JOB_ID."B08",'Unable to insert rna_sample'); 
+		if ($return_code !=0 )																		failProcess($JOB_ID."B09",'Unable to insert rna_sample'); 
 	}
 	return $SAMPLES;
 }
@@ -363,6 +364,7 @@ function processGeneData()
 		$line=stream_Get_line($fp,10000000,"\n");if ($line=='')continue;
 		/// Each line is a gene with all expression data
 		$t=explode("\t",$line);
+		if (count($t)!=count($HEAD))																failProcess($JOB_ID."C04",'Invalid number of columns');
 		
 		/// Here we convert the array to a hash map using header as key
 		$tab=array_combine($HEAD,$t);
@@ -382,7 +384,7 @@ function processGeneData()
 
 		//////// SEARCH FOR GENE
 		$res=runQuery("SELECT * FROM gene_seq WHERE gene_seq_name='".$ENSG_ID."'");
-		if ($res===false)																			failProcess($JOB_ID."C04",'Unable to  search for gene sequence');
+		if ($res===false)																			failProcess($JOB_ID."C05",'Unable to  search for gene sequence');
 		/// Can't find the gene? we skip it
 		if (count($res)==0){$STAT['ENSG_NOT_FOUND']++;continue;}
 		
@@ -396,7 +398,7 @@ function processGeneData()
 				WHERE  RS.rna_sample_id = RG.rna_sample_id 
 				AND rna_source_id = ".$RNA_SOURCE_ID." 
 				AND gene_seq_id=".$ENSGDBID);
-		if ($res===false)																			failProcess($JOB_ID."C05",'Unable to  search for rna gene data');
+		if ($res===false)																			failProcess($JOB_ID."C06",'Unable to  search for rna gene data');
 
 		$TPMS=array();
 		$TISSUE_STAT=array();
@@ -418,7 +420,7 @@ function processGeneData()
 			if (!isset($TPMS[$SAMPLE]))
 			{
 				/// The sample doesn't exist=> that's an issue
-				if (!isset($SAMPLES[$SAMPLE])) 														failProcess($JOB_ID."C06","Unrecognized Sample ".$SAMPLE);
+				if (!isset($SAMPLES[$SAMPLE])) 														failProcess($JOB_ID."C07","Unrecognized Sample ".$SAMPLE);
 				++$DBIDS['rna_gene'];
 				
 				fputs($FILES['rna_gene'],
@@ -460,9 +462,9 @@ function processGeneData()
 		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 		exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 		//print_r($res);
-		if ($return_code !=0 )																failProcess($JOB_ID."C07",'Unable to insert rna_gene'); 
+		if ($return_code !=0 )																failProcess($JOB_ID."C08",'Unable to insert rna_gene'); 
 
-		$FILES['rna_gene']=fopen('rna_gene_insert.csv','w');if (!$FILES['rna_gene'])		failProcess($JOB_ID."C08",'Unable to open rna_gene_insert'); 
+		$FILES['rna_gene']=fopen('rna_gene_insert.csv','w');if (!$FILES['rna_gene'])		failProcess($JOB_ID."C09",'Unable to open rna_gene_insert'); 
 		
 	}
 	fclose($fp);
@@ -475,7 +477,7 @@ function processGeneData()
 	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 	exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 	
-	if ($return_code !=0 )																	failProcess($JOB_ID."C09",'Unable to insert '.$NAME); 
+	if ($return_code !=0 )																	failProcess($JOB_ID."C10",'Unable to insert '.$NAME); 
 
 }
 
@@ -522,6 +524,8 @@ function processTranscriptData()
 		
 		/// Each line is a transcript with all expression data
 		$t=explode("\t",$line);
+
+		if (count($t)!=count($HEAD))																failProcess($JOB_ID."D05",'Invalid number of columns');
 		
 		/// Here we convert the array to a hash map using header as key
 		$tab=array_combine($HEAD,$t);
@@ -539,7 +543,7 @@ function processTranscriptData()
 
 		/// Searching for the transcript
 		$res=runQuery("SELECT * FROM transcript WHERE transcript_name='".$ENST_ID."'");
-		if ($res===false)																			failProcess($JOB_ID."D05",'Failed to search for transcript ');
+		if ($res===false)																			failProcess($JOB_ID."D06",'Failed to search for transcript ');
 		if (count($res)==0){$STAT['TRANSCRIPT_NOT_FOUND']++;continue;}
 		
 		$STAT['TRANSCRIPT_FOUND']++;
@@ -553,7 +557,7 @@ function processTranscriptData()
 		$res=runQuery("SELECT sample_id,tpm 
 						FROM rna_transcript RG,rna_sample RS WHERE  RS.rna_sample_id = RG.rna_sample_id 
 						AND rna_source_id = ".$RNA_SOURCE_ID." AND transcript_id=".$ENSTDBID);
-		if ($res===false)																			failProcess($JOB_ID."D06",'Failed to search for rna_transcript ');
+		if ($res===false)																			failProcess($JOB_ID."D07",'Failed to search for rna_transcript ');
 		
 		
 		$TPMS=array();
@@ -574,7 +578,7 @@ function processTranscriptData()
 			if (!isset($TPMS[$SAMPLE]))
 			{
 				/// Let's check if we have the sample. No? issue
-				if (!isset($SAMPLES[$SAMPLE])) 														failProcess($JOB_ID."D07","Unrecognized Sample ".$SAMPLE);
+				if (!isset($SAMPLES[$SAMPLE])) 														failProcess($JOB_ID."D08","Unrecognized Sample ".$SAMPLE);
 				///Add it
 				$SAMPLES_TR[$SAMPLE]=true;
 				$HAS_DATA=true;
@@ -607,7 +611,7 @@ function processTranscriptData()
 						AND rna_sample_id='.$SAMPLES[$SAMPLE]['DBID'];
 					echo "\t".$query."\n";
 					$STAT['TRANSCRIPT_UPD']++;
-					if (!runQueryNoRes($query))												 	failProcess($JOB_ID."D08",'unable to update transcript TPM: '.$query);
+					if (!runQueryNoRes($query))												 	failProcess($JOB_ID."D09",'unable to update transcript TPM: '.$query);
 				}else $STAT['TRANSCRIPT_VALID']++;
 			}
 			
@@ -639,7 +643,7 @@ function processTranscriptData()
 			$query='DELETE FROM rna_transcript 
 				WHERE transcript_id='.$ENSTDBID.' 
 				AND rna_sample_id IN ('.implode(',',$LIST_DEL).')';
-			if (!runQueryNoRes($query)) 														failProcess($JOB_ID."D09",'unable to delete transcript TPM: '.$query);
+			if (!runQueryNoRes($query)) 														failProcess($JOB_ID."D10",'unable to delete transcript TPM: '.$query);
 		}
 		++$N_FILE;
 
@@ -660,11 +664,11 @@ function processTranscriptData()
 		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 		exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 		//print_r($res);
-		if ($return_code !=0 )																failProcess($JOB_ID."D10",'Unable to insert rna_transcript'); 
+		if ($return_code !=0 )																failProcess($JOB_ID."D11",'Unable to insert rna_transcript'); 
 
 		/// Reopen file
 		$FILES['rna_transcript']=fopen('rna_transcript_insert.csv','w');
-		if (!$FILES['rna_transcript'])														failProcess($JOB_ID."D11",'Unable to open rna_transcript_insert'); 
+		if (!$FILES['rna_transcript'])														failProcess($JOB_ID."D12",'Unable to open rna_transcript_insert'); 
 		
 	}///END FILE
 	fclose($fp);
@@ -673,7 +677,7 @@ function processTranscriptData()
 		$STAT['TRANSCRIPT_DEL']=count($LIST_INI_TRANSCRIPTS);
 	if (!runQueryNoRes("DELETE FROM rna_transcript 
 						WHERE transcript_id IN (".implode(",",array_keys($LIST_INI_TRANSCRIPTS)).')'))
-																									failProcess($JOB_ID."D12",'Unable to delete transcripts');
+																									failProcess($JOB_ID."D13",'Unable to delete transcripts');
 	}
 
 	if (!$HAS_DATA)return ;
@@ -686,7 +690,7 @@ function processTranscriptData()
 	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 	exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 	//print_r($res);
-	if ($return_code !=0 )																		failProcess($JOB_ID."D13",'Unable to insert rna_transcript'); 
+	if ($return_code !=0 )																		failProcess($JOB_ID."D14",'Unable to insert rna_transcript'); 
 
 }
 ?>

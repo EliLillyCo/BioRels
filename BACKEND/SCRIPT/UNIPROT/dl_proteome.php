@@ -116,6 +116,7 @@ addLog("Extracting Proteome Ids");
 
 
 		$tab=explode("\t",$line);
+		if (count($HEAD)!=count($tab))													failProcess($JOB_ID."014",'Not the same number of columns in proteome.txt');
 		/// Combine the header with the line
 		$record=array_combine($HEAD,$tab);
 		
@@ -142,7 +143,7 @@ addLog("Check Proteome Ids");
 	foreach ($GLB_VAR['PROTEOME'] as $TAX=>&$INFO)
 	foreach ($INFO as $I=>&$V) 
 	{
-		if (!$V['STATUS'])																failProcess($JOB_ID."014",'Unable to find Proteome ID for '.$TAX);
+		if (!$V['STATUS'])																failProcess($JOB_ID."015",'Unable to find Proteome ID for '.$TAX);
 		
 	}
 
@@ -168,8 +169,8 @@ addLog("Concatenate");
 		$TXT_U.=$RECORD['Tax_Id'].'_PROT_UNIPROT.txt '.$RECORD['Tax_Id'].'_PROT_UNIPROT_add.txt ';
 		
 	}	
-	system($TXT_S.' >ALL_SEQ.txt ',$return_code);		if ($return_code!=0)			failProcess($JOB_ID."015",'Failed to concatenate '.$TXT_S); 
-	system($TXT_U.' >ALL_PROT_UNIPROT.txt ',$return_code);  if ($return_code!=0)		failProcess($JOB_ID."016",'Failed to concatenate '.$TXT_U); 
+	system($TXT_S.' >ALL_SEQ.txt ',$return_code);		if ($return_code!=0)			failProcess($JOB_ID."016",'Failed to concatenate '.$TXT_S); 
+	system($TXT_U.' >ALL_PROT_UNIPROT.txt ',$return_code);  if ($return_code!=0)		failProcess($JOB_ID."017",'Failed to concatenate '.$TXT_U); 
 
 
 
@@ -179,16 +180,16 @@ foreach ($GLB_VAR['PROTEOME'] as $TAX=>&$INFO)
 foreach ($INFO as $I=>&$RECORD) 
 	{
 		
-		if (!unlink($RECORD['Tax_Id'].'_SEQ.txt'))												failProcess($JOB_ID."017",'Failed to remove '.$RECORD['Tax_Id'].'_SEQ.txt'); 
-		if (!unlink($RECORD['Tax_Id'].'_SEQ_add.txt'))											failProcess($JOB_ID."018",'Failed to remove '.$RECORD['Tax_Id'].'_SEQ_add.txt'); 
-		if (!unlink($RECORD['Tax_Id'].'_PROT_UNIPROT_add.txt'))									failProcess($JOB_ID."019",'Failed to remove '.$RECORD['Tax_Id'].'_PROT_UNIPROT_add.txt'); 
-		if (!unlink($RECORD['Tax_Id'].'_PROT_UNIPROT.txt'))										failProcess($JOB_ID."020",'Failed to remove '.$RECORD['Tax_Id'].'_PROT_UNIPROT.txt'); 
+		if (!unlink($RECORD['Tax_Id'].'_SEQ.txt'))												failProcess($JOB_ID."018",'Failed to remove '.$RECORD['Tax_Id'].'_SEQ.txt'); 
+		if (!unlink($RECORD['Tax_Id'].'_SEQ_add.txt'))											failProcess($JOB_ID."019",'Failed to remove '.$RECORD['Tax_Id'].'_SEQ_add.txt'); 
+		if (!unlink($RECORD['Tax_Id'].'_PROT_UNIPROT_add.txt'))									failProcess($JOB_ID."020",'Failed to remove '.$RECORD['Tax_Id'].'_PROT_UNIPROT_add.txt'); 
+		if (!unlink($RECORD['Tax_Id'].'_PROT_UNIPROT.txt'))										failProcess($JOB_ID."021",'Failed to remove '.$RECORD['Tax_Id'].'_PROT_UNIPROT.txt'); 
 	}
 	
 addLog("Create Blast Database");
 	
 	system($GLB_VAR['TOOL']['MAKEBLAST'].' -in ALL_SEQ.txt -parse_seqids -dbtype prot',$return_code);
-	if ($return_code!=0)																failProcess($JOB_ID."021",'Unable to create blast db'); 
+	if ($return_code!=0)																failProcess($JOB_ID."022",'Unable to create blast db'); 
 	
 
 

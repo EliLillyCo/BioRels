@@ -86,7 +86,7 @@ addLog("Process drugs");
 	{
 		$line=stream_get_line($fp,10000,"\n");if ($line=='')continue;
 		$tab=array_values(array_filter(explode("\t",$line)));
-		if (count($tab)!=count($head))													failProcess($JOB_ID."008",'Not the same nunmber of columns - Did you use spaces?');
+		if (count($tab)!=count($head))													failProcess($JOB_ID."008",'Not the same number of columns - Did you use spaces?');
 
 		$ENTRY=array_combine($head,$tab);
 		
