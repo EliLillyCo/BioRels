@@ -34,6 +34,15 @@ Please follow the guidelines provided in the documentation file.
 
 For any questions, please contact desaphy_jeremy[@]lilly.com
 
+## HOW TO CITE
+
+Please use the following citation:
+```
+BioRels' data infrastructure: A Scientific Schema and Exchange Standard to transform and enhance biological data sciences
+Jibo Wang, Bruno dos Santos, Amanda Turney, Lauren Murray, Andrew M Craven, Patty Bragger-Wilkinson, Jaroslav Martasek, Jeremy Desaphy
+Nucleic Acids Research - 2024 - In review
+```
+
 ## LICENSE
 
 GPL V3
@@ -49,6 +58,7 @@ All source files is subject to the license and copyright provided in this reposi
 * We make no warranties regarding the correctness of the data, and disclaim liability for damages resulting from its use. 
 * We do not provided unrestricted permission regarding the use of the data, as some data may be covered by patents or other rights. 
 * User is responsible for complying with the legal terms for BioRels, any data source and packages used in BioRels
+
 
 
 # DATA SOURCES
