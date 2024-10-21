@@ -86,6 +86,8 @@ addLog("Process drugs");
 	{
 		$line=stream_get_line($fp,10000,"\n");if ($line=='')continue;
 		$tab=array_values(array_filter(explode("\t",$line)));
+		if (count($tab)!=count($head))													failProcess($JOB_ID."008",'Not the same nunmber of columns - Did you use spaces?');
+
 		$ENTRY=array_combine($head,$tab);
 		
 		$MAPPING_RULES[]=$ENTRY;
@@ -141,10 +143,10 @@ addLog("Preparation step");
 	foreach ($DBIDS as $TBL=>&$POS)
 	{
 		$query='SELECT MAX('.$TBL.'_id) CO FROM '.$TBL;
-		$res=array();$res=runQuery($query);if ($res===false)							failProcess($JOB_ID."008",'Unable to run query '.$query);
+		$res=array();$res=runQuery($query);if ($res===false)							failProcess($JOB_ID."009",'Unable to run query '.$query);
 		$DBIDS[$TBL]=(count($res)>0)?$res[0]['co']:1;
 		$FILE_STATUS[$TBL]=0;
-		$FILES[$TBL]=fopen('INSERT/'.$TBL.'.csv','w');if (!$FILES[$TBL])				failProcess($JOB_ID."009",'Unable to open file '.$TBL.'.csv');
+		$FILES[$TBL]=fopen('INSERT/'.$TBL.'.csv','w');if (!$FILES[$TBL])				failProcess($JOB_ID."010",'Unable to open file '.$TBL.'.csv');
 	}
 
 
