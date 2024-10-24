@@ -13,15 +13,18 @@
 
 * Create a postgres database and keep your user/password/host/port and database name handy
 * Please modify the following variables in setenv.sh located in BACKEND/SCRIPT/SHELL/:
-*   TG_DIR: Path to the root directory of BioRels
-*   PGPASSWORD=Postgres password
-*   PGUSER=Postgres user
-*   DB_HOST=Postgres host
-*   DB_PORT=Postgres port
-*   DB_NAME=Database name
-*   DB_SCHEMA=Database schema
-*   If you are behind a proxy, please set up the proxy variables accordingly.
-* Please execute the following command to load the environment variables: source BACKEND/SCRIPT/SHELL/setenv.sh
+  * TG_DIR: Path to the root directory of BioRels
+  * PGPASSWORD=Postgres password
+  * PGUSER=Postgres user
+  * DB_HOST=Postgres host
+  * DB_PORT=Postgres port
+  * DB_NAME=Database name
+  * DB_SCHEMA=Database schema
+  * If you are behind a proxy, please set up the proxy variables accordingly.
+* Please execute the following command to load the environment variables: 
+```
+source BACKEND/SCRIPT/SHELL/setenv.sh
+```
 
 You can check this was successful by running echo $TG_DIR to confirm the root path is set
 

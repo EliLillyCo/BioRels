@@ -47,8 +47,9 @@ The list of data sources with the license and release frequency are provided bel
 ### WHERE TO START?
 
 If you're wondering where to start, we recommend diving into our documentation to get familiar with the project and its goals:
- *[Wiki pages](wiki)
- *[Word version of the documentation](DOCS/Biorels_Complete_documentation.docx)
+* [Wiki pages](https://github.com/EliLillyCo/BioRels/wiki)
+* [Word version of the documentation](https://github.com/EliLillyCo/BioRels/blob/BioRelsKB/DOCS/Biorels_Complete_documentation.docx)
+
 The documentation has everything you need to set things up. 
 
 You are not sure yet if you want to dig in the whole process? Fair enough, we've got you covered. If you want to evaluate BioRels with the minimal amount of configuration, please go to [QUICKSTART](BACKEND/INSTALL/QUICKSTART/README.md)
@@ -103,6 +104,5 @@ All source files is subject to the license and copyright provided in this reposi
 * We make no warranties regarding the correctness of the data, and disclaim liability for damages resulting from its use. 
 * We do not provided unrestricted permission regarding the use of the data, as some data may be covered by patents, other rights or licenses.
 * User is responsible for complying with the legal terms for BioRels, any data source and packages used in BioRels
-
 
 
