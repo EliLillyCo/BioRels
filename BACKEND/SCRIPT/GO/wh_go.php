@@ -147,6 +147,7 @@ addLog("Push to prod");
 	updateStat('go_syn','GO_SYN',$STATS['ENTRY_SYN'],$JOB_ID);
 
 
+addLog("Update release tag");
 	$CURR_RELEASE=getCurrentReleaseDate('NEW-GO',$JOB_ID);
 	updateReleaseDate($JOB_ID,'GO',$CURR_RELEASE);
 

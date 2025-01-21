@@ -260,8 +260,12 @@ addLog("Push to prod");
 	pushToProd();
 
 
-addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'ECO',getCurrDate());
+
+
+	addLog("Update release tag");
+	
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-ECO',$JOB_ID);
+	updateReleaseDate($JOB_ID,'ECO',$CURR_RELEASE);
 	 
 	
 successProcess();
