@@ -262,7 +262,7 @@ function step_2_init_jobs(&$USER_PARAMS)
 			$RMJ_JOB['DESC']='Running parallel jobs for '.$USER_PARAMS['DATA_SOURCE'];
 			$RMJ_JOB['RUNTIME']='R';
 			$USER_PARAMS['JOBS']['rmj']=$RMJ_JOB;
-			$USER_PARAMS['FILES']['rmj']=file_get_contents(($USER_PARAMS['USER_INI_PARAMS']['PHP']?'PHP':'PYTHON').'_TEMPLATES/rmj_.php');
+			$USER_PARAMS['FILES']['rmj']='';
 
 			$PRO_JOB=$TEMPLATE_JOB;
 			$USER_PARAMS['CURR_MAX_JOB_ID']++;

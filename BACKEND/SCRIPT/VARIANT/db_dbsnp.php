@@ -90,7 +90,7 @@ addLog("Preparation step");
 	}
 
 	/// Checking master script:
-	$ALL_FILE=$U_DIR.'/SCRIPTS/all.sh';
+	$ALL_FILE=$U_DIR.'/master.sh';
 	if (!is_file($ALL_FILE))															failProcess($JOB_ID."008",'Unable to find master job file at '.$ALL_FILE);
 	$N_JOBS=getLineCount($ALL_FILE);
 	

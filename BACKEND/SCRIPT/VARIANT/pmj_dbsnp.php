@@ -36,22 +36,10 @@ addLog("Setting up");
 	/// Update process control directory to the current release so that the next job can use it
 	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 	
-	/// Check SCRIPT_DIR
-	if (!isset($GLB_VAR['SCRIPT_DIR'])) 												failProcess($JOB_ID."004",'SCRIPT_DIR not set ');
-	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."005",'SCRIPT_DIR not found ');
-	
-	/// Check setenv.sh
-	$SETENV=$SCRIPT_DIR.'/SHELL/setenv.sh'; 		if (!checkFileExist($SETENV))		failProcess($JOB_ID."006",'Setenv file not found ');
 
 	/// Check the script to run
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_dbsnp.php';
-	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."007",$RUNSCRIPT.' file not found');
-
-	/// Check JOBARRAY that allow to run multiple jobs
-	if (!isset($GLB_VAR['JOBARRAY']))													failProcess($JOB_ID."008",'JOBARRAY NOT FOUND ');
-	$JOBARRAY=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$GLB_VAR['JOBARRAY'];
-	if (!checkFileExist($JOBARRAY))														failProcess($JOB_ID."009",'JOBARRAY file NOT FOUND '.$JOBARRAY);
-
+	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."004",$RUNSCRIPT.' file not found');
 
 	addLog("Working directory: ".$W_DIR);
 
@@ -82,12 +70,10 @@ addLog("Setting up");
 
 
 	/// Create the jobs directory
-	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."010",'Unable to create jobs directory');
-	if (!is_dir("DATA") && !mkdir("DATA"))												failProcess($JOB_ID."011",'Unable to create jobs directory');
+	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."005",'Unable to create jobs directory');
+	if (!is_dir("DATA") && !mkdir("DATA"))												failProcess($JOB_ID."006",'Unable to create jobs directory');
 
-	/// Open the job array file
-	$fpA=fopen("SCRIPTS/all.sh",'w'); if(!$fpA)													failProcess($JOB_ID."012",'Unable to open all.sh');
-
+	$COMMANDS=array();
 
 	/// Now for each job, we create a job file
 	/// A job will process a set of variants that can come from one or more chromosomes based on $N_PER_JOB
@@ -115,21 +101,9 @@ addLog("Setting up");
 		}
 		echo $I."\t".$STR."\n";
 		
-	
-		$JOB_NAME="SCRIPTS/job_".$I.".sh";
-		$fp=fopen($JOB_NAME,"w");if(!$fp)												failProcess($JOB_ID."013",'Unable to open jobs/job_'.$I.'.sh');
-		
-		fputs($fpA,"sh ".$W_DIR.'/'.$JOB_NAME."\n");
-		
-		fputs($fp,'#!/bin/sh'."\n");
-		fputs($fp,'cd '.$W_DIR."\n");
-		fputs($fp,"source ".$SETENV."\n");
-		fputs($fp,'biorels_php '.$RUNSCRIPT.' '.$I.' '.$STR.' &> SCRIPTS/LOG_'.$I."\n");
-		fputs($fp,'echo $? > SCRIPTS/status_'.$I."\n");
-		fclose($fp);
+		$COMMANDS[$I+1]='biorels_php '.$RUNSCRIPT.' '.$I.' '.$STR.' &> SCRIPTS/LOG_'.$I;
 	}
-	fclose($fpA);
-
+	prepare_batch($COMMANDS,$W_DIR);
 successProcess();
 
 

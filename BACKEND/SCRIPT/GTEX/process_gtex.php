@@ -36,9 +36,10 @@ $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 
 
-$TOT_JOB=200;
+
 $JOB_R_ID=$argv[1];
-if ($JOB_R_ID<0 || $JOB_R_ID>=$TOT_JOB)failProcess($JOB_ID."000",'Invalid job id');
+$TOT_JOB=$argv[2];
+if ($JOB_R_ID<0 || $JOB_R_ID>$TOT_JOB)failProcess($JOB_ID."000",'Invalid job id');
 
 addLog("Check directory");
 	/// Get Parent info

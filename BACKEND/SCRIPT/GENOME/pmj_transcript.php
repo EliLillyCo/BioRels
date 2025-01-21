@@ -22,7 +22,7 @@ $PROCESS_CONTROL['DIR']='N/A';
 $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 addLog("Setting up");
-	
+	 
 	/// Get Parent info	
 	$CK_INFO=$GLB_TREE[getJobIDByName('db_transcriptome')];
 
@@ -35,24 +35,8 @@ addLog("Setting up");
 	/// Update the process control so that the next job can access the directory
 	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 
-	/// Check if SCRIPT_DIR is set in CONFIG_GLOBAL
-	if (!isset($GLB_VAR['SCRIPT_DIR'])) 												failProcess($JOB_ID."005",'SCRIPT_DIR not set ');
-	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."006",'SCRIPT_DIR not found ');
-
-	/// Getting the path of the script to run
-	$SETENV=$SCRIPT_DIR.'/SHELL/setenv.sh'; 		if (!checkFileExist($SETENV))		failProcess($JOB_ID."007",'Setenv file not found ');
-
-	/// Getting the path of the script to run
-	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_transcript.php';
-	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."008",$RUNSCRIPT.' file not found');
-	
 	/// Create the full path:
 	$RUNSCRIPT_PATH='$TG_DIR/'.$GLB_VAR['SCRIPT_DIR'].'/'.$JOB_INFO['DIR'].'/process_transcript.php';
-
-	/// Check if JOBARRAY is set in CONFIG_GLOBAL
-	if (!isset($GLB_VAR['JOBARRAY']))													failProcess($JOB_ID."009",'JOBARRAY NOT FOUND ');
-	$JOBARRAY=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$GLB_VAR['JOBARRAY'];
-	if (!checkFileExist($JOBARRAY))														failProcess($JOB_ID."010",'JOBARRAY file NOT FOUND '.$JOBARRAY);
 
 	
 	addLog("Working directory:".$W_DIR);
@@ -65,7 +49,7 @@ addLog("Setting up");
 		AND cs.chr_seq_id=t.chr_seq_id
 		GROUP BY assembly_accession, assembly_version");
 
-	if ($res===false)																	failProcess($JOB_ID."011",'Unable to get count of transcripts per taxon');
+	if ($res===false)																	failProcess($JOB_ID."005",'Unable to get count of transcripts per taxon');
 	
 	/// Getting the total count of transcripts:
 	$TOT=0;
@@ -76,21 +60,20 @@ addLog("Setting up");
 		$ASSEMBLY_STAT[$line['assembly_accession'].'.'.$line['assembly_version']]=array($line['co'],0,$line['co']);
 	}
 
-	/// Set up the path
-	$W_DIR_PATH='$TG_DIR/'.$GLB_VAR['PROCESS_DIR'].'/'.$CK_INFO['DIR'].'/'.$CK_INFO['TIME']['DEV_DIR'];
 	/// Create directory
-	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))												failProcess($JOB_ID."012",'Unable to create jobs directory');
-	if (!is_dir("JSON") && !mkdir("JSON"))														failProcess($JOB_ID."013",'Unable to create jobs directory');
-	if (!is_dir("LOG") && !mkdir("LOG"))														failProcess($JOB_ID."014",'Unable to create LOG directory');
+	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))												failProcess($JOB_ID."006",'Unable to create jobs directory');
+	if (!is_dir("JSON") && !mkdir("JSON"))														failProcess($JOB_ID."007",'Unable to create jobs directory');
+	if (!is_dir("LOG") && !mkdir("LOG"))														failProcess($JOB_ID."008",'Unable to create LOG directory');
 
-	/// all.sh will get all the job paths to use for batch submission
-	$fpA=fopen("SCRIPTS/all.sh",'w'); if(!$fpA)													failProcess($JOB_ID."015",'Unable to open all.sh');
 
 	/// Total number of jobs:
 	$N_JOB=100;
+	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
 
 	/// Therefore total number of transcripts to process per job:
 	$N_PER_JOB=ceil($TOT/$N_JOB);
+
+	$COMMANDS=array();
 
 	/// Create the jobs
 	for($I=0;$I<$N_JOB;++$I)
@@ -111,21 +94,12 @@ addLog("Setting up");
 				}
 			else {$STR.=$CO[1].'-'.$CO[2].'__';$CO[0]=0;$JOB_CO-=$CO[2]-$CO[1];}
 		}
-		/// Create the script
-		$JOB_NAME="SCRIPTS/job_".$I.".sh";
-		$fp=fopen($JOB_NAME,"w");if(!$fpA)												failProcess($JOB_ID."016",'Unable to open jobs/job_'.$I.'.sh');
-		/// Push the script to all.sh
-		fputs($fpA," sh ".$W_DIR_PATH.'/'.$JOB_NAME."\n");
+		$COMMANDS[$I+1]='biorels_php '.$RUNSCRIPT_PATH.' '.$I.' '.$STR.' &> LOG/LOG_'.$I;
 		
-		/// Create the script:
-		fputs($fp,'#!/bin/sh'."\n");
-		fputs($fp,"source ".$SETENV."\n");
-		fputs($fp,'cd '.$W_DIR_PATH."\n");
-		fputs($fp,'biorels_php '.$RUNSCRIPT_PATH.' '.$I." ".$STR.' &> LOG/LOG_'.$I."\n");
-		fputs($fp,'echo $? > SCRIPTS/status_'.$I."\n");
-		fclose($fp);
 	}
-	fclose($fpA);
+
+	prepare_batch($COMMANDS,$W_DIR);
+	
 
 successProcess();
 

@@ -293,7 +293,7 @@ $STR_SPECS='';
 					
 				if (!$IS_RUNNING){
 					$STR_SPECS.=$STR."\tSUBMIT\n";
-					if ($JOB_INFO['RUNTIME']=='S')$STR_LOG.=submit_qengine($JOB_ID);
+					if ($JOB_INFO['RUNTIME']=='S')$STR_LOG.=submit_biorels_job($JOB_ID);
 					else
 					{
 						$GLB_RUN_JOBS[call_user_func($JOB_INFO['NAME'])]=$JOB_ID;

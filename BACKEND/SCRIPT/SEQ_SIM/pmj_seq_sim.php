@@ -45,55 +45,35 @@ addLog("Working directory:".$W_DIR);
 	
 
 	
-	if (!isset($GLB_VAR['SCRIPT_DIR'])) 												failProcess($JOB_ID."006",'SCRIPT_DIR not set ');
-	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."007",'SCRIPT_DIR not found ');
 	
-	/// Check for the setenv file
-	$SETENV=$SCRIPT_DIR.'/SHELL/setenv.sh'; 		if (!checkFileExist($SETENV))		failProcess($JOB_ID."008",'Setenv file not found ');
-
 	/// Check for the run script
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_seq_sim.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."009",$RUNSCRIPT.' file not found');
 
-	/// Check for the job array
-	if (!isset($GLB_VAR['JOBARRAY']))													failProcess($JOB_ID."010",'JOBARRAY NOT FOUND ');
-	$JOBARRAY=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$GLB_VAR['JOBARRAY'];
-	if (!checkFileExist($JOBARRAY))														failProcess($JOB_ID."011",'JOBARRAY file NOT FOUND '.$JOBARRAY);
-
-	
 	
 	///Creating directories:
 	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."012",'Unable to create SCRIPTS directory');
 	if (!is_dir("JSON") && !mkdir("JSON"))												failProcess($JOB_ID."013",'Unable to create jobs directory');
 
-	/// Create the job array
-	$fpA=fopen("SCRIPTS/all.sh",'w'); if(!$fpA)											failProcess($JOB_ID."014",'Unable to open all.sh');
 	
 	/// If you change the number of jobs, you need to change the number of jobs in the process_seq_sim.php file
 	$N_JOB=50;
+	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
 	$JOB_TYPE=array('DOM','SEQ');
-	
+	$N_JOB_ID=0;
+	$COMMANDS=array();
 	for($I=0;$I<$N_JOB;++$I)
 	{
+		
 		foreach ($JOB_TYPE as $TYPE)
 		{
-			$JOB_NAME="SCRIPTS/job_".$I."_".$TYPE.".sh";
-			/// Create the job file
-			$fp=fopen($JOB_NAME,"w");if(!$fp)												failProcess($JOB_ID."015",'Unable to open jobs/job_'.$I.'.sh');
-			/// Add the job to the all.sh file
-			fputs($fpA,"sh ".$W_DIR.'/'.$JOB_NAME."\n");
+			++$N_JOB_ID;
+			$COMMANDS[$N_JOB_ID]='biorels_exe php '.$RUNSCRIPT.' '.$I.' '.$TYPE;
 
-			/// Write the job file
-			fputs($fp,'#!/bin/sh'."\n");
-			fputs($fp,"source ".$SETENV."\n");/// Load the environment
-			fputs($fp,'cd '.$W_DIR."\n");/// Go to the working directory
-			fputs($fp,'biorels_exe php '.$RUNSCRIPT.' '.$I.' '.$TYPE.' &> SCRIPTS/'.$TYPE.'_LOG_'.$I."\n");/// Run the script
-			fputs($fp,'echo $? > SCRIPTS/status_'.$TYPE.'_'.$I."\n");/// Write the status
-			fclose($fp);
 		}
 		
 	}
-	fclose($fpA);
+	prepare_batch($COMMANDS,$W_DIR);
 
 
 

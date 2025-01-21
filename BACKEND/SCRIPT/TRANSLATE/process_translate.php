@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set('memory_limit','5000M');
 
 /// total number of jobs - if you change it, don't forget to change it in pmj_translate
-$TOT_JOB=100;
+$TOT_JOB=$argv[2];
 $JOB_RUNID=$argv[1];
 
 /// Job name - Do not change
@@ -83,7 +83,7 @@ addLog("Get list of genes to process");
 
 	/// Breaking down of jobs based on job id input
 	$LINE_C=count($LIST_GENES);
-	$N_P_JOB=ceil($LINE_C/100);
+	$N_P_JOB=ceil($LINE_C/$TOT_JOB);
 	$START=$N_P_JOB*($JOB_RUNID);
 	$END=$N_P_JOB*($JOB_RUNID+1);
 	$N_LINE=-1;
