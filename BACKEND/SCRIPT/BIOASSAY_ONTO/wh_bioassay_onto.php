@@ -280,6 +280,13 @@ addLog("Delete obsolete files");
  	foreach ($list_files as $F)
  	if (is_file($F))unlink($F);
 
+
+addLog("Update release tag");
+	
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-BIOASSAY',$JOB_ID);
+	updateReleaseDate($JOB_ID,'BIOASSAY',$CURR_RELEASE);
+	 
+
 	
 addLog("Push to prod");
    pushToProd();

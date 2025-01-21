@@ -37,6 +37,15 @@ addLog("Create directory");
 	$PROCESS_CONTROL['DIR']=getCurrDate();
 
 
+		
+	addLog("Get current release date for GENE");
+	$NEW_RELEASE=getCurrentReleaseDate('NEW-GENE',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('GENE',$JOB_ID);
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=$NEW_RELEASE)
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
 
 addLog("Download Gene file");
 ///We check that we have the ftp weblink
@@ -59,6 +68,11 @@ addLog("Download and Extract Gene Ensembl Mapping");
 	if (!dl_file($GLB_VAR['LINK']['FTP_NCBI'].'/gene/DATA/gene2ensembl.gz',3)) 			failProcess($JOB_ID."012",'Unable to download gene2ensembl archive');
 	if (!ungzip('gene2ensembl.gz'))														failProcess($JOB_ID."013",'Unable to extract archive');
 	if (!validateLineCount('gene2ensembl',2500000))										failProcess($JOB_ID."014",'gene2ensembl smaller than expected');
+
+addLog("Update release tag for GENE");
+	updateReleaseDate($JOB_ID,'NEW-GENE',$NEW_RELEASE);
+
+
 
 
 successProcess();

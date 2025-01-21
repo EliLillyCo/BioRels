@@ -60,6 +60,10 @@ addLog("Preparation");
 
 pushToProd();
 
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-LIVER TOX',$JOB_ID);
+	updateReleaseDate($JOB_ID,'LIVER TOX',$CURR_RELEASE);
+
 	successProcess();
 
 

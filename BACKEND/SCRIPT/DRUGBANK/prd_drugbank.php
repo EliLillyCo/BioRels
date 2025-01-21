@@ -42,6 +42,15 @@ addLog("Cleanup files");
 	if (is_dir('LOG_INSERT'))cleanDirectory('LOG_INSERT');
 	if (is_file('file.zip') &&!unlink('file.zip'))	failProcess($JOB_ID."006",'Unable to delete file.zip');
 
+
+
+addLog("Update release tag");
+	
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-DRUGBANK',$JOB_ID);
+	updateReleaseDate($JOB_ID,'DRUGBANK',$CURR_RELEASE);
+	 
+
+
 addLog("Switch to production");
 	pushToProd();
 	

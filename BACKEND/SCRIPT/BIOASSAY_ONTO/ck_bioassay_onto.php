@@ -40,7 +40,7 @@ addLog("Process release note");
 
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('BIOASSAY',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-BIOASSAY',$JOB_ID);
 
 
 addLog("Compare release");
@@ -49,6 +49,11 @@ addLog("Compare release");
 		/// Remove file since it's the same file
 		if (!unlink($W_DIR.'/bao_complete_merged.owl'))									failProcess($JOB_ID."008",'Unable to remove bao_complete_merged.owl');
 		successProcess('VALID');
+	}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('BIOASSAY',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
 	}
 
 addLog("Compare License");
@@ -92,7 +97,7 @@ addLog("Compare License");
 	/// If we get to that stage, the file is new and the license is valid
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'BIOASSAY',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-BIOASSAY',$NEW_RELEASE);
 
 
 addLog("Create directory");

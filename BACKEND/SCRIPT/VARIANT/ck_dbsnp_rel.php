@@ -47,7 +47,7 @@ addLog("Download release note");
 	if (!is_numeric($NEW_RELEASE))														failProcess($JOB_ID."010",'Unexpected release format for DBSNP');
 
 addLog("Get current release date for DBSNP");
-	$CURR_RELEASE=getCurrentReleaseDate('DBSNP',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-DBSNP',$JOB_ID);
 	
 	
 addLog($CURR_RELEASE."\t".$NEW_RELEASE);
@@ -57,9 +57,15 @@ addLog($CURR_RELEASE."\t".$NEW_RELEASE);
 		if (!unlink('release_notes.txt'))												failProcess($JOB_ID."011",'Unable to remove release note ');
 		successProcess("VALID");
 	}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('DBSNP',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
+	
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'DBSNP',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-DBSNP',$NEW_RELEASE);
 
 
 addLog("Create directory");

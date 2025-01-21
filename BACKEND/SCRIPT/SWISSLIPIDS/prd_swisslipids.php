@@ -43,6 +43,10 @@ addLog("Cleanup files");
 addLog("Switch to production");
 	pushToProd();
 	
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-SWISSLIPIDS',$JOB_ID);
+	updateReleaseDate($JOB_ID,'SWISSLIPIDS',$CURR_RELEASE);
+
 
 successProcess();
 

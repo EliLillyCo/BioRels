@@ -65,16 +65,20 @@ addLog("Process index.html");
 
 
 addLog("Get current release date for OPEN TARGETS");
-	$CURR_RELEASE=getCurrentReleaseDate('OPEN_TARGET',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-OPEN TARGETS',$JOB_ID);
 	$CR_STEP=explode(".",$CURR_RELEASE);
 
 
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($NEW_RELEASE==$CURR_RELEASE)successProcess("VALID");
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('OPEN TARGETS',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
 
 addLog("Update release tag for OPEN TARGETS");
-	updateReleaseDate($JOB_ID,'OPEN_TARGET',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-OPEN TARGETS',$NEW_RELEASE);
 
 
 	

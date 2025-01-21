@@ -78,14 +78,20 @@ addLog("Download License");
 
 
 addLog("Get current release date for " .$info['date']);
-	$CURR_RELEASE=getCurrentReleaseDate('GO',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GO',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE == $NEW_RELEASE) successProcess('VALID');
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('GO',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
+
+
 
 addLog("Update release tag for GO");
-	updateReleaseDate($JOB_ID,'GO',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-GO',$NEW_RELEASE);
 
 	
 addLog("Create directory");

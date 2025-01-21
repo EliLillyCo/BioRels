@@ -60,12 +60,16 @@ addLog("Process cellosaurus_relnotes");
 	if (!is_numeric($NEW_RELEASE))														failProcess($JOB_ID."008",'Unexpected release format');
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('CELLAUSORUS',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-CELLAUSORUS',$JOB_ID);
 	
 	
 addLog("Compare release");
 	if ($CURR_RELEASE == $NEW_RELEASE){	successProcess('VALID');}
-		
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('CELLAUSORUS',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
 
 addLog("Compare License");
 	/// Downloading license file
@@ -97,8 +101,7 @@ addLog("Compare License");
 	
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'CELLAUSORUS',$NEW_RELEASE);
-	
+	updateReleaseDate($JOB_ID,'NEW-CELLAUSORUS',$NEW_RELEASE);
 	
 addLog("Create directory");
 	$PROCESS_CONTROL['DIR']='N/A';
