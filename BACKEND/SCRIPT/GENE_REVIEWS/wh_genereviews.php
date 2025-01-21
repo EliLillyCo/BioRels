@@ -73,6 +73,12 @@ addLog("Setting up");
 addLog("Push to prod");
 	pushToProd();
 
+
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GENE REVIEWS',$JOB_ID);
+	updateReleaseDate($JOB_ID,'GENE REVIEWS',$CURR_RELEASE);
+	 	 
+
 	successProcess();
 
 

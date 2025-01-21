@@ -49,7 +49,7 @@ if not match:
 NEW_RELEASE = match.group(0)
 
 add_log("Get current release date")
-CURR_RELEASE = get_current_release_date('BIOASSAY', JOB_ID)
+CURR_RELEASE = get_current_release_date('NEW-BIOASSAY', JOB_ID)
 
 add_log("Compare release")
 if CURR_RELEASE == NEW_RELEASE:
@@ -73,7 +73,7 @@ else:
         fail_process(f"{JOB_ID}014", 'License file is different')
 
 add_log("Update release tag")
-update_release_date(JOB_ID, 'BIOASSAY', NEW_RELEASE)
+update_release_date(JOB_ID, 'NEW-BIOASSAY', NEW_RELEASE)
 
 
 add_log("Create directory")

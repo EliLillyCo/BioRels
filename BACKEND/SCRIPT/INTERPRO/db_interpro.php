@@ -320,6 +320,11 @@ pushToDB();
 
 pushToProd();
 
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-INTERPRO',$JOB_ID);
+	updateReleaseDate($JOB_ID,'INTERPRO',$CURR_RELEASE);
+
+
 successProcess();
 
 

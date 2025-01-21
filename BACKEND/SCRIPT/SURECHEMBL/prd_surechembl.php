@@ -43,6 +43,10 @@ addLog("Cleanup files");
 addLog("Switch to production");
 	pushToProd();
 	
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-SURECHEMBL',$JOB_ID);
+	updateReleaseDate($JOB_ID,'SURECHEMBL',$CURR_RELEASE);
+
 
 successProcess();
 

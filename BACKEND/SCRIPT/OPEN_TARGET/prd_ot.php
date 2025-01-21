@@ -33,8 +33,13 @@ $PROCESS_CONTROL['DIR']=$CK_OT_INFO['TIME']['DEV_DIR'];
 
 
 addLog("Push to prod");
-	updateReleaseDate($JOB_ID,'OT',getCurrDate());
+pushToProd();
 
-	pushToProd();
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-OPEN TARGETS',$JOB_ID);
+	updateReleaseDate($JOB_ID,'OPEN TARGETS',$CURR_RELEASE);
+
+
+	
 successProcess();
 ?>

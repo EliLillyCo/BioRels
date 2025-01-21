@@ -62,7 +62,7 @@ addLog("Download content");
 
 	
 addLog("Get current release date for EFO");
-	$CURR_RELEASE=getCurrentReleaseDate('EFO',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-EFO',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE == $NEW_RELEASE)
@@ -70,10 +70,14 @@ addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 		if (!unlink('efo.owl'))														failProcess($JOB_ID."009",'Unable to remove efo.owl');
 		successProcess('VALID');
 	}
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('EFO',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
 
-addLog("Update release tag for ECO");
-	updateReleaseDate($JOB_ID,'EFO',$NEW_RELEASE);
+addLog("Update release tag for EFO");
+	updateReleaseDate($JOB_ID,'NEW-EFO',$NEW_RELEASE);
 
 	
 addLog("Create directory");

@@ -78,6 +78,11 @@ addLog("Clean up");
 	
 
 
+addLog("Update release tag");
+	
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GENE',$JOB_ID);
+	updateReleaseDate($JOB_ID,'GENE',$CURR_RELEASE);
+	 
 
 addLog("Push to prod");
 	pushToProd();

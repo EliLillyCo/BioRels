@@ -146,6 +146,10 @@ addLog("Push to prod");
 	updateStat('go_dbref','GO_DBREF',$STATS['ENTRY_DBREF'],$JOB_ID);
 	updateStat('go_syn','GO_SYN',$STATS['ENTRY_SYN'],$JOB_ID);
 
+
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GO',$JOB_ID);
+	updateReleaseDate($JOB_ID,'GO',$CURR_RELEASE);
+
 	successProcess();
 
 

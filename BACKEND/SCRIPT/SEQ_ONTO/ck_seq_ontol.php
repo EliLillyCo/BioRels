@@ -73,7 +73,7 @@ addLog("Validate release note");
 
 addLog("Get current release date");
 		///Fetching from the database the current version of the data source
-	$CURR_RELEASE=getCurrentReleaseDate('SEQ_ONTO',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-SEQ_ONTO',$JOB_ID);
 
 
 addLog("Compare release");
@@ -85,11 +85,17 @@ addLog("Compare release");
 		if (!unlink($W_DIR.'/so.obo'))												failProcess($JOB_ID."011",'Unable to remove so.obo');
 		successProcess('VALID');
 	}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('SEQ_ONTO',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
+	
 
 
 addLog("Update release tag");
 	///Otherwise we update hte release state in the database
-	updateReleaseDate($JOB_ID,'SEQ_ONTO',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-SEQ_ONTO',$NEW_RELEASE);
 
 
 addLog("Create directory");

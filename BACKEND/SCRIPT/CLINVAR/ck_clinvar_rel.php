@@ -65,18 +65,22 @@ addLog("Validate release note");
 	
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('CLINVAR',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-CLINVAR',$JOB_ID);
 
 
 addLog("Compare release");
 	if (!unlink($W_DIR.'/index.html')) 													failProcess($JOB_ID."008",'Unable to remove index.html');
 	if ($CURR_RELEASE == $NEW_RELEASE){	successProcess('VALID');}
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('CLINVAR',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		succesProcess("VALID");
+	}
 	
 
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'CLINVAR',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-CLINVAR',$NEW_RELEASE);
 
 
 addLog("Create directory");

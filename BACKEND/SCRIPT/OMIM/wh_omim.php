@@ -191,6 +191,10 @@ addLog("Get OMIM to Disease mapping");
 
 
 
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-OMIM',$JOB_ID);
+	updateReleaseDate($JOB_ID,'OMIM',$CURR_RELEASE);
+
 
 	successProcess();
 

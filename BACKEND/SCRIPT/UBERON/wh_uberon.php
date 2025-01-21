@@ -419,6 +419,12 @@ addLog("Update hierarchy");
 addLog("Push to prod");
    pushToProd();
    
+
+addLog("Update release tag");
+   $CURR_RELEASE=getCurrentReleaseDate('NEW-UBERON',$JOB_ID);
+   updateReleaseDate($JOB_ID,'UBERON',$CURR_RELEASE);
+
+
 	successProcess();
 
 

@@ -208,6 +208,9 @@ addLog("Push to prod");
 	pushToProd();
 
 	
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-SEQ_ONTO',$JOB_ID);
+	updateReleaseDate($JOB_ID,'SEQ_ONTO',$CURR_RELEASE);
 
 successProcess();
 

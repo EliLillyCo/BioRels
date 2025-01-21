@@ -2455,6 +2455,9 @@ function processDrugSynonyms(&$FROM_CHEMBL,$FROM_DB,&$FILES)
 
 }
 
+
+
+
 successProcess();
 
 
