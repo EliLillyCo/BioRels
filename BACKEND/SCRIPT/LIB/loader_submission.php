@@ -646,27 +646,42 @@ function validate_batch($JOB_ID)
 
 	/// Check if all the jobs are done successfully
 	$STATUS='T';
-														
+	$INFO='';												
 	for ($I=0;$I<$LC;++$I)
 	{
 		if (!checkFileExist($W_DIR.'/jobs/status_'.$I))
 		{
 			$STR_LOG.= "\t=> ".$W_DIR.'/jobs/status_'.$I." MISSING\n";
 			$STATUS='Q';
+			$INFO.='MISSING job '.$I.';';
 		}
 		if (file_get_contents($W_DIR.'/jobs/status_'.$I)!=0)
 		{
 			$STATUS='F';
 			$STR_LOG.= "\t=> ".$W_DIR.'/jobs/status_'.$I." FAILED\n";
+			$INFO.='FAILED job '.$I.';';
 
 		}
 	}
 
-	$STR_LOG= $JOB_ID.":".$JOB_INFO['NAME']."\tEND\n";
+	$STR_LOG.= $JOB_ID.":".$JOB_INFO['NAME']."\tEND\n";
 
 	/// we want to keep track of the number of time a job failed
 	if ($STATUS=='F')$GLB_TREE[$JOB_ID]['FAILED']++;
 	else $GLB_TREE[$JOB_ID]['FAILED']=0;	
+
+	$SCHEMA=$GLB_VAR['PUBLIC_SCHEMA'];
+	if ($JOB_INFO['IS_PRIVATE']==1)$SCHEMA=$GLB_VAR['SCHEMA_PRIVATE'];
+	$res=runQueryNoRes("INSERT INTO ".$SCHEMA.".biorels_job_history 
+						VALUES (
+							(SELECT br_timestamp_id 
+							FROM  ".$SCHEMA.".biorels_timestamp 
+							WHERE job_name='".$JOB_NAME."'),
+						CURRENT_TIMESTAMP,
+						0,
+						'".$STATUS."',
+						'".$INFO."')");
+
 	refreshTimestamp($JOB_ID, $STATUS);
 	return $STR_LOG;
 
