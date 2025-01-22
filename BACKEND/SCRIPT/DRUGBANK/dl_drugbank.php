@@ -50,7 +50,7 @@ addLog("Create directory");
     $PWD=array(substr($DRUGBANK_LOGIN,0,$pos),substr($DRUGBANK_LOGIN,$pos+1));
 	
 	/// Get the current release
-    $CURR_RELEASE=getCurrentReleaseDate('DRUGBANK',$JOB_ID);
+    $CURR_RELEASE=getCurrentReleaseDate('NEW-DRUGBANK',$JOB_ID);
     $rel=explode(";",$CURR_RELEASE);
 
 addLog("Download drugbank files file");
