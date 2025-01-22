@@ -68,7 +68,7 @@ addLog("Compare release");
 	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('CELLAUSORUS',$JOB_ID))
 	{
 		addLog("Waiting for current release to be pushed to production");
-		succesProcess("VALID");
+		successProcess("VALID");
 	}
 
 addLog("Compare License");
