@@ -398,7 +398,7 @@ def gen_hierarchy():
 
 
 
-def monitor_qengine():
+def monitor_running_jobs():
     global GLB_RUN_JOBS
     global GLB_TREE
     global GLB_VAR
