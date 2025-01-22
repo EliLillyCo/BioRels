@@ -40,38 +40,27 @@ addLog("Create directory");
 addLog("Working directory:".$W_DIR);
 
 	prepareSequences();
-	prepareDomains();
-	
-	
-
 	
 	
 	/// Check for the run script
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_seq_sim.php';
-	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."009",$RUNSCRIPT.' file not found');
+	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."006",$RUNSCRIPT.' file not found');
 
 	
 	///Creating directories:
-	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."012",'Unable to create SCRIPTS directory');
-	if (!is_dir("JSON") && !mkdir("JSON"))												failProcess($JOB_ID."013",'Unable to create jobs directory');
+	if (!is_dir("JSON") && !mkdir("JSON"))												failProcess($JOB_ID."007",'Unable to create jobs directory');
 
 	
 	/// If you change the number of jobs, you need to change the number of jobs in the process_seq_sim.php file
 	$N_JOB=50;
 	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
-	$JOB_TYPE=array('DOM','SEQ');
+	
 	$N_JOB_ID=0;
 	$COMMANDS=array();
 	for($I=0;$I<$N_JOB;++$I)
 	{
-		
-		foreach ($JOB_TYPE as $TYPE)
-		{
-			++$N_JOB_ID;
-			$COMMANDS[$N_JOB_ID]='biorels_exe php '.$RUNSCRIPT.' '.$I.' '.$TYPE;
-
-		}
-		
+		$COMMANDS[$N_JOB_ID][]='biorels_exe php '.$RUNSCRIPT.' '.$I.' '.$N_JOB;
+		++$N_JOB_ID;	
 	}
 	prepare_batch($COMMANDS,$W_DIR);
 
@@ -157,91 +146,5 @@ function prepareSequences()
 
 }
 
-
-
-function prepareDomains()
-{
-	global $MAKEBLAST;
-
-
-	//Status = 9 means set for deletion
-	$res=runQuery("SELECT prot_dom_id, domain_type 
-				from prot_dom where status !=9 AND (pos_end-pos_start+1)>=30");
-				if ($res===false)																			failProcess($JOB_ID."B01",'Unable to get protein domains');
-	
-	/// Store the domain id and the domain type in an array
-	$UN_SEQ_LIST=array();
-	foreach ($res as $line)
-	{
-		$UN_SEQ_LIST[$line['prot_dom_id']]=$line['domain_type'];
-	}
-	
-	/// Split the list into chunks of 70
-	$CHUNKS=array_chunk(array_keys($UN_SEQ_LIST),70);
-	
-	$fp=fopen('DOM.fasta','w');if (!$fp)																	failProcess($JOB_ID."B02",'Unable to open DOM.fasta');
-	$fpP=fopen('DOM_pointer.csv','w');if (!$fpP)															failProcess($JOB_ID."B03",'Unable to open DOM_pointer.csv');
-	
-	
-	
-	foreach ($CHUNKS as $N=>$CHUNK)
-	{
-		$time=microtime_float();
-		echo $N."\t".count($CHUNKS)."\n";
-		/// Getting the sequences from the database for the current chunk
-		$res=runQuery("SELECT prot_dom_id,udp.position,letter  
-						FROM prot_dom_seq udp, prot_seq_pos usp   
-						WHERE udp.prot_seq_pos_id = usp.prot_seq_pos_id 
-						AND  prot_dom_id IN (".implode(',',$CHUNK).')');
-						if ($res===false)																failProcess($JOB_ID."B04",'Unable to get protein domain');
-		
-		/// Storing the sequences in an array
-		/// The array is a 2D array where the first key is the sequence id and the second key is the position
-		/// The value is the letter
-		$SEQS=array();
-		foreach ($res as $line)
-		{
-			$SEQS[$line['prot_dom_id']][$line['position']]=$line['letter'];
-		}
-		
-		foreach ($SEQS as $SEQ_ID=>&$LIST)
-		{
-			///Since the position are not order by default, we need to sort them by the key, i.e. the position
-			ksort($LIST);
-			/// Get the file position
-			$FPOS=ftell($fp);
-			/// We don't consider domain that are less than 30 amino acids
-			if (count($LIST)<30)continue;
-
-			/// Write the whole sequence in chunks of 100 characters with the header:
-			$STR='>'.$SEQ_ID."-".$UN_SEQ_LIST[$SEQ_ID]."\n".implode("\n",str_split(implode('',$LIST),100))."\n";
-			fputs($fp,$STR);
-			/// Write the file position and the length of the sequence to the pointer file
-			fputs($fpP,$SEQ_ID."\t".$FPOS."\t".strlen($STR)."\t".$UN_SEQ_LIST[$SEQ_ID]."\n");
-		}
-		$SEQS=array();
-		unset($SEQS);
-
-		/// Provide some time expectation:
-		$time_run=round(microtime_float()-$time,2);
-		echo $time_run;
-		$time_all+=$time_run;
-		if ($N>0)
-		{
-			$avg=round($time_all/$N,3);
-			echo "\tAVG=".$avg;
-			echo "\tREMAINING=".round($avg*(count($CHUNKS)-$N)/60,2).'m';
-		}
-		
-	}
-	fclose($fp);
-	fclose($fpP);
-
-	addLog("Create Blast Database");
-	exec($MAKEBLAST.' -in DOM.fasta -parse_seqids -dbtype prot',$res,$return_code);
-	if ($return_code!=0)																failProcess($JOB_ID."B05",'Unable to create DOM blast db'); 
-	
-
-}
 ?>
 
