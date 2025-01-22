@@ -75,7 +75,7 @@ addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('GENE REVIEWS',$JOB_ID))
 	{
 		addLog("Waiting for current release to be pushed to production");
-		succesProcess("VALID");
+		successProcess("VALID");
 	}
 
 

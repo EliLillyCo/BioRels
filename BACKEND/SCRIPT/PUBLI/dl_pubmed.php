@@ -44,7 +44,7 @@ addLog("Create directory");
 	if ($NEW_RELEASE!=-1 && $NEW_RELEASE!=getCurrentReleaseDate('PUBMED',$JOB_ID))
 	{
 		addLog("Waiting for current release to be pushed to production");
-		succesProcess("VALID");
+		successProcess("VALID");
 	}
 
 addLog("Working directory:".$W_DIR);

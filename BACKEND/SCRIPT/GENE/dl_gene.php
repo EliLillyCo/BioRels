@@ -44,7 +44,7 @@ addLog("Create directory");
 	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=$NEW_RELEASE)
 	{
 		addLog("Waiting for current release to be pushed to production");
-		succesProcess("VALID");
+		successProcess("VALID");
 	}
 
 addLog("Download Gene file");
