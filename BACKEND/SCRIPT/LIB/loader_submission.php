@@ -630,7 +630,7 @@ function validate_batch($JOB_ID)
 	global $GLB_TREE;
 	global $GLB_VAR;
 	global $TG_DIR;
-	$JOB_INFO= $GLB_TREE[$JOB_ID];
+	$JOB_INFO= &$GLB_TREE[$JOB_ID];
 	$JOB_NAME=$JOB_INFO['NAME'];
 	$JOB_PMJ=str_replace('rmj_','pmj_',$JOB_NAME);
 	$PMJ_INFO=$GLB_TREE[getJobIDByName($JOB_PMJ)];
@@ -643,7 +643,7 @@ function validate_batch($JOB_ID)
 	/// Checking master script:
 	$ALL_FILE=$W_DIR.'/master.sh';
 	$LC=getLineCount($ALL_FILE);
-
+	$JOB_INFO['TIME']['DEV_DIR']=$PMJ_INFO['TIME']['DEV_DIR'];
 	/// Check if all the jobs are done successfully
 	$STATUS='T';
 	$INFO='';												
