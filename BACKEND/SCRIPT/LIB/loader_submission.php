@@ -32,9 +32,13 @@ function submit_biorels_job($JOB_ID)
 	/// we log the submission
 	$STR_LOG= $JOB_ID.':'.$JOB_INFO['NAME']."\tSUBMISSION\n";
 	
-	/// we get the path of the script
-	$FPATH=$TG_DIR.'/'.$GLB_VAR['BACKEND_DIR'].'/CONTAINER_SHELL/'.$JOB_INFO['NAME'].'.sh';
-	if (!checkFileExist($FPATH))die('Missing script file '.$FPATH);
+	if ($JOB_INFO['RUNTIME']=='S')
+	{
+		/// we get the path of the script
+		$FPATH=$TG_DIR.'/'.$GLB_VAR['BACKEND_DIR'].'/CONTAINER_SHELL/'.$JOB_INFO['NAME'].'.sh';
+		if (!checkFileExist($FPATH))die('Missing script file '.$FPATH);
+	}
+	
 	
 	/// Depending on the job type, as defined in CONFIG_JOB, we can set up the memory and the number of cores
 	$ADD_DESC='';
@@ -58,6 +62,7 @@ function submit_biorels_job($JOB_ID)
 		/// A "S" stands for Single job. Those jobs are submitted directly
 		if ($JOB_INFO['RUNTIME']=='S')
 		{
+	
 			/// We defined the command to submit the job:
 			$query='qsub -v TG_DIR '.
 			'-o '.$TG_DIR.'/BACKEND/LOG/SGE_LOG/TG_'.$JOB_ID.'_'.date("Y_m_d_H_i_s").'.o '.
@@ -147,6 +152,7 @@ function submit_biorels_job($JOB_ID)
 	// if ($JOB_INFO['RUNTIME']=='S')
 	// {
 	// 	//// SUBMIT HERE
+	//	/// The name of the job MUST be $GLB_VAR['JOB_PREFIX'].'_'.$JOB_ID
 	// 	/// GET THE submitted job id as $SUBMITTED_JOB_ID
 	// 	///$GLB_RUN_JOBS[$SUBMITTED_JOB_ID]=$JOB_ID;
 	// }
@@ -172,24 +178,59 @@ function submit_batch($JOB_ID,$JOB_INFO)
 {
 	global $TG_DIR;
 	global $GLB_VAR;
+	global $GLB_TREE;
 
 
-	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR'];if (!is_dir($W_DIR)) 					failProcess($JOB_ID."_SUBMIT_BATCH_001",'NO '.$W_DIR.' found ');
-	$W_DIR.='/'.$JOB_INFO['DIR'].'/';	   							if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."_SUBMIT_BATCH_002",'Unable to find and create '.$W_DIR);
-	$W_DIR.='/'.$JOB_INFO['TIME']['DEV_DIR'].'/';   if (!is_dir($W_DIR)) 				failProcess($JOB_ID."_SUBMIT_BATCH_003",'Unable to find  '.$W_DIR);
+	/// Get job name
+	$JOB_INFO=$GLB_TREE[$JOB_ID];
+	$JOB_NAME=$JOB_INFO['NAME'];
+
+	/// We define the process control job array as if it was a single job
+	$PROCESS_CONTROL_JOB=array(
+		'STEP'=>0,
+		'JOB_NAME'=>$JOB_NAME,
+		'DIR'=>'',
+		'LOG'=>array(),
+		'STATUS'=>'INIT',
+		'START_TIME'=>microtime_float(),
+		'END_TIME'=>'',
+		'STEP_TIME'=>microtime_float(),
+		'FILE_LOG'=>''
+	);
+
+	/// Now the information about the working directory is in the parent job
+	/// So we need to get the parent job information
+	/// We can get the parent job name by replacing the first letter of the job name
+	$JOB_PMJ=str_replace('rmj_','pmj_',$JOB_NAME);
+	/// We get the parent job info:
+	$PMJ_INFO=$GLB_TREE[getJobIDByName($JOB_PMJ)];
+	/// We set the process control directory to the current release so that the next job can use it
+	$PROCESS_CONTROL_JOB['DIR']=$PMJ_INFO['TIME']['DEV_DIR'];
+
+	/// Now based on the parent job information, we can get the working directory for this script:
+	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR'];
+	$W_DIR.='/'.$PMJ_INFO['DIR'].'/';   		
+	$W_DIR.='/'.$PMJ_INFO['TIME']['DEV_DIR'].'/';  
+	if (!is_dir($W_DIR)) 				failProcess($JOB_ID."_SUBMIT_BATCH_001",'Unable to find  '.$W_DIR,$PROCESS_CONTROL_JOB);
+	
+	/// We check the master script that will be used to submit the job array is present:
 	$ALL_FILE=$W_DIR.'/master.sh';
+	if (!checkFileExist($ALL_FILE)) 				failProcess($JOB_ID."_SUBMIT_BATCH_002",'Unable to find  master.sh in '.$W_DIR,$PROCESS_CONTROL_JOB);
+	
+	/// We get the number of jobs defined in the job array:
 	$LC=getLineCount($ALL_FILE);
 
+	/// Rules for a SGE cluster:
 	if ($GLB_VAR['MONITOR_TYPE']=='SGE_CLUSTER')
 	{
 		/// Check script directory:
-		if (!isset($GLB_VAR['SCRIPT_DIR'])) 												failProcess($JOB_ID."_SUBMIT_BATCH_004",'SCRIPT_DIR not set ');
-		$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."_SUBMIT_BATCH_005",'SCRIPT_DIR not found ');
+		if (!isset($GLB_VAR['SCRIPT_DIR'])) 												failProcess($JOB_ID."_SUBMIT_BATCH_004",'SCRIPT_DIR not set ',$PROCESS_CONTROL_JOB);
+		$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."_SUBMIT_BATCH_005",'SCRIPT_DIR not found ',$PROCESS_CONTROL_JOB);
 		
 		/// Checking job array
-		if (!isset($GLB_VAR['JOBARRAY']))													failProcess($JOB_ID."_SUBMIT_BATCH_006",'JOBARRAY NOT FOUND ');
+		if (!isset($GLB_VAR['JOBARRAY']))													failProcess($JOB_ID."_SUBMIT_BATCH_006",'JOBARRAY NOT FOUND ',$PROCESS_CONTROL_JOB);
 		$JOBARRAY=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$GLB_VAR['JOBARRAY'];
-		if (!checkFileExist($JOBARRAY))														failProcess($JOB_ID."_SUBMIT_BATCH_007",'JOBARRAY file NOT FOUND '.$JOBARRAY);
+		if (!checkFileExist($JOBARRAY))														failProcess($JOB_ID."_SUBMIT_BATCH_007",'JOBARRAY file NOT FOUND '.$JOBARRAY,$PROCESS_CONTROL_JOB);
 
 		
 
@@ -201,7 +242,7 @@ function submit_batch($JOB_ID,$JOB_INFO)
 				' -v TG_DIR '.
 				' -N '.$GLB_VAR['JOB_PREFIX'].'_'.$JOB_ID.
 				' -t 1-'.$LC.':1 '.$JOBARRAY.' '.$ALL_FILE,$res,$return_code);
-		if ($return_code!=0)															failProcess($JOB_ID."_SUBMIT_BATCH_008",'Unable to submit master job file at '.$ALL_FILE);
+		if ($return_code!=0)															failProcess($JOB_ID."_SUBMIT_BATCH_008",'Unable to submit master job file at '.$ALL_FILE,$PROCESS_CONTROL_JOB);
 
 		// get the job id
 		$tab=array_values(array_filter(explode(' ',$res[0])));
@@ -211,8 +252,8 @@ function submit_batch($JOB_ID,$JOB_INFO)
 	}
 	else if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')
 	{
-		if ($LC!=1)																		failProcess($JOB_ID."_SUBMIT_BATCH_009",'Only one job can be submitted in single mode');
-		$fp=fopen("master.sh",'r'); if(!$fp)											failProcess($JOB_ID."_SUBMIT_BATCH_010",'Unable to open master.sh');
+		if ($LC!=1)																		failProcess($JOB_ID."_SUBMIT_BATCH_009",'Only one job can be submitted in single mode',$PROCESS_CONTROL_JOB);
+		$fp=fopen("master.sh",'r'); if(!$fp)											failProcess($JOB_ID."_SUBMIT_BATCH_010",'Unable to open master.sh',$PROCESS_CONTROL_JOB);
 		while(!feof($fp))
 		{
 			$line=stream_get_line($fp,10000,"\n");
@@ -250,7 +291,7 @@ function submit_batch($JOB_ID,$JOB_INFO)
 			}
 			$STR_LOG.= "\t=> ".$FULL_PID."\n";
 			
-			if ($FULL_PID=='')											failProcess($JOB_ID."_SUBMIT_BATCH_011",'Unable to submit single job');
+			if ($FULL_PID=='')											failProcess($JOB_ID."_SUBMIT_BATCH_011",'Unable to submit single job',$PROCESS_CONTROL_JOB);
 			/// Then we store the job id in the GLB_RUN_JOBS array, which defines the list of jobs that are currently running:
 			return $FULL_PID;
 		}
@@ -442,7 +483,7 @@ function validate_biorels_job($JOB_ID)
 		$GLB_TREE[$JOB_ID]['TIME']['CHECK']=time();
 	}	
 	else{
-
+	echo $LOG_FILE."\t".is_file($LOG_FILE)."\n";
 	$PROCESS_DATA=unserialize(file_get_contents($LOG_FILE));
 	$STR_LOG.= "\tSTATUS:".$PROCESS_DATA['STATUS']."\n";
 	$STR_LOG.= "\tPROCESS DIR:".$PROCESS_DATA['DIR']."\n";
@@ -503,9 +544,10 @@ function prepare_batch($COMMANDS,$W_DIR)
 
 	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE' && count($COMMANDS)>1)failProcess($JOB_ID."_PREPARE_BATCH_000",'Only one job can be submitted in single mode');
 	
+	chdir($W_DIR);
 	$fpA=fopen("master.sh",'w'); if(!$fpA)													failProcess($JOB_ID."_PREPARE_BATCH_001",'Unable to open master.sh');
 	if (!is_dir("jobs") && !mkdir("jobs"))												failProcess($JOB_ID."_PREPARE_BATCH_002",'Unable to create jobs directory');
-
+	if (!isset($COMMANDS[0]))															failProcess($JOB_ID."_PREPARE_BATCH_003",'JOB ID MUST START AT 0');
 
 	if ($GLB_VAR['MONITOR_TYPE']=='SGE_CLUSTER')
 	{
@@ -538,11 +580,44 @@ function prepare_batch($COMMANDS,$W_DIR)
 			fputs($fp,'cd '.$W_DIR."\n");
 			fputs($fp,implode ("\n",$JOB_COMMANDS)."\n");
 			/// Retrieve the job status and save it to a file for post-processing
-			fputs($fp,'echo $? > status_'.$I."\n");
+			fputs($fp,'echo $? > '.$W_DIR.'/jobs/status_'.$JOB_NUM."\n");
 			fclose($fp);
 		}
 	}
+	/// Single mode
+	else if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')
+	{
+		foreach ($COMMANDS as $I=>$JOB_COMMANDS)
+		{
+			$JOB_NAME="jobs/job_".$JOB_NUM.".sh";
+			$fp=fopen($JOB_NAME,"w");if(!$fpA)												failProcess($JOB_ID."_PREPARE_BATCH_010",'Unable to open jobs/job_'.$JOB_NUM.'.sh');
+			
+			/// Add the script path to master script
+			fputs($fpA,"sh ".$W_DIR.'/'.$JOB_NAME."\n");
 
+			/// Add the script to the job
+			fputs($fp,'#!/bin/sh'."\n");
+			/// Add the environment script
+			fputs($fp,"source ".$SETENV."\n");
+
+			/// Add the command to run the script
+			fputs($fp,'cd '.$W_DIR."\n");
+			fputs($fp,implode ("\n",$JOB_COMMANDS)."\n");
+			/// Retrieve the job status and save it to a file for post-processing
+			fputs($fp,'echo $? > '.$W_DIR.'/jobs/status_'.$I."\n");
+			fclose($fp);
+		}
+		
+	}
+	// else if ($GLB_VAR['MONITOR_TYPE']=='YOUR_CLUSTERING_TOOL')
+	// {
+	// 	/// YOUR CODE HERE
+	// 	/// The goal here is to prepare the batch job
+	//	/// A master script is already opened
+	//	/// Each record in $COMMANDS contains the shell commands" for each script to run
+	//	/// You need to create a script for each record in $COMMANDS
+	//	/// The script should be saved in the jobs directory
+	// }
 	fclose($fpA);
 
 
@@ -554,6 +629,7 @@ function validate_batch($JOB_ID)
 {
 	global $GLB_TREE;
 	global $GLB_VAR;
+	global $TG_DIR;
 	$JOB_INFO= $GLB_TREE[$JOB_ID];
 	$JOB_NAME=$JOB_INFO['NAME'];
 	$JOB_PMJ=str_replace('rmj_','pmj_',$JOB_NAME);
