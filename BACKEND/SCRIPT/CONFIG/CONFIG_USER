@@ -265,6 +265,7 @@ JOB		ck_chembl_rel	T
 JOB		dl_chembl	T
 JOB		db_chembl_cpd	T
 JOB		db_chembl_data	T
+JOB		prd_chembl		T
 
 # SURECHEMBL
 JOB		ck_surechembl_rel	T
