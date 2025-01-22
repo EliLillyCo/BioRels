@@ -24,7 +24,7 @@ preloadWebJobs();
 
 
 /// Log information:
-$STR_LOG='## BIORELS MONITORING SCRIPT'."\nDate/Time:".date('l jS \of F Y h:i:s A')."\n".monitor_qengine();
+$STR_LOG='## BIORELS MONITORING SCRIPT'."\nDate/Time:".date('l jS \of F Y h:i:s A')."\n".monitor_running_jobs();
 $N_LINES=count(explode("\n",$STR_LOG));
 echo $STR_LOG;sleep(2);	
 
@@ -316,7 +316,7 @@ $STR_SPECS='';
 	
 	
 	/// Once we checked every job to see if we need to submit them, we check their status
-	$STR_LOG.=monitor_qengine();
+	$STR_LOG.=monitor_running_jobs();
 	//$STR_LOG.=$STR_SPECS;
 	
 	/// Then we pause the process depending on whether a job is running or not.

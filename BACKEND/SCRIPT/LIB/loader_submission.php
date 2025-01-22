@@ -293,10 +293,10 @@ function refreshJobFile()
 	$GLB_VAR is an array that contains the list of variables
 	$TG_DIR is the root directory of the project
 
-	monitor_qengine goal is to check the status of the jobs that are currently running
+	monitor_running_jobs goal is to check the status of the jobs that are currently running
 		
 */
-function monitor_qengine()
+function monitor_running_jobs()
 {
 	global $GLB_RUN_JOBS;
 	global $GLB_TREE;
