@@ -59,22 +59,6 @@ foreach ($FILE_TO_LOAD as $FILE)
 }
 
 
-if (defined("MONITOR_JOB"))
-{
-	foreach ($GLB_TREE as $ID=>&$INFO)
-	{
-		if (substr($INFO['NAME'],0,4)!='rmj_')continue;
-		$PATH=$TG_DIR.'/BACKEND/';
-		if ($INFO['IS_PRIVATE'])$PATH.='PRIVATE_SCRIPT/';
-		else $PATH.='SCRIPT/';
-		$PATH.=$INFO['DIR'].'/'.$INFO['NAME'].'.php';
-		if (!checkFileExist($PATH))sendKillMail('000004','Unable to locate file: '.$PATH);
-		if ((include $PATH)==TRUE)continue;
-
-		sendKillMail('000005','Unable to load file: '.$PATH);
-		
-	}
-}
 
 function sendMail($ERROR_ID,$INFO)
 {
