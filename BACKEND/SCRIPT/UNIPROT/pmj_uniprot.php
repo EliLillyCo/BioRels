@@ -35,36 +35,36 @@ addLog("Create directory");
 	/// Update process control directory to the current release so that the next job can use it
 	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 
-	
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];
 	/// Check process_uniprot.php
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_uniprot.php';
-	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."008",$RUNSCRIPT.' file not found');
+	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."005",$RUNSCRIPT.' file not found');
 
+	/// This is the script to run
 	$RUNSCRIPT_PATH='$TG_DIR/'.$GLB_VAR['SCRIPT_DIR'].'/'.$JOB_INFO['DIR'].'/process_uniprot.php';
 	
 
 
 addLog("Working directory: ".$W_DIR);	
 
-	$STATIC_DATA=array('ECO'=>array());
+	
 
 
 	/// Ensure we have ECO entries:
 	$QUERY='select count(*) co FROM eco_entry';
 	$res=runQuery($QUERY);
-	if ($res===false)																	failProcess($JOB_ID."011","Unable to run query ",$QUERY);
-	if ($res[0]['co']==0)																failProcess($JOB_ID."012","No ECO Entry record found");
+	if ($res===false)																	failProcess($JOB_ID."006","Unable to run query ",$QUERY);
+	if ($res[0]['co']==0)																failProcess($JOB_ID."007","No ECO Entry record found");
 	
 
 	/// Ensure we have GO entries:
 	$QUERY='select count(*) co FROM GO_ENTRY ';
-	$res=runQuery($QUERY);if ($res===false)												failProcess($JOB_ID."013","Unable to run query ",$QUERY);
-	if ($res[0]['co']==0)																failProcess($JOB_ID."014","No Gene Ontology record found");
+	$res=runQuery($QUERY);if ($res===false)												failProcess($JOB_ID."008","Unable to run query ",$QUERY);
+	if ($res[0]['co']==0)																failProcess($JOB_ID."009","No Gene Ontology record found");
 	
 
 	
-	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."015",'Unable to create jobs directory');
-	if (!is_dir("JSON") && !mkdir("JSON"))												failProcess($JOB_ID."016",'Unable to create jobs directory');
+	if (!is_dir("JSON") && !mkdir("JSON"))												failProcess($JOB_ID."010",'Unable to create jobs directory');
 	
 	
 	/// Create master script:
