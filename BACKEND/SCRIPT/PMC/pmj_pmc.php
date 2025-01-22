@@ -187,7 +187,7 @@ addLog("Working directory:".$W_DIR);
 	
 	for($I=0;$I<$N_JOB;++$I)
 	{
-		$COMMANDS[$I]='biorels_php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/LOG_'.$I;
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/LOG_'.$I;
 	}
 
 	prepare_batch($COMMANDS,$W_DIR);

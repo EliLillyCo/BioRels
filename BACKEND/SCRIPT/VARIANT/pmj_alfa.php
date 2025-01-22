@@ -62,7 +62,7 @@ addLog("Setting up");
 	$COMMANDS=array();
 	for ($I=0;$I<200;++$I)
 	{
-		$COMMANDS[$I+1]='biorels_php '.$RUNSCRIPT.' '.$I.' '.($N_PER_JOBS*$I).' '.(($N_PER_JOBS)*($I+1)).' &> LOG_ALFA_'.$I."\n";
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' '.($N_PER_JOBS*$I).' '.(($N_PER_JOBS)*($I+1)).' &> LOG_ALFA_'.$I."\n";
 
 	}
 	prepare_batch($COMMANDS,$W_DIR);

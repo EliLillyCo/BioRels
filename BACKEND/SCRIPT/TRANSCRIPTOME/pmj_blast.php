@@ -41,19 +41,19 @@ echo $W_DIR."\n";
 			$T_DIR=$W_DIR.'/DATA/'.$TAXON;
 			
 			if (!is_dir($T_DIR.'/'.$TYPE.'_BLASTN') && !mkdir($T_DIR.'/'.$TYPE.'_BLASTN'))failProcess($JOB_ID."005",'Unable to create  directory '.$TYPE.'_BLASTN for '.$TAXON);
-			$COMMANDS[$JOB_NUM]='cd '.$T_DIR.'/'.$TYPE.'_BLASTN'."\n".
+			$COMMANDS[$JOB_NUM][]='cd '.$T_DIR.'/'.$TYPE.'_BLASTN'."\n".
 				'biorels_exe '.$GLB_VAR['TOOL']['MAKEBLAST'].' -in ../'.$TAXON.'_'.$TYPE.'.fa  -dbtype nucl -out '.$TAXON.'_'.$TYPE.'_BLASTN'.' &> PREP_LOG';
 				
 
 			++$JOB_NUM;
 			if (!is_dir($T_DIR.'/'.$TYPE.'_BOWTIE') && !mkdir($T_DIR.'/'.$TYPE.'_BOWTIE'))failProcess($JOB_ID."006",'Unable to create  directory '.$TYPE.'_BOWTIE for '.$TAXON);
-			$COMMANDS[$JOB_NUM]='cd '.$T_DIR.'/'.$TYPE.'_BOWTIE'."\n".
+			$COMMANDS[$JOB_NUM][]='cd '.$T_DIR.'/'.$TYPE.'_BOWTIE'."\n".
 				'biorels_exe '.$GLB_VAR['TOOL']['BOWTIE_BUILD'].' -r ../'.$TAXON.'_'.$TYPE.'.fa BOWTIE_'.$TYPE.'_'.$TAXON.' &> PREP_LOG';
 				
 
 			++$JOB_NUM;
 			if (!is_dir($T_DIR.'/'.$TYPE.'_BOWTIE2') && !mkdir($T_DIR.'/'.$TYPE.'_BOWTIE2'))failProcess($JOB_ID."007",'Unable to create  directory '.$TYPE.'_BOWTIE2 for '.$TAXON);
-			$COMMANDS[$JOB_NUM]='cd '.$T_DIR.'/'.$TYPE.'_BOWTIE2'."\n".
+			$COMMANDS[$JOB_NUM][]='cd '.$T_DIR.'/'.$TYPE.'_BOWTIE2'."\n".
 				'biorels_exe '.$GLB_VAR['TOOL']['BOWTIE2_BUILD'].' -r ../'.$TAXON.'_'.$TYPE.'.fa BOWTIE2_'.$TYPE.'_'.$TAXON.' &> PREP_LOG';
 
 		}

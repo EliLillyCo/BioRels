@@ -94,7 +94,7 @@ addLog("Setting up");
 				}
 			else {$STR.=$CO[1].'-'.$CO[2].'__';$CO[0]=0;$JOB_CO-=$CO[2]-$CO[1];}
 		}
-		$COMMANDS[$I+1]='biorels_php '.$RUNSCRIPT_PATH.' '.$I.' '.$STR.' &> LOG/LOG_'.$I;
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT_PATH.' '.$I.' '.$STR.' &> LOG/LOG_'.$I;
 		
 	}
 
