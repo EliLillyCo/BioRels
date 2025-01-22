@@ -422,7 +422,7 @@ function monitor_running_jobs()
 		//print_R($JOB_INFO);
 		if ($JOB_INFO['RUNTIME']!='S') 
 		{
-			$STR_JOB.=validate_batch($JOB_ID);
+			$STR_LOG.=validate_batch($JOB_ID);
 		}
 		else 
 		{
