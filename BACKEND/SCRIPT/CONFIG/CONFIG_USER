@@ -253,6 +253,13 @@ JOB		rmj_seq_sim	T
 JOB		db_insert_seq_sim	T
 JOB		prd_seq_sim	T
 
+# DOM_SIM
+JOB		pmj_dom_sim	T
+JOB		process_dom_sim	F
+JOB		rmj_dom_sim	T
+JOB		db_insert_dom_sim	T
+JOB		prd_dom_sim	T
+
 # CHEMBL
 JOB		ck_chembl_rel	T
 JOB		dl_chembl	T
