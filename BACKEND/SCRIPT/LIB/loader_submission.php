@@ -630,6 +630,8 @@ function validate_batch($JOB_ID)
 	global $GLB_TREE;
 	global $GLB_VAR;
 	global $TG_DIR;
+	date_default_timezone_set($GLB_VAR['TIMEZONE']);
+
 	$JOB_INFO= &$GLB_TREE[$JOB_ID];
 	$JOB_NAME=$JOB_INFO['NAME'];
 	$JOB_PMJ=str_replace('rmj_','pmj_',$JOB_NAME);
