@@ -2503,7 +2503,7 @@ def process_compound_record(RECORD,  SCHEMA, WITH_MOL_ENTITY=False):
             STATS['NEW_SMILES'] += 1
             HAS_NEW_MOLECULE = True
             
-            FILES['sm_molecule'].write(f"{DBIDS['sm_molecule']}\t{SMI}\t{'T' if IS_VALID else 'F'}\n")
+            FILES['sm_molecule'].write(f"{DBIDS['sm_molecule']}\t{SMI[1:-1]}\t{'T' if IS_VALID else 'F'}\n")
 
             for MD5_HASH in LIST_RECORD:
                 ENTRY = RECORD[MD5_HASH]
