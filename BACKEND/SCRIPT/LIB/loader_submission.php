@@ -645,6 +645,7 @@ function validate_batch($JOB_ID)
 	$LC=getLineCount($ALL_FILE);
 	$JOB_INFO['TIME']['DEV_DIR']=$PMJ_INFO['TIME']['DEV_DIR'];
 	$JOB_INFO['TIME']['CHECK']=time();
+	$JOB_INFO['TIME']['DEV']=time();
 	/// Check if all the jobs are done successfully
 	$STATUS='T';
 	$INFO='';												
