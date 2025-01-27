@@ -84,7 +84,8 @@ addLog("Working directory: ".$W_DIR);
 		$NV=0;
 		foreach ($res as $line)
 		{
-			if (!checkRegex($line['prot_extdb_value'],"TRANSCRIPT"))continue;
+			$match=checkRegex($line['prot_extdb_value'],"TRANSCRIPT");
+			if ($match===false)continue;
 			
 			++$NV;
 			fputs($fp,$line['gene_id']."\t".$line['iso_id']."\t".$match[0]."\n");
