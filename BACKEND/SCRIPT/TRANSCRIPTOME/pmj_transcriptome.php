@@ -54,7 +54,7 @@ addLog("Create directory");
 	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
 	$N_PER_JOB=ceil(count($res)/$N_JOBS);
 
-
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_transcriptome.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."006",$RUNSCRIPT.' file not found');
 	

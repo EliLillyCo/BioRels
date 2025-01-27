@@ -41,7 +41,7 @@ addLog("Working directory:".$W_DIR);
 
 	prepareSequences();
 	
-	
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];
 	/// Check for the run script
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_seq_sim.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."006",$RUNSCRIPT.' file not found');

@@ -37,6 +37,7 @@ addLog("Setting up");
 	/// Update process control directory to the current release so that the next job can use it
 	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 	
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];
 	// Check the script to run
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_alfa.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."006",$RUNSCRIPT.' file not found');

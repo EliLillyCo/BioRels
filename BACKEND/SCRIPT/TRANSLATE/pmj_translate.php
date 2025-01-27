@@ -34,7 +34,7 @@ addLog("Setting up");
 	$PROCESS_CONTROL['DIR']=getCurrDate();
 
 	
-
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];
 	/// Checking for the script computing the translation:
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_translate.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."005",$RUNSCRIPT.' file not found');
