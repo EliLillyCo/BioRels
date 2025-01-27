@@ -66,7 +66,7 @@ addLog("Create directory");
 	
 	for($I=0;$I<$N_JOBS;++$I)
 	{
-		$COMMANDS[$I]='biorels_exe php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/LOG_'.$I;
+		$COMMANDS[$I][]='biorels_exe php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/LOG_'.$I;
 		
 		
 	}

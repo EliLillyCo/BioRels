@@ -101,7 +101,7 @@ addLog("Setting up");
 		}
 		echo $I."\t".$STR."\n";
 		
-		$COMMANDS[$I+1]='biorels_php '.$RUNSCRIPT.' '.$I.' '.$STR.' &> SCRIPTS/LOG_'.$I;
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' '.$STR.' &> SCRIPTS/LOG_'.$I;
 	}
 	prepare_batch($COMMANDS,$W_DIR);
 successProcess();
