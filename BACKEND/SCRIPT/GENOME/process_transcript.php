@@ -615,7 +615,7 @@ function processEnsembl(&$ASSEMBLY_DATA,&$FILES,&$TRANSCRIPT_NAME,&$POINTERS,$AS
 
 
 		
-	$LOG_DEBUG.= substr($query,0,-4).')'."\n";
+	//$LOG_DEBUG.= substr($query,0,-4).')'."\n";
 	/// we run the query to fill DNA_POS that will now contain for each chromosome sequence and position its corresponding nucleotide and database ID
 	$res=runQuery(substr($query,0,-4).')');
 	if ($res===false)		 																failProcess($JOB_ID."E01",'Unable to get DNA sequence');
@@ -1267,7 +1267,7 @@ function processRefSeqNoBAM(&$ASSEMBLY_DATA,&$FILES,&$TRANSCRIPT_NAME,&$POINTERS
 		$tab[3]=max($L,$R);
 		$query .="(chr_seq_id = ".$ASSEMBLY_DATA['CHR_SEQ'][$tab[0]].' AND chr_pos >= '.$tab[2].' AND chr_pos <='.$tab[3].') OR';
 	}
-	$LOG_DEBUG.= substr($query,0,-4).')'."\n";
+	//$LOG_DEBUG.= substr($query,0,-4).')'."\n";
 	$res=runQuery(substr($query,0,-4).')');
 	foreach ($res as $line)
 	$TR_DATA['DNA_POS'][$line['chr_seq_id']][$line['chr_pos']]=array($line['nucl'],$line['chr_seq_pos_id']);
@@ -1661,7 +1661,7 @@ function processRefSeq(&$ASSEMBLY_DATA,&$FILES,&$TRANSCRIPT_NAME,&$POINTERS,$ASS
 		$query .="(chr_seq_id = ".$ASSEMBLY_DATA['CHR_SEQ'][$tab[0]].' AND chr_pos >= '.$tab[2].' AND chr_pos <='.$tab[3].') OR';
 	}
 	$LOG_DEBUG.= substr($query,0,-4).')'."\n";
-	echo $LOG_DEBUG."\n";
+	//echo $LOG_DEBUG."\n";
 	$res=runQuery(substr($query,0,-4).')');
 	foreach ($res as $line)
 	$TR_DATA['DNA_POS'][$line['chr_seq_id']][$line['chr_pos']]=array($line['nucl'],$line['chr_seq_pos_id']);
@@ -1957,10 +1957,9 @@ if (is_file($TASK_ID.'_tmp.txt'))unlink($TASK_ID.'_tmp.txt');
 			
 			
 			
-			$STR_FILE.=				$TR_DB_INFO['transcript_id']."\t".
-			$INFO[0]."\t".$POS."\t".$SEQ_TYPES[$INFO[4]]."\t";
-			if ($INFO[3]==-1)$STR_FILE.="NULL\t";else $STR_FILE.=$INFO[3]."\t";
-			if ($INFO[6]==-1)$STR_FILE.="NULL\n";else $STR_FILE.=$INFO[6]."\n";
+			$STR_FILE.=				$TR_DB_INFO['transcript_id']."\t". $INFO[0]."\t".$POS."\t".$SEQ_TYPES[$INFO[4]]."\t";
+			if (!isset($INFO[3]) ||$INFO[3]==-1)$STR_FILE.="NULL\t";else $STR_FILE.=$INFO[3]."\t";
+			if (!isset($INFO[6]) ||$INFO[6]==-1)$STR_FILE.="NULL\n";else $STR_FILE.=$INFO[6]."\n";
 			
 			
 
