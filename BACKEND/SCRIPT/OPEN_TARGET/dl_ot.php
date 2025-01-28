@@ -45,7 +45,7 @@ addLog("Set up directory");
 	if (!isset($GLB_VAR['LINK']['FTP_OPEN_TARGETS']))									failProcess($JOB_ID."005",'FTP_OPEN_TARGETS path no set');
 
 	/// Get current release
-	$CURR_RELEASE=getCurrentReleaseDate('NEW-OPEN_TARGET',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-OPEN TARGETS',$JOB_ID);
 	
 	/// The path to download the files is directly dependent on the current release
 	$PATH=$GLB_VAR['LINK']['FTP_OPEN_TARGETS'].'/'.$CURR_RELEASE.'/';
