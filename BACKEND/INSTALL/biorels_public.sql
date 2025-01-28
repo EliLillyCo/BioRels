@@ -4727,9 +4727,9 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.rna_source.rna_source_id IS 'Primary key for RN
 COMMENT ON COLUMN DB_SCHEMA_NAME.rna_source.source_name IS 'Source name';
 
 CREATE TABLE DB_SCHEMA_NAME.rna_tissue (
-    rna_tissue_id smallint NOT NULL,
-    anatomy_entry_id smallint,
-    efo_entry_id smallint,
+    rna_tissue_id integer NOT NULL,
+    anatomy_entry_id integer,
+    efo_entry_id integer,
     organ_name character varying(50),
     tissue_name character varying(50)
 );
