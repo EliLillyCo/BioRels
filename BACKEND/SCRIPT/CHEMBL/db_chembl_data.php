@@ -2434,7 +2434,7 @@ function processDrugSynonyms(&$FROM_CHEMBL,$FROM_DB,&$FILES)
 	foreach ($res as $line)
 	{
 		$FOUND=false;
-		$line['synonyms']=trim($line['synonyms']);
+		$line['synonyms']=str_replace("\t","",trim($line['synonyms']));
 		if (isset($FROM_DB['SYN']))
 		foreach ($FROM_DB['SYN'] as &$SYN_DB)
 		{
@@ -2446,9 +2446,10 @@ function processDrugSynonyms(&$FROM_CHEMBL,$FROM_DB,&$FILES)
 			}
 		}
 		if ($FOUND)continue;
-		echo $FROM_DB['drug_primary_name']."\tNAME:".$line['synonyms']."\n";
+		$FROM_DB['SYN'][]=array('drug_name'=>$line['synonyms'],'DB_STATUS'=>'TO_INS');
+	//	echo $FROM_DB['drug_primary_name']."\tNAME:".$line['synonyms']."\n";
 		++$FILES['NAME_ID'];
-		fputs($FILES['NAME'],$FILES['NAME_ID']."\t".$FROM_DB['drug_entry_id']."\t\"".str_replace('"','\"',str_replace("\t","",$line['synonyms']))."\"\tF\tF\t".$source_id."\n");
+		fputs($FILES['NAME'],$FILES['NAME_ID']."\t".$FROM_DB['drug_entry_id']."\t\"".str_replace('"','""',str_replace("\\","\\\\",$line['synonyms']))."\"\tF\tF\t".$source_id."\n");
 		//$query='INSERT INTO drug_name VALUES ('.$FILES['NAME_ID'].','.$FROM_DB['drug_entry_id'].',"'.$line['synonyms'].'","F","F",'.$source_id.')';
 	}
 
