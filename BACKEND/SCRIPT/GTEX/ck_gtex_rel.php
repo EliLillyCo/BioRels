@@ -29,22 +29,26 @@ $PROCESS_CONTROL['DIR']='N/A';
 $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 
-if (!isset($argv[1])) die("php ck_gtex_rel.php 8\nGTEX Version required. Before running this script, please update the paths in dl_gtex");
-$NEW_RELEASE=$argv[1];
+
+$NEW_RELEASE=8;
 
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('GTEX',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GTEX',$JOB_ID);
 
 
 addLog("Compare release");
 	if ($CURR_RELEASE == $NEW_RELEASE){	successProcess('VALID');}
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('GTEX',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 	
 
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'GTEX',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-GTEX',$NEW_RELEASE);
 
 
 addLog("Create directory");
