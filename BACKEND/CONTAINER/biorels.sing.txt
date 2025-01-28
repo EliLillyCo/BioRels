@@ -86,9 +86,9 @@ From: ubuntu:24.04
 	make \
 	npm \
 	openssl \
-	php8.1-gmp \
-    php8.1-mysql \
-	php8.1-pgsql \
+	php8.4-gmp \
+    php8.4-mysql \
+	php8.4-pgsql \
 	php-bcmath \
 	php-cli \
 	php-curl \
