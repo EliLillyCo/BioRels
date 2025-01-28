@@ -285,6 +285,16 @@ for F in list_files:
     if os.path.isfile(F):
         os.unlink(F)
 
+
+
+
+print("Update release tag")
+CURR_RELEASE=get_current_release_date('NEW-BIOASSAY',JOB_ID)
+update_release_date(JOB_ID,'BIOASSAY',CURR_RELEASE)
+	 
+
+	
+
 print("Push to prod")
 push_to_prod(JOB_INFO,W_DIR)
 

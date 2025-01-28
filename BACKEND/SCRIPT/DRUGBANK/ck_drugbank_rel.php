@@ -107,12 +107,17 @@ addLog("Process releases");
 	$NEW_RELEASE=$max_record['id'].';'.$record['created_at'];
    
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('DRUGBANK',$JOB_ID);
-
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-DRUGBANK',$JOB_ID);
+	if ($CURR_RELEASE==$NEW_RELEASE){successProcess('VALID');}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('DRUGBANK',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'DRUGBANK',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-DRUGBANK',$NEW_RELEASE);
 
 
 addLog("Create directory");

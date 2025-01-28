@@ -50,6 +50,11 @@ addLog("Push to prod");
 	pushToProd();
 	
 
+addLog("Update release tag");
+	
+	updateReleaseDate($JOB_ID,'TRANSLATE',$PROCESS_CONTROL['DIR']);
+
+
 successProcess();
 ?>
 

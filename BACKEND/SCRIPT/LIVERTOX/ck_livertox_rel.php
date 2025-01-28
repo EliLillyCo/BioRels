@@ -62,12 +62,16 @@ addLog("Process index.html");
 	if (!unlink('index.html'))														failProcess($JOB_ID."005",'Unable to delete index.html');
 
 addLog("Get current release date for LIVER TOX");
-	$CURR_RELEASE=getCurrentReleaseDate('LIVER TOX',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-LIVER TOX',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 
 	if ($CURR_RELEASE == $NEW_RELEASE) successProcess('VALID');
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('LIVER TOX',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 
 
 	
@@ -93,8 +97,8 @@ addLog("Create directory");
 
 
 	
-addLog("Update release tag for GENE REVIEWS");
-	updateReleaseDate($JOB_ID,'LIVER TOX',$NEW_RELEASE);
+addLog("Update release tag for LIVER TOX");
+	updateReleaseDate($JOB_ID,'NEW-LIVER TOX',$NEW_RELEASE);
 
 
 successProcess();

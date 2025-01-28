@@ -44,7 +44,7 @@ addLog("Get Static data");
 	if (!is_dir($STATIC_DIR))																		failProcess($JOB_ID."003",'GENE_EXPR static dir not found '.$STATIC_DIR);
 	
 	/// Get the source_id for GTEX
-	$RNA_SOURCE_ID=getSource('GTEX');
+	$RNA_SOURCE_ID=getRNASource('GTEX');
 
 
 	/// This is to keep track of the changes:
@@ -68,7 +68,7 @@ addLog("Preload annotation");
 
 addLog("Process Samples");
 
-	$SAMPLES=prepareSamples();
+	$SAMPLES=prepareSamples($GTEX_TISSUE);
 
 
  	
@@ -216,6 +216,10 @@ function  prepareTissues()
 function prepareSamples(&$GTEX_TISSUE)
 {
 	global $DB_TISSUE;
+	global $RNA_SOURCE_ID;
+	global $JOB_ID;
+	global $DB_INFO;
+	global $GLB_VAR;
 	/// Here we are going to fetch the samples from the database and compare them against the list of samples
 	$SAMPLES=array();
 	$res=runQuery("SELECT rna_sample_id, sample_id,T.rna_tissue_id,tissue_name,organ_name 
@@ -330,6 +334,8 @@ function processGeneData()
 	global $SAMPLES;
 	global $STAT;
 	global $JOB_ID;
+	global $DB_INFO;
+	global $GLB_VAR;
 
 	
 	
@@ -341,10 +347,10 @@ function processGeneData()
 	
 	/// Get max PK value for that table to speed up insert
 	$res=runQuery('SELECT MAX(rna_gene_ID) CO FROM rna_gene');
-	if ($res===false)																			failProcess($JOB_ID."C01",'Unable to get Max ID for '.$TBL);
+	if ($res===false)																			failProcess($JOB_ID."C01",'Unable to get Max ID for rna_gene');
 	$DBIDS['rna_gene']=(count($res)==1)?$res[0]['co']:0;
 	
-	$FILES['rna_gene']=fopen('rna_gene_insert.csv','w');if (!$FILES[$TBL])						failProcess($JOB_ID."C02",'Unable to open '.$TBL.'_insert.csv');
+	$FILES['rna_gene']=fopen('rna_gene_insert.csv','w');if (!$FILES['rna_gene'])						failProcess($JOB_ID."C02",'Unable to open rna_gene_insert.csv');
 
 
 
@@ -484,6 +490,13 @@ function processGeneData()
 
 function processTranscriptData()
 {
+	global $DB_TISSUE;
+	global $RNA_SOURCE_ID;
+	global $SAMPLES;
+	global $STAT;
+	global $JOB_ID;
+	global $DB_INFO;
+	global $GLB_VAR;
 
 
 	$FILES=array();
@@ -492,10 +505,10 @@ function processTranscriptData()
 	
 	/// Get max PK value for that table to speed up insert
 	$res=runQuery('SELECT MAX(rna_transcript_ID) CO FROM rna_transcript');
-	if ($res===false)																			failProcess($JOB_ID."D01",'Unable to get Max ID for '.$TBL);
+	if ($res===false)																			failProcess($JOB_ID."D01",'Unable to get Max ID for rna_transcript');
 	$DBIDS['rna_transcript']=(count($res)==1)?$res[0]['co']:0;
 	
-	$FILES['rna_transcript']=fopen('rna_transcript_insert.csv','w');if (!$FILES[$TBL])			failProcess($JOB_ID."D02",'Unable to open '.$TBL.'_insert.csv');
+	$FILES['rna_transcript']=fopen('rna_transcript_insert.csv','w');if (!$FILES['rna_transcript'])			failProcess($JOB_ID."D02",'Unable to open rna_transcript_insert.csv');
 
 
 
@@ -692,5 +705,21 @@ function processTranscriptData()
 	//print_r($res);
 	if ($return_code !=0 )																		failProcess($JOB_ID."D14",'Unable to insert rna_transcript'); 
 
+}
+
+
+function getRNASource($NAME)
+{
+	$MAX_ID=-1;
+	$res=runQuery("SELECT * FROM rna_source ");
+	foreach ($res as $line)
+	{
+		$MAX_ID=max($MAX_ID,$line['rna_source_id']);
+		if ($line['source_name']==$NAME)return $line['rna_source_id'];
+	}
+	++$MAX_ID;
+	$query='INSERT INTO rna_source (rna_source_id , source_name) VALUES ('.$MAX_ID.",'".$NAME."')";
+	if (!runQueryNoRes($query)) 																failProcess($JOB_ID."E01",'unable to insert rna_source');
+	return $MAX_ID;
 }
 ?>

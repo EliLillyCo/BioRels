@@ -1,13 +1,13 @@
 <?php
 
 /**
- SCRIPT NAME: prd_surechembl
- PURPOSE:     Cleanup SureChembl files & push to production
+ SCRIPT NAME: prd_dom_sim
+ PURPOSE:     Cleanup dom sim files & push to production
  
 */
 
 /// Job name - Do not change
-$JOB_NAME='prd_surechembl';
+$JOB_NAME='prd_dom_sim';
 
 /// Get root directories
 $TG_DIR= getenv('TG_DIR');
@@ -23,29 +23,29 @@ $JOB_INFO=$GLB_TREE[$JOB_ID];
  
 
 addLog("Define directory");
-$CK_INFO=$GLB_TREE[getJobIDByName('db_surechembl_cpd')];
+$CK_INFO=$GLB_TREE[getJobIDByName('db_insert_dom_sim')];
 $W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR'];	if (!is_dir($W_DIR)) 				failProcess($JOB_ID.'001','NO '.$W_DIR.' found ');
 $W_DIR.='/'.$CK_INFO['DIR'].'/';   			if (!is_dir($W_DIR)) 				failProcess($JOB_ID.'002','Unable to find and create '.$W_DIR);
 $W_DIR.=$CK_INFO['TIME']['DEV_DIR']; 		if (!is_dir($W_DIR)) 				failProcess($JOB_ID.'003','Unable to create new process dir '.$W_DIR);
 											if (!chdir($W_DIR)) 				failProcess($JOB_ID.'004','Unable to access process dir '.$W_DIR);
+$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 
-											$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 addLog("Working directory: ".$W_DIR);
 
 
 
 
 addLog("Cleanup files");
-	if (is_dir('STD'))cleanDirectory('STD');
-	if (is_dir('INSERT'))cleanDirectory('INSERT');
-	if (is_dir('LOG_INSERT'))cleanDirectory('LOG_INSERT');
+	if (is_dir('JSON'))cleanDirectory('JSON');
+	if (is_dir('SCRIPTS'))cleanDirectory('SCRIPTS');
+	
 	
 addLog("Switch to production");
 	pushToProd();
-	
+
 addLog("Update release tag");
-	$CURR_RELEASE=getCurrentReleaseDate('NEW-SURECHEMBL',$JOB_ID);
-	updateReleaseDate($JOB_ID,'SURECHEMBL',$CURR_RELEASE);
+	
+	updateReleaseDate($JOB_ID,'SEQ_SIM',getCurrDate());
 
 
 successProcess();

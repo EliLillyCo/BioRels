@@ -235,7 +235,12 @@ addLog("Total count: ".$DATA['totalCount']."\n");
 	processJson($DATA,1);
 	
 	// If there is no more file to download we can exit
-	if (!isset($DATA['nextPageToken']) || $DATA['nextPageToken']=='')successProcess();
+	if (!isset($DATA['nextPageToken']) || $DATA['nextPageToken']=='')
+	{
+		updateReleaseDate($JOB_ID,'CLINICAL_TRIALS',getCurrDate());
+		successProcess();
+		exit;
+	}
 
 	// We will download the rest of the files
 	$N_FILE=1;
@@ -265,6 +270,12 @@ addLog("Total count: ".$DATA['totalCount']."\n");
 
 
 	if ($DATE!=-1)createNews($NEWS_INFO);
+
+
+	addLog("Update release note");
+	
+	updateReleaseDate($JOB_ID,'CLINICAL_TRIALS',getCurrDate());
+
 
 	successProcess();
 	exit;

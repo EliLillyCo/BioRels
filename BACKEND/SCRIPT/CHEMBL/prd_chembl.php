@@ -1,13 +1,13 @@
 <?php
 
 /**
- SCRIPT NAME: prd_cellausorus
- PURPOSE:     Push all cellausorus files to production
+ SCRIPT NAME: prd_chembl
+ PURPOSE:     Push all ChEMBL files to production
  
 */
 
 /// Name of the job:
-$JOB_NAME='prd_cellausorus';
+$JOB_NAME='prd_chembl';
 
 /// Get biorels Root directory
 $TG_DIR= getenv('TG_DIR');
@@ -26,7 +26,7 @@ $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 
 addLog("Access directory");
-	$PAR_INFO=$GLB_TREE[getJobIDByName('db_cellausorus')];
+	$PAR_INFO=$GLB_TREE[getJobIDByName('db_chembl_data')];
 	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR'];						if (!is_dir($W_DIR)) 					failProcess($JOB_ID."001",'NO '.$W_DIR.' found ');
 	$W_DIR.='/'.$JOB_INFO['DIR'].'/';	   							if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
 	
@@ -35,8 +35,8 @@ addLog("Access directory");
 
 	
 addLog("Update release note");
-	$CURR_RELEASE=getCurrentReleaseDate('NEW-CELLAUSORUS',$JOB_ID);
-	updateReleaseDate($JOB_ID,'CELLAUSORUS',$CURR_RELEASE);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-CHEMBL',$JOB_ID);
+	updateReleaseDate($JOB_ID,'CHEMBL',$CURR_RELEASE);
 
 addLog("Push to prod");
 	pushToProd();

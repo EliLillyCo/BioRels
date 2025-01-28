@@ -67,12 +67,16 @@ addLog($W_DIR);
 	
 
 addLog("Get current release date for GENE REVIEWS");
-	$CURR_RELEASE=getCurrentReleaseDate('GENE REVIEWS',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GENE REVIEWS',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if (!unlink('index.html'))															failProcess($JOB_ID."008",'Unable to delete index.html');
 	if ($CURR_RELEASE == $NEW_RELEASE) successProcess('VALID');
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('GENE REVIEWS',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 
 
 	
@@ -106,7 +110,7 @@ addLog("Create directory");
 	if (!dl_file($GLB_VAR['LINK']['FTP_GENEREVIEWS_MAP'].'/'.$f,3))						failProcess($JOB_ID."015",'Unable to download file '.$f);
 	
 addLog("Update release tag for GENE REVIEWS");
-	updateReleaseDate($JOB_ID,'GENE REVIEWS',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-GENE REVIEWS',$NEW_RELEASE);
 
 
 successProcess();

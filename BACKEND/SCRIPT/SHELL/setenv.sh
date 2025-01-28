@@ -8,18 +8,36 @@ export DB_NAME=[database name]
 export DB_SCHEMA=[database schema]
 #export SCHEMA_PRIVATE=[private database schema - optional]
 export SINGULARITY_BIND=$SGE_ROOT,/[Add here, separated by comma path to the directory where you want to bind the container or remove this block]
+
+################ SGE CLUSTER ################
 #export SGE_QMASTER_PORT=[SGE_QMASTER_PORT]
 #export SGE_EXECD_PORT=[SGE_EXECD_PORT]
 #export SGE_CLUSTER_NAME=[SGE_CLUSTER_NAME]
 #export DRMAA_LIBRARY_PATH=[PATH TO YOUR LIBRARY]
 #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:[PATH TO YOUR LIBRARY]
 #export PATH=/opt/uge/current/bin/lx-amd64:$PATH
+
+
+################ ALTERNATIVE CLUSTER ################
+
+# If you wish to use an alternative job submission/monitoring, please add your global configuration here.
+
+##############################################
+
+
+################ PROXY ################
+
 export HTTPS_PROXY=[proxy]
 export HTTPS_proxy=[proxy]
 export HTTP_PROXY=[proxy]
 export HTTP_proxy=[proxy]
 export https_proxy=[proxy]
 export http_proxy=[proxy]
+
+##############################################
+
+
+######### ALIASES #########
 alias biorels_exe='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif '
 alias biorels_run='singularity run --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif ' 
 alias biorels_php='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif php ' 

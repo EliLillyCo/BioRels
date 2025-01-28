@@ -63,12 +63,18 @@ addLog("Process index.html");
 	
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('SURECHEMBL',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-SURECHEMBL',$JOB_ID);
 
 
 addLog("Compare release");
 	
 	if ($CURR_RELEASE == $NEW_RELEASE){	successProcess('VALID');}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('SURECHEMBL',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
+	
 	
 addLog("Compare License");
 	
@@ -92,7 +98,7 @@ addLog("Compare License");
 
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'SURECHEMBL',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-SURECHEMBL',$NEW_RELEASE);
 
 
 addLog("Create directory");

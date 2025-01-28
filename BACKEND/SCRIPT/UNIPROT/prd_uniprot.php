@@ -48,7 +48,10 @@ addLog("Push to prod");
 	
 
 
-		
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-UNIPROT',$JOB_ID);
+	updateReleaseDate($JOB_ID,'UNIPROT',$CURR_RELEASE);
+	
 
 successProcess();
 ?>

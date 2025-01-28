@@ -67,14 +67,18 @@ addLog("Validate release note");
 	if ($tab2[2]<1 || $tab2[1]>31)														failProcess($JOB_ID."011",'Unexpected day format');
 
 addLog("Get current release date for ECO");
-	$CURR_RELEASE=getCurrentReleaseDate('ECO',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-ECO',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE == $NEW_RELEASE){unlink('eco.owl'); successProcess('VALID');}
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('ECO',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 
 addLog("Update release tag for ECO");
-	updateReleaseDate($JOB_ID,'ECO',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-ECO',$NEW_RELEASE);
 
 	
 addLog("Create directory");

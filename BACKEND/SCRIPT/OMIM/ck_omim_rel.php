@@ -54,7 +54,7 @@ addLog("Download content");
 
 
 addLog("Get current release date for OMIM");
-	$CURR_RELEASE=getCurrentReleaseDate('OMIM',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-OMIM',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE == $NEW_RELEASE)
@@ -62,10 +62,15 @@ addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 		if (!unlink('mim2gene.txt'))													failProcess($JOB_ID."010",'Unable to delete mim2gene.txt');
 		successProcess('VALID');
 	}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('OMIM',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 	
 
 addLog("Update release tag for OMIM");
-	updateReleaseDate($JOB_ID,'OMIM',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-OMIM',$NEW_RELEASE);
 
 	
 addLog("Create directory");

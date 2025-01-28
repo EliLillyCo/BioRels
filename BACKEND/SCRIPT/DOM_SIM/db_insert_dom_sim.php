@@ -4,11 +4,11 @@ error_reporting(E_ALL);
 ini_set('memory_limit','5000M');
 
 /**
- SCRIPT NAME: db_insert_seq_sim
- PURPOSE:     Insert sequence alignment statistics and amino-acid pairs in the database
+ SCRIPT NAME: db_insert_dom_sim
+ PURPOSE:     Insert sdomain alignment statistics and amino-acid pairs in the database
  
 */
-$JOB_NAME='db_insert_seq_sim';
+$JOB_NAME='db_insert_dom_sim';
 
 /// Get root directories
 $TG_DIR= getenv('TG_DIR');
@@ -26,7 +26,7 @@ $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 addLog("Go to directory");
 	/// Get parent job information
-	$CK_INFO=$GLB_TREE[getJobIDByName('pmj_seq_sim')];
+	$CK_INFO=$GLB_TREE[getJobIDByName('pmj_dom_sim')];
 
 	/// Setting up directory path:
 	$U_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; if (!is_dir($U_DIR)) 					failProcess($JOB_ID."001",'NO '.$U_DIR.' found ');
@@ -41,8 +41,8 @@ addLog("Working directory:".$W_DIR);
 
 	/// $DBIDS is an array that will store the last id used for each table
 	$DBIDS=array(
-		'prot_seq_al'=>-1,
-		'prot_seq_al_seq'=>-1
+		'prot_dom_al'=>-1,
+		'prot_dom_al_seq'=>-1
 	);
 	
 	foreach ($DBIDS as $TBL=>&$POS)
@@ -57,9 +57,8 @@ addLog("Working directory:".$W_DIR);
 	/// $COL_ORDER is an array that will store the order of the columns in the csv files
 	/// It also provides the order of the files to be processed
 	$COL_ORDER=array(
-		'prot_seq_al'=>'(prot_seq_al_id , prot_seq_ref_id , prot_seq_comp_id , perc_sim , perc_identity , length , e_value , bit_score , perc_sim_com , perc_identity_com )',
-		'prot_seq_al_seq'=>'(prot_seq_al_seq_id ,prot_seq_al_id , prot_seq_id_ref , prot_seq_id_comp)'
-		
+		'prot_dom_al'=>'(prot_dom_al_id , prot_dom_ref_id , prot_dom_comp_id , perc_sim , perc_identity , length , e_value , bit_score , perc_sim_com , perc_identity_com)',
+		'prot_dom_al_seq'=>'(prot_dom_al_seq_id , prot_dom_al_id , prot_dom_seq_id_ref , prot_dom_seq_id_comp )',
 	);
 
 	/// New records are going to be stored in these files
@@ -71,20 +70,19 @@ addLog("Working directory:".$W_DIR);
 	$FILE_STATUS=array();
 	
 
-	//// Here we are going to loop over all the json files for  SEQ  sequence alignments
+	//// Here we are going to loop over all the json files for both SEQ and DOM sequence alignments
 	
 	$VALID_ALL=true;
 	
 	for ($Ijob=0;$Ijob<50;++$Ijob)
 	{
-		/// Debug commands:
-		
+
 		/// In blast, a pair of sequences can appear multiple times because multiple matches have been found
 		//// but since we do a sequence alignment which takes the whole sequence, we don't repeat it
 		print_r($DBIDS);
 		
 	
-		echo "####################### START FILE : SEQ ".$Ijob."\n";
+		echo "####################### START FILE : Domain ".$Ijob."\n";
 
 		/// We open the files in which we are going to put the records that needs to be added to the database
 		$FILES=array();
@@ -92,14 +90,14 @@ addLog("Working directory:".$W_DIR);
 		{
 			$FILE_STATUS[$TBL]=false;
 			$FILES[$TBL]=fopen($TBL.'.csv','w');
-			if (!$FILES[$TBL])																failProcess($JOB_ID."007",'Unable to open SEQ.csv');
+			if (!$FILES[$TBL])																failProcess($JOB_ID."007",'Unable to open DOM.csv');
 		}
 		$VALID=true;
 		$N=0;
 
 
 		/// We open the json file
-		$fp=fopen('JOB_SEQ_'.$Ijob.'.json','r');if (!$fp)					failProcess($JOB_ID."008",'Unable to open JOB_SEQ_'.$Ijob.'.json');
+		$fp=fopen('JOB_DOM_'.$Ijob.'.json','r');if (!$fp)					failProcess($JOB_ID."008",'Unable to open JOB_DOM_'.$Ijob.'.json');
 		$fpO=fopen('failed','w');if (!$fpO)													failProcess($JOB_ID."009",'Unable to open failed');
 		$STR_F='';
 		$STR_S='';
@@ -160,7 +158,7 @@ function processBulk(&$BULK,$Ijob,$N)
 	global $GLB_VAR;
 	global $DB_INFO;
 
-	echo "####################### FILE :  ".$Ijob."\n";
+	echo "####################### FILE : DOM ".$Ijob."\n";
 	$PREV_DB=$DBIDS;
 	echo "##### START BULK\t".$N."\n";
 
@@ -168,20 +166,20 @@ function processBulk(&$BULK,$Ijob,$N)
 	$LIST_ID=array();
 	foreach ($BULK as &$B)
 	{
-		if (!isset($B['prot_seq_ref_id'])||!isset($B['prot_seq_comp_id']))continue;
-		$LIST_ID[$B['prot_seq_ref_id']]=false;
-		$LIST_ID[$B['prot_seq_comp_id']]=false;
+		if (!isset($B['prot_dom_ref_id'])||!isset($B['prot_dom_comp_id']))continue;
+		$LIST_ID[$B['prot_dom_ref_id']]=false;
+		$LIST_ID[$B['prot_dom_comp_id']]=false;
 	}
 	
 	if ($LIST_ID!=array())
 	{
-		$res=runQuery('SELECT prot_seq_id 
-		FROM prot_seq 
-		WHERE prot_seq_id IN ('.implode(',',array_keys($LIST_ID)).')');
-		if ($res===false)																failProcess($JOB_ID."A01",'Unable to query for existing seq ids ');
+		$res=runQuery('SELECT prot_dom_id 
+		FROM prot_dom 
+		WHERE prot_dom_id IN ('.implode(',',array_keys($LIST_ID)).')');
+		if ($res===false)																failProcess($JOB_ID."A01",'Unable to query for existing dom ids ');
 		foreach ($res as $line)
 		{
-			$LIST_ID[$line['prot_seq_id']]=true;
+			$LIST_ID[$line['prot_dom_id']]=true;
 		}
 	}
 
@@ -198,18 +196,18 @@ function processBulk(&$BULK,$Ijob,$N)
 		$TIMES['SAVE']+=microtime_float()-$time; $time=microtime_float();
 		/// In blast, a pair of sequences can appear multiple times because multiple matches have been found
 		//// but since we do a sequence alignment which takes the whole sequence, we don't repeat it
-		if (isset($DONE[$ENTRY['prot_seq_ref_id']][$ENTRY['prot_seq_comp_id']]))continue;
+		if (isset($DONE[$ENTRY['prot_dom_ref_id']][$ENTRY['prot_dom_comp_id']]))continue;
 		
-		$DONE[$ENTRY['prot_seq_ref_id']][$ENTRY['prot_seq_comp_id']]=true;
+		$DONE[$ENTRY['prot_dom_ref_id']][$ENTRY['prot_dom_comp_id']]=true;
 		
 		$TIMES['PRE']+=microtime_float()-$time; $time=microtime_float();
 		
 		/// We check if we already had this record in the database
-		if ($LIST_ID[$ENTRY['prot_seq_ref_id']]==false||$LIST_ID[$ENTRY['prot_seq_comp_id']]==false)
+		if ($LIST_ID[$ENTRY['prot_dom_ref_id']]==false||$LIST_ID[$ENTRY['prot_dom_comp_id']]==false)
 		{
 			echo "INVALID\t";
-			echo $ENTRY['prot_seq_ref_id']."::".$LIST_ID[$ENTRY['prot_seq_ref_id']]."\t".
-				$ENTRY['prot_seq_comp_id']."::".$LIST_ID[$ENTRY['prot_seq_comp_id']]."\t";
+			echo $ENTRY['prot_dom_ref_id']."::".$LIST_ID[$ENTRY['prot_dom_ref_id']]."\t".
+				$ENTRY['prot_dom_comp_id']."::".$LIST_ID[$ENTRY['prot_dom_comp_id']]."\t";
 			echo "\n";
 			continue;
 		}
@@ -218,12 +216,12 @@ function processBulk(&$BULK,$Ijob,$N)
 		if ($ENTRY['DB_STATUS']=='TO_INS')
 		{
 			
-			$DBIDS['prot_seq_al']++;
-			$ENTRY['prot_seq_al_id']=$DBIDS['prot_seq_al'];
+			$DBIDS['prot_dom_al']++;
+			$ENTRY['prot_dom_al_id']=$DBIDS['prot_dom_al'];
 			
-			$STR_F.=$ENTRY['prot_seq_al_id']
-			."\t".$ENTRY['prot_seq_ref_id']
-			."\t".$ENTRY['prot_seq_comp_id']
+			$STR_F.=$ENTRY['prot_dom_al_id']
+			."\t".$ENTRY['prot_dom_ref_id']
+			."\t".$ENTRY['prot_dom_comp_id']
 			."\t".$ENTRY['perc_sim']
 			."\t".$ENTRY['perc_identity']
 			."\t".$ENTRY['length']
@@ -234,12 +232,12 @@ function processBulk(&$BULK,$Ijob,$N)
 		else if ($ENTRY['DB_STATUS']=='VALID'){}
 		else if ($ENTRY['DB_STATUS']=='TO_UPD')
 		{
-			$query='UPDATE prot_seq_al SET perc_sim='.$ENTRY['perc_sim'].','.
+			$query='UPDATE prot_dom_al SET perc_sim='.$ENTRY['perc_sim'].','.
 			'perc_identity='.$ENTRY['perc_identity'].','.
 			'length='.$ENTRY['length'].','.
 			'perc_sim_com='.$ENTRY['perc_sim_com'].','.
 			'perc_identity_com='.$ENTRY['perc_identity_com'].' '.
-			'WHERE prot_seq_al_id='.$ENTRY['prot_seq_al_id'];
+			'WHERE prot_dom_al_id='.$ENTRY['prot_dom_al_id'];
 			if (!runQueryNoRes($query))
 			{
 				echo "FAILED UPDATE\t".$query."\n";
@@ -255,13 +253,13 @@ function processBulk(&$BULK,$Ijob,$N)
 		{
 			foreach ($ENTRY['ALIGN'] as $AL)
 			{
-				$DBIDS['prot_seq_al_seq']++;
-				// fputs($FILES['prot_seq_al_seq'],
-				// $DBIDS['prot_seq_al_seq']."\t".
-				// $ENTRY['prot_seq_al_id']."\t".
+				$DBIDS['prot_dom_al_seq']++;
+				// fputs($FILES['prot_dom_al_seq'],
+				// $DBIDS['prot_dom_al_seq']."\t".
+				// $ENTRY['prot_dom_al_id']."\t".
 				// $AL[0]."\t".$AL[1]."\n");
-				$STR_S.=$DBIDS['prot_seq_al_seq']."\t".
-				$ENTRY['prot_seq_al_id']."\t".
+				$STR_S.=$DBIDS['prot_dom_al_seq']."\t".
+				$ENTRY['prot_dom_al_id']."\t".
 				$AL[0]."\t".$AL[1]."\n";
 			}
 		}else if ($ENTRY['SEQ_STATUS']=='VALID')continue;
@@ -279,8 +277,8 @@ function processBulk(&$BULK,$Ijob,$N)
 	$LIST_ID=array();
 	
 	/// Saving results to files:
-	fputs($FILES['prot_seq_al'],$STR_F);$STR_F='';
-	fputs($FILES['prot_seq_al_seq'],$STR_S);$STR_S='';
+	fputs($FILES['prot_dom_al'],$STR_F);$STR_F='';
+	fputs($FILES['prot_dom_al_seq'],$STR_S);$STR_S='';
 
 
 	foreach ($FILES as $F)fclose($F);
@@ -317,11 +315,11 @@ function processBulk(&$BULK,$Ijob,$N)
 	foreach ($COL_ORDER as $TBL=>$CTL)
 	{
 		$FILES[$TBL]=fopen($TBL.'.csv','w');
-		if (!$FILES[$TBL])																failProcess($JOB_ID."A02",'Unable to open seq.csv');
+		if (!$FILES[$TBL])																failProcess($JOB_ID."A02",'Unable to open dom.csv');
 	}
 	if ($VALID)return false;
 	$VALID_ALL=false;
-	$res=runQueryNoRes('DELETE FROM prot_seq_al WHERE prot_seq_al_id>='.$PREV_DB['prot_seq_al']);
+	$res=runQueryNoRes('DELETE FROM prot_dom_al WHERE prot_dom_al_id>='.$PREV_DB['prot_dom_al']);
 	///Saving 
 	foreach ($ERROR_MSG as $MSG)fputs($fpE,"ERROR\t".$MSG."\n");
 	foreach ($COL_ORDER as $NAME=>$CTL)

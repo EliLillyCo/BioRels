@@ -66,14 +66,19 @@ addLog("Validate release note");
 	if ($tab2[2]<1 || $tab2[1]>31)														failProcess($JOB_ID."009",'Unexpected day format');
 
 addLog("Get current release date for REACTOME");
-	$CURR_RELEASE=getCurrentReleaseDate('REACTOME',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-REACTOME',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE == $NEW_RELEASE) successProcess('VALID');
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('REACTOME',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 	
 
 addLog("Update release tag for REACTOME");
-	updateReleaseDate($JOB_ID,'REACTOME',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-REACTOME',$NEW_RELEASE);
 
 	
 addLog("Create directory");

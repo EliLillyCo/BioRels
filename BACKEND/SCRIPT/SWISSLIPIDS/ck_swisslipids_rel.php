@@ -47,18 +47,23 @@ addLog("Validate release note");
 	
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('SWISSLIPIDS',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-SWISSLIPIDS',$JOB_ID);
 
 
 addLog("Compare release");
 	if (!unlink($W_DIR.'relnotes.txt'))												failProcess($JOB_ID."008",'Unable to delete relnotes.txt');
 	if ($CURR_RELEASE == $NEW_RELEASE){	successProcess('VALID');}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('SWISSLIPIDS',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 	
 	
 
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'SWISSLIPIDS',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-SWISSLIPIDS',$NEW_RELEASE);
 
 
 addLog("Create directory");

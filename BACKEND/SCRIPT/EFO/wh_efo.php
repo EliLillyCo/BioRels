@@ -431,7 +431,12 @@ addLog("load tree");
 addLog("Push to prod");
 	pushToProd();
 
-   
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-EFO',$JOB_ID);
+	updateReleaseDate($JOB_ID,'EFO',$CURR_RELEASE);
+	 
+	    
+
 	successProcess();
 
 

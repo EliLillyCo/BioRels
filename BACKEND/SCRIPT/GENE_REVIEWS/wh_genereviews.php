@@ -73,6 +73,12 @@ addLog("Setting up");
 addLog("Push to prod");
 	pushToProd();
 
+
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GENE REVIEWS',$JOB_ID);
+	updateReleaseDate($JOB_ID,'GENE REVIEWS',$CURR_RELEASE);
+	 	 
+
 	successProcess();
 
 
@@ -342,9 +348,13 @@ function preloadDataFromFiles(&$EXT_DATA,&$DATA)
 
 function compareRecords(&$CURR_INFO,&$INFO,&$DS_LIST,&$SCHEMA)
 {
+	global $JOB_ID;
+	global $EXT_DATA;
+	global $DB_CONN;
+	global $DISCLAIMER;
 
 	/// We are going to compare the current data with the new data
-
+	$DBID=$CURR_INFO['news_id'];
 	/// Setting the current data as valid
 	$CURR_INFO['DB_STATUS']='VALID';
 

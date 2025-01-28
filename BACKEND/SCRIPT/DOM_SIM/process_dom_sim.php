@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * 	This script is running a blastp followed by a sequence alignment
+ * 	This script is running a blastp followed by a sequence alignment for protein domain sequences
  * 
  */
 
@@ -11,8 +11,7 @@ ini_set('memory_limit','5000M');
 $JOB_RUNID=$argv[1];
 $TOT_JOB=$argv[2];
 
-
-$JOB_NAME='process_seq_sim';
+$JOB_NAME='process_dom_sim';
 $TG_DIR= getenv('TG_DIR');
 if ($TG_DIR===false)  die('NO TG_DIR found ');
 if (!is_dir($TG_DIR)) die('TG_DIR value is not a directory '.$TG_DIR);
@@ -22,8 +21,8 @@ $PROCESS_CONTROL['DIR']='N/A';
 $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 
-addLog("Define directory");
-	$CK_INFO=$GLB_TREE[getJobIDByName('pmj_seq_sim')];
+addLog("Go to directory");
+	$CK_INFO=$GLB_TREE[getJobIDByName('pmj_dom_sim')];
 	$U_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; 		if (!is_dir($U_DIR)) 					failProcess($JOB_ID."001",'NO '.$U_DIR.' found ');
 	$U_DIR.='/'.$CK_INFO['DIR'].'/';   					if (!is_dir($U_DIR) && !mkdir($U_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$U_DIR);
 	$U_DIR.=$CK_INFO['TIME']['DEV_DIR'];				if (!is_dir($U_DIR) && !mkdir($U_DIR)) 	failProcess($JOB_ID."003",'Unable to create new process dir '.$U_DIR);
@@ -31,31 +30,27 @@ addLog("Define directory");
 	$W_DIR=$U_DIR.'/JSON/';								if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."004",'Unable to create job dir '.$W_DIR);
 	if (!chdir($W_DIR)) 																		failProcess($JOB_ID."005",'Unable to access process dir '.$W_DIR);
 	echo $W_DIR."\n";
-	
-	/// Ensure that the tools are available
 	if (!isset($GLB_VAR['TOOL']['BLASTP'])) 													failProcess($JOB_ID."006",'Unable to find BLASTP path in CONFIG_GLOBAL');
 	if (!isset($GLB_VAR['TOOL']['SEQALIGN'])) 													failProcess($JOB_ID."007",'Unable to find SEQ_ALIGN path in CONFIG_GLOBAL');
-	$BLASTP=$GLB_VAR['TOOL']['BLASTP']; 					if(!is_executable($BLASTP))			failProcess($JOB_ID."008",'Unable to Find blastp '.$BLASTP);
-	$SEQ_ALIGN=$GLB_VAR['TOOL']['SEQALIGN'];			if(!is_executable($SEQ_ALIGN))			failProcess($JOB_ID."009",'Unable to Find seq_Align tool '.$SEQ_ALIGN);
+	$BLASTP=$GLB_VAR['TOOL']['BLASTP']; 		if(!is_executable($BLASTP))			failProcess($JOB_ID."008",'Unable to Find blastp '.$BLASTP);
+	$SEQ_ALIGN=$GLB_VAR['TOOL']['SEQALIGN'];if(!is_executable($SEQ_ALIGN))			failProcess($JOB_ID."009",'Unable to Find seq_Align tool '.$SEQ_ALIGN);
 
 	
 	
-	/// Key are the table names, values are the columns in the order they appear in the csv files to insert data
+
 	$COL_ORDER=array(
-		'prot_seq_al'=>'(prot_seq_al_id , prot_seq_ref_id , prot_seq_comp_id , perc_sim , perc_identity , length , e_value , bit_score , perc_sim_com , perc_identity_com)',
-		'prot_seq_al_seq'=>'(prot_seq_al_seq_id , prot_seq_al_id , prot_seq_id_ref , prot_seq_id_comp )'
-	);
-
-
+	'prot_dom_al'=>'(prot_dom_al_id , prot_dom_ref_id , prot_dom_comp_id , perc_sim , perc_identity , length , e_value , bit_score , perc_sim_com , perc_identity_com)',
+	'prot_dom_al_seq'=>'(prot_dom_al_seq_id , prot_dom_al_id , prot_dom_seq_id_ref , prot_dom_seq_id_comp)'
+);
 
 addLog("Check inputs");
-	$FILE_LIST=array('SEQ.fasta');
+	$FILE_LIST=array('DOM'.'.fasta');
 	foreach ($FILE_LIST as $FILE)	if (!checkFileExist($U_DIR.'/'.$FILE))				failProcess($JOB_ID."010",'Unable to access process dir '.$U_DIR.'/'.$FILE);
 
 	$STATS=array('N_SEQ'=>0,'N_BLAST'=>0,'N_SEL'=>0,'N_ADDED'=>0,'N_VALID'=>0,'N_SEQ_VALID'=>0,'N_UPD'=>0,'N_DEL'=>0,'N_NEW'=>0,'N_SEQ_UPD'=>0);
 	
 addLog("Get list to process");
-	$INPUT_FILE='SEQ_pointer.csv';
+	$INPUT_FILE='DOM'.'_pointer.csv';
 	$fp=fopen($U_DIR.'/'.$INPUT_FILE,'r'); if (!$fp)									failProcess($JOB_ID."011",'Unable to open unique_pointers.csv '.$U_DIR.'/'.$FILE);
 	
 	
@@ -72,7 +67,7 @@ addLog("Get list to process");
 	{
 		$line=stream_get_line($fp,1000,"\n");	if ($line=="")continue;
 		
-		$tab=explode("\t",$line);				if (count($tab)!=3){continue;}
+		$tab=explode("\t",$line);				if (count($tab)!=4){continue;}
 		
 		$N_LINE++;								if ($N_LINE<$START || $N_LINE>=$END)continue;
 		$TO_PROCESS[]=$tab;
@@ -83,7 +78,7 @@ addLog("Get list to process");
 
 addLog("Processing");
 
-	$fpJS=fopen('JOB_SEQ_'.$JOB_RUNID.'.json','w');if (!$fpJS)				failProcess($JOB_ID."012",'JOB_SEQ_'.$JOB_RUNID.'.json');
+	$fpJS=fopen('JOB_DOM_'.$JOB_RUNID.'.json','w');if (!$fpJS)				failProcess($JOB_ID."012",'JOB_DOM_'.$JOB_RUNID.'.json');
 
 	$START=false;$NTEST=0;
 	$N_PROCESS=0;$N_MMATCH=0;
@@ -116,10 +111,10 @@ addLog("Processing");
 		global $BLASTP;
 		global $SEQ_ALIGN;
 		
-		$IN_FILE='SEQ_'.$JOB_RUNID.'_input.fasta';
+		$IN_FILE='DOM'.'_'.$JOB_RUNID.'_input.fasta';
 		
-		$OUT_FILE='SEQ_'.$JOB_RUNID.'_out.csv';
-		$fp=fopen('../SEQ.fasta','r');if (!$fp)	failProcess($JOB_ID."013",'Unable to open SEQ.fasta');
+		$OUT_FILE='DOM'.'_'.$JOB_RUNID.'_out.csv';
+		$fp=fopen('../DOM.fasta','r');if (!$fp)	failProcess($JOB_ID."013",'Unable to open DOM.fasta');
 		fseek($fp,$ENTRY[1]);
 		$fpK=fopen($IN_FILE,'w');
 
@@ -136,9 +131,9 @@ addLog("Processing");
 		fclose($fp);
 		fclose($fpK);
 		unlink($OUT_FILE);
-		$command_line=$BLASTP.' ';
+		$command_line=$BLASTP.'  -word_size=3 -max_hsps 1 -evalue 100 ';
 		
-		$command_line.= ' -query '.$IN_FILE.' -db ../SEQ.fasta -outfmt "6 qseqid sseqid pident qlen slen length nident mismatch gapopen evalue bitscore" -out '.$OUT_FILE;
+		$command_line.= ' -query '.$IN_FILE.' -db ../DOM.fasta -outfmt "6 qseqid sseqid pident qlen slen length nident mismatch gapopen evalue bitscore" -out '.$OUT_FILE;
 		echo $command_line;
 		exec($command_line,$res,$return_code);
 		if ($return_code !=0){fputs($fpE,$ENTRY[0]."\tBLAST\n");
@@ -155,14 +150,14 @@ addLog("Processing");
 		$selected=array();
 		
 		/// get list of current alignments:
-		$query='SELECT * FROM prot_seq_al WHERE prot_seq_ref_id = '.$ENTRY[0];
+		$query="SELECT * FROM prot_".'dom'.'_al WHERE prot_dom_ref_id = '.$ENTRY[0];
 		
 		$res=runQuery($query);
 		$DB_LIST=array();
 		foreach ($res as &$L)
 		{
 			$L['DB_STATUS']='FROM_DB';
-			$DB_LIST[$L['prot_seq_comp_id']]=$L;
+			$DB_LIST[$L['prot_dom_comp_id']]=$L;
 			//$selected[$L['prot_SEQ_comP_id']]=array();
 		}
 		
@@ -196,7 +191,10 @@ addLog("Processing");
 			}
 			else $CNAME=explode("-",$tab[1]);
 			
-			
+			if ('DOM'=='DOM')
+			{
+				if (($RNAME[1]=='CHAIN'&& $CNAME[1]!='CHAIN') || !($RNAME[1]!='CHAIN' && $CNAME[1]!='CHAIN'))continue;
+			}
 			
 			if ($tab[2]<30)continue;
 			$tab[1]=$CNAME[0];
@@ -212,32 +210,34 @@ addLog("Processing");
 		$STATS['N_SEL']+=$N_SEL;
 
 		/// Then we add orthologs and isoforms - primary only
-		$query="select uS2.prot_seq_id
-		FROM prot_seq US,  gn_prot_map GUM, gn_prot_map GUM2,prot_seq US2
+		$query="select uS2.prot_dom_id
+		FROM prot_dom US,  gn_prot_map GUM, gn_prot_map GUM2,prot_dom US2
 		WHERE US.prot_entry_id = GUM.prot_entry_id AND GUM.gn_entry_id = GUM2.gn_entry_id  
-		AND GUM2.prot_entry_id = US2.prot_entry_id AND US.prot_seq_id !=US2.prot_seq_id
-		AND US.prot_seq_id=".$ENTRY[0].' AND US2.status!=9  AND US2.is_primary=\'T\'';
+		AND GUM2.prot_entry_id = US2.prot_entry_id AND US.prot_dom_id !=US2.prot_dom_id
+		AND US.prot_dom_id=".$ENTRY[0].' AND US2.status!=9';
+		
 			echo $query."\n";
 		$res=runQuery($query);
 		foreach ($res as $line)
 		{
-			if (isset($selected[$line["prot_seq_id"]]))continue;
-			$selected[$line["prot_seq_id"]]=array($ENTRY[0],$line["prot_seq_id"],'ADDED'=>true);
+			if (isset($selected[$line["prot_dom_id"]]))continue;
+			$selected[$line["prot_dom_id"]]=array($ENTRY[0],$line["prot_dom_id"],'ADDED'=>true);
 		}
 		
-		$query="select DISTINCT uS2.prot_seq_id 
-		FROM prot_seq US,  gn_prot_map GUM, gn_rel GR, gn_prot_map GUM2, prot_seq US2
+		$query="select DISTINCT uS2.prot_dom_id 
+		FROM prot_dom US,  gn_prot_map GUM, gn_rel GR, gn_prot_map GUM2, prot_dom US2
 		WHERE US.prot_entry_id = GUM.prot_entry_id AND GUM.gn_entry_id = gr.gn_entry_r_id 
 		AND gr.gn_Entry_c_id = gum2.gn_entry_id
 		AND GUM2.prot_entry_id = US2.prot_entry_id 
-		AND US.prot_seq_id !=US2.prot_seq_id
-		AND US.prot_seq_id=".$ENTRY[0].' AND US2.status!=9   AND US2.is_primary=\'T\'';
+		AND US.prot_dom_id !=US2.prot_dom_id
+		AND US.prot_dom_id=".$ENTRY[0].' AND US2.status!=9 ';
+		
 		echo $query."\n";
 		$res=runQuery($query);
 		foreach ($res as $line)
 		{
-			if (isset($selected[$line["prot_seq_id"]]))continue;
-			$selected[$line["prot_seq_id"]]=array($ENTRY[0],$line["prot_seq_id"],'ADDED'=>true);
+			if (isset($selected[$line["prot_dom_id"]]))continue;
+			$selected[$line["prot_dom_id"]]=array($ENTRY[0],$line["prot_dom_id"],'ADDED'=>true);
 		}
 		
 		echo "DONE\n";
@@ -246,7 +246,7 @@ addLog("Processing");
 
 		if ($selected==array())return;
 		
-		$INPUT_FILE='SEQ_pointer.csv';
+		$INPUT_FILE='DOM'.'_pointer.csv';
 		
 		$fp=fopen($U_DIR.'/'.$INPUT_FILE,'r'); if (!$fp)									failProcess($JOB_ID."014",'Unable to open unique_pointers.csv '.$U_DIR.'/'.$FILE);
 		$N_LINE=0;$NT=0;
@@ -254,7 +254,7 @@ addLog("Processing");
 		{
 			
 			$line=stream_get_line($fp,1000,"\n");	if ($line=="")continue;
-			$tab=explode("\t",$line);				if (count($tab)!=3){continue;}
+			$tab=explode("\t",$line);				if (count($tab)!=4){continue;}
 			
 			if (isset($selected[$tab[0]])) $selected[$tab[0]]['fpos']=$tab;
 		}
@@ -269,7 +269,7 @@ addLog("Processing");
 			if (!isset($info['fpos']))continue;
 			echo $cid."\t";
 			
-			$fp=fopen('../SEQ.fasta','r');
+			$fp=fopen('../DOM.fasta','r');
 			fseek($fp,$info['fpos'][1]);
 			$str=array();
 			$str=array_filter(explode("\n",fread($fp,$info['fpos'][2])));
@@ -293,6 +293,19 @@ addLog("Processing");
 			$STAT=explode("\t",$res[4]);
 			
 			
+				
+				$NMATCH=0;
+				for ($I=0;$I<strlen($info['ALIGN']['REF']);++$I)
+				{
+					$RL=substr($info['ALIGN']['REF'],$I,1);
+					$CL=substr($info['ALIGN']['COMP'],$I,1);
+					
+					if ($RL!='-' && $CL!='-')$NMATCH++;
+				}
+			//	echo $NMATCH."\t".strlen(str_replace("-","",$info['ALIGN']['REF']))."\t".($NMATCH/strlen(str_replace("-","",$info['ALIGN']['REF'])))."\n";
+				if ($NMATCH/strlen(str_replace("-","",$info['ALIGN']['REF']))<0.4)continue;
+				if (isset($info['ADDED']) && $STAT[0]<0.3)continue;
+			
 			
 			//SPA.getIdentity()<<"\t"<<SPA.getSimilarity()<<"\t"<<SPA.getIdentityCommon()<<"\t"<<SPA.getSimilarityCommon()<<"\t"<<SPA.getScore()<<"\t"<<sqR.getName()<<"\t"<<sqC.getName()<<"\n";
 			if (isset($DB_LIST[$info['fpos'][0]]))
@@ -310,9 +323,12 @@ addLog("Processing");
 
 				$res=array();
 				
-					$res=runQuery("select USP.letter as ref_letter, USP.position as ref_position, USP2.letter AS comp_letter, USP2.position as comp_position
-				FROM prot_seq_al_seq USAS, prot_seq_pos USP, prot_seq_pos USP2
-				WHERE prot_seq_al_id=".$RECORD['prot_seq_al_id']." AND USP.prot_seq_pos_id = prot_seq_id_ref AND USP2.prot_seq_pos_id=prot_seq_id_comp ORDER BY prot_seq_al_seq_id ASC ");
+					
+					echo "QUERY\t";
+					$res=runQuery("select USP.letter as ref_letter, UDP.position as ref_position, USP2.letter AS comp_letter, UDP2.position as comp_position
+					FROM prot_dom_al_seq USAS, prot_seq_pos USP, prot_dom_seq UDP, prot_seq_pos USP2, prot_dom_seq UDP2
+					WHERE prot_dom_al_id=".$RECORD['prot_dom_al_id']." AND USAS.prot_dom_seq_id_ref=UDP.prot_dom_seq_id AND USP.prot_seq_pos_id = UDP.prot_seq_pos_id
+					AND USP2.prot_seq_pos_id = UDP2.prot_seq_pos_id AND UDP2.prot_dom_seq_id = prot_dom_seq_id_comp  ORDER BY  UDP.position ASC ");
 				
 				
 				$MAP=array();
@@ -337,16 +353,16 @@ addLog("Processing");
 				//print_r($info['ALIGN']);
 				echo "GET SEQ\t";
 				$res=runQuery("SELECT position,letter,prot_seq_id,prot_seq_pos_id FROM prot_seq_pos WHERE prot_seq_id IN (".$info[0].','.$info[1].')');
-				if ($res===false){echo $RECORD["prot_seq_al_id"]."\tUNABLE TO GET SEQUENCE\n";unset($DB_LIST[$info['fpos'][0]]);continue;}
+				if ($res===false){echo $RECORD['prot_'.'dom'."_al_id"]."\tUNABLE TO GET SEQUENCE\n";unset($DB_LIST[$info['fpos'][0]]);continue;}
 				echo "SAVE RECORD\t";
 				$MAPIDS=array();
 				foreach ($res as $line)$MAPIDS[$line['prot_seq_id']][$line['position']]=array($line['letter'],$line['prot_seq_pos_id']);
 				$RLEN=strlen(str_replace("-","",$info['ALIGN']['REF']));
 				if ($RLEN!=count($MAPIDS[$info[0]])) 
-				{echo $RECORD["prot_seq_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[0]])."\n";exit;}
+				{echo $RECORD['prot_'.'dom'."_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[0]])."\n";exit;}
 				$RLEN=strlen(str_replace("-","",$info['ALIGN']['COMP']));
 				if ($RLEN!=count($MAPIDS[$info[1]])) 
-				{echo $RECORD["prot_seq_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[1]])."\n";exit;}
+				{echo $RECORD['prot_'.'dom'."_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[1]])."\n";exit;}
 				$VALID=true;$RP=0;$CP=0;
 				for ($I=0;$I<strlen($info['ALIGN']['REF']);++$I)
 				{
@@ -361,7 +377,7 @@ addLog("Processing");
 					$RECORD['ALIGN'][]=array($MAPIDS[$info[0]][$RP][1],$MAPIDS[$info[1]][$CP][1]);
 				}
 				echo "DONE\n";
-				if (!$VALID){echo $RECORD["prot_seq_al_id"]."\tUNABLE TO CREATE ALIGNMENT\n";unset($DB_LIST[$info['fpos'][0]]);continue;}
+				if (!$VALID){echo $RECORD['prot_'.'dom'."_al_id"]."\tUNABLE TO CREATE ALIGNMENT\n";unset($DB_LIST[$info['fpos'][0]]);continue;}
 				
 				
 			}
@@ -371,15 +387,15 @@ addLog("Processing");
 				//echo "\n\n\nINSERT\n\n\n";
 				//print_r($info['ALIGN']);
 				$res=array();
-				$res	=runQuery("SELECT position,letter,prot_seq_id,prot_seq_pos_id FROM prot_seq_pos WHERE prot_seq_id IN (".$info[0].','.$info[1].')');
-				
+				$res	=runQuery("SELECT UDP.position,letter,prot_dom_id,prot_dom_seq_id FROM prot_Seq_pos USP, prot_dom_seq UDP WHERE UDP.prot_seq_pos_id = USP.prot_seq_pos_id AND prot_dom_id IN (".$info[0].','.$info[1].')');
 
-				if ($res===false){echo $RECORD["prot_seq_al_id"]."\tUNABLE TO GET SEQUENCE\n";unset($DB_LIST[$info['fpos'][0]]);continue;}
+
+				if ($res===false){echo $RECORD['prot_'.'dom'."_al_id"]."\tUNABLE TO GET SEQUENCE\n";unset($DB_LIST[$info['fpos'][0]]);continue;}
 				//print_r($res);
 				$MAPIDS=array();
-				foreach ($res as $line)$MAPIDS[$line['prot_seq_id']][$line['position']]=array($line['letter'],$line['prot_seq_pos_id']);
+				foreach ($res as $line)$MAPIDS[$line['prot_dom_id']][$line['position']]=array($line['letter'],$line['prot_dom_seq_id']);
 				if (!isset($MAPIDS[$info[1]])||!isset($MAPIDS[$info[0]]))continue;
-				$RECORD=array('prot_seq_ref_id'=>$info[0],'prot_seq_comp_id'=>$info[1]);
+				$RECORD=array('prot_dom_ref_id'=>$info[0],'prot_dom_comp_id'=>$info[1]);
 				$RECORD['DB_STATUS']='TO_INS';
 				echo $info[0]."\t".$info[1]."\t%Iden:".round($STAT[0],3)."\t%sim:".round($STAT[1],3)."\t%iden_com:".round($STAT[2],3)."\t%sim_com:".round($STAT[3],3)."\t".((isset($info['ADDED'])?"ADDED":"BLAST" ))."\n";
 				$RECORD['perc_identity']=round($STAT[0],3);
@@ -391,10 +407,10 @@ addLog("Processing");
 				$VALID=true;$RP=min(array_keys($MAPIDS[$info[0]]))-1;$CP=min(array_keys($MAPIDS[$info[1]]))-1;
 				$RLEN=strlen(str_replace("-","",$info['ALIGN']['REF']));
 				if ($RLEN!=count($MAPIDS[$info[0]])) 
-				{echo $RECORD["prot_seq_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[0]])."\n";exit;}
+				{echo $RECORD['prot_'.'dom'."_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[0]])."\n";exit;}
 				$RLEN=strlen(str_replace("-","",$info['ALIGN']['COMP']));
 				if ($RLEN!=count($MAPIDS[$info[1]])) 
-				{echo $RECORD["prot_seq_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[1]])."\n";exit;}
+				{echo $RECORD['prot_'.'dom'."_al_id"]."\tREF DIFFERNET SIZE\t".$RLEN."\t".count($MAPIDS[$info[1]])."\n";exit;}
 				// print_r($info);
 				// print_R($MAPIDS);
 				for ($I=0;$I<strlen($info['ALIGN']['REF']);++$I)
@@ -421,8 +437,8 @@ addLog("Processing");
 		if ($RECORD['DB_STATUS']=='FROM_DB')
 		{
 			$STATS['N_DEL']++;
-			$query="DELETE FROM prot_seq_al WHERE prot_seq_al_id=".$RECORD["prot_seq_al_id"];
-			if (!runQueryNoRes($query)) {echo $RECORD["prot_seq_al_id"]."\tFAIL DELETION\n";}
+			$query="DELETE FROM prot_dom_al WHERE prot_dom_al_id=".$RECORD['prot_'.'dom'."_al_id"];
+			if (!runQueryNoRes($query)) {echo $RECORD['prot_'.'dom'."_al_id"]."\tFAIL DELETION\n";}
 			continue;
 		}
 		if ($RECORD['DB_STATUS']=='VALID')
@@ -434,9 +450,9 @@ addLog("Processing");
 			else
 			{
 				$STATS['N_SEQ_UPD']++;
-				if (!runQueryNoRes('DELETE FROM prot_seq_al_seq WHERE prot_seq_al_id = '.$RECORD["prot_seq_al_id"]))
+				if (!runQueryNoRes("DELETE FROM prot_".'dom'.'_al_seq WHERE prot_dom_al_id = '.$RECORD['prot_'.'dom'."_al_id"]))
 				{
-					echo $RECORD["prot_seq_al_id"]."\tFAIL SEQUENCE DELETION\n";
+					echo $RECORD['prot_'.'dom'."_al_id"]."\tFAIL SEQUENCE DELETION\n";
 					continue;
 				}
 
@@ -445,17 +461,17 @@ addLog("Processing");
 		if ($RECORD['DB_STATUS']=='TO_UPD')
 		{
 			$STATS['N_UPD']++;
-			$query='UPDATE prot_seq_al SET perc_sim='.$RECORD['perc_sim'].
+			$query='UPDATE prot_dom_al SET perc_sim='.$RECORD['perc_sim'].
 			',perc_identity='.$RECORD['perc_identity'].
 			',perc_sim_com='.$RECORD['perc_sim_com'].
 			',perc_identity_com='.$RECORD['perc_identity_com'].
 			',length='.$RECORD['length'].
-			' WHERE prot_seq_al_id='.$RECORD["prot_seq_al_id"];
-			if (!runQueryNoRes($query)) {echo $RECORD["prot_seq_al_id"]."\tFAIL UPDATE\n";continue;}
+			' WHERE prot_seq_al_id='.$RECORD['prot_'.'dom'."_al_id"];
+			if (!runQueryNoRes($query)) {echo $RECORD['prot_'.'dom'."_al_id"]."\tFAIL UPDATE\n";continue;}
 			if ($RECORD['SEQ_STATUS']=='VALID')continue;
-			if (!runQueryNoRes('DELETE FROM prot_seq_al_seq WHERE prot_seq_al_id = '.$RECORD["prot_seq_al_id"]))
+			if (!runQueryNoRes("DELETE FROM prot_".'dom'.'_al_seq WHERE prot_dom_al_id = '.$RECORD['prot_'.'dom'."_al_id"]))
 			{
-				echo $RECORD["prot_seq_al_id"]."\tFAIL SEQUENCE DELETION\n";
+				echo $RECORD['prot_'.'dom'."_al_id"]."\tFAIL SEQUENCE DELETION\n";
 				continue;
 			}
 		}

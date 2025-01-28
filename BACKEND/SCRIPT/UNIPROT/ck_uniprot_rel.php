@@ -54,7 +54,7 @@ addLog("Validate release note");
 	if ($tab2[0]!=date("Y") && $tab2[0]!=(date("Y")-1))									failProcess($JOB_ID."009",'Unexpected year format');
 
 addLog("Get current release date");
-	$CURR_RELEASE=getCurrentReleaseDate('UNIPROT',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-UNIPROT',$JOB_ID);
 
 
 addLog("Compare release");
@@ -63,6 +63,11 @@ addLog("Compare release");
 	
 	/// If the release is the same as the current release, we are done
 	if ($CURR_RELEASE == $NEW_RELEASE)	successProcess('VALID');
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('UNIPROT',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 	
 	
 addLog("Compare License");
@@ -82,7 +87,7 @@ addLog("Compare License");
 
 
 addLog("Update release tag");
-	updateReleaseDate($JOB_ID,'UNIPROT',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-UNIPROT',$NEW_RELEASE);
 
 
 addLog("Create directory");

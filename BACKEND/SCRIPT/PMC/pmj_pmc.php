@@ -148,6 +148,7 @@ addLog("Working directory:".$W_DIR);
 	else if ($N_C<1000)$N_JOB=25;
 	else if ($N_C<10000)$N_JOB=50;
 	else if ($N_C<20000)$N_JOB=100;
+	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
 	$N_J=ceil($N_C/$N_JOB);
 	
 	/// Create the SCRIPTS directory if it does not exist
@@ -181,29 +182,15 @@ addLog("Working directory:".$W_DIR);
 	fclose($fpO);
 	
 	
-	///Create batch script:
-	$fpA=fopen("SCRIPTS/all.sh",'w'); if(!$fpA)											failProcess($JOB_ID."016",'Unable to open all.sh');
+	$COMMANDS=array();
+
 	
 	for($I=0;$I<$N_JOB;++$I)
 	{
-		/// And the individual job script
-		$JOB_NAME="SCRIPTS/job_".$I.".sh";
-		$fp=fopen($JOB_NAME,"w");if(!$fpA)												failProcess($JOB_ID."017",'Unable to open jobs/job_'.$I.'.sh');
-		
-		/// Add the job to the batch script
-		fputs($fpA,"sh ".$W_DIR.'/'.$JOB_NAME."\n");
-
-		/// Populate the job script
-		fputs($fp,'#!/bin/sh'."\n");
-		fputs($fp,"source ".$SETENV."\n");	/// Set up the environment
-		fputs($fp,'cd '.$W_DIR."\n");		/// Go to the working directory
-		fputs($fp,'biorels_php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/'.'LOG_'.$I."\n");	/// Run the script
-		fputs($fp,'echo $? > SCRIPTS/status_'.$I."\n");	/// Save the status of the script
-		fclose($fp);
-	
-		
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/LOG_'.$I;
 	}
-	fclose($fpA);
+
+	prepare_batch($COMMANDS,$W_DIR);
 
 
 

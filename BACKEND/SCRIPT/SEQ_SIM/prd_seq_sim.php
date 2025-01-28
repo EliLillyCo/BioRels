@@ -42,7 +42,11 @@ addLog("Cleanup files");
 	
 addLog("Switch to production");
 	pushToProd();
+
+addLog("Update release tag");
 	
+	updateReleaseDate($JOB_ID,'SEQ_SIM',getCurrDate());
+
 
 successProcess();
 
