@@ -70,9 +70,9 @@ addLog("Save list genes");
 	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
 	$COMMANDS=array();
 	/// Create the jobs
-	for($I=1;$I<=$N_JOB;++$I)
+	for($I=0;$I<$N_JOB;++$I)
 	{
-		$COMMANDS[$I]='biorels_php '.$RUNSCRIPT.' '.$I.' '.$N_JOB.' &> LOG_'.$I;	
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' '.$N_JOB.' &> LOG_'.$I;	
 	}
 	prepare_batch($COMMANDS,$W_DIR);
 
