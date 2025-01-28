@@ -341,10 +341,10 @@ function processGeneData()
 	
 	/// Get max PK value for that table to speed up insert
 	$res=runQuery('SELECT MAX(rna_gene_ID) CO FROM rna_gene');
-	if ($res===false)																			failProcess($JOB_ID."C01",'Unable to get Max ID for '.$TBL);
+	if ($res===false)																			failProcess($JOB_ID."C01",'Unable to get Max ID for rna_gene');
 	$DBIDS['rna_gene']=(count($res)==1)?$res[0]['co']:0;
 	
-	$FILES['rna_gene']=fopen('rna_gene_insert.csv','w');if (!$FILES[$TBL])						failProcess($JOB_ID."C02",'Unable to open '.$TBL.'_insert.csv');
+	$FILES['rna_gene']=fopen('rna_gene_insert.csv','w');if (!$FILES['rna_gene'])						failProcess($JOB_ID."C02",'Unable to open rna_gene_insert.csv');
 
 
 
@@ -492,10 +492,10 @@ function processTranscriptData()
 	
 	/// Get max PK value for that table to speed up insert
 	$res=runQuery('SELECT MAX(rna_transcript_ID) CO FROM rna_transcript');
-	if ($res===false)																			failProcess($JOB_ID."D01",'Unable to get Max ID for '.$TBL);
+	if ($res===false)																			failProcess($JOB_ID."D01",'Unable to get Max ID for rna_transcript');
 	$DBIDS['rna_transcript']=(count($res)==1)?$res[0]['co']:0;
 	
-	$FILES['rna_transcript']=fopen('rna_transcript_insert.csv','w');if (!$FILES[$TBL])			failProcess($JOB_ID."D02",'Unable to open '.$TBL.'_insert.csv');
+	$FILES['rna_transcript']=fopen('rna_transcript_insert.csv','w');if (!$FILES['rna_transcript'])			failProcess($JOB_ID."D02",'Unable to open rna_transcript_insert.csv');
 
 
 
