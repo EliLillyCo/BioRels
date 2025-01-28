@@ -27,24 +27,20 @@ addLog("Download release note");
 	
 	if (!chdir($W_DIR))																	failProcess($JOB_ID."003",'Unable to chdir '.$W_DIR);
 	
-	$W_DIR.='DBSNP/';
-	if (!is_dir("DBSNP") && !mkdir("DBSNP"))											failProcess($JOB_ID."004",'Unable to create DBSNP directory ');
-	if (!chdir("DBSNP"))																failProcess($JOB_ID."005",'Unable to get in DBSNP directory ');
-
 
 	/// Check FTP path:
-	if (!isset($GLB_VAR['LINK']['FTP_DBSNP']))											failProcess($JOB_ID."006",'FTP_DBSNP path no set');
+	if (!isset($GLB_VAR['LINK']['FTP_DBSNP']))											failProcess($JOB_ID."004",'FTP_DBSNP path no set');
 	
 	/// Step 1: Download DBSNP release notes
-	if (is_file('release_notes.txt') && !unlink('release_notes.txt'))					failProcess($JOB_ID."007",'Unable to remove old release note ');
+	if (is_file('release_notes.txt') && !unlink('release_notes.txt'))					failProcess($JOB_ID."005",'Unable to remove old release note ');
 
-	if (!dl_file($GLB_VAR['LINK']['FTP_DBSNP'].'/latest_release/release_notes.txt',3))	failProcess($JOB_ID."008",'Unable to download release note ');
+	if (!dl_file($GLB_VAR['LINK']['FTP_DBSNP'].'/latest_release/release_notes.txt',3))	failProcess($JOB_ID."006",'Unable to download release note ');
 	
-	if (!checkFileExist("release_notes.txt"))											failProcess($JOB_ID."009",'Couldn\'t find release note ');
+	if (!checkFileExist("release_notes.txt"))											failProcess($JOB_ID."007",'Couldn\'t find release note ');
 	
 	$NEW_RELEASE=explode(" ",explode("\n",file_get_contents("release_notes.txt"))[0])[2];
 	
-	if (!is_numeric($NEW_RELEASE))														failProcess($JOB_ID."010",'Unexpected release format for DBSNP');
+	if (!is_numeric($NEW_RELEASE))														failProcess($JOB_ID."008",'Unexpected release format for DBSNP');
 
 addLog("Get current release date for DBSNP");
 	$CURR_RELEASE=getCurrentReleaseDate('NEW-DBSNP',$JOB_ID);
@@ -54,7 +50,7 @@ addLog($CURR_RELEASE."\t".$NEW_RELEASE);
 
 	if ($CURR_RELEASE == $NEW_RELEASE)
 	{
-		if (!unlink('release_notes.txt'))												failProcess($JOB_ID."011",'Unable to remove release note ');
+		if (!unlink('release_notes.txt'))												failProcess($JOB_ID."009",'Unable to remove release note ');
 		successProcess("VALID");
 	}
 	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('DBSNP',$JOB_ID))
@@ -72,10 +68,10 @@ addLog("Create directory");
 	$PROCESS_CONTROL['DIR']='N/A';
 
 	
-	$W_DIR.=getCurrDate();		           if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."012",'Unable to create new process dir '.$W_DIR);
+	$W_DIR.=getCurrDate();		           if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."010",'Unable to create new process dir '.$W_DIR);
 
 	/// Move release note to the new directory
-	if (!rename('release_notes.txt',$W_DIR.'/release_notes.txt'))					failProcess($JOB_ID."013",'Unable to move release_notes.txt to '.$W_DIR);
+	if (!rename('release_notes.txt',$W_DIR.'/release_notes.txt'))					failProcess($JOB_ID."011",'Unable to move release_notes.txt to '.$W_DIR);
 
 	/// Update process control directory to the current release so that the next job can use it
 	$PROCESS_CONTROL['DIR']=getCurrDate();

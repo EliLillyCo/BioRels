@@ -28,7 +28,7 @@ addLog("Create directory");
 
 	/// Setting up directory path:
 	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR'];if (!is_dir($W_DIR)) 					failProcess($JOB_ID."001",'NO '.$W_DIR.' found ');
-	$W_DIR.='/'.$CK_DBSNP_INFO['DIR'].'/DBSNP/';if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
+	$W_DIR.='/'.$CK_DBSNP_INFO['DIR'].'/';if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
 	$W_DIR.=$CK_DBSNP_INFO['TIME']['DEV_DIR'];	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."003",'Unable to create new process dir '.$W_DIR);
 						   					   if (!chdir($W_DIR)) 						failProcess($JOB_ID."004",'Unable to access process dir '.$W_DIR);
 	
