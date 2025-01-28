@@ -179,7 +179,7 @@ From: ubuntu:24.04
 
 # PART 2 - Python packages	
 
-	python3 -m pip install --break-system-packages  setuptools attrs \
+	python3 -m pip install --break-system-packages --ignore-installed  setuptools attrs \
 	pytz \
 	grappa \
 	langchain \
