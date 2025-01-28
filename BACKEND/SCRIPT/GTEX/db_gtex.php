@@ -44,7 +44,7 @@ addLog("Get Static data");
 	if (!is_dir($STATIC_DIR))																		failProcess($JOB_ID."003",'GENE_EXPR static dir not found '.$STATIC_DIR);
 	
 	/// Get the source_id for GTEX
-	$RNA_SOURCE_ID=getSource('GTEX');
+	$RNA_SOURCE_ID=getRNASource('GTEX');
 
 
 	/// This is to keep track of the changes:
@@ -68,7 +68,7 @@ addLog("Preload annotation");
 
 addLog("Process Samples");
 
-	$SAMPLES=prepareSamples();
+	$SAMPLES=prepareSamples($GTEX_TISSUE);
 
 
  	
@@ -705,5 +705,21 @@ function processTranscriptData()
 	//print_r($res);
 	if ($return_code !=0 )																		failProcess($JOB_ID."D14",'Unable to insert rna_transcript'); 
 
+}
+
+
+function getRNASource($NAME)
+{
+	$MAX_ID=-1;
+	$res=runQuery("SELECT * FROM rna_source ");
+	foreach ($res as $line)
+	{
+		$MAX_ID=max($MAX_ID,$line['rna_source_id']);
+		if ($line['source_name']==$NAME)return $line['rna_source_id'];
+	}
+	++$MAX_ID;
+	$query='INSERT INTO rna_source (rna_source_id , source_name) VALUES ('.$MAX_ID.",'".$NAME."')";
+	if (!runQueryNoRes($query)) 																failProcess($JOB_ID."E01",'unable to insert rna_source');
+	return $MAX_ID;
 }
 ?>
