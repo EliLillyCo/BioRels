@@ -36,6 +36,8 @@ addLog("Check directory");
 	if ( !chdir($W_DIR))																failProcess($JOB_ID."002",'Unable to access '.$W_DIR);
 
 	/// Find the run script:
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."007",'SCRIPT_DIR not found ');
+	
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_gtex.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."003",$RUNSCRIPT.' file not found');
 
