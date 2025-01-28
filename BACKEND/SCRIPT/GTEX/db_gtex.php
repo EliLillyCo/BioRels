@@ -216,6 +216,10 @@ function  prepareTissues()
 function prepareSamples(&$GTEX_TISSUE)
 {
 	global $DB_TISSUE;
+	global $RNA_SOURCE_ID;
+	global $JOB_ID;
+	global $DB_INFO;
+	global $GLB_VAR;
 	/// Here we are going to fetch the samples from the database and compare them against the list of samples
 	$SAMPLES=array();
 	$res=runQuery("SELECT rna_sample_id, sample_id,T.rna_tissue_id,tissue_name,organ_name 
@@ -330,6 +334,8 @@ function processGeneData()
 	global $SAMPLES;
 	global $STAT;
 	global $JOB_ID;
+	global $DB_INFO;
+	global $GLB_VAR;
 
 	
 	
@@ -484,6 +490,13 @@ function processGeneData()
 
 function processTranscriptData()
 {
+	global $DB_TISSUE;
+	global $RNA_SOURCE_ID;
+	global $SAMPLES;
+	global $STAT;
+	global $JOB_ID;
+	global $DB_INFO;
+	global $GLB_VAR;
 
 
 	$FILES=array();
