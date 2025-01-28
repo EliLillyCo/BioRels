@@ -41,7 +41,7 @@ addLog("Setting up");
 	// Check the script to run
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_alfa.php';
 	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."006",$RUNSCRIPT.' file not found');
-
+	if (!is_dir('DATA_ALFA') && !mkdir('DATA_ALFA'))	failProcess($JOB_ID."006",'Unable to create DATA-ALFA directory');
 
 	addLog("Working directory: ".$W_DIR);
 
