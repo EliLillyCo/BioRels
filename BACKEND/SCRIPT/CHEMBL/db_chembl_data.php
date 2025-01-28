@@ -2004,7 +2004,7 @@ function processVariants($SCHEMA)
 
 
 	
-$DEBUG=true;
+$DEBUG=false;
 	foreach ($res as $line)
 	{
 		if ($DEBUG){
@@ -2285,32 +2285,60 @@ function processDrugs()
 
 	$res=runQuery("SELECT * FROM public.molecule_dictionary where max_phase is NOT NULL");
 	if ($res===false)failProcess($JOB_ID."P05",'Unable to get molecule_dictionary');
-	foreach ($res as $line)
+	$n=0;
+	foreach ($res as  $line)
 	{
 		processDrugRecord($line,$FILES);
+		++$n;
+		if ($n!=10000)continue;
+	
+		fclose($FILES['NAME']);
+		fclose($FILES['ENTRY']);
+		fclose($FILES['MAP']);
+
+
+
+		$command='\COPY '.$SCHEMA.'.drug_entry (drug_entry_id,drug_primary_name,is_approved,is_withdrawn,is_investigational, is_experimental, is_nutraceutical,is_illicit, is_vet_approved,max_clin_phase,drugbank_id,chembl_id) FROM \'DRUG_ENTRY.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
+		system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
+		if ($return_code !=0 )																		failProcess($JOB_ID."P06",'Unable to insert drug_entry'); 
+		
+		
+		$command='\COPY '.$SCHEMA.'.drug_name (drug_name_id,drug_entry_id,drug_name,is_primary,is_tradename,source_id) FROM \'DRUG_NAME.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\", ESCAPE '\\\\' ,format CSV )";
+		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
+		system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
+		if ($return_code !=0 )																		failProcess($JOB_ID."P07",'Unable to insert drug_name'); 
+		
+		$command='\COPY '.$SCHEMA.'.drug_mol_entity_map (drug_mol_entity_map_id,drug_entry_id,molecular_entity_id,is_preferred,source_id) FROM \'DRUG_MAP.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
+		system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
+		if ($return_code !=0 )																		failProcess($JOB_ID."P08",'Unable to insert drug_mol_entity_map'); 
+	
+		$FILES['NAME']=fopen('DRUG_NAME.csv','w');
+		$FILES['ENTRY']=fopen('DRUG_ENTRY.csv','w');
+		$FILES['MAP']=fopen('DRUG_MAP.csv','w');
 	}
-
 	fclose($FILES['NAME']);
-	fclose($FILES['ENTRY']);
-	fclose($FILES['MAP']);
+		fclose($FILES['ENTRY']);
+		fclose($FILES['MAP']);
 
 
 
-	$command='\COPY '.$SCHEMA.'.drug_entry (drug_entry_id,drug_primary_name,is_approved,is_withdrawn,is_investigational, is_experimental, is_nutraceutical,is_illicit, is_vet_approved,max_clin_phase,drugbank_id,chembl_id) FROM \'DRUG_ENTRY.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
-	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
-	system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
-	if ($return_code !=0 )																		failProcess($JOB_ID."P06",'Unable to insert drug_entry'); 
-	
-	
-	$command='\COPY '.$SCHEMA.'.drug_name (drug_name_id,drug_entry_id,drug_name,is_primary,is_tradename,source_id) FROM \'DRUG_NAME.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\", ESCAPE '\\\\' ,format CSV )";
-	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
-	system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
-	if ($return_code !=0 )																		failProcess($JOB_ID."P07",'Unable to insert drug_name'); 
-	
-	$command='\COPY '.$SCHEMA.'.drug_mol_entity_map (drug_mol_entity_map_id,drug_entry_id,molecular_entity_id,is_preferred,source_id) FROM \'DRUG_MAP.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
-	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
-	system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
-	if ($return_code !=0 )																		failProcess($JOB_ID."P08",'Unable to insert drug_mol_entity_map'); 
+		$command='\COPY '.$SCHEMA.'.drug_entry (drug_entry_id,drug_primary_name,is_approved,is_withdrawn,is_investigational, is_experimental, is_nutraceutical,is_illicit, is_vet_approved,max_clin_phase,drugbank_id,chembl_id) FROM \'DRUG_ENTRY.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
+		system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
+		if ($return_code !=0 )																		failProcess($JOB_ID."P06",'Unable to insert drug_entry'); 
+		
+		
+		$command='\COPY '.$SCHEMA.'.drug_name (drug_name_id,drug_entry_id,drug_name,is_primary,is_tradename,source_id) FROM \'DRUG_NAME.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\", ESCAPE '\\\\' ,format CSV )";
+		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
+		system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
+		if ($return_code !=0 )																		failProcess($JOB_ID."P07",'Unable to insert drug_name'); 
+		
+		$command='\COPY '.$SCHEMA.'.drug_mol_entity_map (drug_mol_entity_map_id,drug_entry_id,molecular_entity_id,is_preferred,source_id) FROM \'DRUG_MAP.csv'."'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
+		system($DB_INFO['COMMAND'].' -c "'.$command.'"',$return_code);
+		if ($return_code !=0 )																		failProcess($JOB_ID."P08",'Unable to insert drug_mol_entity_map'); 
 	
 	
 
