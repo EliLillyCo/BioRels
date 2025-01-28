@@ -191,6 +191,10 @@ addLog("Get OMIM to Disease mapping");
 
 
 
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-OMIM',$JOB_ID);
+	updateReleaseDate($JOB_ID,'OMIM',$CURR_RELEASE);
+
 
 	successProcess();
 
@@ -230,6 +234,8 @@ function processGeneMap()
 
 		//We process the line so we can have the appropriate header as key
 		$tab=explode("\t",$line);
+		if (count($tab)!=count($HEADER)) failProcess($JOB_ID."A02",'Invalid number of columns');
+		
 		$ENTRY=array_combine($HEADER,$tab);
 		
 		
@@ -248,7 +254,7 @@ addLog("Get Corresponding Gene database identifiers");
 	$res=runQuery("SELECT gn_entry_Id , gene_id 
 					FROM gn_entry 
 					WHERE gene_id IN (".implode(',',array_keys($GENES)).')');
-	if ($res===false)															failProcess($JOB_ID."A02",'Unable to fetch from database');
+	if ($res===false)															failProcess($JOB_ID."A03",'Unable to fetch from database');
 	foreach ($res as $line)
 	{
 		foreach ($GENES[$line['gene_id']] as $MIM)
@@ -294,6 +300,7 @@ function processAllelicVariants()
 
 		//We process the line so we can have the appropriate header as key
 		$tab=explode("\t",$line);
+		if (count($tab)!=count($HEADER)) failProcess($JOB_ID."B02",'Invalid number of columns');
 		$ENTRY=array_combine($HEADER,$tab);
 		
 		/// We only keep the entries that have a MIM number and a Gene ID
@@ -321,7 +328,7 @@ function processAllelicVariants()
 		$res=runQuery("SELECT variant_entry_id , rsid 
 						FROM variant_entry 
 						WHERE rsid IN (".implode(',',$CHUNK).')');
-		if ($res===false)															failProcess($JOB_ID."B02",'Unable to fetch from database');
+		if ($res===false)															failProcess($JOB_ID."B03",'Unable to fetch from database');
 		
 		foreach ($res as $line)
 		{

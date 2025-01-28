@@ -64,8 +64,13 @@ addLog("Delete files");
 
 
 addLog("Push to prod");
-	updateReleaseDate($JOB_ID,'PUBMED',$CK_PUBMED_INFO['TIME']['DEV_DIR']);
+	
 	pushToProd();
+
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-PUBMED',$JOB_ID);
+	updateReleaseDate($JOB_ID,'PUBMED',$CURR_RELEASE);
+
 
 successProcess();
 ?>

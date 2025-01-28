@@ -77,7 +77,7 @@ if os.path.exists('index.html'):
 
 # Compare the last update date with the one in the database
 add_log("Compare the last update date with the one in the database")
-CURR_RELEASE=get_current_release_date('CHEBI',JOB_ID)
+CURR_RELEASE=get_current_release_date('NEW-CHEBI',JOB_ID)
 
 
 if (CURR_RELEASE == new_release_date):
@@ -88,7 +88,7 @@ if (CURR_RELEASE == new_release_date):
 
 
 add_log("Update release tag due to new release date")
-update_release_date(JOB_ID,'ChEBI',new_release_date)
+update_release_date(JOB_ID,'NEW-CHEBI',new_release_date)
 
 
 add_log("Create working directory")

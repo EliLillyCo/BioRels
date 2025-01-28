@@ -1,9 +1,11 @@
-FROM php:8.3.8-apache-bullseye
+FROM php:8.3.12-apache-bullseye
 
 
 RUN apt-get update && \ 
     apt-get upgrade -y && \
-    apt-get install -y git && \ 
+    apt-get install -y freetype2-demos libfreetype6 libfreetype6-dev zlib1g-dev libpq-dev libicu-dev libxml2-dev libcurl4-openssl-dev \
+    pkg-config libssl-dev libzip-dev zlib1g-dev \
+    libjpeg62-turbo-dev libpng-dev git && \ 
     apt-get install -y vim && \
     apt-get install -y wget && \
     apt-get install -y libpng-dev && \
@@ -16,6 +18,7 @@ RUN apt-get update && \
     apt-get install -y sendmail-bin && \
     apt-get install -y python3 libxrender1 && \
     apt-get install -y python3-pip && \
+    apt-get install -y libpng-dev libzip-dev libgd3 libgd-dev && \
     python3 -m pip install --upgrade pip && \
     python3 -m pip install rdkit pillow
     # \    
@@ -25,7 +28,9 @@ RUN apt-get update && \
 
 RUN apt-get update; \
     apt-get install -y libpq5 libpq-dev; \
+    docker-php-ext-configure gd --enable-gd --prefix=/usr --with-jpeg --with-freetype; \
     docker-php-ext-install pdo pdo_pgsql gd zip bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gd gettext gmp hash iconv imap intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_pgsql pgsql phar posix pspell random readline reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem sysvshm tidy tokenizer xml xmlreader xmlwriter xsl zend_test; \    
+    docker-php-ext-enable pdo pdo_pgsql gd zip bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gd gettext gmp hash iconv imap intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_pgsql pgsql phar posix pspell random readline reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem sysvshm tidy tokenizer xml xmlreader xmlwriter xsl zend_test; \
     apt-get autoremove --purge -y libpq-dev; \
     apt-get clean ; \    
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
@@ -44,17 +49,13 @@ COPY ./WEBSITE /var/www/html
 COPY ./BACKEND/SCRIPT/API/queries.php /var/www/html/module/api/api_home/api_queries.php
 
 # Install packages
-COPY --from=docker.io/library/composer:2.6.3 /usr/bin/composer /usr/local/bin/composer
+COPY --from=docker.io/library/composer:2.8.1 /usr/bin/composer /usr/local/bin/composer
 
 ENV  COMPOSER_ALLOW_SUPERUSER=1
 
 ## Production packages
-RUN composer require phpoffice/phpspreadsheet --with-all-dependencies
-RUN composer require phpoffice/phppresentation --with-all-dependencies
 RUN composer require phpmailer/phpmailer
-RUN composer require aws/aws-sdk-php --with-all-dependencies
 RUN composer config vendor-dir /usr/local/bin/website-vendor/
-RUN composer require microsoft/microsoft-graph
 ## Dev packages
 # RUN composer require --dev phpunit/phpunit ^9
 

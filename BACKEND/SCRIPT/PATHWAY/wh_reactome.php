@@ -111,6 +111,11 @@ addLog("Push to prod");
 	updateStat('pw_entry','pathway',$STATS['PATHWAY'],$JOB_ID);
 	updateStat('pw_hierarchy','pathway_hierarchy',$STATS['PATHWAY_REL'],$JOB_ID);
 	
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-REACTOME',$JOB_ID);
+	updateReleaseDate($JOB_ID,'REACTOME',$CURR_RELEASE);
+
+
 	successProcess();
 	
 

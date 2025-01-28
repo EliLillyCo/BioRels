@@ -37,6 +37,16 @@ addLog("Create directory");
 	// Check if the WEB FTP link is set
 	if (!isset($GLB_VAR['LINK']['FTP_NCBI']))										failProcess($JOB_ID."004",'FTP_NCBI path no set');
 
+
+	$NEW_RELEASE=getCurrentReleaseDate('NEW-PUBMED',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('PUBMED',$JOB_ID);
+
+	if ($NEW_RELEASE!=-1 && $NEW_RELEASE!=getCurrentReleaseDate('PUBMED',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
+
 addLog("Working directory:".$W_DIR);
 
 addLog("Get last refresh date");
@@ -232,6 +242,8 @@ addLog("Getting Baseline Files timestamp");
 	if (!unlink('index.html'))													failProcess($JOB_ID."037",'Unable to delete index.html');
 
 
+	
+	updateReleaseDate($JOB_ID,'NEW-PUBMED',$PROCESS_CONTROL['DIR']);
 
 successProcess();
 

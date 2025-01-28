@@ -32,8 +32,8 @@ addLog("Go to directory");
 
 	/// Setting up directory path:
 	$U_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; if (!is_dir($U_DIR)) 									failProcess($JOB_ID."001",'NO '.$U_DIR.' found ');
-	$U_DIR.='/'.$CK_INFO['DIR'].'/DBSNP/';   			if (!is_dir($U_DIR))				 			failProcess($JOB_ID."002",'Unable to find  '.$U_DIR);
-	$U_DIR.='/'.$CK_INFO['TIME']['DEV_DIR'].'/';   if (!is_dir($U_DIR))				 					failProcess($JOB_ID."003",'Unable to find '.$U_DIR);
+	$U_DIR.='/'.$CK_INFO['DIR'].'/';   			if (!is_dir($U_DIR))				 			failProcess($JOB_ID."002",'Unable to find  '.$U_DIR);
+	$U_DIR.='/'.$CK_INFO['TIME']['DEV_DIR'].'/ALFA/';   if (!is_dir($U_DIR))				 					failProcess($JOB_ID."003",'Unable to find '.$U_DIR);
 	if (!chdir($U_DIR))				 																	failProcess($JOB_ID."004",'Unable to access '.$U_DIR);
 
 	/// Check static directory and ALFA_POP file
@@ -84,7 +84,7 @@ addLog("Verification of ALFA studies");
 
 	
 	/// Processing file
-	$fp=fopen('ALFA/freq.vcf','r');if (!$fp)																failProcess($JOB_ID."008",'Unable to open freq.vcf');
+	$fp=fopen('freq.vcf','r');if (!$fp)																failProcess($JOB_ID."008",'Unable to open freq.vcf');
 
 	//  0   		1			2				3	4	5		6		7		8		9
 	//#CHROM		POS			ID				REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMN10492695	SAMN10492696	SAMN10492697	SAMN10492698	SAMN10492699	SAMN10492700	SAMN10492701	SAMN10492702	SAMN11605645	SAMN10492703	SAMN10492704	SAMN10492705

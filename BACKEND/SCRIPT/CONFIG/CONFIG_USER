@@ -12,7 +12,7 @@ GLOB	EMAIL_FROM			N/A
 GLOB	PROXY				N/A
 # Processing
 GLOB	WEBJOB_LIMIT				20						Max number of web jobs running in parallel
-GLOB	MONITOR_TYPE				CLUSTER					Type of parallel work. SINGLE (for local machine only), CLUSTER (for cluster use)
+GLOB	MONITOR_TYPE				SGE_CLUSTER					Type of parallel work. SINGLE (for local machine only), SGE_CLUSTER (for cluster use)
 GLOB	SINGLE_PARALLEL				5						For SINGLE use, max number of jobs allowed to run in parallel
 GLOB	JOB_PREFIX					BR  					Job prefix
 GLOB	CHECK_ITER					3600					Time in seconds in which the system will run a check when no jobs are running
@@ -253,11 +253,19 @@ JOB		rmj_seq_sim	T
 JOB		db_insert_seq_sim	T
 JOB		prd_seq_sim	T
 
+# DOM_SIM
+JOB		pmj_dom_sim	T
+JOB		process_dom_sim	F
+JOB		rmj_dom_sim	T
+JOB		db_insert_dom_sim	T
+JOB		prd_dom_sim	T
+
 # CHEMBL
 JOB		ck_chembl_rel	T
 JOB		dl_chembl	T
 JOB		db_chembl_cpd	T
 JOB		db_chembl_data	T
+JOB		prd_chembl		T
 
 # SURECHEMBL
 JOB		ck_surechembl_rel	T

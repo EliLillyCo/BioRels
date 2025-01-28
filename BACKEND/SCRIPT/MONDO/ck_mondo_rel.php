@@ -90,7 +90,7 @@ addLog("Compare License");
 addLog("Validate release note");
 	
 addLog("Get current release date for MONDO");
-	$CURR_RELEASE=getCurrentReleaseDate('MONDO',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-MONDO',$JOB_ID);
 	
  addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
  	if ($CURR_RELEASE == $NEW_RELEASE)
@@ -98,10 +98,15 @@ addLog("Get current release date for MONDO");
 		if (!unlink('mondo.owl'))														failProcess($JOB_ID."014",'Unable to delete mondo.owl');
 		successProcess('VALID');
 	}
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('MONDO',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 	
 
 addLog("Update release tag for MONDO");
-	updateReleaseDate($JOB_ID,'MONDO',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-MONDO',$NEW_RELEASE);
 
 	
 addLog("Create directory");

@@ -16,7 +16,7 @@ GLOB	EMAIL_FROM			test@test.com
 GLOB	PROXY				N/A
 # Processing
 GLOB	WEBJOB_LIMIT				20						Max number of web jobs running in parallel
-GLOB	MONITOR_TYPE				SINGLE					Type of parallel work. SINGLE (for local machine only), CLUSTER (for cluster use)
+GLOB	MONITOR_TYPE				SINGLE					Type of parallel work. SINGLE (for local machine only), SGE_CLUSTER (for SGE cluster use)
 GLOB	SINGLE_PARALLEL				5						For SINGLE use, max number of jobs allowed to run in parallel
 GLOB	JOB_PREFIX					TT1					Job prefix
 GLOB	CHECK_ITER					3600					Time in seconds in which the system will run a check when no jobs are running

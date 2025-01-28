@@ -43,5 +43,10 @@ addLog("Working directory:".$W_DIR);
 addLog("Push to prod");
 	pushToProd();
 
+
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-GTEX',$JOB_ID);
+	updateReleaseDate($JOB_ID,'GTEX',$CURR_RELEASE);
+
 successProcess();
 ?>

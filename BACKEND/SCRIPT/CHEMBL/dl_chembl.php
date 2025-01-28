@@ -38,7 +38,7 @@ addLog("Create directory");
 	
 addLog("Download ChEMBL file");
 	/// File names are version dependent, so we need the release version
- 	$CURR_RELEASE=explode("-",getCurrentReleaseDate('CHEMBL',$JOB_ID))[0];
+ 	$CURR_RELEASE=explode("-",getCurrentReleaseDate('NEW-CHEMBL',$JOB_ID))[0];
 	/// And the files prefix
 	$HEADER_FILE='chembl_'.$CURR_RELEASE.'_';
 	/// Those are the files to download

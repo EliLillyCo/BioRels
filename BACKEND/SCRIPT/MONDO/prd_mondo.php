@@ -55,6 +55,10 @@ addLog("Push to prod");
 	pushToProd();
 
 
+	addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-MONDO',$JOB_ID);
+	updateReleaseDate($JOB_ID,'MONDO',$CURR_RELEASE);
+
 	successProcess();
 
 

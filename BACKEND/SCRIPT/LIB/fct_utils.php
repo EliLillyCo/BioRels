@@ -718,7 +718,7 @@ function failProcess($ID,$INFO,&$PCC=array())
 	if ($fp)fputs($fp,serialize($PCC));
 	else sendKillMail($ID,"Unable to open ".$TG_DIR.$GLB_VAR['LOG_DIR'].$PCC['JOB_NAME'].'.log');
 	fclose($fp);
-	if (!defined("MONITOR_JOB"))	qengine_validate(getJobIDByName($PCC['JOB_NAME']));
+	if (!defined("MONITOR_JOB"))	validate_biorels_job(getJobIDByName($PCC['JOB_NAME']));
 	
 	if ($GLB)sendKillMail($ID,$INFO);
 	else sendMail($ID,$INFO);
@@ -866,7 +866,7 @@ function successProcess($STATUS_TAG='SUCCESS',&$PCC=array())
 	
 	//if (!defined("MONITOR_JOB")) {
 		
-		qengine_validate(getJobIDByName($PCC['JOB_NAME']));
+		validate_biorels_job(getJobIDByName($PCC['JOB_NAME']));
 	//}
 	if ($GLB)exit(0);
 }

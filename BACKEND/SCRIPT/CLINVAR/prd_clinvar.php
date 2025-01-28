@@ -35,8 +35,16 @@ addLog("Check directory");
 
 
 
+addLog("Update release note");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-CLINVAR',$JOB_ID);
+	updateReleaseDate($JOB_ID,'CLINVAR',$CURR_RELEASE);
+
+
 addLog("Push to prod");
-	updateReleaseDate($JOB_ID,'CLINVAR',$CK_CLINVAR_INFO['TIME']['DEV_DIR']);
+	
+
+	
+
 	pushToProd();
 
 

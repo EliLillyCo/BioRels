@@ -30,37 +30,27 @@ addLog("Setting up");
 
 	/// Setting up directory path:
 	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; if (!is_dir($W_DIR)) 					failProcess($JOB_ID."001",'NO '.$W_DIR.' found ');
-	$W_DIR.='/'.$CK_INFO['DIR'].'/DBSNP/';   	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
+	$W_DIR.='/'.$CK_INFO['DIR'].'/';		   	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
 	$W_DIR.=$CK_INFO['TIME']['DEV_DIR'];		if ( !chdir($W_DIR))				 	failProcess($JOB_ID."003",'Unable to access process dir '.$W_DIR);
-
+	$W_DIR.='/ALFA';	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 							failProcess($JOB_ID."004",'Unable to find and create '.$W_DIR);
+	if (!chdir($W_DIR))				 													failProcess($JOB_ID."005",'Unable to access process dir '.$W_DIR);
 	/// Update process control directory to the current release so that the next job can use it
 	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 	
-	/// Check SCRIPT_DIR
-	if (!isset($GLB_VAR['SCRIPT_DIR'])) 												failProcess($JOB_ID."004",'SCRIPT_DIR not set ');
-	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];if (!is_dir($SCRIPT_DIR))			failProcess($JOB_ID."005",'SCRIPT_DIR not found ');
-
-	/// Check setenv.sh
-	$SETENV=$SCRIPT_DIR.'/SHELL/setenv.sh'; 		if (!checkFileExist($SETENV))		failProcess($JOB_ID."006",'Setenv file not found ');
-
+	$SCRIPT_DIR=$TG_DIR.'/'.$GLB_VAR['SCRIPT_DIR'];
 	// Check the script to run
 	$RUNSCRIPT=$SCRIPT_DIR.'/'.$JOB_INFO['DIR'].'/process_alfa.php';
-	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."007",$RUNSCRIPT.' file not found');
-
-	/// Check JOBARRAY that allow to run multiple jobs
-	if (!isset($GLB_VAR['JOBARRAY']))													failProcess($JOB_ID."008",'JOBARRAY NOT FOUND ');
-	$JOBARRAY=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$GLB_VAR['JOBARRAY'];
-	if (!checkFileExist($JOBARRAY))														failProcess($JOB_ID."009",'JOBARRAY file NOT FOUND '.$JOBARRAY);
-
+	if (!checkFileExist($RUNSCRIPT))													failProcess($JOB_ID."006",$RUNSCRIPT.' file not found');
+	if (!is_dir('DATA_ALFA') && !mkdir('DATA_ALFA'))	failProcess($JOB_ID."006",'Unable to create DATA-ALFA directory');
 
 	addLog("Working directory: ".$W_DIR);
 
 		/// Check the static file containing the ALFA studies
 	$STATIC_DIR=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$JOB_INFO['DIR'];
 	$ALFA_STUDY	  =$STATIC_DIR.'/ALFA_POP';
-	if (!checkFileExist($ALFA_STUDY))											   		failProcess($JOB_ID."010",'Missing ALFA_STUDY setup file ');
+	if (!checkFileExist($ALFA_STUDY))											   		failProcess($JOB_ID."007",'Missing ALFA_STUDY setup file ');
 
-		$N_LINES=getLineCount('ALFA/freq.vcf');
+		$N_LINES=getLineCount('freq.vcf');
 		$N_PER_JOBS=ceil($N_LINES/200);
 
 	/// Find dbSNP-ALFA as a source
@@ -69,34 +59,14 @@ addLog("Setting up");
 	/// Review the different studies and add them 
 	prepareStudies($SOURCE_ID,$ALFA_STUDY);
 
-		/// Open the job array file
-	$fpA=fopen("all_alfa.sh",'w'); if(!$fpA)											failProcess($JOB_ID."011",'Unable to open all.sh');
-	
-	if (!is_dir("jobs_alfa") && !mkdir("jobs_alfa"))									failProcess($JOB_ID."012",'Unable to create jobs directory');
-	if (!is_dir("DATA_ALFA") && !mkdir("DATA_ALFA"))									failProcess($JOB_ID."013",'Unable to create DATA_alfa directory');
-
+	/// Create the job array
+	$COMMANDS=array();
 	for ($I=0;$I<200;++$I)
 	{
-		
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' '.($N_PER_JOBS*$I).' '.(($N_PER_JOBS)*($I+1)).' &> LOG_ALFA_'.$I."\n";
 
-		///Job name:
-		$JOB_NAME="jobs_alfa/job_".$I.".sh";
-		
-		/// Open the job file
-		$fp=fopen($JOB_NAME,"w");if(!$fp)												failProcess($JOB_ID."014",'Unable to open jobs/job_'.$I.'.sh');
-		
-		/// Add the job to the master script
-		fputs($fpA,"sh ".$W_DIR.'/'.$JOB_NAME."\n");
-		
-		/// Write the job script
-		fputs($fp,'#!/bin/sh'."\n");
-		fputs($fp,'cd '.$W_DIR."\n");/// Go to the working directory
-		fputs($fp,"source ".$SETENV."\n");/// Load the environment
-		fputs($fp,'biorels_php '.$RUNSCRIPT.' '.$I.' '.($N_PER_JOBS*$I).' '.(($N_PER_JOBS)*($I+1)).' &> LOG_ALFA_'.$I."\n");// Run the script
-		fputs($fp,'echo $? > status_ALFA_'.$I."\n");/// Save the status
-		fclose($fp);
 	}
-	fclose($fpA);
+	prepare_batch($COMMANDS,$W_DIR);
 
 successProcess();
 

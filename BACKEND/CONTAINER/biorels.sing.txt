@@ -86,9 +86,9 @@ From: ubuntu:24.04
 	make \
 	npm \
 	openssl \
-	php8.1-gmp \
-    php8.1-mysql \
-	php8.1-pgsql \
+	php8.4-gmp \
+    php8.4-mysql \
+	php8.4-pgsql \
 	php-bcmath \
 	php-cli \
 	php-curl \
@@ -165,12 +165,21 @@ From: ubuntu:24.04
 	python3-opencv
 
 
+	cd $TG_DIR/BACKEND/SRC/
+	wget https://ftp.ebi.ac.uk/pub/software/clustalw2/2.1/clustalw-2.1.tar.gz
+	tar -zxf clustalw-2.1.tar.gz
+	cd clustalw-2.1
+	./configure --prefix=$TG_DIR/BACKEND/APPS/clustalw/
+	make
+	make install
+	cd ..
+	rm -rf clustalw-2.1
 
 	
 
 # PART 2 - Python packages	
 
-	python3 -m pip install --break-system-packages  setuptools attrs \
+	python3 -m pip install --break-system-packages --ignore-installed  setuptools attrs \
 	pytz \
 	grappa \
 	langchain \

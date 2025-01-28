@@ -398,7 +398,7 @@ def gen_hierarchy():
 
 
 
-def monitor_qengine():
+def monitor_running_jobs():
     global GLB_RUN_JOBS
     global GLB_TREE
     global GLB_VAR
@@ -437,7 +437,7 @@ def is_job_monitored(JOB_ID):
     return False
 
 
-def submit_qengine(JOB_ID):
+def submit_biorels_job(JOB_ID):
     global GLB_RUN_JOBS
     global GLB_TREE
     global GLB_VAR
@@ -492,7 +492,7 @@ def convertJsonString(s):
     return s
 
 
-def qengine_validate(JOB_ID):
+def validate_biorels_job(JOB_ID):
     add_log("VALIDATE JOB")
 
     global GLB_TREE
@@ -1542,7 +1542,7 @@ def fail_process(ID, INFO, PCC=None):
         fp.write(str(PCC) + "\n")
 
     if not os.getenv("MONITOR_JOB"):
-        qengine_validate(get_job_id_by_name(PCC['JOB_NAME']))
+        validate_biorels_job(get_job_id_by_name(PCC['JOB_NAME']))
 
     if GLB:
         send_kill_mail(ID, INFO)
@@ -1594,7 +1594,7 @@ def success_process(status_tag='SUCCESS', pcc=None):
         send_mail(ID, '\n'.join(MAIL_COMMENTS))
 
     if not "MONITOR_JOB" in locals():
-        qengine_validate(get_job_id_by_name(pcc['JOB_NAME']))
+        validate_biorels_job(get_job_id_by_name(pcc['JOB_NAME']))
 
     if GLB:
         exit(0)
@@ -2503,7 +2503,7 @@ def process_compound_record(RECORD,  SCHEMA, WITH_MOL_ENTITY=False):
             STATS['NEW_SMILES'] += 1
             HAS_NEW_MOLECULE = True
             
-            FILES['sm_molecule'].write(f"{DBIDS['sm_molecule']}\t{SMI}\t{'T' if IS_VALID else 'F'}\n")
+            FILES['sm_molecule'].write(f"{DBIDS['sm_molecule']}\t{SMI[1:-1]}\t{'T' if IS_VALID else 'F'}\n")
 
             for MD5_HASH in LIST_RECORD:
                 ENTRY = RECORD[MD5_HASH]

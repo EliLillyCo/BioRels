@@ -309,6 +309,7 @@ function processVariantsSummary()
 	{
 		$line=stream_get_line($fp,200000,"\n");if ($line=='')continue;
 		$tmp=explode("\t",$line);
+		if (count($tmp)!=count($head)) 										failProcess($JOB_ID."B02",'Not the same number of columns - Did you use spaces?');
 		$tab=array_combine($head,$tmp);/// We create an associative array to make it easier to access the data
 		
 		/// We only want GRCh38 records
@@ -350,6 +351,7 @@ function processInterpretation()
 		$line=stream_get_line($fp,100000,"\n");
 		if ($line=='')continue;
 		$tmp=explode("\t",$line);
+		if (count($tmp)!=count($head)) 								failProcess($JOB_ID."C02",'Not the same number of columns - Did you use spaces?');
 		/// Combine so that header are keys and values from tmp are values
 		$tab=array_combine($head,$tmp);
 		
@@ -438,6 +440,7 @@ function processCitationFile()
 	{
 		$line=stream_get_line($fp,1000000,"\n");if ($line=='')continue;
 		$tmp=explode("\t",$line);
+		if (count($tmp)!=count($head)) 								failProcess($JOB_ID."E02",'Not the same number of columns - Did you use spaces?');
 		$tab=array_combine($head,$tmp);
 
 		$MAP[$tab['#VariationID']]=$tab['SCV'];
@@ -447,7 +450,7 @@ function processCitationFile()
 	
 	/// We then open the citation file
 	$fp=fopen('var_citations.txt','r');
-	if (!$fp) failProcess($JOB_ID."E02",'Unable to open var_citations.txt');
+	if (!$fp) failProcess($JOB_ID."E03",'Unable to open var_citations.txt');
 	
 	/// We read the header line
 	$head=explode("\t",stream_get_line($fp,1000,"\n"));
@@ -463,8 +466,10 @@ function processCitationFile()
 		/// We split the line by tabulation
 		$tmp=explode("\t",$line);
 
+		if (count($tmp)!=count($head)) 								failProcess($JOB_ID."E04",'Not the same number of columns - Did you use spaces?');
 		/// We create an associative array to make it easier to access the data
 		$tab=array_combine($head,$tmp);
+		
 
 		/// We only want PubMed records
 		if ($tab['citation_source']!='PubMed')continue;
@@ -680,6 +685,7 @@ function processVariantMapFile()
 	{
 		$line=stream_get_line($fp,1000000,"\n");if ($line=='')continue;
 		$tmp=explode("\t",$line);
+		if (count($tmp)!=count($head)) 									failProcess($JOB_ID."G03",'Not the same number of columns - Did you use spaces?');
 		$tab=array_combine($head,$tmp);
 		/// We only process dbSNP records
 		if ($tab['Database']!='dbSNP')continue;
@@ -873,6 +879,7 @@ function processSubmissionFile()
 	{
 		$line=stream_get_line($fp,1000000,"\n");if ($line=='')continue;
 		$tmp=explode("\t",$line);
+		if (count($tmp)!=count($head)) 								failProcess($JOB_ID."I02",'Not the same number of columns - Did you use spaces?');
 		/// Combine so that header are keys and values from tmp are values
 		$tab=array_combine($head,$tmp);
 		

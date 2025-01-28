@@ -30,7 +30,7 @@ addLog("Preparation step");
 
 	/// Setting up directory path:
 	$U_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; 	if (!is_dir($U_DIR)) 					failProcess($JOB_ID."001",'NO '.$U_DIR.' found ');
-	$U_DIR.='/'.$CK_INFO['DIR'].'/DBSNP/';   		if (!is_dir($U_DIR))					failProcess($JOB_ID."002",'Unable to find  '.$U_DIR);
+	$U_DIR.='/'.$CK_INFO['DIR'].'/';  		 		if (!is_dir($U_DIR))					failProcess($JOB_ID."002",'Unable to find  '.$U_DIR);
 	$U_DIR.='/'.$CK_INFO['TIME']['DEV_DIR'].'/';   	if (!is_dir($U_DIR))				 	failProcess($JOB_ID."003",'Unable to find '.$U_DIR);
 	if (!chdir($U_DIR))				 														failProcess($JOB_ID."004",'Unable to access '.$U_DIR);
 
@@ -90,7 +90,7 @@ addLog("Preparation step");
 	}
 
 	/// Checking master script:
-	$ALL_FILE=$U_DIR.'/SCRIPTS/all.sh';
+	$ALL_FILE=$U_DIR.'/master.sh';
 	if (!is_file($ALL_FILE))															failProcess($JOB_ID."008",'Unable to find master job file at '.$ALL_FILE);
 	$N_JOBS=getLineCount($ALL_FILE);
 	
@@ -109,58 +109,65 @@ addLog("Preparation step");
 		'EXISTING_TRANSCRIPT'=>0);
 		
 
-// for ($I=0;$I<$N_JOBS;++$I)
-// {
+for ($I=0;$I<$N_JOBS;++$I)
+{
 	
-// 	$time=microtime_float();
+	$time=microtime_float();
 	
-// 	/// All errors will be saved here:
-// 	$FILE_ISSUE=fopen('SNP_ISSUE_'.$I.'_db.csv','w');if (!$FILE_ISSUE)					failProcess($JOB_ID."009",'Unable to open error file');
+	/// All errors will be saved here:
+	$FILE_ISSUE=fopen('SNP_ISSUE_'.$I.'_db.csv','w');if (!$FILE_ISSUE)					failProcess($JOB_ID."009",'Unable to open error file');
 
-// 	addLog("PROCESS ".$I."\n");
-// 	$fp=fopen('DATA/RESULTS_'.$I,'r');if (!$fp)											failProcess($JOB_ID."010",'Unable to open RESULTS_'.$I);
-// 	$RECORDS=array();$N=0;
-// 	while(!feof($fp))
-// 	{	
-// 		/// Each record is on one line, so it can be pretty long lines
-// 		$line=stream_get_line($fp,100000000,"\n");
-// 		if ($line=='')continue;
-// 		/// Decode json string and put it in an array for batch processing
-// 		$ENTRY=json_decode($line,true);
+	addLog("PROCESS ".$I."\n");
+	$fp=fopen('DATA/RESULTS_'.$I,'r');if (!$fp)											failProcess($JOB_ID."010",'Unable to open RESULTS_'.$I);
+	$RECORDS=array();$N=0;
+	while(!feof($fp))
+	{	
+		/// Each record is on one line, so it can be pretty long lines
+		$line=stream_get_line($fp,100000000,"\n");
+		if ($line=='')continue;
+		/// Decode json string and put it in an array for batch processing
+		$ENTRY=json_decode($line,true);
 		
-// 		/// Cannot decode json string - issue with the json string
-// 		if ($ENTRY===false)
-// 		{
-// 			$STATS['ENTRY_JSON_ISSUE']++;
-// 			continue;
-// 		}
-// 		$RECORDS[]=$ENTRY;
+		/// Cannot decode json string - issue with the json string
+		if ($ENTRY===false)
+		{
+			$STATS['ENTRY_JSON_ISSUE']++;
+			continue;
+		}
+		$RECORDS[]=$ENTRY;
 		
-// 		///
-// 		if (count($RECORDS)<20000)continue;
+		///
+		if (count($RECORDS)<20000)continue;
 		
-// 		++$N;
-// 		echo $I."\tPUSH TO DB\t".(20000*($N-1))."\t".(20000*$N)."\n";
+		++$N;
+		echo $I."\tPUSH TO DB\t".(20000*($N-1))."\t".(20000*$N)."\n";
 		
-// 		pushToDB($RECORDS);
+		pushToDB($RECORDS);
 		
-// 		///Clean up the batch
-// 		$RECORDS=null;
-// 		$RECORDS=array();
+		///Clean up the batch
+		$RECORDS=null;
+		$RECORDS=array();
 			
 			
-// 	}
-// 	fclose($fp);
+	}
+	fclose($fp);
 
-// 	/// Push the last batch
-// 	pushToDB($RECORDS);
-// 	print_r($STATS);
-// 	echo "TIME\t".round(microtime_float()-$time,3)."\n";
+	/// Push the last batch
+	pushToDB($RECORDS);
+	print_r($STATS);
+	echo "TIME\t".round(microtime_float()-$time,3)."\n";
 	
-// }
+}
 
 /// Sometimes the database time out, so we reconnect to the db before updating the status
 connectDB();
+
+
+
+addLog("Update release tag");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-DBSNP',$JOB_ID);
+	updateReleaseDate($JOB_ID,'DBSNP',$CURR_RELEASE);
+	
 
 successProcess();
 

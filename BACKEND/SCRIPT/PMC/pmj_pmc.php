@@ -85,6 +85,7 @@ addLog("Working directory:".$W_DIR);
 		$fpos=ftell($fp);
 		$line=fgetcsv($fp);
 		if ($line==false)continue;
+		if (count($HEAD)!=count($line))failProcess($JOB_ID."011",'Not the same number of columns in oa_file_list.csv');
 		/// Combines the header with the line so the header becomes the key and the line becomes the value
 		$tab=array_combine($HEAD,$line);
 		if ($tab['PMID']=='')continue;
@@ -96,6 +97,7 @@ addLog("Working directory:".$W_DIR);
 		if (count($BATCH)<1000)continue;
 		
 		$res=runQuery("SELECT status_code, pmc_id FROM pmc_entry WHERE pmc_id IN ('".implode("','",array_keys($BATCH))."')");
+		if ($res===false)failProcess($JOB_ID."012",'Unable to get status code');
 		foreach ($res as $line)
 		{
 			/// If it's the first time we are processing the file,
@@ -146,20 +148,21 @@ addLog("Working directory:".$W_DIR);
 	else if ($N_C<1000)$N_JOB=25;
 	else if ($N_C<10000)$N_JOB=50;
 	else if ($N_C<20000)$N_JOB=100;
+	if ($GLB_VAR['MONITOR_TYPE']=='SINGLE')$N_JOB=1;
 	$N_J=ceil($N_C/$N_JOB);
 	
 	/// Create the SCRIPTS directory if it does not exist
-	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."011",'Unable to create SCRIPTS directory');
+	if (!is_dir("SCRIPTS") && !mkdir("SCRIPTS"))										failProcess($JOB_ID."013",'Unable to create SCRIPTS directory');
 
 
-	$fp=fopen('oa_file_list.csv','r');if (!$fp)											failProcess($JOB_ID."010",'Unable to open oa_file_list.csv file ');
+	$fp=fopen('oa_file_list.csv','r');if (!$fp)											failProcess($JOB_ID."014",'Unable to open oa_file_list.csv file ');
 	
 	
 	addLog("CURRENT RELEASE:".$CURR_RELEASE);
 	
 	$HEAD=fgetcsv($fp);
 	/// Create the process.csv file that will be list all the files to process
-	$fpO=fopen('SCRIPTS/process.csv','w');if (!$fpO)										failProcess($JOB_ID."012",'Unable to open SCRIPTS/oa_file_list.csv');
+	$fpO=fopen('SCRIPTS/process.csv','w');if (!$fpO)										failProcess($JOB_ID."015",'Unable to open SCRIPTS/oa_file_list.csv');
 	$HEAD[]='job_id';
 	fputcsv($fpO,$HEAD);
 	$I=0;
@@ -179,29 +182,15 @@ addLog("Working directory:".$W_DIR);
 	fclose($fpO);
 	
 	
-	///Create batch script:
-	$fpA=fopen("SCRIPTS/all.sh",'w'); if(!$fpA)											failProcess($JOB_ID."013",'Unable to open all.sh');
+	$COMMANDS=array();
+
 	
 	for($I=0;$I<$N_JOB;++$I)
 	{
-		/// And the individual job script
-		$JOB_NAME="SCRIPTS/job_".$I.".sh";
-		$fp=fopen($JOB_NAME,"w");if(!$fpA)												failProcess($JOB_ID."014",'Unable to open jobs/job_'.$I.'.sh');
-		
-		/// Add the job to the batch script
-		fputs($fpA,"sh ".$W_DIR.'/'.$JOB_NAME."\n");
-
-		/// Populate the job script
-		fputs($fp,'#!/bin/sh'."\n");
-		fputs($fp,"source ".$SETENV."\n");	/// Set up the environment
-		fputs($fp,'cd '.$W_DIR."\n");		/// Go to the working directory
-		fputs($fp,'biorels_php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/'.'LOG_'.$I."\n");	/// Run the script
-		fputs($fp,'echo $? > SCRIPTS/status_'.$I."\n");	/// Save the status of the script
-		fclose($fp);
-	
-		
+		$COMMANDS[$I][]='biorels_php '.$RUNSCRIPT.' '.$I.' &> SCRIPTS/LOG_'.$I;
 	}
-	fclose($fpA);
+
+	prepare_batch($COMMANDS,$W_DIR);
 
 
 

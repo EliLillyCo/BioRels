@@ -61,14 +61,18 @@ addLog("Validate release note");
 	if (!unlink('release_notes.txt'))													failProcess($JOB_ID."009",'Unable to delete release_notes.txt');
 
 addLog("Get current release date for INTERPRO");
-	$CURR_RELEASE=getCurrentReleaseDate('INTERPRO',$JOB_ID);
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-INTERPRO',$JOB_ID);
 	
 addLog("Compare release date ".$CURR_RELEASE."\t".$NEW_RELEASE);
 	if ($CURR_RELEASE == $NEW_RELEASE) successProcess('VALID');
-	
+	if ($CURR_RELEASE!=-1 && $CURR_RELEASE!=getCurrentReleaseDate('INTERPRO',$JOB_ID))
+	{
+		addLog("Waiting for current release to be pushed to production");
+		successProcess("VALID");
+	}
 
 addLog("Update release tag for INTERPRO");
-	updateReleaseDate($JOB_ID,'INTERPRO',$NEW_RELEASE);
+	updateReleaseDate($JOB_ID,'NEW-INTERPRO',$NEW_RELEASE);
 
 	
 addLog("Create directory");

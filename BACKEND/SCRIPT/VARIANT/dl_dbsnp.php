@@ -28,7 +28,7 @@ addLog("Create directory");
 
 	/// Setting up directory path:
 	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR'];if (!is_dir($W_DIR)) 					failProcess($JOB_ID."001",'NO '.$W_DIR.' found ');
-	$W_DIR.='/'.$CK_DBSNP_INFO['DIR'].'/DBSNP/';if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
+	$W_DIR.='/'.$CK_DBSNP_INFO['DIR'].'/';if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
 	$W_DIR.=$CK_DBSNP_INFO['TIME']['DEV_DIR'];	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."003",'Unable to create new process dir '.$W_DIR);
 						   					   if (!chdir($W_DIR)) 						failProcess($JOB_ID."004",'Unable to access process dir '.$W_DIR);
 	
@@ -99,38 +99,6 @@ addLog("Download alfa");
 	/// Remove hash file and extract archive:
 	if (!unlink('freq.vcf.gz.md5'))														failProcess($JOB_ID."018",'Unable to remove freq.vcf.gz.md5');
 	if (!ungzip('freq.vcf.gz'))															failProcess($JOB_ID."019",'Unable to extract archive');
-
-	$WLINK.='supplement/';
-	if (!checkFileExist('ALFA.html') &&
-	!dl_file($WLINK,3,'ALFA.html'))														failProcess($JOB_ID."020",'Unable to download ALFA.html');
-
-	$fpB=fopen('ALFA.html','r');if (!$fpB) 												failProcess($JOB_ID."021",'Unable to open ALFA.html');
-	$tag='.gz';
-	$path=$WLINK;
-	while(!feof($fpB))
-	{
-		$line=stream_get_line($fpB,10000,"\n");
-		$tab=explode(">",$line);
-		
-		
-		
-		$t2=explode('"',$tab[0]);
-		if (!isset($t2[1]))continue;
-		$name=$t2[1];
-	;	if ($tag!='' && strpos($name,$tag)===false)continue;
-		echo "DOWNLOADING ".$path.'/'.$name."\n";
-		$path_all='';
-		$path_all.=$path.'/';
-		$path_all.=$name;
-		$out='';
-		
-		$out.=$name;
-		if (!checkFileExist($name) &&
-			!dl_file($path_all,3,$out))              							     failProcess($JOB_ID."022",'Unable to download '.$path.$name);
-	}
-
-
-	if (!dl_file($WLINK,3))															failProcess($JOB_ID."023",'Unable to download ALFA frequency ');
 
 successProcess();
 

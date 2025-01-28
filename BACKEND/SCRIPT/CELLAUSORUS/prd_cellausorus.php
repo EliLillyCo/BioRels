@@ -34,6 +34,10 @@ addLog("Access directory");
 	$PROCESS_CONTROL['DIR']=$PAR_INFO['TIME']['DEV_DIR'];
 
 	
+addLog("Update release note");
+	$CURR_RELEASE=getCurrentReleaseDate('NEW-CELLAUSORUS',$JOB_ID);
+	updateReleaseDate($JOB_ID,'CELLAUSORUS',$CURR_RELEASE);
+
 addLog("Push to prod");
 	pushToProd();
 	

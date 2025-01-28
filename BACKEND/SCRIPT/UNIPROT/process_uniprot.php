@@ -96,7 +96,7 @@ addLog("Get list to process");
 	/// We get the number of lines in this file, that we are going to divide by the number of jobs to get the number of records to process
 	$LINE_C=getLineCount($U_DIR.'/unique_pointers.csv');
 	/// We get the number of lines in this file, Which defines the total number of jobs:
-	$TOT_JOBS=getLineCount($U_DIR.'/SCRIPTS/all.sh');
+	$TOT_JOBS=getLineCount($U_DIR.'/master.sh');
 
 
 	$N_P_JOB=ceil($LINE_C/$TOT_JOBS);

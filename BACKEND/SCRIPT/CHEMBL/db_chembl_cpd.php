@@ -63,7 +63,7 @@ addLog("Update source");
 
 addLog("Extract SMILES and counterions from ChEMBL file");
  	/// Names are based on release version, so we need to get the version for ChEMBL
- 	$CURR_RELEASE=explode("-",getCurrentReleaseDate('CHEMBL',$JOB_ID))[0];
+ 	$CURR_RELEASE=explode("-",getCurrentReleaseDate('NEW-CHEMBL',$JOB_ID))[0];
 	/// chemreps contains all small moleculeS:
 	$fp=fopen('chembl_'.$CURR_RELEASE.'_chemreps.txt','r');if (!$fp)								failProcess($JOB_ID."008",'Unable to open chembl chemreps file');
 	/// We are going to put all the smiles into chembl.smi so we can standardize them
