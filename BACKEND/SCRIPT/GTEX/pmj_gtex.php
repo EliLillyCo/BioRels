@@ -58,7 +58,7 @@ addLog("Generate scripts");
 	
 addLog("Save list genes");
 	$fp=fopen('LIST_GENE_SPLIT','w');if (!$fp)											failProcess($JOB_ID."006",'Unable to get rna gene');
-	fputs($fp,implode($LIST_GENES,"\n")."\n");
+	fputs($fp,implode("\n",$LIST_GENES)."\n");
 	fclose($fp);
 
 	
