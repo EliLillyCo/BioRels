@@ -50,7 +50,7 @@ addLog("Setting up");
 	$ALFA_STUDY	  =$STATIC_DIR.'/ALFA_POP';
 	if (!checkFileExist($ALFA_STUDY))											   		failProcess($JOB_ID."007",'Missing ALFA_STUDY setup file ');
 
-		$N_LINES=getLineCount('ALFA/freq.vcf');
+		$N_LINES=getLineCount('freq.vcf');
 		$N_PER_JOBS=ceil($N_LINES/200);
 
 	/// Find dbSNP-ALFA as a source
