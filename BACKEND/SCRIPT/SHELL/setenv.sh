@@ -42,5 +42,5 @@ alias biorels_exe='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-fil
 alias biorels_run='singularity run --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif ' 
 alias biorels_php='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif php ' 
 alias biorels_monitor='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif php $TG_DIR/BACKEND/SCRIPT/monitor_jobs.php'
-alias biorels_python='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif python3.12 '
+alias biorels_python='singularity exec --env-file $TG_DIR/BACKEND/CONTAINER/env-file.txt $TG_DIR/BACKEND/CONTAINER/biorels_container.sif /Python/bin/python3.12 '
 alias biorels_sql='psql -h $DB_HOST -p $DB_PORT -n $DB_NAME'
