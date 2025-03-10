@@ -317,7 +317,7 @@ function processBulk(&$BULK,$Ijob,$N)
 		$FILES[$TBL]=fopen($TBL.'.csv','w');
 		if (!$FILES[$TBL])																failProcess($JOB_ID."A02",'Unable to open dom.csv');
 	}
-	if ($VALID)return false;
+	if ($VALID)return true;
 	$VALID_ALL=false;
 	$res=runQueryNoRes('DELETE FROM prot_dom_al WHERE prot_dom_al_id>='.$PREV_DB['prot_dom_al']);
 	///Saving 
@@ -335,7 +335,7 @@ function processBulk(&$BULK,$Ijob,$N)
 		fclose($fpI);
 		
 	}
-	return true;
+	return false;
 	
 
 }
