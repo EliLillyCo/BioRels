@@ -1,3 +1,3 @@
 #!/bin/sh
 source $TG_DIR/BACKEND/SCRIPT/SHELL/setenv.sh
-php $TG_DIR/BACKEND/SCRIPT/ALFA/process_alfa.php
+php $TG_DIR/BACKEND/SCRIPT/ALFA/dl_alfa.php

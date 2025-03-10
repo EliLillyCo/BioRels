@@ -11,7 +11,7 @@ The data used for the analyses described  were obtained from  the GTEx Portal,  
 */
 
 /// Job name - Do not change
-$JOB_NAME='ck_gtex_rel';
+$JOB_NAME='dl_gtex';
 
 
 /// Get root directories

@@ -483,7 +483,7 @@ function validate_biorels_job($JOB_ID)
 		$GLB_TREE[$JOB_ID]['TIME']['CHECK']=time();
 	}	
 	else{
-	echo $LOG_FILE."\t".is_file($LOG_FILE)."\n";
+	//echo $LOG_FILE."\t".is_file($LOG_FILE)."\n";
 	$PROCESS_DATA=unserialize(file_get_contents($LOG_FILE));
 	$STR_LOG.= "\tSTATUS:".$PROCESS_DATA['STATUS']."\n";
 	$STR_LOG.= "\tPROCESS DIR:".$PROCESS_DATA['DIR']."\n";

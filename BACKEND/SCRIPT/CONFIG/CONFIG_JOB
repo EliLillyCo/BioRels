@@ -52,9 +52,13 @@ SC	62	pmj_dbsnp					20|61|101					162	21|57	VARIANT			C	D	P		S	/																
 SC	63	rmj_dbsnp					62							-1		-1	VARIANT			C	D	P		R	50|51|53|54|56|57													-1	Run dbsnp preparation jobs
 SC	64	process_dbsnp				-1							-1		-1	VARIANT			C	D	P		S	/																-1	Processing dbsnp script (should be always set to disabled)
 SC	65	db_dbsnp					63							-1		-1	VARIANT			C	D	P		S	50|51|53|54|56|159|160											-1	Push dbsnp results to database
-SC	66	pmj_alfa					65							-1		-1	VARIANT			C	D	P		S	62|63|65														-1	Prepare alfa jobs
-SC	67	process_alfa				-1							-1		-1	VARIANT			C	D	P		S	/																-1	Processing alfa script (should always be disabled)
-SC	68	rmj_alfa					66							-1		-1	VARIANT			C	D	P		R	62|63|65														-1	Run alfa jobs
+
+SC	70	ck_alfa_rel					-1							-1		-1	ALFA			C	D	00:10	S	/																-1	Check for new release of ALFA
+SC	71	dl_alfa						70							-1		-1	ALFA			C	D	P		S	/																-1	download alfa files
+SC	72	pmj_alfa					71							-1		65	ALFA			C	D	P		S	62|63|65														-1	Prepare alfa jobs
+SC	73	process_alfa				-1							-1		-1	ALFA			C	D	P		S	/																-1	Processing alfa script (should always be disabled)
+SC	74	rmj_alfa					72							-1		-1	ALFA			C	D	P		R	62|63|65														-1	Run alfa jobs
+SC	75	prd_alfa					74							-1		-1	ALFA			C	D	P		S	/																-1	Push to prod
 
 
 

@@ -33,11 +33,11 @@ addLog("Go to directory");
 	/// Setting up directory path:
 	$U_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; if (!is_dir($U_DIR)) 									failProcess($JOB_ID."001",'NO '.$U_DIR.' found ');
 	$U_DIR.='/'.$CK_INFO['DIR'].'/';   			if (!is_dir($U_DIR))				 			failProcess($JOB_ID."002",'Unable to find  '.$U_DIR);
-	$U_DIR.='/'.$CK_INFO['TIME']['DEV_DIR'].'/ALFA/';   if (!is_dir($U_DIR))				 					failProcess($JOB_ID."003",'Unable to find '.$U_DIR);
+	$U_DIR.='/'.$CK_INFO['TIME']['DEV_DIR'].'/';   if (!is_dir($U_DIR))				 					failProcess($JOB_ID."003",'Unable to find '.$U_DIR);
 	if (!chdir($U_DIR))				 																	failProcess($JOB_ID."004",'Unable to access '.$U_DIR);
 
 	/// Check static directory and ALFA_POP file
-	$STATIC_DIR=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$JOB_INFO['DIR'];
+	$STATIC_DIR=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/VARIANT/';
 										    	
 	$ALFA_STUDY	  =$STATIC_DIR.'/ALFA_POP';
 	if (!checkFileExist($ALFA_STUDY))											   			 			failProcess($JOB_ID."005",'Missing ALFA_STUDY setup file ');
