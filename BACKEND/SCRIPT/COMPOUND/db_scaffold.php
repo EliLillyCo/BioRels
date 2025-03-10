@@ -151,6 +151,7 @@ function processScaffold($SCHEMA)
 
 function processScaff($SCHEMA,&$SCAFF,&$DBIDS)
 {
+	echo "Processing ".count($SCAFF)." scaffolds\n";
 	
 	global $GLB_VAR;
 	global $DB_INFO;
@@ -215,16 +216,16 @@ function processScaff($SCHEMA,&$SCAFF,&$DBIDS)
 	
 	
 
-	foreach ($SCAFF as $SCAFF_SMI=>$LIST_SC)
+	foreach ($SCAFF as $SCAFF_SMI=>$LIST_SM)
 	{
 		/// We have to update the molecules that are mapped to the scaffold id
 		/// However, we have to do this in chunks
-		$CHUNKS2=array_chunk($RECS,1000);
+		$CHUNKS2=array_chunk($LIST_SM,1000);
 
 		foreach ($CHUNKS2 as $CHK2)
 		{
 			$query= 'UPDATE '.$SCHEMA.'.sm_molecule 
-					SET sm_scaffold_id='.$SCAFF_ID.'
+					SET sm_scaffold_id='.$MAP[$SCAFF_SMI].'
 					WHERE sm_molecule_id IN ('.implode(",",$CHK2).')';
 			if (!runQueryNoRes($query))										failProcess($JOB_ID."B05",'Unable to run query '.$query);
 		}
