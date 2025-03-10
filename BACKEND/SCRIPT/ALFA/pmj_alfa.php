@@ -26,13 +26,13 @@ $JOB_INFO=$GLB_TREE[$JOB_ID];
 
 addLog("Setting up");
 	/// Get parent information:
-	$CK_INFO=$GLB_TREE[getJobIDByName('ck_dbsnp_rel')];
+	$CK_INFO=$GLB_TREE[getJobIDByName('dl_alfa')];
 
 	/// Setting up directory path:
 	$W_DIR=$TG_DIR.'/'.$GLB_VAR['PROCESS_DIR']; if (!is_dir($W_DIR)) 					failProcess($JOB_ID."001",'NO '.$W_DIR.' found ');
 	$W_DIR.='/'.$CK_INFO['DIR'].'/';		   	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."002",'Unable to find and create '.$W_DIR);
-	$W_DIR.=$CK_INFO['TIME']['DEV_DIR'];		if ( !chdir($W_DIR))				 	failProcess($JOB_ID."003",'Unable to access process dir '.$W_DIR);
-	$W_DIR.='/ALFA';	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 							failProcess($JOB_ID."004",'Unable to find and create '.$W_DIR);
+	$W_DIR.=$CK_INFO['TIME']['DEV_DIR'];		
+	if (!is_dir($W_DIR) && !mkdir($W_DIR)) 												failProcess($JOB_ID."004",'Unable to find and create '.$W_DIR);
 	if (!chdir($W_DIR))				 													failProcess($JOB_ID."005",'Unable to access process dir '.$W_DIR);
 	/// Update process control directory to the current release so that the next job can use it
 	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
@@ -46,8 +46,9 @@ addLog("Setting up");
 	addLog("Working directory: ".$W_DIR);
 
 		/// Check the static file containing the ALFA studies
-	$STATIC_DIR=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/'.$JOB_INFO['DIR'];
+	$STATIC_DIR=$TG_DIR.'/'.$GLB_VAR['STATIC_DIR'].'/VARIANT';
 	$ALFA_STUDY	  =$STATIC_DIR.'/ALFA_POP';
+	
 	if (!checkFileExist($ALFA_STUDY))											   		failProcess($JOB_ID."007",'Missing ALFA_STUDY setup file ');
 
 		$N_LINES=getLineCount('freq.vcf');

@@ -147,9 +147,14 @@ JOB	pmj_dbsnp	F
 JOB	rmj_dbsnp	F
 JOB	process_dbsnp	F
 JOB	db_dbsnp	F
-JOB	pmj_alfa	F
+
+# ALFA
+JOB	ck_alfa_rel		F
+JOB	dl_alfa			F
+JOB	pmj_alfa		F
 JOB	process_alfa	F
-JOB	rmj_alfa	F
+JOB	rmj_alfa		F
+JOB	prd_alfa		F
 
 # PUBLI
 JOB	dl_pubmed	T
