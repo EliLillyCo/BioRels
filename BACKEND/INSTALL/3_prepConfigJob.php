@@ -462,10 +462,12 @@ $GLOBAL_OPTIONS['JOB_PREFIX']=$VAL;
         echo "N/A if you don't have one - this will disable OMIM\n";
         echo "Your choice: ";
         $VAL= str_replace("\n","",fgets(STDIN));
-        if ($VAL=='N/A') 
+        if ($VAL=='N/A' || $VAL == '') 
         {
             unset($LIST_RESOURCES['OMIM']);
             updateDataSourceFile();
+            $VAL = 'N/A';
+            echo "OMIM: No API key provided. This will disable OMIM\n";
         }
         $GLOBAL_OPTIONS['OMIM_API_KEY']=$VAL;
            
