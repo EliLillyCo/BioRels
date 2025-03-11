@@ -1172,7 +1172,7 @@ function compareRecord(&$FILE_RECORD,&$DB_RECORD_ID)
 	if ($DB_RECORD['drug_primary_name']!=$FILE_RECORD['name'])
 	{
 		echo ("\tCHANGE\tDRUG_PRIMARY_NAME\tFROM:".$DB_RECORD['drug_primary_name'].'=>'.$FILE_RECORD['name'])."\n";
-		$QUERY.='drug_primary_name=\''.$FILE_RECORD['name'].'\', '; 
+		$QUERY.='drug_primary_name=\''.str_replace("'","''",$FILE_RECORD['name']).'\', '; 
 		$TO_UPDATE=true;
 	}
 	if ($DB_RECORD['is_experimental']!=$MAP[$FILE_RECORD['experimental']])
