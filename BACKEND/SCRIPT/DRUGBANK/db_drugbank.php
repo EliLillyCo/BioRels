@@ -200,6 +200,7 @@ function loadBiotechCats(&$BIOTECH_MAP)
 				VALUES (".$MAX_ID.",
 				'".str_replace("'","''",$NAME)."',
 				'".str_replace("'","''",$ENTRY['group_name|'])."')"))								failProcess($JOB_ID."A03",'Unable to insert new drug type '.$NAME);
+			$BIOTECH_CATS[$NAME]['DB_ID']=$MAX_ID;
 		}
 		else
 		{
