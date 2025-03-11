@@ -200,6 +200,7 @@ function loadBiotechCats(&$BIOTECH_MAP)
 				VALUES (".$MAX_ID.",
 				'".str_replace("'","''",$NAME)."',
 				'".str_replace("'","''",$ENTRY['group_name|'])."')"))								failProcess($JOB_ID."A03",'Unable to insert new drug type '.$NAME);
+			$BIOTECH_CATS[$NAME]['DB_ID']=$MAX_ID;
 		}
 		else
 		{
@@ -1171,7 +1172,7 @@ function compareRecord(&$FILE_RECORD,&$DB_RECORD_ID)
 	if ($DB_RECORD['drug_primary_name']!=$FILE_RECORD['name'])
 	{
 		echo ("\tCHANGE\tDRUG_PRIMARY_NAME\tFROM:".$DB_RECORD['drug_primary_name'].'=>'.$FILE_RECORD['name'])."\n";
-		$QUERY.='drug_primary_name=\''.$FILE_RECORD['name'].'\', '; 
+		$QUERY.='drug_primary_name=\''.str_replace("'","''",$FILE_RECORD['name']).'\', '; 
 		$TO_UPDATE=true;
 	}
 	if ($DB_RECORD['is_experimental']!=$MAP[$FILE_RECORD['experimental']])
