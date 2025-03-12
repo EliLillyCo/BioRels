@@ -42,7 +42,7 @@ SC	53	db_dna						50							-1		-1	GENOME			C	D	P		S	/																-1	Push DNA
 SC	54	pmj_transcript				51|53						-1		-1	GENOME			C	D	P		S	50|51|180|182|183|11											-1	Prepare transcript jobs
 SC	55	process_transcript			54							-1		-1	GENOME			C	D	P		S	/																-1	Transcript jobs
 SC	56	rmj_transcript				54							-1		-1	GENOME			C	D	P		R	50|51|180|182|183|11											-1	Run transcript jobs to map transcript sequence to DNA & annotation
-SC	57	db_transcript_seq			56							-1		-1	GENOME			C	D	P		S	50|51|180|182|183|11											-1	Push transcript sequence to database
+SC	57	db_transcript_seq			56							-1		-1	GENOME			C	D	P		S	50|51|180|182|183|11|56											-1	Push transcript sequence to database
 
 
 
@@ -51,7 +51,7 @@ SC	61	dl_dbsnp					60							-1		-1	VARIANT			C	D	P		S	/																-1	Downlo
 SC	62	pmj_dbsnp					20|61|101					162	21|57	VARIANT			C	D	P		S	/																-1	Prepare dbsnp preparation jobs
 SC	63	rmj_dbsnp					62							-1		-1	VARIANT			C	D	P		R	50|51|53|54|56|57													-1	Run dbsnp preparation jobs
 SC	64	process_dbsnp				-1							-1		-1	VARIANT			C	D	P		S	/																-1	Processing dbsnp script (should be always set to disabled)
-SC	65	db_dbsnp					63							-1		-1	VARIANT			C	D	P		S	50|51|53|54|56|159|160											-1	Push dbsnp results to database
+SC	65	db_dbsnp					63							-1		-1	VARIANT			C	D	P		S	50|51|53|54|56|159|160|63										-1	Push dbsnp results to database
 
 SC	70	ck_alfa_rel					-1							-1		-1	ALFA			C	D	00:10	S	/																-1	Check for new release of ALFA
 SC	71	dl_alfa						70							-1		-1	ALFA			C	D	P		S	/																-1	download alfa files
@@ -104,7 +104,7 @@ SC	162	prd_uniprot					160							-1		-1	UNIPROT			C	P	P		S	/																-1	P
 SC	180	pmj_translate				160							57		-1	TRANSLATE		C	D	P		S	50|51|56|54|57|157|159|160										-1	Prepare transcript/protein translation jobs
 SC	181	process_translate			180							-1		-1	TRANSLATE		C	D	P		S	/																-1	Processing translation script (should always be disabled as run by rmj_translate)
 SC	182	rmj_translate				180							-1		-1	TRANSLATE		C	D	P		R	11|12|15|50|51|56|54|57|157|159|160								-1	Run transcript/protein translation jobs
-SC	183	db_translate				182							-1		-1	TRANSLATE		C	D	P		S	11|12|15|50|51|56|54|57|157|159|160								-1	Prepare transcript/protein translation jobs
+SC	183	db_translate				182							-1		-1	TRANSLATE		C	D	P		S	11|12|15|50|51|56|54|57|157|159|160|182							-1	Prepare transcript/protein translation jobs
 SC	184	prd_translate				183							-1		-1	TRANSLATE		C	D	P		S	/																-1	Prepare transcript/protein translation jobs
 
 SC	170	ck_gtex_rel					-1							-1		-1	GTEX			A	D	00:10	S	/																-1	Semi automated job. Please update paths in dl_gtex prior to triggering ck_gtex_rel
@@ -148,7 +148,7 @@ SC	231	wh_omim						230|223						-1		-1	OMIM			C	P	P		S	221|222															-1
 SC	400	pmj_seq_sim					160							-1		-1	SEQ_SIM			C	D	P		S	/																-1	Prepare sequence alignment scripts
 SC	401	process_seq_sim				400							-1		-1	SEQ_SIM			C	D	P		S	/																-1	Process seq sim files (should always be disabled)
 SC	402	rmj_seq_sim					400							-1		-1	SEQ_SIM			C	D	P		R	154|159|160|182													-1	Run sequence alignment scripts
-SC	403	db_insert_seq_sim			402							-1		-1	SEQ_SIM			C	D	P		S	/																-1	Insert sequence alignment 
+SC	403	db_insert_seq_sim			402							-1		-1	SEQ_SIM			C	D	P		S	402																-1	Insert sequence alignment 
 SC	404	prd_seq_sim					403							-1		-1	SEQ_SIM			C	D	P		S	/																-1	Cleanup directory and push to production
 
 
@@ -156,7 +156,7 @@ SC	404	prd_seq_sim					403							-1		-1	SEQ_SIM			C	D	P		S	/																-1	C
 SC	405	pmj_dom_sim					160							-1		-1	DOM_SIM			C	D	P		S	/																-1	Prepare protein domain sequence alignment scripts
 SC	406	process_dom_sim				405							-1		-1	DOM_SIM			C	D	P		S	/																-1	Process protein domain seq sim files (should always be disabled)
 SC	407	rmj_dom_sim					405							-1		-1	DOM_SIM			C	D	P		R	154|159|160|182													-1	Run protein domain sequence alignment scripts
-SC	408	db_insert_dom_sim			407							-1		-1	DOM_SIM			C	D	P		S	/																-1	Insert protein domain sequence alignment 
+SC	408	db_insert_dom_sim			407							-1		-1	DOM_SIM			C	D	P		S	407																-1	Insert protein domain sequence alignment 
 SC	409	prd_dom_sim					408							-1		-1	DOM_SIM			C	D	P		S	/																-1	Cleanup directory and push to production
 
 
