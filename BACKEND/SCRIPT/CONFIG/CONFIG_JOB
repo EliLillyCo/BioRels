@@ -110,7 +110,7 @@ SC	184	prd_translate				183							-1		-1	TRANSLATE		C	D	P		S	/																-1
 SC	170	ck_gtex_rel					-1							-1		-1	GTEX			A	D	00:10	S	/																-1	Semi automated job. Please update paths in dl_gtex prior to triggering ck_gtex_rel
 SC	171	dl_gtex						170							-1		-1	GTEX			C	D	P		S	/																-1	Download GTEx data
 SC	172	db_gtex						171|130|51|540				-1	131|541	GTEX			C	D	P		S	50|51|541														-1	Push GTEx data to database
-SC	173	pmj_gtex					171							-1		-1	GTEX			C	D	P		S	/																-1	Prepare GTEX jobs
+SC	173	pmj_gtex					172							-1		-1	GTEX			C	D	P		S	/																-1	Prepare GTEX jobs
 SC	174	process_gtex				173							-1		-1	GTEX			C	D	P		S	/																-1	Processing GTEX script (should be always set to disabled)
 SC	175	rmj_gtex					173							-1		-1	GTEX			C	D	P		R	172																-1	Run GTEX jobs
 SC	176	db_stat_gtex				175							-1		-1	GTEX			C	D	P		S	/																-1	Compute GTEx statistics and push data to DB
