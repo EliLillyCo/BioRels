@@ -38,10 +38,8 @@ addLog("Check directory");
 
 
 addLog("Cleanup");
-
 	cleanDirectory('INSERT');
- 	cleanDirectory('JSON');
- 	cleanDirectory('SCRIPTS');
+ 	cleanDirectory('jobs');
 
 addLog("Push to prod");
 	pushToProd();
