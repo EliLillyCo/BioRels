@@ -122,8 +122,8 @@ SC	202	dl_ot						201							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Dow
 SC	203	pp_ot_eco					202|221						-1		131	OPENTARGETS		A	D	P		S	106																-1	List all reported EFO diseases and map them to mondo - Any parent will trigger the update
 SC	204	db_ot_drug					203							-1		-1	OPENTARGETS		C	D	P		S	412|422|502|642|662|104										-1	Process open targets
 SC	205	db_ot_clintrial				204|15|223|650				-1		-1	OPENTARGETS		C	D	P		S	12|15|223														-1	Process open targets clinical trials
-SC	206	db_ot_evidence				203|101|12|223				-1		-1	OPENTARGETS		C	D	P		S	12|104|105|106|223|222|221																-1	Process open targets evidence 
-SC	207	db_stat_gene_dis			204							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Compute statistics
+SC	206	db_ot_evidence				203|101|12|223				-1		-1	OPENTARGETS		C	D	P		S	12|104|105|106|223|222|221										-1	Process open targets evidence 
+SC	207	db_stat_gene_dis			206							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Compute statistics
 SC	208	prd_ot						204|205|206					-1		-1	OPENTARGETS		C	P	P		S	/																-1	Process open targets
 
 
