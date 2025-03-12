@@ -629,7 +629,7 @@ function is_dir_empty($dir) {
 
 function cleanDirectory($dir)
 {
-	if ($dir=='/' || $dir=='')return true;
+	if (!is_dir($dir) || $dir=='/' || $dir=='')return true;
 	$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 	$files = new RecursiveIteratorIterator($it,
              RecursiveIteratorIterator::CHILD_FIRST);
@@ -797,7 +797,8 @@ function pushToProd()
 	$dirs=scandir('.');
 	foreach ($dirs as $dir)
 	{
-		if ($dir=='.'||$dir=='..')continue;
+		if ($dir=='.'||$dir=='..'||$dir=='ARCHIVE')continue;
+		if(is_file($dir))continue;
 		//echo $dir.' '.$PROCESS_CONTROL['DIR']."\n";
 		if ($dir==$PROCESS_CONTROL['DIR'])continue;
 		

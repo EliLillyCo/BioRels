@@ -45,7 +45,9 @@ addLog("Cleanup files");
 	$FILES=array('disease_entry.csv',
 				'disease_syn.csv',
 				'disease_ext.csv',
-				'disease_anatomy.csv');
+				'disease_anatomy.csv',
+				'RELATIONS.csv',
+				'TREE.csv');
 
 				
 	foreach($FILES as $f) if (file_exists($f) && !unlink($f))						failProcess($JOB_ID."006",'Unable to delete '.$f);
