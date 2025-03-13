@@ -36,6 +36,8 @@ addLog("Go to directory");
 	$W_DIR=$U_DIR.'/JSON/';						if (!is_dir($W_DIR) && !mkdir($W_DIR)) 	failProcess($JOB_ID."004",'Unable to create job dir '.$W_DIR);
 	if (!chdir($W_DIR)) 																failProcess($JOB_ID."005",'Unable to access process dir '.$W_DIR);
 
+	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
+
 addLog("Working directory:".$W_DIR);
 
 

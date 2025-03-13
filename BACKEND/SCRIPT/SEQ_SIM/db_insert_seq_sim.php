@@ -38,6 +38,7 @@ addLog("Go to directory");
 
 addLog("Working directory:".$W_DIR);
 
+	$PROCESS_CONTROL['DIR']=$CK_INFO['TIME']['DEV_DIR'];
 
 	/// $DBIDS is an array that will store the last id used for each table
 	$DBIDS=array(
