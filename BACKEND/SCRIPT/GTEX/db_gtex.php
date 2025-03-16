@@ -595,7 +595,8 @@ function processTranscriptData()
 				///Add it
 				$SAMPLES_TR[$SAMPLE]=true;
 				$HAS_DATA=true;
-				fputs($FILES['rna_transcript'],$SAMPLES[$SAMPLE]['DBID']."\t".$ENSTDBID."\t".$VALUE."\n");
+				++$DBIDS['rna_transcript'];
+				fputs($FILES['rna_transcript'],$DBIDS['rna_transcript']."\t".$SAMPLES[$SAMPLE]['DBID']."\t".$ENSTDBID."\t".$VALUE."\n");
 				$STAT['NEW_TRANSCRIPT_TPM']++;
 				
 			}
@@ -673,7 +674,7 @@ function processTranscriptData()
 		fclose($FILES['rna_transcript']);
 
 		/// Create the command to insert the data
-		$command='\COPY '.$GLB_VAR['DB_SCHEMA'].'.rna_transcript (rna_sample_id , transcript_id , tpm ) FROM \''."rna_transcript_insert.csv'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+		$command='\COPY '.$GLB_VAR['DB_SCHEMA'].'.rna_transcript (rna_transcript_id,rna_sample_id , transcript_id , tpm ) FROM \''."rna_transcript_insert.csv'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
 		echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 		exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 		//print_r($res);
@@ -699,7 +700,7 @@ function processTranscriptData()
 
 	addLog("inserting RNA_transcript records");
 
-	$command='\COPY '.$GLB_VAR['DB_SCHEMA'].'.rna_transcript (rna_sample_id , transcript_id , tpm ) FROM \''."rna_transcript_insert.csv'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
+	$command='\COPY '.$GLB_VAR['DB_SCHEMA'].'.rna_transcript (rna_transcript_id,rna_sample_id , transcript_id , tpm ) FROM \''."rna_transcript_insert.csv'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";
 	echo $DB_INFO['COMMAND'].' -c "'.$command.'"'."\n";
 	exec($DB_INFO['COMMAND'].' -c "'.$command.'"',$res,$return_code);
 	//print_r($res);
