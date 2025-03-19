@@ -386,16 +386,18 @@ function processDNA($TAX_ID,&$INFO_DIR,$GENE_SEQS,$DNA_DONE)
 			else echo '|';
 
 
-			if ($UPD_MAP==array())continue;
-		
-			/// When there is anything to update, we run the queries
-			foreach ($UPD_MAP as $NUCL=>&$LIST_NUCL_CH)
+			if ($UPD_MAP!=array())
 			{
-				$query='UPDATE chr_seq_pos 
-					set nucl = \''.$NUCL.'\' 
-					WHERE chr_seq_id = '.$CHR_SEQ_ID .' 
-					AND chr_pos IN ('.implode(',',$LIST_NUCL_CH).')';
-				if (!runQueryNoRes($query))											failProcess($JOB_ID."B13",'Unable to update chr_seq_pos');
+		
+				/// When there is anything to update, we run the queries
+				foreach ($UPD_MAP as $NUCL=>&$LIST_NUCL_CH)
+				{
+					$query='UPDATE chr_seq_pos 
+						set nucl = \''.$NUCL.'\' 
+						WHERE chr_seq_id = '.$CHR_SEQ_ID .' 
+						AND chr_pos IN ('.implode(',',$LIST_NUCL_CH).')';
+					if (!runQueryNoRes($query))											failProcess($JOB_ID."B13",'Unable to update chr_seq_pos');
+				}
 			}
 			
 		
@@ -433,6 +435,7 @@ function processDNA($TAX_ID,&$INFO_DIR,$GENE_SEQS,$DNA_DONE)
 	fputs($fpO,$STR);
 	/// And push it to the database
 	fclose($fpO);
+	$STR = '';
 	loadInDB($CHR_SEQ_ID);
 
 	/// And we update the hash and length
