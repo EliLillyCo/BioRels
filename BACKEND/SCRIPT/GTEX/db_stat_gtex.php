@@ -7,7 +7,7 @@
 */
 
 /// Job name - Do not change
-$JOB_NAME='db_gtex_stat';
+$JOB_NAME='db_stat_gtex';
 
 
 /// Get root directories
