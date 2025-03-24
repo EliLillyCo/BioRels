@@ -76,7 +76,19 @@ addLog("Working directory:".$W_DIR);
 	
 	$VALID_ALL=true;
 	
-	for ($Ijob=0;$Ijob<50;++$Ijob)
+	$start_job = 0;
+	$has_restart = false;
+	if (is_file('RESTART'))
+	{
+		$info =file_get_contents('RESTART');
+		$tab=explode("\t",$info);
+		$start_job = $tab[0];
+		$start_block= $tab[1];
+		$has_restart = true;
+		echo "RESTARTING from job ".$start_job." and block ".$start_block."\n";
+	}
+
+	for ($Ijob=$start_job;$Ijob<50;++$Ijob)
 	{
 
 		/// In blast, a pair of sequences can appear multiple times because multiple matches have been found
@@ -112,11 +124,13 @@ addLog("Working directory:".$W_DIR);
 		while(!feof($fp))
 		{
 			++$N;
+			
 			$time=microtime_float();
 			/// Because each line is a json record, 
 			///the line can be pretty long, reason why we put a large cut-off for the number of characters
 			
 			$line=stream_get_line($fp,2000000,"\n");
+			if ($Ijob==$start_job && $N<$start_block) continue;
 			$TIMES['READ']+=microtime_float()-$time; $time=microtime_float();
 			if ($line=='')continue;
 			
@@ -313,13 +327,21 @@ function processBulk(&$BULK,$Ijob,$N)
 
 	echo ($VALID)?"SUCCESS":"FAILURE";
 	echo "\n";
-	$FILES=array();
-	foreach ($COL_ORDER as $TBL=>$CTL)
+	
+	if ($VALID)
 	{
-		$FILES[$TBL]=fopen($TBL.'.csv','w');
-		if (!$FILES[$TBL])																failProcess($JOB_ID."A02",'Unable to open dom.csv');
+		$FILES=array();
+		foreach ($COL_ORDER as $TBL=>$CTL)
+		{
+			$FILES[$TBL]=fopen($TBL.'.csv','w');
+			if (!$FILES[$TBL])																failProcess($JOB_ID."A02",'Unable to open dom.csv');
+		}
+		$fp=fopen('RESTART','w');
+		if (!$fp) failProcess($JOB_ID."A03",'Unable to open RESTART');
+		fputs($fp,$Ijob."\t".($N+count($BULK)+1)."\n");
+		fclose($fp);
+		return true;
 	}
-	if ($VALID)return true;
 	$VALID_ALL=false;
 	$res=runQueryNoRes('DELETE FROM prot_dom_al WHERE prot_dom_al_id>='.$PREV_DB['prot_dom_al']);
 	///Saving 
