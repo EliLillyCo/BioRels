@@ -7,7 +7,7 @@
 */
 
 /// Job name - Do not change
-$JOB_NAME='db_gtex_stat';
+$JOB_NAME='db_stat_gtex';
 
 
 /// Get root directories
@@ -58,9 +58,9 @@ addLog("Static file check");
 addLog("Merge Files");
 
 	/// There's 200 scripts run in parallel, each of them creating a result file
-	for($I=1;$I<=200;++$I)
+	for($I=0;$I<200;++$I)
 	{
-		if (!checkFileExist('RESULTS_'.$I.'.csv'))									failProcess($JOB_ID."006",'Missing RESULTS_'.$I.' file ');
+		if (!is_file($W_DIR.'/RESULTS_'.$I.'.csv'))									failProcess($JOB_ID."006",'Missing RESULTS_'.$I.' file ');
 		/// So we read the file
 		$fp=fopen($W_DIR.'/RESULTS_'.$I.'.csv','r');if (!$fp)						failProcess($JOB_ID."007",'Unable to open RESULTS_'.$I.' file ');
 		while(!feof($fp))

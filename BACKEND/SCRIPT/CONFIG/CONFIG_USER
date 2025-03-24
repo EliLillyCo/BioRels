@@ -329,6 +329,7 @@ JOB		ck_drugbank_rel	T
 JOB		dl_drugbank	T
 JOB		db_drugbank_cpd	T
 JOB		db_drugbank	T
+JOB		db_drugbank_drug	T
 JOB		prd_drugbank	T
 
 # CHEBI

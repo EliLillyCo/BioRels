@@ -281,6 +281,8 @@ function processTissue($DBID,$TS_ID,&$DATA,&$fpO,$IS_TRANSCRIPT)
 		
 		if ($VALUE==$LOWER_VALUE)
 		{
+			if (1-$TNR==0) $LR=0; // Avoid division by zero
+			else
 			$LR=$TPR/(1-$TNR);
 		}
 

@@ -45,7 +45,7 @@ addLog("Switch to production");
 
 addLog("Update release tag");
 	
-	updateReleaseDate($JOB_ID,'SEQ_SIM',getCurrDate());
+	updateReleaseDate($JOB_ID,'DOM_SIM',getCurrDate());
 
 
 successProcess();

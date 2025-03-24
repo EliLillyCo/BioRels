@@ -36,7 +36,7 @@ SC	40	ck_ensembl_rel				-1							-1		-1	ENSEMBL			C	D	00:10	S	/																-
 SC	41	dl_ensembl					40							-1		-1	ENSEMBL			C	D	P		S	/																-1	Download ensembl
 
 
-SC	50	db_genome					31|41|12|20					-1		21	GENOME			D	D	P		S	1|11|12|13|15														-1	Process gene sequence information
+SC	50	db_genome					31|41|15|20					-1		21	GENOME			D	D	P		S	1|11|12|13|15														-1	Process gene sequence information
 SC	51	db_transcriptome			50							-1		-1	GENOME			C	D	P		S	/																-1	Process transcript files
 SC	53	db_dna						50							-1		-1	GENOME			C	D	P		S	/																-1	Push DNA sequence to database
 SC	54	pmj_transcript				51|53						-1		-1	GENOME			C	D	P		S	50|51|180|182|183|11											-1	Prepare transcript jobs
@@ -120,8 +120,8 @@ SC	177	prd_gtex					172|176						-1		-1	GTEX			C	D	P		S	/																-1	Push
 SC	201	ck_ot_rel					-1							-1		-1	OPENTARGETS		A	D	00:10	S	/																-1	Check for new OPEN TARGETS release	
 SC	202	dl_ot						201							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Download open targets
 SC	203	pp_ot_eco					202|221						-1		131	OPENTARGETS		A	D	P		S	106																-1	List all reported EFO diseases and map them to mondo - Any parent will trigger the update
-SC	204	db_ot_drug					203							-1		-1	OPENTARGETS		C	D	P		S	412|422|502|642|662|104										-1	Process open targets
-SC	205	db_ot_clintrial				204|15|223|650				-1		-1	OPENTARGETS		C	D	P		S	12|15|223														-1	Process open targets clinical trials
+SC	204	db_ot_drug					203							-1		-1	OPENTARGETS		C	D	P		S	412|413|422|502|642|662|104|414										-1	Process open targets
+SC	205	db_ot_clintrial				204|15|223|650				-1		-1	OPENTARGETS		C	D	P		S	12|15|223|413|414														-1	Process open targets clinical trials
 SC	206	db_ot_evidence				203|101|12|223				-1		-1	OPENTARGETS		C	D	P		S	12|104|105|106|223|222|221										-1	Process open targets evidence 
 SC	207	db_stat_gene_dis			206							-1		-1	OPENTARGETS		C	D	P		S	/																-1	Compute statistics
 SC	208	prd_ot						204|205|206					-1		-1	OPENTARGETS		C	P	P		S	/																-1	Process open targets
@@ -164,8 +164,9 @@ SC	409	prd_dom_sim					408							-1		-1	DOM_SIM			C	D	P		S	/																-1	C
 SC	410	ck_chembl_rel				-1							-1		-1	CHEMBL			A	D	00:10	S	/																-1	Check for new Chembl release	
 SC	411	dl_chembl					410							-1		-1	CHEMBL			C	D	P		S	/																-1	Download Chembl files
 SC	412	db_chembl_cpd				411							-1		-1	CHEMBL			C	D	P		S	422|502|204|642|662											-1	Prepare and process Chembl File
-SC	413	db_chembl_data				412|532|132|154|1|101|12	-1	162|133	CHEMBL			C	D	P		S	11|12|15|157|159|160|642										-1	Load Chembl data
-SC	414	prd_chembl					413							-1		-1	CHEMBL			C	P	P		S	/																-1	Push to production
+SC	413	db_chembl_data				412|532|132|154|1|101|12	-1	162|133	CHEMBL			C	D	P		S	11|12|15|157|159|160|642|204|205								-1	Load Chembl data
+SC	414	db_chembl_drug				413							-1		-1	CHEMBL			C	D	P		S	11|12|15|157|159|160|642|204|205								-1	Load Chembl drug data
+SC	415	prd_chembl					414							-1		-1	CHEMBL			C	P	P		S	/																-1	Push to production
 
 
 SC	450	db_scaffold					412|422|502					-1		-1	COMPOUNDS		A	D	P		S	/																	-1	Generate scaffolds
@@ -199,10 +200,10 @@ SC	604	prd_clinvar					602							-1		-1	CLINVAR			C	D	P		S	/																-1	M
 SC	640	ck_drugbank_rel				-1							-1		-1	DRUGBANK		C	D	00:10	S	/																-1	Check drugbank files
 SC	641	dl_drugbank					640							-1		-1	DRUGBANK		C	D	P		S	/																-1	Download drugbank files
 SC	642	db_drugbank_cpd				641							-1		-1	DRUGBANK		C	D	P		S	412|502|422|502|204|662											-1	Process compounds from drugbank files
-SC	643	db_drugbank					642							-1		-1	DRUGBANK		C	D	P		S	650|205|413|105													-1	Process data from drugbank files
+SC	643	db_drugbank					642							-1		-1	DRUGBANK		C	D	P		S	650|205|413|105|414													-1	Process data from drugbank files
 SC	644	prd_drugbank				643							-1		-1	DRUGBANK		C	P	P		S	/																-1	Push Drugbank to prod
 
-SC	650	wh_clinical_trials			643							-1	204|221	CLINICAL_TRIAL	D	D	D3		S	205|221|222|643|650												-1	Download and push clinical trial information
+SC	650	wh_clinical_trials			643							-1	204|221	CLINICAL_TRIAL	D	D	D3		S	205|221|222|643|650|414												-1	Download and push clinical trial information
 
 SC	660	ck_chebi_rel				-1							-1	-1		CHEBI			C	D	00:10	S	-1																-1	Check ChEBI release
 SC	661	dl_chebi					660							-1	-1		CHEBI			C	D	D		S	-1																-1	Download ChEBI files
@@ -226,3 +227,4 @@ SC	423	prd_surechembl				422							-1		-1	SURECHEMBL		C	D	P		S	/																
 
 
 SC	1000	web_job					-1							-1		-1	WEBJOBS			C	D	P		S	/																-1	WEBJOBS
+

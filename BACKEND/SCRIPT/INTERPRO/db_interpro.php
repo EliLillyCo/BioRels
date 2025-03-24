@@ -237,21 +237,21 @@ addLog("Read interpro file");
 		$array = json_decode($json,TRUE);
 		
 		// Process the entry
-		addLog("PROCESS ENTRY");
+		echo "PROCESS ENTRY\n";
 		$ENTRY=processEntry($array);
 		
-		addLog("PROCESS DB");
+		echo "PROCESS DB\n";
 		processToDB($ENTRY);
 		
-		addLog("END ENTRY");
+		echo "END ENTRY\n";
 		if ($N_ENTRY%1000!=0)continue;
 		///Every batch, we save the interpro records into files
 		
 		foreach ($COL_ORDER as $NAME=>$CTL)
 		{
 			//	if (in_array($NAME,$TO_FILTER))continue;
-			echo $NAME."\n";
-			addLog("inserting ".$NAME." records");
+			
+			echo "inserting ".$NAME." records";
 			$res=array();
 			fclose($FILES[$NAME]);
 			$command='\COPY '.$GLB_VAR['DB_SCHEMA'].'.'.$NAME.' '.$CTL.' FROM \''.$NAME.".csv'  (DELIMITER E'\\t', null \\\"NULL\\\" ,format CSV )";

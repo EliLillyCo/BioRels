@@ -4745,12 +4745,15 @@ COMMENT ON COLUMN DB_SCHEMA_NAME.rna_tissue.organ_name IS 'Name of the organ';
 COMMENT ON COLUMN DB_SCHEMA_NAME.rna_tissue.tissue_name IS 'Name of the tissue';
 
 CREATE TABLE DB_SCHEMA_NAME.rna_transcript (
+    rna_transcript_id bigint NOT NULL,
     rna_sample_id bigint NOT NULL,
     transcript_id bigint NOT NULL,
     tpm double precision NOT NULL
 );
 
 COMMENT ON TABLE DB_SCHEMA_NAME.rna_transcript IS 'RNA Expression level of a transcript';
+
+COMMENT ON COLUMN DB_SCHEMA_NAME.rna_transcript.rna_transcript_id IS 'Primary key to RNA_Transcript. Defines RNA Expression level for a transcript in a given tissue';
 
 COMMENT ON COLUMN DB_SCHEMA_NAME.rna_transcript.rna_sample_id IS 'Foreign key to RNA Sample. defines a sample';
 
@@ -7218,6 +7221,10 @@ ALTER TABLE ONLY DB_SCHEMA_NAME.rna_tissue
 
 ALTER TABLE ONLY DB_SCHEMA_NAME.rna_transcript
     ADD CONSTRAINT rna_transcript_rna_sample_id_transcript_id_key UNIQUE (rna_sample_id, transcript_id);
+
+ALTER TABLE ONLY DB_SCHEMA_NAME.rna_transcript
+    ADD CONSTRAINT rna_transcript_pkey PRIMARY KEY (rna_transcript_id);
+
 
 ALTER TABLE ONLY DB_SCHEMA_NAME.rna_transcript_stat
     ADD CONSTRAINT rna_transcript_stat_pkey PRIMARY KEY (rna_transcript_stat_id);
