@@ -105,14 +105,16 @@ addLog("Download species_EnsemblVertebrates.txt");
 	{
 		
 		addLog("##Processing Taxon ".$TAX_ID);
-		if (!isset($ENSEMBL_INFO[$TAX_ID]))																failProcess($JOB_ID."014",'Unable to find Taxon in Ensembl:'.$TAX_ID);
-		if (!is_dir($W_DIR.'/'.$TAX_ID) && !mkdir($W_DIR.'/'.$TAX_ID))									failProcess($JOB_ID."015",'Unable to create Tax directory '.$TAX_ID);
 		
 		/// Looping over the assemblies requested by the user
 		foreach ($LIST as &$INFO)	
 		{
 			// We only want the Ensembl genomes (since we can also have RefSeq)
 			if ($INFO['Source']!='ENSEMBL')continue;
+
+			if (!isset($ENSEMBL_INFO[$TAX_ID]))																failProcess($JOB_ID."014",'Unable to find Taxon in Ensembl:'.$TAX_ID);
+			if (!is_dir($W_DIR.'/'.$TAX_ID) && !mkdir($W_DIR.'/'.$TAX_ID))									failProcess($JOB_ID."015",'Unable to create Tax directory '.$TAX_ID);
+		
 			/// This should be done at the start of each build to ensure the right directory is used
 			if (!chdir($W_DIR.'/'.$TAX_ID))																failProcess($JOB_ID."016",'Unable to access Tax directory '.$TAX_ID);
 
